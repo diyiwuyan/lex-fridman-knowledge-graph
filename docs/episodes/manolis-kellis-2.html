@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -642,31 +658,34 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 <div class="quote-block">
   <div class="quote-text">"touching to embrace the suffering, not because of an accident, but because of a choice, the sacrifice"</div>
-  
+  <div class="quote-zh">感动拥抱苦难，不是因为偶然，而是因为选择、牺牲</div>
   <div class="quote-meta">— Manolis Kellis （1:18:32.240）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"love CO2 and there&#39;s humans that love O2 and we&#39;re sort of, you know, trading different types of gases"</div>
-  
+  <div class="quote-zh">喜欢二氧化碳，也有人喜欢氧气，你知道，我们在交易不同类型的气体</div>
   <div class="quote-meta">— Manolis Kellis （12:23.440）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"that we think of is pollution or sunlight or heat or cold and so on and so forth. That&#39;s the external"</div>
-  
+  <div class="quote-zh">我们想到的是污染、阳光、炎热或寒冷等等。这就是外部</div>
   <div class="quote-meta">— Manolis Kellis （13:47.120）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"make sense and it&#39;s okay. And you can&#39;t comprehend everything. And I think this concept of how do you"</div>
-  
+  <div class="quote-zh">有道理，没关系。而且你无法理解一切。我认为这个概念你如何</div>
   <div class="quote-meta">— Manolis Kellis （1:19:24.720）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"think. Do you see what I mean? Basically, it tells you that, I mean, my mom would always tell me about"</div>
-  
+  <div class="quote-zh">思考。你明白我的意思吗？基本上，它告诉你，我的意思是，我妈妈总是会告诉我</div>
   <div class="quote-meta">— Manolis Kellis （1:19:50.640）</div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（1266 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
@@ -674,140 +693,140 @@ a:hover { color: var(--accent); text-decoration: underline; }
     Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">The following is a conversation with Manolis Kellis, his second time on the podcast.</div>
-  
+  <div class="dialogue-zh">以下是与马诺利斯·凯利斯的对话，这是他第二次参加播客。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:05.120)</span>
   </div>
   <div class="dialogue-en">He&#39;s a professor at MIT and head of the MIT Computational Biology Group.</div>
-  
+  <div class="dialogue-zh">他是麻省理工学院的教授，也是麻省理工学院计算生物学小组的负责人。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:09.920)</span>
   </div>
   <div class="dialogue-en">He&#39;s one of the most brilliant, productive, and kind people I&#39;ve had the fortune of talking to.</div>
-  
+  <div class="dialogue-zh">他是我有幸交谈过的最聪明、最有生产力、最善良的人之一。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:15.360)</span>
   </div>
   <div class="dialogue-en">A lot of my colleagues at MIT and former MIT faculty and students</div>
-  
+  <div class="dialogue-zh">我在麻省理工学院的很多同事以及前麻省理工学院的教师和学生</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:19.520)</span>
   </div>
   <div class="dialogue-en">wrote to me after our first conversation with some version of,</div>
-  
+  <div class="dialogue-zh">在我们第一次与某个版本的对话后写给我，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Manolis Kellis <span class="dialogue-time">(00:23.200)</span>
   </div>
   <div class="dialogue-en">Manolis is awesome, isn&#39;t he? I&#39;m glad you guys are now friends. I am too. And I&#39;m happy that</div>
-  
+  <div class="dialogue-zh">马诺利斯很棒，不是吗？我很高兴你们现在成为朋友了。我也是。我很高兴</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Manolis Kellis <span class="dialogue-time">(00:30.080)</span>
   </div>
   <div class="dialogue-en">he makes time in his insanely busy schedule to sit down and have a chat with me.</div>
-  
+  <div class="dialogue-zh">他在繁忙的日程中抽出时间坐下来和我聊天。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Manolis Kellis <span class="dialogue-time">(00:35.520)</span>
   </div>
   <div class="dialogue-en">Quick summary of the sponsors, Public Goods, Magic Spoon, and ExpressVPN.</div>
-  
+  <div class="dialogue-zh">赞助商、Public Goods、Magic Spoon 和 ExpressVPN 的快速摘要。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Manolis Kellis <span class="dialogue-time">(00:40.960)</span>
   </div>
   <div class="dialogue-en">Please check out these sponsors in the description to get a discount and to support this podcast.</div>
-  
+  <div class="dialogue-zh">请查看说明中的这些赞助商以获得折扣并支持此播客。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Manolis Kellis <span class="dialogue-time">(00:46.960)</span>
   </div>
   <div class="dialogue-en">As a side note, let me say that I just got back from talking to Joe Rogan on his podcast,</div>
-  
+  <div class="dialogue-zh">顺便说一句，我刚刚在乔·罗根的播客上与他交谈回来，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Manolis Kellis <span class="dialogue-time">(00:51.760)</span>
   </div>
   <div class="dialogue-en">my fifth time on there. I also got a chance to record a separate conversation with Joe</div>
-  
+  <div class="dialogue-zh">我第五次去那里。我还有机会录制与乔的单独对话</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Manolis Kellis <span class="dialogue-time">(00:57.200)</span>
   </div>
   <div class="dialogue-en">on this podcast. We talked on both quite a bit about his journey and his advice for mine.</div>
-  
+  <div class="dialogue-zh">在这个播客上。我们谈论了很多关于他的旅程以及他对我的建议。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Manolis Kellis <span class="dialogue-time">(01:04.160)</span>
   </div>
   <div class="dialogue-en">One of the things that I think made his show special is that he just had fun and made choices</div>
-  
+  <div class="dialogue-zh">我认为他的节目之所以特别的原因之一是他只是享受乐趣并做出选择</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Manolis Kellis <span class="dialogue-time">(01:09.760)</span>
   </div>
   <div class="dialogue-en">that didn&#39;t get in the way of him having fun and loving life. I&#39;m learning to do just that.</div>
-  
+  <div class="dialogue-zh">这并不妨碍他享受乐趣和热爱生活。我正在学习这样做。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:15.360)</span>
   </div>
   <div class="dialogue-en">It&#39;s tough since I&#39;m naturally full of self doubt and anxiety,</div>
-  
+  <div class="dialogue-zh">这很难，因为我天生就充满自我怀疑和焦虑，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:19.680)</span>
   </div>
   <div class="dialogue-en">but I&#39;m learning to let go and have fun, even if my monotone robotic voice sometimes sounds otherwise.</div>
-  
+  <div class="dialogue-zh">但我正在学着放手并享受乐趣，即使我单调的机器人声音有时听起来并非如此。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Manolis Kellis <span class="dialogue-time">(01:28.000)</span>
   </div>
   <div class="dialogue-en">For Joe, that involved talking to his friends, comedians, especially ones that brought out the</div>
-  
+  <div class="dialogue-zh">对于乔来说，这包括与他的朋友、喜剧演员，尤其是那些能够激发他的想法的人交谈。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Manolis Kellis <span class="dialogue-time">(01:33.200)</span>
   </div>
   <div class="dialogue-en">best in him. Duncan Trussell and the five hour first episode on Spotify comes to mind as an</div>
-  
+  <div class="dialogue-zh">最好的在他身上。邓肯·特鲁塞尔 (Duncan Trussel) 和 Spotify 上播放的 5 小时第一集让人想起</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Manolis Kellis <span class="dialogue-time">(01:39.200)</span>
   </div>
   <div class="dialogue-en">example of that. Duncan has been a guest probably close to if not more than 50 times on Joe&#39;s</div>
-  
+  <div class="dialogue-zh">的例子。邓肯 (Duncan) 曾是乔餐厅 (Joe&#39;s) 的客人，即使不超过 50 次，也可能接近 50 次</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Manolis Kellis <span class="dialogue-time">(01:45.040)</span>
   </div>
   <div class="dialogue-en">podcast. My hope with amazing people like Manolis is to find my Duncan Trussell, my Joey Diaz,</div>
-  
+  <div class="dialogue-zh">播客。我希望像马诺利斯这样出色的人能够找到我的邓肯·特鲁塞尔，我的乔伊·迪亚兹，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
@@ -9534,7 +9553,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 </div></div>
 <button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 1266 条对话 ↓</button>
 
-    <a href="https://lexfridman.com/manolis-kellis-2" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+    <a href="https://lexfridman.com/manolis-kellis-2" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -9592,6 +9611,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -9604,6 +9675,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

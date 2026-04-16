@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -586,7 +600,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 <nav class="sidebar">
   <div class="sidebar-logo">
     <h1>Lex Fridman<br>知识图谱</h1>
-    <p>112 期节目 · 全文字幕</p>
+    <p>434 期节目 · 全文字幕</p>
   </div>
   
   <div class="sidebar-section">导航</div>
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -642,174 +658,3645 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 <div class="quote-block">
   <div class="quote-text">"of the time scale at which breakthroughs in AI happen? I really don&#39;t. Because look at Deep Learning."</div>
-  
+  <div class="quote-zh">人工智能取得突破的时间尺度是多少？我真的不知道。因为看看深度学习。</div>
   <div class="quote-meta">— Pamela McCorduck （44:24.240）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"this is somehow blasphemous. We shouldn&#39;t be going there. Now, you can say, yeah, but there are going"</div>
-  
+  <div class="quote-zh">这在某种程度上是亵渎的。我们不应该去那里。现在，你可以说，是的，但是有</div>
   <div class="quote-meta">— Pamela McCorduck （14:08.800）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"person in expert systems, for example, how is that, how are these folks who you&#39;ve interviewed in the"</div>
-  
+  <div class="quote-zh">例如，专家系统中的人，那怎么样，你在专家系统中采访过的这些人怎么样？</div>
   <div class="quote-meta">— Pamela McCorduck （16:45.000）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"answer. But here&#39;s how we could get over that and then blah, blah, blah. And one of his favorite things"</div>
-  
+  <div class="quote-zh">回答。但这就是我们如何克服这个问题，然后等等等等。还有他最喜欢的事情之一</div>
   <div class="quote-meta">— Pamela McCorduck （20:03.440）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"Fe Institute. I thought, algorithms, yeah, they&#39;re in the service of, but they&#39;re not the main event."</div>
-  
+  <div class="quote-zh">铁研究所。我想，算法，是的，它们是服务的，但它们不是主要事件。</div>
   <div class="quote-meta">— Pamela McCorduck （36:33.200）</div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（515 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Pamela McCorduck <span class="dialogue-time">(00:00.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">The following is a conversation with Pamela McCordick. She&#39;s an author who has written on</div>
-  
+  <div class="dialogue-zh">以下是与帕梅拉·麦考迪克的对话。她是一位作家，曾写过</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Pamela McCorduck <span class="dialogue-time">(00:04.800)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04.800)</span>
   </div>
   <div class="dialogue-en">the history and the philosophical significance of artificial intelligence. Her books include</div>
-  
+  <div class="dialogue-zh">人工智能的历史和哲学意义。她的书包括</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Pamela McCorduck <span class="dialogue-time">(00:10.400)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10.400)</span>
   </div>
   <div class="dialogue-en">Machines Who Think in 1979, The Fifth Generation in 1983 with Ed Feigenbaum, who&#39;s considered to</div>
-  
+  <div class="dialogue-zh">1979 年的《会思考的机器》，1983 年与 Ed Feigenbaum 合作的第五代机器，他被认为是</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Pamela McCorduck <span class="dialogue-time">(00:18.160)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:18.160)</span>
   </div>
   <div class="dialogue-en">be the father of expert systems, The Edge of Chaos that features women, and many more books.</div>
-  
+  <div class="dialogue-zh">成为专家系统之父、以女性为主角的《混沌边缘》以及更多书籍。</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Pamela McCorduck <span class="dialogue-time">(00:24.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:24.000)</span>
   </div>
   <div class="dialogue-en">I came across her work in an unusual way by stumbling in a quote from Machines Who Think</div>
-  
+  <div class="dialogue-zh">我以一种不寻常的方式看到了她的作品，偶然引用了《思考的机器》中的一段话</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(00:29.520)</span>
   </div>
   <div class="dialogue-en">that is something like, artificial intelligence began with the ancient wish to forge the gods.</div>
-  
+  <div class="dialogue-zh">就好像，人工智能始于古老的锻造神的愿望。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(00:37.040)</span>
   </div>
   <div class="dialogue-en">That was a beautiful way to draw a connecting line between our societal relationship with AI</div>
-  
+  <div class="dialogue-zh">这是在我们与人工智能的社会关系之间建立联系的一种美妙方式</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(00:42.960)</span>
   </div>
   <div class="dialogue-en">from the grounded day to day science, math and engineering, to popular stories and science</div>
-  
+  <div class="dialogue-zh">从扎根的日常科学、数学和工程，到流行的故事和科学</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(00:48.560)</span>
   </div>
   <div class="dialogue-en">fiction and myths of automatons that go back for centuries. Through her literary work,</div>
-  
+  <div class="dialogue-zh">几个世纪以来关于机器人的小说和神话。通过她的文学作品，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(00:54.800)</span>
   </div>
   <div class="dialogue-en">she has spent a lot of time with the seminal figures of artificial intelligence, including</div>
-  
+  <div class="dialogue-zh">她花了很多时间研究人工智能的开创性人物，包括</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:00.480)</span>
   </div>
   <div class="dialogue-en">the founding fathers of AI from the 1956 Dartmouth summer workshop where the field was launched.</div>
-  
+  <div class="dialogue-zh">人工智能的奠基人来自 1956 年达特茅斯夏季研讨会，该领域正是在该研讨会上启动的。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:08.480)</span>
   </div>
   <div class="dialogue-en">I reached out to Pamela for a conversation in hopes of getting a sense of what those early</div>
-  
+  <div class="dialogue-zh">我联系帕梅拉进行了一次谈话，希望了解早期的情况</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:13.760)</span>
   </div>
   <div class="dialogue-en">days were like, and how their dreams continue to reverberate through the work of our community</div>
-  
+  <div class="dialogue-zh">日子是怎样的，以及他们的梦想如何继续在我们社区的工作中产生反响</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:19.200)</span>
   </div>
   <div class="dialogue-en">today. I often don&#39;t know where the conversation may take us, but I jump in and see. Having no</div>
-  
+  <div class="dialogue-zh">今天。我常常不知道谈话会把我们带向何方，但我会跳进去看看。没有</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:25.600)</span>
   </div>
   <div class="dialogue-en">constraints, rules, or goals is a wonderful way to discover new ideas. This is the Artificial</div>
-  
+  <div class="dialogue-zh">约束、规则或目标是发现新想法的好方法。这就是人工</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:31.760)</span>
   </div>
   <div class="dialogue-en">Intelligence Podcast. If you enjoy it, subscribe on YouTube, give it five stars on iTunes,</div>
-  
+  <div class="dialogue-zh">情报播客。如果您喜欢它，请在 YouTube 上订阅，在 iTunes 上给它五颗星，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:37.840)</span>
   </div>
   <div class="dialogue-en">support it on Patreon, or simply connect with me on Twitter, at Lex Friedman, spelled F R I D M</div>
-  
+  <div class="dialogue-zh">在 Patreon 上支持它，或者直接在 Twitter 上与我联系，地址为 Lex Friedman（拼写为 F R I D M）</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:44.720)</span>
   </div>
   <div class="dialogue-en">A N. And now, here&#39;s my conversation with Pamela McCordick. In 1979, your book Machines Who Think</div>
-  
+  <div class="dialogue-zh">A N. 现在，这是我与帕梅拉·麦考迪克的对话。 1979 年，您的著作《思考的机器》</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:55.040)</span>
   </div>
   <div class="dialogue-en">was published. In it, you interview some of the early AI pioneers and explore the idea that</div>
-  
+  <div class="dialogue-zh">已发布。在其中，您采访了一些早期的人工智能先驱，并探讨了这样的想法：</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(02:00.720)</span>
   </div>
   <div class="dialogue-en">AI was born not out of maybe math and computer science, but out of myth and legend. So, tell me</div>
+  <div class="dialogue-zh">人工智能的诞生可能不是数学和计算机科学，而是神话和传说。所以告诉我</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(02:10.400)</span>
+  </div>
+  <div class="dialogue-en">if you could the story of how you first arrived at the book, the journey of beginning to write it.</div>
   
 </div>
-    <a href="https://lexfridman.com/pamela-mccorduck" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(02:19.040)</span>
+  </div>
+  <div class="dialogue-en">I had been a novelist. I&#39;d published two novels, and I was sitting under the portal at Stanford</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(02:29.120)</span>
+  </div>
+  <div class="dialogue-en">one day, the house we were renting for the summer. And I thought, I should write a novel about these</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(02:33.920)</span>
+  </div>
+  <div class="dialogue-en">weird people in AI, I know. And then I thought, ah, don&#39;t write a novel, write a history. Simple.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(02:41.360)</span>
+  </div>
+  <div class="dialogue-en">Just go around, interview them, splice it together, voila, instant book. Ha, ha, ha. It was</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(02:48.240)</span>
+  </div>
+  <div class="dialogue-en">much harder than that. But nobody else was doing it. And so, I thought, well, this is a great</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(02:54.400)</span>
+  </div>
+  <div class="dialogue-en">opportunity. And there were people who, John McCarthy, for example, thought it was a nutty</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(03:03.760)</span>
+  </div>
+  <div class="dialogue-en">idea. The field had not evolved yet, so on. And he had some mathematical thing he thought I should</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(03:11.040)</span>
+  </div>
+  <div class="dialogue-en">write instead. And I said, no, John, I am not a woman in search of a project. This is what I want</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(03:17.840)</span>
+  </div>
+  <div class="dialogue-en">to do. I hope you&#39;ll cooperate. And he said, oh, mutter, mutter, well, okay, it&#39;s your time.</div>
+  
+</div>
+<div id="dialogue-more" style="display:none">
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:24.560)</span>
+  </div>
+  <div class="dialogue-en">What was the pitch for the, I mean, such a young field at that point. How do you write</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(03:30.800)</span>
+  </div>
+  <div class="dialogue-en">a personal history of a field that&#39;s so young? I said, this is wonderful. The founders of the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(03:37.040)</span>
+  </div>
+  <div class="dialogue-en">field are alive and kicking and able to talk about what they&#39;re doing. Did they sound or feel like</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:42.720)</span>
+  </div>
+  <div class="dialogue-en">founders at the time? Did they know that they have founded something?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(03:48.000)</span>
+  </div>
+  <div class="dialogue-en">Oh, yeah. They knew what they were doing was very important. Very. What I now see in retrospect</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(03:56.160)</span>
+  </div>
+  <div class="dialogue-en">is that they were at the height of their research careers. And it&#39;s humbling to me that they took</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(04:04.320)</span>
+  </div>
+  <div class="dialogue-en">time out from all the things that they had to do as a consequence of being there. And to talk to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(04:11.440)</span>
+  </div>
+  <div class="dialogue-en">this woman who said, I think I&#39;m going to write a book about you. No, it was amazing. Just amazing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:17.040)</span>
+  </div>
+  <div class="dialogue-en">So who stands out to you? Maybe looking 63 years ago, the Dartmouth conference,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:26.480)</span>
+  </div>
+  <div class="dialogue-en">so Marvin Minsky was there, McCarthy was there, Claude Shannon, Alan Newell, Herb Simon,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(04:32.960)</span>
+  </div>
+  <div class="dialogue-en">some of the folks you&#39;ve mentioned. Then there&#39;s other characters, right? One of your coauthors</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(04:40.080)</span>
+  </div>
+  <div class="dialogue-en">He wasn&#39;t at Dartmouth.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:43.120)</span>
+  </div>
+  <div class="dialogue-en">He wasn&#39;t at Dartmouth.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(04:43.920)</span>
+  </div>
+  <div class="dialogue-en">No. He was, I think, an undergraduate then.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:47.680)</span>
+  </div>
+  <div class="dialogue-en">And of course, Joe Traub. All of these are players, not at Dartmouth, but in that era.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(04:56.000)</span>
+  </div>
+  <div class="dialogue-en">Right.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(04:57.600)</span>
+  </div>
+  <div class="dialogue-en">CMU and so on. So who are the characters, if you could paint a picture, that stand out to you</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(05:02.960)</span>
+  </div>
+  <div class="dialogue-en">from memory? Those people you&#39;ve interviewed and maybe not, people that were just in the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:08.400)</span>
+  </div>
+  <div class="dialogue-en">In the atmosphere.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(05:09.920)</span>
+  </div>
+  <div class="dialogue-en">In the atmosphere.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:11.840)</span>
+  </div>
+  <div class="dialogue-en">Of course, the four founding fathers were extraordinary guys. They really were.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:15.920)</span>
+  </div>
+  <div class="dialogue-en">Who are the founding fathers?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(05:18.560)</span>
+  </div>
+  <div class="dialogue-en">Alan Newell, Herbert Simon, Marvin Minsky, John McCarthy. They were the four who were not only</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(05:24.800)</span>
+  </div>
+  <div class="dialogue-en">at the Dartmouth conference, but Newell and Simon arrived there with a working program</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(05:29.600)</span>
+  </div>
+  <div class="dialogue-en">called The Logic Theorist. Everybody else had great ideas about how they might do it, but</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:34.960)</span>
+  </div>
+  <div class="dialogue-en">But they weren&#39;t going to do it yet.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:41.040)</span>
+  </div>
+  <div class="dialogue-en">And you mentioned Joe Traub, my husband. I was immersed in AI before I met Joe</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(05:50.080)</span>
+  </div>
+  <div class="dialogue-en">because I had been Ed Feigenbaum&#39;s assistant at Stanford. And before that,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(05:55.040)</span>
+  </div>
+  <div class="dialogue-en">I had worked on a book edited by Feigenbaum and Julian Feldman called Computers and Thought.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(06:04.320)</span>
+  </div>
+  <div class="dialogue-en">It was the first textbook of readings of AI. And they only did it because they were trying to teach</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(06:10.480)</span>
+  </div>
+  <div class="dialogue-en">AI to people at Berkeley. And there was nothing, you&#39;d have to send them to this journal and that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(06:15.040)</span>
+  </div>
+  <div class="dialogue-en">journal. This was not the internet where you could go look at an article. So I was fascinated from</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(06:22.240)</span>
+  </div>
+  <div class="dialogue-en">the get go by AI. I was an English major. What did I know? And yet I was fascinated. And that&#39;s</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:30.960)</span>
+  </div>
+  <div class="dialogue-en">why you saw that historical, that literary background, which I think is very much a part</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(06:38.080)</span>
+  </div>
+  <div class="dialogue-en">of the continuum of AI, that AI grew out of that same impulse. That traditional, what was,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:47.600)</span>
+  </div>
+  <div class="dialogue-en">what drew you to AI? How did you even think of it back then? What was the possibilities,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(06:54.880)</span>
+  </div>
+  <div class="dialogue-en">the dreams? What was interesting to you? The idea of intelligence outside the human cranium,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(07:03.200)</span>
+  </div>
+  <div class="dialogue-en">this was a phenomenal idea. And even when I finished Machines Who Think,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(07:08.960)</span>
+  </div>
+  <div class="dialogue-en">I didn&#39;t know if they were going to succeed. In fact, the final chapter is very wishy washy,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(07:15.120)</span>
+  </div>
+  <div class="dialogue-en">frankly. Succeed, the field did. Yeah. So was there the idea that AI began with the wish to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(07:25.760)</span>
+  </div>
+  <div class="dialogue-en">forge the gods? So the spiritual component that we crave to create this other thing greater than</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(07:33.760)</span>
+  </div>
+  <div class="dialogue-en">ourselves. For those guys, I don&#39;t think so. Newell and Simon were cognitive psychologists.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:42.320)</span>
+  </div>
+  <div class="dialogue-en">What they wanted was to simulate aspects of human intelligence,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:49.040)</span>
+  </div>
+  <div class="dialogue-en">and they found they could do it on the computer. Minsky just thought it was a really cool thing</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(07:57.280)</span>
+  </div>
+  <div class="dialogue-en">to do. Likewise, McCarthy. McCarthy had got the idea in 1949 when he was a Caltech student.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:06.160)</span>
+  </div>
+  <div class="dialogue-en">And he listened to somebody&#39;s lecture. It&#39;s in my book. I forget who it was. And he thought,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(08:15.520)</span>
+  </div>
+  <div class="dialogue-en">oh, that would be fun to do. How do we do that? And he took a very mathematical approach.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(08:21.520)</span>
+  </div>
+  <div class="dialogue-en">Minsky was hybrid, and Newell and Simon were very much cognitive psychology. How can we simulate</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(08:29.440)</span>
+  </div>
+  <div class="dialogue-en">various things about human cognition? What happened over the many years is, of course,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(08:37.120)</span>
+  </div>
+  <div class="dialogue-en">our definition of intelligence expanded tremendously. These days, biologists are</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(08:44.800)</span>
+  </div>
+  <div class="dialogue-en">comfortable talking about the intelligence of the cell, the intelligence of the brain,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(08:49.240)</span>
+  </div>
+  <div class="dialogue-en">not just human brain, but the intelligence of any kind of brain. Cephalopods, I mean, an octopus is</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(09:00.560)</span>
+  </div>
+  <div class="dialogue-en">really intelligent by any amount. We wouldn&#39;t have thought of that in the 60s, even the 70s.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:06.880)</span>
+  </div>
+  <div class="dialogue-en">So all these things have worked in. And I did hear one behavioral primatologist, Franz De Waal,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(09:16.320)</span>
+  </div>
+  <div class="dialogue-en">say, AI taught us the questions to ask. Yeah, this is what happens, right? When you try to build it,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(09:26.240)</span>
+  </div>
+  <div class="dialogue-en">is when you start to actually ask questions. It puts a mirror to ourselves. Yeah, right. So you</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(09:32.400)</span>
+  </div>
+  <div class="dialogue-en">were there in the middle of it. It seems like not many people were asking the questions that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(09:38.880)</span>
+  </div>
+  <div class="dialogue-en">you were, or just trying to look at this field the way you were. I was so low. When I went to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(09:45.920)</span>
+  </div>
+  <div class="dialogue-en">get funding for this because I needed somebody to transcribe the interviews and I needed travel</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(09:53.800)</span>
+  </div>
+  <div class="dialogue-en">expenses, I went to everything you could think of, the NSF, the DARPA. There was an Air Force</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(10:07.160)</span>
+  </div>
+  <div class="dialogue-en">place that doled out money. And each of them said, well, that&#39;s a very interesting idea.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:15.480)</span>
+  </div>
+  <div class="dialogue-en">But we&#39;ll think about it. And the National Science Foundation actually said to me in plain English,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(10:23.960)</span>
+  </div>
+  <div class="dialogue-en">hey, you&#39;re only a writer. You&#39;re not a historian of science. And I said, yeah, that&#39;s true. But</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(10:30.480)</span>
+  </div>
+  <div class="dialogue-en">the historians of science will be crawling all over this field. I&#39;m writing for the general</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(10:35.400)</span>
+  </div>
+  <div class="dialogue-en">audience, so I thought. And they still wouldn&#39;t budge. I finally got a private grant without</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(10:43.880)</span>
+  </div>
+  <div class="dialogue-en">knowing who it was from, from Ed Fredkin at MIT. He was a wealthy man, and he liked what he called</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(10:51.400)</span>
+  </div>
+  <div class="dialogue-en">crackpot ideas. And he considered this a crackpot idea, and he was willing to support it. I am ever</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(10:58.680)</span>
+  </div>
+  <div class="dialogue-en">grateful, let me say that. Some would say that a history of science approach to AI, or even just a</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(11:06.720)</span>
+  </div>
+  <div class="dialogue-en">history, or anything like the book that you&#39;ve written, hasn&#39;t been written since. Maybe I&#39;m</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(11:13.760)</span>
+  </div>
+  <div class="dialogue-en">not familiar, but it&#39;s certainly not many. If we think about bigger than just these couple of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(11:20.240)</span>
+  </div>
+  <div class="dialogue-en">decades, few decades, what are the roots of AI? Oh, they go back so far. Yes, of course, there&#39;s</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(11:30.640)</span>
+  </div>
+  <div class="dialogue-en">all the legendary stuff, the Golem and the early robots of the 20th century. But they go back much</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(11:41.240)</span>
+  </div>
+  <div class="dialogue-en">further than that. If you read Homer, Homer has robots in the Iliad. And a classical scholar was</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(11:49.680)</span>
+  </div>
+  <div class="dialogue-en">pointing out to me just a few months ago, well, you said you just read the Odyssey. The Odyssey</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(11:54.120)</span>
+  </div>
+  <div class="dialogue-en">is full of robots. It is, I said? Yeah. How do you think Odysseus&#39;s ship gets from one place to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(12:00.800)</span>
+  </div>
+  <div class="dialogue-en">another? He doesn&#39;t have the crew people to do that, the crewmen. Yeah, it&#39;s magic. It&#39;s robots.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(12:07.320)</span>
+  </div>
+  <div class="dialogue-en">Oh, I thought, how interesting. So we&#39;ve had this notion of AI for a long time. And then toward the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(12:17.240)</span>
+  </div>
+  <div class="dialogue-en">end of the 19th century, the beginning of the 20th century, there were scientists who actually</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(12:23.080)</span>
+  </div>
+  <div class="dialogue-en">tried to make this happen some way or another, not successfully. They didn&#39;t have the technology for</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(12:29.520)</span>
+  </div>
+  <div class="dialogue-en">it. And of course, Babbage in the 1850s and 60s, he saw that what he was building was capable of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(12:40.080)</span>
+  </div>
+  <div class="dialogue-en">intelligent behavior. And when he ran out of funding, the British government finally said,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(12:47.080)</span>
+  </div>
+  <div class="dialogue-en">that&#39;s enough. He and Lady Lovelace decided, oh, well, why don&#39;t we play the ponies with this? He</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(12:55.880)</span>
+  </div>
+  <div class="dialogue-en">had other ideas for raising money too. But if we actually reach back once again, I think people</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(13:02.400)</span>
+  </div>
+  <div class="dialogue-en">don&#39;t actually really know that robots do appear and ideas of robots. You talk about the Hellenic</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:09.160)</span>
+  </div>
+  <div class="dialogue-en">and the Hebraic points of view. Oh, yes. Can you tell me about each? I defined it this way. The</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(13:16.760)</span>
+  </div>
+  <div class="dialogue-en">Hellenic point of view is robots are great. They are party help. They help this guy Hephaestus,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(13:25.160)</span>
+  </div>
+  <div class="dialogue-en">this god Hephaestus in his forge. I presume he made them to help him and so on and so forth.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:32.560)</span>
+  </div>
+  <div class="dialogue-en">And they welcome the whole idea of robots. The Hebraic view has to do with, I think it&#39;s the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(13:40.120)</span>
+  </div>
+  <div class="dialogue-en">second commandment, thou shalt not make any graven image. In other words, you better not</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(13:47.280)</span>
+  </div>
+  <div class="dialogue-en">start imitating humans because that&#39;s just forbidden. It&#39;s the second commandment. And</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(13:55.200)</span>
+  </div>
+  <div class="dialogue-en">a lot of the reaction to artificial intelligence has been a sense that this is somehow wicked,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(14:08.800)</span>
+  </div>
+  <div class="dialogue-en">this is somehow blasphemous. We shouldn&#39;t be going there. Now, you can say, yeah, but there are going</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(14:17.600)</span>
+  </div>
+  <div class="dialogue-en">to be some downsides. And I say, yes, there are, but blasphemy is not one of them.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:21.840)</span>
+  </div>
+  <div class="dialogue-en">You know, there is a kind of fear that feels to be almost primal. Is there religious roots to that?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(14:29.800)</span>
+  </div>
+  <div class="dialogue-en">Because so much of our society has religious roots. And so there is a feeling of, like you</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(14:36.280)</span>
+  </div>
+  <div class="dialogue-en">said, blasphemy of creating the other, of creating something, you know, it doesn&#39;t have to be</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(14:43.800)</span>
+  </div>
+  <div class="dialogue-en">artificial intelligence. It&#39;s creating life in general. It&#39;s the Frankenstein idea.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(14:48.640)</span>
+  </div>
+  <div class="dialogue-en">There&#39;s the annotated Frankenstein on my coffee table. It&#39;s a tremendous novel. It really is just</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(14:56.080)</span>
+  </div>
+  <div class="dialogue-en">beautifully perceptive. Yes, we do fear this and we have good reason to fear it,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:03.880)</span>
+  </div>
+  <div class="dialogue-en">but because it can get out of hand. Maybe you can speak to that fear,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(15:08.760)</span>
+  </div>
+  <div class="dialogue-en">the psychology, if you&#39;ve thought about it. You know, there&#39;s a practical set of fears,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(15:12.960)</span>
+  </div>
+  <div class="dialogue-en">concerns in the short term. You can think if we actually think about artificial intelligence</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(15:17.800)</span>
+  </div>
+  <div class="dialogue-en">systems, you can think about bias of discrimination in algorithms. You can think about their social</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(15:29.160)</span>
+  </div>
+  <div class="dialogue-en">networks have algorithms that recommend the content you see, thereby these algorithms control</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(15:35.520)</span>
+  </div>
+  <div class="dialogue-en">the behavior of the masses. There&#39;s these concerns. But to me, it feels like the fear</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:40.320)</span>
+  </div>
+  <div class="dialogue-en">that people have is deeper than that. So have you thought about the psychology of it?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(15:46.280)</span>
+  </div>
+  <div class="dialogue-en">I think in a superficial way I have. There is this notion that if we produce a machine that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(15:57.240)</span>
+  </div>
+  <div class="dialogue-en">can think, it will outthink us and therefore replace us.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(16:01.240)</span>
+  </div>
+  <div class="dialogue-en">I guess that&#39;s a primal fear of almost kind of a kind of mortality. So around the time you said</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(16:11.960)</span>
+  </div>
+  <div class="dialogue-en">you worked at Stanford with Ed Feigenbaum. So let&#39;s look at that one person. Throughout his</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(16:21.760)</span>
+  </div>
+  <div class="dialogue-en">history, clearly a key person, one of the many in the history of AI. How has he changed in general</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:31.240)</span>
+  </div>
+  <div class="dialogue-en">around him? How has Stanford changed in the last, how many years are we talking about here?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:36.440)</span>
+  </div>
+  <div class="dialogue-en">Oh, since 65.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(16:38.400)</span>
+  </div>
+  <div class="dialogue-en">65. So maybe it doesn&#39;t have to be about him. It could be bigger. But because he was a key</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(16:45.000)</span>
+  </div>
+  <div class="dialogue-en">person in expert systems, for example, how is that, how are these folks who you&#39;ve interviewed in the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:54.160)</span>
+  </div>
+  <div class="dialogue-en">70s, 79 changed through the decades?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(16:58.360)</span>
+  </div>
+  <div class="dialogue-en">In Ed&#39;s case, I know him well. We are dear friends. We see each other every month or so. He told me</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(17:12.240)</span>
+  </div>
+  <div class="dialogue-en">that when Machines Who Think first came out, he really thought all the front matter was kind of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(17:17.040)</span>
+  </div>
+  <div class="dialogue-en">bologna. And 10 years later, he said, no, I see what you&#39;re getting at. Yes, this is an impulse</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(17:27.040)</span>
+  </div>
+  <div class="dialogue-en">that has been a human impulse for thousands of years to create something outside the human</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(17:34.800)</span>
+  </div>
+  <div class="dialogue-en">cranium that has intelligence. I think it&#39;s very hard when you&#39;re down at the algorithmic level,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:46.000)</span>
+  </div>
+  <div class="dialogue-en">and you&#39;re just trying to make something work, which is hard enough to step back and think of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(17:53.000)</span>
+  </div>
+  <div class="dialogue-en">the big picture. It reminds me of when I was in Santa Fe, I knew a lot of archaeologists,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(17:59.720)</span>
+  </div>
+  <div class="dialogue-en">which was a hobby of mine. And I would say, yeah, yeah, well, you can look at the shards and say,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(18:07.920)</span>
+  </div>
+  <div class="dialogue-en">oh, this came from this tribe and this came from this trade route and so on. But what about the big</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(18:14.080)</span>
+  </div>
+  <div class="dialogue-en">picture? And a very distinguished archaeologist said to me, they don&#39;t think that way. No,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(18:21.840)</span>
+  </div>
+  <div class="dialogue-en">they&#39;re trying to match the shard to where it came from. Where did the remainder of this corn</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(18:30.520)</span>
+  </div>
+  <div class="dialogue-en">come from? Was it grown here? Was it grown elsewhere? And I think this is part of any</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(18:37.360)</span>
+  </div>
+  <div class="dialogue-en">scientific field. You&#39;re so busy doing the hard work, and it is hard work, that you don&#39;t step</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(18:46.800)</span>
+  </div>
+  <div class="dialogue-en">back and say, oh, well, now let&#39;s talk about the general meaning of all this. Yes.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:53.120)</span>
+  </div>
+  <div class="dialogue-en">So none of the even Minsky and McCarthy, they...</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(18:58.320)</span>
+  </div>
+  <div class="dialogue-en">Oh, those guys did. Yeah. The founding fathers did.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:01.840)</span>
+  </div>
+  <div class="dialogue-en">Early on or later?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(19:03.920)</span>
+  </div>
+  <div class="dialogue-en">Pretty early on. But in a different way from how I looked at it. The two cognitive psychologists,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(19:11.200)</span>
+  </div>
+  <div class="dialogue-en">Newell and Simon, they wanted to imagine reforming cognitive psychology so that we would really,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(19:20.960)</span>
+  </div>
+  <div class="dialogue-en">really understand the brain. Minsky was more speculative. And John McCarthy saw it as,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(19:32.960)</span>
+  </div>
+  <div class="dialogue-en">I think I&#39;m doing him right by this, he really saw it as a great boon for human beings to have</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(19:40.320)</span>
+  </div>
+  <div class="dialogue-en">this technology. And that was reason enough to do it. And he had wonderful, wonderful</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(19:48.880)</span>
+  </div>
+  <div class="dialogue-en">fables about how if you do the mathematics, you will see that these things are really good for</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(19:56.800)</span>
+  </div>
+  <div class="dialogue-en">human beings. And if you had a technological objection, he had an answer, a technological</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(20:03.440)</span>
+  </div>
+  <div class="dialogue-en">answer. But here&#39;s how we could get over that and then blah, blah, blah. And one of his favorite things</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(20:10.320)</span>
+  </div>
+  <div class="dialogue-en">was what he called the literary problem, which of course he presented to me several times.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(20:16.400)</span>
+  </div>
+  <div class="dialogue-en">That is everything in literature, there are conventions in literature. One of the conventions</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(20:23.680)</span>
+  </div>
+  <div class="dialogue-en">is that you have a villain and a hero. And the hero in most literature is human,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:36.160)</span>
+  </div>
+  <div class="dialogue-en">and the villain in most literature is a machine. And he said, that&#39;s just not the way it&#39;s going</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(20:41.680)</span>
+  </div>
+  <div class="dialogue-en">to be. But that&#39;s the way we&#39;re used to it. So when we tell stories about AI, it&#39;s always</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(20:47.600)</span>
+  </div>
+  <div class="dialogue-en">with this paradigm. I thought, yeah, he&#39;s right. Looking back, the classics RUR is certainly the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(20:57.040)</span>
+  </div>
+  <div class="dialogue-en">machines trying to overthrow the humans. Frankenstein is different. Frankenstein is</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(21:06.400)</span>
+  </div>
+  <div class="dialogue-en">a creature. He never has a name. Frankenstein, of course, is the guy who created him, the human,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(21:13.440)</span>
+  </div>
+  <div class="dialogue-en">Dr. Frankenstein. This creature wants to be loved, wants to be accepted. And it is only when</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(21:22.320)</span>
+  </div>
+  <div class="dialogue-en">Frankenstein turns his head, in fact, runs the other way. And the creature is without love,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(21:34.480)</span>
+  </div>
+  <div class="dialogue-en">that he becomes the monster that he later becomes.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:38.560)</span>
+  </div>
+  <div class="dialogue-en">So who&#39;s the villain in Frankenstein? It&#39;s unclear, right?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(21:43.840)</span>
+  </div>
+  <div class="dialogue-en">Oh, it is unclear, yeah.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(21:45.520)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s really the people who drive him. By driving him away, they bring out the worst.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(21:54.240)</span>
+  </div>
+  <div class="dialogue-en">That&#39;s right. They give him no human solace. And he is driven away, you&#39;re right.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(22:00.800)</span>
+  </div>
+  <div class="dialogue-en">He becomes, at one point, the friend of a blind man. And he serves this blind man,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:08.160)</span>
+  </div>
+  <div class="dialogue-en">and they become very friendly. But when the sighted people of the blind man&#39;s family come in,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(22:14.880)</span>
+  </div>
+  <div class="dialogue-en">ah, you&#39;ve got a monster here. So it&#39;s very didactic in its way. And what I didn&#39;t know</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(22:23.040)</span>
+  </div>
+  <div class="dialogue-en">is that Mary Shelley and Percy Shelley were great readers of the literature surrounding abolition</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(22:31.120)</span>
+  </div>
+  <div class="dialogue-en">in the United States, the abolition of slavery. And they picked that up wholesale. You are making</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(22:38.720)</span>
+  </div>
+  <div class="dialogue-en">monsters of these people because you won&#39;t give them the respect and love that they deserve.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:44.000)</span>
+  </div>
+  <div class="dialogue-en">Do you have, if we get philosophical for a second, do you worry that once we create</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(22:52.000)</span>
+  </div>
+  <div class="dialogue-en">machines that are a little bit more intelligent, let&#39;s look at Roomba, the vacuums, the cleaner,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(22:58.080)</span>
+  </div>
+  <div class="dialogue-en">that this darker part of human nature where we abuse the other, the somebody who&#39;s different,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:08.800)</span>
+  </div>
+  <div class="dialogue-en">will come out?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(23:09.600)</span>
+  </div>
+  <div class="dialogue-en">I don&#39;t worry about it. I could imagine it happening. But I think that what AI has to offer</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(23:18.560)</span>
+  </div>
+  <div class="dialogue-en">the human race will be so attractive that people will be won over.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:25.760)</span>
+  </div>
+  <div class="dialogue-en">So you have looked deep into these people, had deep conversations, and it&#39;s interesting to get</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(23:32.480)</span>
+  </div>
+  <div class="dialogue-en">a sense of stories of the way they were thinking and the way it was changed, the way your own</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(23:42.720)</span>
+  </div>
+  <div class="dialogue-en">thinking about AI has changed. So you mentioned McCarthy. What about the years at CMU, Carnegie</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(23:51.840)</span>
+  </div>
+  <div class="dialogue-en">Mellon, with Joe? Sure. Joe was not in AI. He was in algorithmic complexity.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:03.440)</span>
+  </div>
+  <div class="dialogue-en">Was there always a line between AI and computer science, for example?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:07.280)</span>
+  </div>
+  <div class="dialogue-en">Is AI its own place of outcasts? Was that the feeling?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(24:10.880)</span>
+  </div>
+  <div class="dialogue-en">There was a kind of outcast period for AI. For instance, in 1974, the new field was hardly 10</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(24:24.560)</span>
+  </div>
+  <div class="dialogue-en">years old. The new field of computer science was asked by the National Science Foundation,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:31.680)</span>
+  </div>
+  <div class="dialogue-en">I believe, but it may have been the National Academies, I can&#39;t remember,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(24:34.400)</span>
+  </div>
+  <div class="dialogue-en">to tell your fellow scientists where computer science is and what it means.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:44.160)</span>
+  </div>
+  <div class="dialogue-en">And they wanted to leave out AI. And they only agreed to put it in because Don Knuth said,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(24:53.520)</span>
+  </div>
+  <div class="dialogue-en">hey, this is important. You can&#39;t just leave that out.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:57.280)</span>
+  </div>
+  <div class="dialogue-en">Really? Don, dude?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(24:58.240)</span>
+  </div>
+  <div class="dialogue-en">Don Knuth, yes.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:59.680)</span>
+  </div>
+  <div class="dialogue-en">I talked to him recently, too. Out of all the people.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(25:02.960)</span>
+  </div>
+  <div class="dialogue-en">Yes. But you see, an AI person couldn&#39;t have made that argument. He wouldn&#39;t have been believed.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:08.640)</span>
+  </div>
+  <div class="dialogue-en">But Knuth was believed. Yes.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:10.800)</span>
+  </div>
+  <div class="dialogue-en">So Joe Traub worked on the real stuff.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(25:15.200)</span>
+  </div>
+  <div class="dialogue-en">Joe was working on algorithmic complexity. But he would say in plain English again and again,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(25:22.160)</span>
+  </div>
+  <div class="dialogue-en">the smartest people I know are in AI.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:24.720)</span>
+  </div>
+  <div class="dialogue-en">Really?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(25:25.280)</span>
+  </div>
+  <div class="dialogue-en">Oh, yes. No question. Anyway, Joe loved these guys. What happened was that I guess it was</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(25:35.760)</span>
+  </div>
+  <div class="dialogue-en">as I started to write Machines Who Think, Herb Simon and I became very close friends.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(25:41.360)</span>
+  </div>
+  <div class="dialogue-en">He would walk past our house on Northumberland Street every day after work. And I would just</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:47.200)</span>
+  </div>
+  <div class="dialogue-en">be putting my cover on my typewriter. And I would lean out the door and say,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(25:52.160)</span>
+  </div>
+  <div class="dialogue-en">Herb, would you like a sherry? And Herb almost always would like a sherry. So he&#39;d stop in</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:59.440)</span>
+  </div>
+  <div class="dialogue-en">and we&#39;d talk for an hour, two hours. My journal says we talked this afternoon for three hours.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:06.720)</span>
+  </div>
+  <div class="dialogue-en">What was on his mind at the time in terms of on the AI side of things?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:11.680)</span>
+  </div>
+  <div class="dialogue-en">Oh, we didn&#39;t talk too much about AI. We talked about other things.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(26:14.640)</span>
+  </div>
+  <div class="dialogue-en">Just life.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(26:15.680)</span>
+  </div>
+  <div class="dialogue-en">We both love literature. And Herb had read Proust in the original French twice all the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(26:24.000)</span>
+  </div>
+  <div class="dialogue-en">way through. I can&#39;t. I&#39;ve read it in English in translation. So we talked about literature.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(26:30.480)</span>
+  </div>
+  <div class="dialogue-en">We talked about languages. We talked about music because he loved music. We talked about</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(26:36.240)</span>
+  </div>
+  <div class="dialogue-en">art because he was actually enough of a painter that he had to give it up because he was afraid</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(26:44.960)</span>
+  </div>
+  <div class="dialogue-en">it was interfering with his research and so on. So no, it was really just chat, chat.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:51.520)</span>
+  </div>
+  <div class="dialogue-en">But it was very warm. So one summer I said to Herb, my students have all the really</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(26:59.360)</span>
+  </div>
+  <div class="dialogue-en">interesting conversations. I was teaching at the University of Pittsburgh then in the English</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:03.920)</span>
+  </div>
+  <div class="dialogue-en">department. They get to talk about the meaning of life and that kind of thing. And what do I have?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(27:09.920)</span>
+  </div>
+  <div class="dialogue-en">I have university meetings where we talk about the photocopying budget and whether the course</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(27:17.040)</span>
+  </div>
+  <div class="dialogue-en">on romantic poetry should be one semester or two. So Herb laughed. He said, yes, I know what you</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(27:23.040)</span>
+  </div>
+  <div class="dialogue-en">mean. He said, but you could do something about that. Dot, that was his wife, Dot and I used to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(27:30.640)</span>
+  </div>
+  <div class="dialogue-en">have a salon at the University of Chicago every Sunday night. And we would have essentially an</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(27:38.560)</span>
+  </div>
+  <div class="dialogue-en">open house and people knew. It wasn&#39;t for a small talk. It was really for some topic of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(27:47.600)</span>
+  </div>
+  <div class="dialogue-en">depth. He said, but my advice would be that you choose the topic ahead of time. Fine, I said.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:54.480)</span>
+  </div>
+  <div class="dialogue-en">So we exchanged mail over the summer. That was US Post in those days because</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(28:01.680)</span>
+  </div>
+  <div class="dialogue-en">you didn&#39;t have personal email. And I decided I would organize it and there would be eight of us,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(28:12.000)</span>
+  </div>
+  <div class="dialogue-en">Alan Noland, his wife, Herb Simon and his wife Dorothea. There was a novelist in town,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(28:21.200)</span>
+  </div>
+  <div class="dialogue-en">a man named Mark Harris. He had just arrived and his wife Josephine. Mark was most famous then for</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(28:29.680)</span>
+  </div>
+  <div class="dialogue-en">a novel called Bang the Drum Slowly, which was about baseball. And Joe and me, so eight people.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:36.720)</span>
+  </div>
+  <div class="dialogue-en">And we met monthly and we just sank our teeth into really hard topics and it was great fun.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:45.760)</span>
+  </div>
+  <div class="dialogue-en">TK How have your own views around artificial intelligence changed</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:53.600)</span>
+  </div>
+  <div class="dialogue-en">through the process of writing Machines Who Think and afterwards, the ripple effects?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(28:57.440)</span>
+  </div>
+  <div class="dialogue-en">RL I was a little skeptical that this whole thing would work out. It didn&#39;t matter. To me,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(29:04.160)</span>
+  </div>
+  <div class="dialogue-en">it was so audacious. AI generally. And in some ways, it hasn&#39;t worked out the way I expected</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:16.800)</span>
+  </div>
+  <div class="dialogue-en">so far. That is to say, there&#39;s this wonderful lot of apps, thanks to deep learning and so on.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:26.880)</span>
+  </div>
+  <div class="dialogue-en">But those are algorithmic. And in the part of symbolic processing, there&#39;s very little yet.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:39.120)</span>
+  </div>
+  <div class="dialogue-en">And that&#39;s a field that lies waiting for industrious graduate students.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(29:45.600)</span>
+  </div>
+  <div class="dialogue-en">TK Maybe you can tell me some figures that popped up in your life in the 80s with expert systems</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(29:53.040)</span>
+  </div>
+  <div class="dialogue-en">where there was the symbolic AI possibilities of what most people think of as AI,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(30:00.960)</span>
+  </div>
+  <div class="dialogue-en">if you dream of the possibilities of AI, it&#39;s really expert systems. And those hit a few walls</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:07.520)</span>
+  </div>
+  <div class="dialogue-en">and there was challenges there. And I think, yes, they will reemerge again with some new</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(30:12.080)</span>
+  </div>
+  <div class="dialogue-en">breakthroughs and so on. But what did that feel like, both the possibility and the winter that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(30:17.760)</span>
+  </div>
+  <div class="dialogue-en">followed the slowdown in research? BG Ah, you know, this whole thing about AI winter is to me</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(30:25.040)</span>
+  </div>
+  <div class="dialogue-en">a crock. TK Snow winters.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(30:26.960)</span>
+  </div>
+  <div class="dialogue-en">BG Because I look at the basic research that was being done in the 80s, which is supposed to be,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(30:34.480)</span>
+  </div>
+  <div class="dialogue-en">my God, it was really important. It was laying down things that nobody had thought about before,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:40.320)</span>
+  </div>
+  <div class="dialogue-en">but it was basic research. You couldn&#39;t monetize it. Hence the winter.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(30:44.880)</span>
+  </div>
+  <div class="dialogue-en">TK That&#39;s the winter. BG You know, research,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:49.120)</span>
+  </div>
+  <div class="dialogue-en">scientific research goes and fits and starts. It isn&#39;t this nice smooth,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(30:54.240)</span>
+  </div>
+  <div class="dialogue-en">oh, this follows this follows this. No, it just doesn&#39;t work that way.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(30:59.040)</span>
+  </div>
+  <div class="dialogue-en">TK The interesting thing, the way winters happen, it&#39;s never the fault of the researchers.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(31:05.760)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s the some source of hype over promising. Well, no, let me take that back. Sometimes it</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(31:12.000)</span>
+  </div>
+  <div class="dialogue-en">is the fault of the researchers. Sometimes certain researchers might over promise the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(31:17.200)</span>
+  </div>
+  <div class="dialogue-en">possibilities. They themselves believe that we&#39;re just a few years away. Sort of just recently</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(31:23.520)</span>
+  </div>
+  <div class="dialogue-en">talked to Elon Musk and he believes he&#39;ll have an autonomous vehicle, will have autonomous vehicles</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:28.160)</span>
+  </div>
+  <div class="dialogue-en">in a year. And he believes it. BG A year?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:30.640)</span>
+  </div>
+  <div class="dialogue-en">TK A year. Yeah. With mass deployment of a time.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(31:33.360)</span>
+  </div>
+  <div class="dialogue-en">BG For the record, this is 2019 right now. So he&#39;s talking 2020.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(31:38.640)</span>
+  </div>
+  <div class="dialogue-en">TK To do the impossible, you really have to believe it. And I think what&#39;s going to happen</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(31:44.480)</span>
+  </div>
+  <div class="dialogue-en">when you believe it, because there&#39;s a lot of really brilliant people around him,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(31:48.240)</span>
+  </div>
+  <div class="dialogue-en">is some good stuff will come out of it. Some unexpected brilliant breakthroughs will come out</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(31:53.840)</span>
+  </div>
+  <div class="dialogue-en">of it when you really believe it, when you work that hard. BG I believe that. And I believe</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:58.480)</span>
+  </div>
+  <div class="dialogue-en">autonomous vehicles will come. I just don&#39;t believe it&#39;ll be in a year. I wish.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(32:02.640)</span>
+  </div>
+  <div class="dialogue-en">TK But nevertheless, there&#39;s, autonomous vehicles is a good example. There&#39;s a feeling</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(32:09.120)</span>
+  </div>
+  <div class="dialogue-en">many companies have promised by 2021, by 2022, Ford, GM, basically every single automotive</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(32:16.640)</span>
+  </div>
+  <div class="dialogue-en">company has promised they&#39;ll have autonomous vehicles. So that kind of over promise is what</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(32:21.440)</span>
+  </div>
+  <div class="dialogue-en">leads to the winter. Because we&#39;ll come to those dates, there won&#39;t be autonomous vehicles.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(32:26.720)</span>
+  </div>
+  <div class="dialogue-en">BG And there&#39;ll be a feeling, well, wait a minute, if we took your word at that time,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(32:32.080)</span>
+  </div>
+  <div class="dialogue-en">that means we just spent billions of dollars, had made no money, and there&#39;s a counter response to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(32:39.680)</span>
+  </div>
+  <div class="dialogue-en">where everybody gives up on it. Sort of intellectually, at every level, the hope just</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(32:46.880)</span>
+  </div>
+  <div class="dialogue-en">dies. And all that&#39;s left is a few basic researchers. So you&#39;re uncomfortable with</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(32:52.960)</span>
+  </div>
+  <div class="dialogue-en">some aspects of this idea. TK Well, it&#39;s the difference between science and commerce.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:58.400)</span>
+  </div>
+  <div class="dialogue-en">BG So you think science goes on the way it does?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(33:04.160)</span>
+  </div>
+  <div class="dialogue-en">TK Oh, science can really be killed by not getting proper funding or timely funding.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:14.160)</span>
+  </div>
+  <div class="dialogue-en">I think Great Britain was a perfect example of that. The Lighthill report in,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(33:19.440)</span>
+  </div>
+  <div class="dialogue-en">I can&#39;t remember the year, essentially said, there&#39;s no use Great Britain putting any money</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(33:26.560)</span>
+  </div>
+  <div class="dialogue-en">into this, it&#39;s going nowhere. And this was all about social factions in Great Britain.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(33:37.040)</span>
+  </div>
+  <div class="dialogue-en">Edinburgh hated Cambridge and Cambridge hated Manchester. Somebody else can write that story.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:44.720)</span>
+  </div>
+  <div class="dialogue-en">But it really did have a hard effect on research there. Now, they&#39;ve come roaring back with Deep</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(33:54.400)</span>
+  </div>
+  <div class="dialogue-en">Mind. But that&#39;s one guy and his visionaries around him. BG But just to push on that,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:03.760)</span>
+  </div>
+  <div class="dialogue-en">it&#39;s kind of interesting. You have this dislike of the idea of an AI winter.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(34:08.320)</span>
+  </div>
+  <div class="dialogue-en">Where&#39;s that coming from? Where were you? TK Oh, because I just don&#39;t think it&#39;s true.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:15.440)</span>
+  </div>
+  <div class="dialogue-en">BG There was a particular period of time. It&#39;s a romantic notion, certainly.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(34:21.280)</span>
+  </div>
+  <div class="dialogue-en">TK Yeah, well. No, I admire science, perhaps more than I admire commerce. Commerce is fine. Hey,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(34:33.280)</span>
+  </div>
+  <div class="dialogue-en">you know, we all gotta live. But science has a much longer view than commerce and continues</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(34:46.720)</span>
+  </div>
+  <div class="dialogue-en">almost regardless. It can&#39;t continue totally regardless, but almost regardless of what&#39;s</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(34:56.400)</span>
+  </div>
+  <div class="dialogue-en">saleable and what&#39;s not, what&#39;s monetizable and what&#39;s not. BG So the winter is just something</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(35:01.680)</span>
+  </div>
+  <div class="dialogue-en">that happens on the commerce side, and the science marches. That&#39;s a beautifully optimistic</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:10.960)</span>
+  </div>
+  <div class="dialogue-en">and inspiring message. I agree with you. I think if we look at the key people that work in AI,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(35:16.400)</span>
+  </div>
+  <div class="dialogue-en">that work in key scientists in most disciplines, they continue working out of the love for science.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(35:22.160)</span>
+  </div>
+  <div class="dialogue-en">You can always scrape up some funding to stay alive, and they continue working diligently.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:31.680)</span>
+  </div>
+  <div class="dialogue-en">But there certainly is a huge amount of funding now, and there&#39;s a concern on the AI side and</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(35:38.080)</span>
+  </div>
+  <div class="dialogue-en">deep learning. There&#39;s a concern that we might, with over promising, hit another slowdown in</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(35:44.160)</span>
+  </div>
+  <div class="dialogue-en">funding, which does affect the number of students, you know, that kind of thing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:47.520)</span>
+  </div>
+  <div class="dialogue-en">RG Yeah, it does. BG So the kind of ideas you had in Machines Who Think,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:52.640)</span>
+  </div>
+  <div class="dialogue-en">did you continue that curiosity through the decades that followed?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(35:56.240)</span>
+  </div>
+  <div class="dialogue-en">RG Yes, I did. BG And what was your view, historical view of how AI community evolved,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(36:03.840)</span>
+  </div>
+  <div class="dialogue-en">the conversations about it, the work? Has it persisted the same way from its birth?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(36:09.280)</span>
+  </div>
+  <div class="dialogue-en">RG No, of course not. It&#39;s just as we were just talking, the symbolic AI really kind of dried up</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(36:19.760)</span>
+  </div>
+  <div class="dialogue-en">and it all became algorithmic. I remember a young AI student telling me what he was doing,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(36:27.200)</span>
+  </div>
+  <div class="dialogue-en">and I had been away from the field long enough. I&#39;d gotten involved with complexity at the Santa</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(36:33.200)</span>
+  </div>
+  <div class="dialogue-en">Fe Institute. I thought, algorithms, yeah, they&#39;re in the service of, but they&#39;re not the main event.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(36:41.680)</span>
+  </div>
+  <div class="dialogue-en">No, they became the main event. That surprised me. And we all know the downside of this. We all</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(36:49.440)</span>
+  </div>
+  <div class="dialogue-en">know that if you&#39;re using an algorithm to make decisions based on a gazillion human decisions,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(36:58.240)</span>
+  </div>
+  <div class="dialogue-en">baked into it are all the mistakes that humans make, the bigotries, the short sightedness,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(37:05.440)</span>
+  </div>
+  <div class="dialogue-en">and so on and so on. BG So you mentioned Santa Fe Institute. So you&#39;ve written the novel</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(37:13.280)</span>
+  </div>
+  <div class="dialogue-en">Edge of Chaos, but it&#39;s inspired by the ideas of complexity, a lot of which have been extensively</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(37:20.720)</span>
+  </div>
+  <div class="dialogue-en">explored at the Santa Fe Institute. It&#39;s another fascinating topic, just sort of emergent</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(37:31.200)</span>
+  </div>
+  <div class="dialogue-en">complexity from chaos. Nobody knows how it happens really, but it seems to where all the interesting</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(37:37.440)</span>
+  </div>
+  <div class="dialogue-en">stuff does happen. So how did first, not your novel, but just complexity in general and the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(37:44.480)</span>
+  </div>
+  <div class="dialogue-en">work at Santa Fe, fit into the bigger puzzle of the history of AI? Or maybe even your personal</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(37:51.600)</span>
+  </div>
+  <div class="dialogue-en">journey through that? RG One of the last projects I did</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(37:57.760)</span>
+  </div>
+  <div class="dialogue-en">concerning AI in particular was looking at the work of Harold Cohen, the painter. And Harold was</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(38:06.080)</span>
+  </div>
+  <div class="dialogue-en">deeply involved with AI. He was a painter first. And what his project, ARIN, which was a lifelong</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(38:17.920)</span>
+  </div>
+  <div class="dialogue-en">project, did was reflect his own cognitive processes. Okay. Harold and I, even though I wrote</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(38:30.480)</span>
+  </div>
+  <div class="dialogue-en">a book about it, we had a lot of friction between us. And I went, I thought, this is it. The book</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(38:39.120)</span>
+  </div>
+  <div class="dialogue-en">died. It was published and fell into a ditch. This is it. I&#39;m finished. It&#39;s time for me to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(38:47.760)</span>
+  </div>
+  <div class="dialogue-en">do something different. By chance, this was a sabbatical year for my husband. And we spent two</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(38:55.840)</span>
+  </div>
+  <div class="dialogue-en">months at the Santa Fe Institute and two months at Caltech. And then the spring semester in Munich,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(39:03.120)</span>
+  </div>
+  <div class="dialogue-en">Germany. Okay. Those two months at the Santa Fe Institute were so restorative for me. And I began</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(39:15.040)</span>
+  </div>
+  <div class="dialogue-en">to, the Institute was very small then. It was in some kind of office complex on old Santa Fe trail.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(39:22.560)</span>
+  </div>
+  <div class="dialogue-en">Everybody kept their door open. So you could crack your head on a problem. And if you finally didn&#39;t</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(39:29.840)</span>
+  </div>
+  <div class="dialogue-en">get it, you could walk in to see Stuart Kaufman or any number of people and say, I don&#39;t get this.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(39:39.040)</span>
+  </div>
+  <div class="dialogue-en">Can you explain? And one of the people that I was talking to about complex adaptive systems</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(39:46.880)</span>
+  </div>
+  <div class="dialogue-en">was Murray Gelman. And I told Murray what Harold Cohen had done. And I said, you know,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(39:55.200)</span>
+  </div>
+  <div class="dialogue-en">this sounds to me like a complex adaptive system. And he said, yeah, it is. Well, what do you know?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(40:02.240)</span>
+  </div>
+  <div class="dialogue-en">Harold Aaron had all these kids and cousins all over the world in science and in economics and</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(40:09.120)</span>
+  </div>
+  <div class="dialogue-en">so on and so forth. I was so relieved. I thought, okay, your instincts are okay. You&#39;re doing the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(40:16.480)</span>
+  </div>
+  <div class="dialogue-en">right thing. I didn&#39;t have the vocabulary. And that was one of the things that the Santa Fe</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(40:21.760)</span>
+  </div>
+  <div class="dialogue-en">Institute gave me. If I could have rewritten that book, no, it had just come out. I couldn&#39;t rewrite</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(40:26.880)</span>
+  </div>
+  <div class="dialogue-en">it. I would have had a vocabulary to explain what Aaron was doing. Okay. So I got really interested</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(40:34.480)</span>
+  </div>
+  <div class="dialogue-en">in what was going on at the Institute. The people were, again, bright and funny and willing to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(40:44.080)</span>
+  </div>
+  <div class="dialogue-en">explain anything to this amateur. George Cowan, who was then the head of the Institute, said he</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(40:51.600)</span>
+  </div>
+  <div class="dialogue-en">thought it might be a nice idea if I wrote a book about the Institute. And I thought about it and I</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(40:58.800)</span>
+  </div>
+  <div class="dialogue-en">had my eye on some other project, God knows what. And I said, I&#39;m sorry, George. Yeah, I&#39;d really</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(41:05.920)</span>
+  </div>
+  <div class="dialogue-en">love to do it, but just not going to work for me at this moment. He said, oh, too bad. I think it</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(41:11.440)</span>
+  </div>
+  <div class="dialogue-en">would make an interesting book. Well, he was right and I was wrong. I wish I&#39;d done it. But that&#39;s</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(41:17.120)</span>
+  </div>
+  <div class="dialogue-en">interesting. I hadn&#39;t thought about that, that that was a road not taken that I wish I&#39;d taken.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(41:22.080)</span>
+  </div>
+  <div class="dialogue-en">Well, you know what? Just on that point, it&#39;s quite brave for you as a writer, as sort of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(41:31.680)</span>
+  </div>
+  <div class="dialogue-en">coming from a world of literature and the literary thinking and historical thinking. I mean, just</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(41:37.120)</span>
+  </div>
+  <div class="dialogue-en">from that world and bravely talking to quite, I assume, large egos in AI or in complexity.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(41:49.600)</span>
+  </div>
+  <div class="dialogue-en">Yeah, in AI or in complexity and so on. How&#39;d you do it? I mean, I suppose they could be</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(41:59.040)</span>
+  </div>
+  <div class="dialogue-en">intimidated of you as well because it&#39;s two different worlds coming together.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(42:03.120)</span>
+  </div>
+  <div class="dialogue-en">I never picked up that anybody was intimidated by me.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(42:06.080)</span>
+  </div>
+  <div class="dialogue-en">But how were you brave enough? Where did you find the guts to sort of...</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(42:08.640)</span>
+  </div>
+  <div class="dialogue-en">God, just dumb luck. I mean, this is an interesting rock to turn over. I&#39;m going</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(42:14.000)</span>
+  </div>
+  <div class="dialogue-en">to write a book about it. And you know, people have enough patience with writers</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(42:18.880)</span>
+  </div>
+  <div class="dialogue-en">if they think they&#39;re going to end up in a book that they let you flail around and so on.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(42:24.800)</span>
+  </div>
+  <div class="dialogue-en">Well, but they also look if the writer has,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(42:28.320)</span>
+  </div>
+  <div class="dialogue-en">if there&#39;s a sparkle in their eye, if they get it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(42:31.120)</span>
+  </div>
+  <div class="dialogue-en">Yeah, sure.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(42:32.640)</span>
+  </div>
+  <div class="dialogue-en">When were you at the Santa Fe Institute?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(42:35.920)</span>
+  </div>
+  <div class="dialogue-en">The time I&#39;m talking about is 1990, 1991, 1992. But we then, because Joe was an external faculty</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(42:46.240)</span>
+  </div>
+  <div class="dialogue-en">member, were in Santa Fe every summer. We bought a house there and I didn&#39;t have that much to do</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(42:52.640)</span>
+  </div>
+  <div class="dialogue-en">with the Institute anymore. I was writing my novels. I was doing whatever I was doing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(43:00.560)</span>
+  </div>
+  <div class="dialogue-en">But I loved the Institute and I loved</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(43:08.400)</span>
+  </div>
+  <div class="dialogue-en">again, the audacity of the ideas. That really appeals to me.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(43:12.960)</span>
+  </div>
+  <div class="dialogue-en">I think that there&#39;s this feeling, much like in great institutes of neuroscience, for example,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(43:23.040)</span>
+  </div>
+  <div class="dialogue-en">that they&#39;re in it for the long game of understanding something fundamental about</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(43:29.840)</span>
+  </div>
+  <div class="dialogue-en">reality and nature. And that&#39;s really exciting. So if we start now to look a little bit more recently,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(43:36.800)</span>
+  </div>
+  <div class="dialogue-en">how, you know, AI is really popular today. How is this world, you mentioned algorithmic,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(43:46.480)</span>
+  </div>
+  <div class="dialogue-en">but in general, is the spirit of the people, the kind of conversations you hear through the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(43:51.680)</span>
+  </div>
+  <div class="dialogue-en">grapevine and so on, is that different than the roots that you remember?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(43:55.360)</span>
+  </div>
+  <div class="dialogue-en">No. The same kind of excitement, the same kind of, this is really going to make a difference</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(44:01.200)</span>
+  </div>
+  <div class="dialogue-en">in the world. And it will. It has. You know, a lot of folks, especially young, 20 years old or</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(44:07.920)</span>
+  </div>
+  <div class="dialogue-en">something, they think we&#39;ve just found something special here. We&#39;re going to change the world</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(44:14.000)</span>
+  </div>
+  <div class="dialogue-en">tomorrow. On a time scale, do you have a sense of what, of the time scale at which breakthroughs</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(44:24.240)</span>
+  </div>
+  <div class="dialogue-en">of the time scale at which breakthroughs in AI happen? I really don&#39;t. Because look at Deep Learning.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(44:32.240)</span>
+  </div>
+  <div class="dialogue-en">That was, Jeffrey Hinton came up with the algorithm in 86. But it took all these years</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(44:44.720)</span>
+  </div>
+  <div class="dialogue-en">for the technology to be good enough to actually be applicable. So no, I can&#39;t predict that at all.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(44:56.400)</span>
+  </div>
+  <div class="dialogue-en">I can&#39;t. I wouldn&#39;t even try. Well, let me ask you to, not to try to predict, but to speak to the,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(45:03.760)</span>
+  </div>
+  <div class="dialogue-en">you know, I&#39;m sure in the 60s, as it continues now, there&#39;s people that think, let&#39;s call it,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(45:09.440)</span>
+  </div>
+  <div class="dialogue-en">we can call it this fun word, the singularity. When there&#39;s a phase shift, there&#39;s some profound</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(45:16.160)</span>
+  </div>
+  <div class="dialogue-en">feeling where we&#39;re all really surprised by what&#39;s able to be achieved. I&#39;m sure those dreams are</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(45:22.720)</span>
+  </div>
+  <div class="dialogue-en">there. I remember reading quotes in the 60s and those continued. How have your own views,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(45:29.200)</span>
+  </div>
+  <div class="dialogue-en">maybe if you look back, about the timeline of a singularity changed?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(45:34.960)</span>
+  </div>
+  <div class="dialogue-en">Well, I&#39;m not a big fan of the singularity as Ray Kurzweil has presented it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(45:46.640)</span>
+  </div>
+  <div class="dialogue-en">How would you define the Ray Kurzweil? How do you think of singularity in those?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(45:53.120)</span>
+  </div>
+  <div class="dialogue-en">If I understand Kurzweil&#39;s view, it&#39;s sort of, there&#39;s going to be this moment when machines</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(45:59.280)</span>
+  </div>
+  <div class="dialogue-en">are smarter than humans and, you know, game over. However, the game over is. I mean, do they put us</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(46:07.120)</span>
+  </div>
+  <div class="dialogue-en">on a reservation? Do they, et cetera, et cetera. And first of all, machines are smarter than humans</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(46:15.680)</span>
+  </div>
+  <div class="dialogue-en">in some ways all over the place. And they have been since adding machines were invented.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(46:21.440)</span>
+  </div>
+  <div class="dialogue-en">So it&#39;s not, it&#39;s not going to come like some great eatable crossroads, you know, where</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(46:29.440)</span>
+  </div>
+  <div class="dialogue-en">they meet each other and our offspring, Oedipus says, you&#39;re dead. It&#39;s just not going to happen.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(46:37.920)</span>
+  </div>
+  <div class="dialogue-en">Yeah. So it&#39;s already game over with calculators, right? They&#39;re already out to do much better at</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(46:44.000)</span>
+  </div>
+  <div class="dialogue-en">basic arithmetic than us. But you know, there&#39;s a human like intelligence. And it&#39;s not the ones</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(46:51.920)</span>
+  </div>
+  <div class="dialogue-en">that destroy us, but you know, somebody that you can have as a, as a friend, you can have deep</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(46:57.920)</span>
+  </div>
+  <div class="dialogue-en">connections with that kind of passing the touring test and beyond those kinds of ideas. Have you</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(47:04.640)</span>
+  </div>
+  <div class="dialogue-en">dreamt of those? Oh yes, yes, yes. Those possibilities. In a book I wrote with Ed Feigenbaum,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(47:10.560)</span>
+  </div>
+  <div class="dialogue-en">a book I wrote with Ed Feigenbaum, there&#39;s a little story called the geriatric robot.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(47:17.280)</span>
+  </div>
+  <div class="dialogue-en">And how I came up with the geriatric robot is a story in itself. But here&#39;s what the geriatric</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(47:24.880)</span>
+  </div>
+  <div class="dialogue-en">robot does. It doesn&#39;t just clean you up and feed you and wheel you out into the sun.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(47:29.520)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s great advantages. It listens. It says, tell me again about the great coup of 73. Tell me again</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(47:45.280)</span>
+  </div>
+  <div class="dialogue-en">about how awful or how wonderful your grandchildren are and so on and so forth.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(47:52.960)</span>
+  </div>
+  <div class="dialogue-en">And it isn&#39;t hanging around to inherit your money. It isn&#39;t hanging around because it can&#39;t get</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(47:59.440)</span>
+  </div>
+  <div class="dialogue-en">any other job. This is his job. And so on and so forth. Well, I would love something like that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(48:09.120)</span>
+  </div>
+  <div class="dialogue-en">Yeah. I mean, for me, that deeply excites me. So I think there&#39;s a lot of us.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(48:15.680)</span>
+  </div>
+  <div class="dialogue-en">Lex, you gotta know, it was a joke. I dreamed it up because I needed to talk to college students</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(48:20.880)</span>
+  </div>
+  <div class="dialogue-en">and I needed to give them some idea of what AI might be. And they were rolling in the aisles as</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(48:26.960)</span>
+  </div>
+  <div class="dialogue-en">I elaborated and elaborated and elaborated. When it went into the book, they took my hide off</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(48:36.320)</span>
+  </div>
+  <div class="dialogue-en">in the New York Review of Books. This is just what we have thought about these people in AI.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(48:41.280)</span>
+  </div>
+  <div class="dialogue-en">They&#39;re inhuman. Come on, get over it. Don&#39;t you think that&#39;s a good thing for</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(48:47.280)</span>
+  </div>
+  <div class="dialogue-en">the world that AI could potentially do? I do. Absolutely. And furthermore,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(48:52.000)</span>
+  </div>
+  <div class="dialogue-en">I&#39;m pushing 80 now. By the time I need help like that, I also want it to roll itself in a corner</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(49:02.560)</span>
+  </div>
+  <div class="dialogue-en">and shut the fuck up. Let me linger on that point. Do you really though?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(49:09.360)</span>
+  </div>
+  <div class="dialogue-en">Yeah, I do. Here&#39;s why. Don&#39;t you want it to push back a little bit?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(49:13.360)</span>
+  </div>
+  <div class="dialogue-en">A little. But I have watched my friends go through the whole issue around having help</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(49:20.240)</span>
+  </div>
+  <div class="dialogue-en">in the house. And some of them have been very lucky and had fabulous help. And some of them</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(49:28.880)</span>
+  </div>
+  <div class="dialogue-en">have had people in the house who want to keep the television going on all day, who want to talk on</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(49:34.000)</span>
+  </div>
+  <div class="dialogue-en">their phones all day. No. Just roll yourself in the corner and shut the fuck up. Unfortunately,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(49:41.360)</span>
+  </div>
+  <div class="dialogue-en">us humans, when we&#39;re assistants, we&#39;re still, even when we&#39;re assisting others,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(49:47.040)</span>
+  </div>
+  <div class="dialogue-en">we care about ourselves more. Of course. And so you create more frustration. And a robot AI</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(49:54.800)</span>
+  </div>
+  <div class="dialogue-en">assistant can really optimize the experience for you. I was just speaking to the point,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(50:01.520)</span>
+  </div>
+  <div class="dialogue-en">you actually bring up a very, very good point. But I was speaking to the fact that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(50:05.360)</span>
+  </div>
+  <div class="dialogue-en">us humans are a little complicated, that we don&#39;t necessarily want a perfect servant.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(50:11.120)</span>
+  </div>
+  <div class="dialogue-en">I don&#39;t, maybe you disagree with that, but there&#39;s a, I think there&#39;s a push and pull with humans.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(50:20.800)</span>
+  </div>
+  <div class="dialogue-en">You&#39;re right.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(50:21.360)</span>
+  </div>
+  <div class="dialogue-en">A little tension, a little mystery that, of course, that&#39;s really difficult for AI to get right. But</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(50:27.680)</span>
+  </div>
+  <div class="dialogue-en">I do sense, especially today with social media, that people are getting more and more lonely,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(50:34.800)</span>
+  </div>
+  <div class="dialogue-en">even young folks, and sometimes especially young folks, that loneliness, there&#39;s a longing for</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(50:42.080)</span>
+  </div>
+  <div class="dialogue-en">connection and AI can help alleviate some of that loneliness. Some, just somebody who listens,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(50:50.800)</span>
+  </div>
+  <div class="dialogue-en">like in person. So to speak. So to speak, yeah. So to speak. Yeah, that to me is really exciting.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(51:03.200)</span>
+  </div>
+  <div class="dialogue-en">That is really exciting. But so if we look at that, that level of intelligence, which is</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(51:08.880)</span>
+  </div>
+  <div class="dialogue-en">exceptionally difficult to achieve actually, as the singularity or whatever, that&#39;s the human level</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(51:15.520)</span>
+  </div>
+  <div class="dialogue-en">bar, that people have dreamt of that too. Turing dreamt of it. He had a date timeline. Do you have,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(51:23.920)</span>
+  </div>
+  <div class="dialogue-en">how have your own timeline evolved on past?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(51:27.840)</span>
+  </div>
+  <div class="dialogue-en">I don&#39;t even think about it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(51:28.960)</span>
+  </div>
+  <div class="dialogue-en">You don&#39;t even think?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(51:29.680)</span>
+  </div>
+  <div class="dialogue-en">No. Just this field has been so full of surprises for me.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(51:38.080)</span>
+  </div>
+  <div class="dialogue-en">You&#39;re just taking in and see the fun about the basic science.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(51:42.080)</span>
+  </div>
+  <div class="dialogue-en">Yeah. I just can&#39;t. Maybe that&#39;s because I&#39;ve been around the field long enough to think,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(51:48.960)</span>
+  </div>
+  <div class="dialogue-en">you know, don&#39;t go that way. Herb Simon was terrible about making these predictions of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(51:54.720)</span>
+  </div>
+  <div class="dialogue-en">when this and that would happen. And he was a sensible guy.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(52:00.640)</span>
+  </div>
+  <div class="dialogue-en">His quotes are often used, right?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(52:03.360)</span>
+  </div>
+  <div class="dialogue-en">As a legend, yeah.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(52:04.880)</span>
+  </div>
+  <div class="dialogue-en">Yeah. Do you have concerns about AI, the existential threats that many people</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(52:14.800)</span>
+  </div>
+  <div class="dialogue-en">like Elon Musk and Sam Harris and others are thinking about?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(52:18.800)</span>
+  </div>
+  <div class="dialogue-en">Yeah. That takes up half a chapter in my book. I call it the male gaze.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(52:29.600)</span>
+  </div>
+  <div class="dialogue-en">Well, you hear me out. The male gaze is actually a term from film criticism.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(52:36.240)</span>
+  </div>
+  <div class="dialogue-en">And I&#39;m blocking on the women who dreamed this up. But she pointed out how most movies were</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(52:44.240)</span>
+  </div>
+  <div class="dialogue-en">made from the male point of view, that women were objects, not subjects. They didn&#39;t have any</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(52:53.760)</span>
+  </div>
+  <div class="dialogue-en">agency and so on and so forth. So when Elon and his pals Hawking and so on came,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(53:01.520)</span>
+  </div>
+  <div class="dialogue-en">AI is going to eat our lunch and our dinner and our midnight snack too, I thought, what?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(53:08.000)</span>
+  </div>
+  <div class="dialogue-en">And I said to Ed Feigenbaum, oh, this is the first guy. First, these guys have always been</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(53:13.120)</span>
+  </div>
+  <div class="dialogue-en">the smartest guy on the block. And here comes something that might be smarter. Oh, let&#39;s stamp</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(53:18.800)</span>
+  </div>
+  <div class="dialogue-en">it out before it takes over. And Ed laughed. He said, I didn&#39;t think about it that way.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(53:24.080)</span>
+  </div>
+  <div class="dialogue-en">But I did. I did. And it is the male gaze. Okay, suppose these things do have agency.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(53:34.480)</span>
+  </div>
+  <div class="dialogue-en">Well, let&#39;s wait and see what happens. Can we imbue them with ethics? Can we imbue them</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(53:43.920)</span>
+  </div>
+  <div class="dialogue-en">with a sense of empathy? Or are they just going to be, I don&#39;t know, we&#39;ve had centuries of guys</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(53:54.480)</span>
+  </div>
+  <div class="dialogue-en">like that. That&#39;s interesting that the ego, the male gaze is immediately threatened. And so you</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(54:05.280)</span>
+  </div>
+  <div class="dialogue-en">can&#39;t think in a patient, calm way of how the tech could evolve. Speaking of which, your 96 book,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(54:16.240)</span>
+  </div>
+  <div class="dialogue-en">The Future of Women, I think at the time and now, certainly now, I mean, I&#39;m sorry, maybe at the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(54:23.840)</span>
+  </div>
+  <div class="dialogue-en">time, but I&#39;m more cognizant of now, is extremely relevant. You and Nancy Ramsey talk about four</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(54:30.800)</span>
+  </div>
+  <div class="dialogue-en">possible futures of women in science and tech. So if we look at the decades before and after</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(54:38.960)</span>
+  </div>
+  <div class="dialogue-en">the book was released, can you tell a history, sorry, of women in science and tech and how it</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(54:46.800)</span>
+  </div>
+  <div class="dialogue-en">has evolved? How have things changed? Where do we stand? Not enough. They have not changed enough.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(54:54.320)</span>
+  </div>
+  <div class="dialogue-en">The way that women are ground down in computing is simply unbelievable. But what are the four</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(55:05.840)</span>
+  </div>
+  <div class="dialogue-en">possible futures for women in tech from the book? What you&#39;re really looking at are various aspects</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(55:13.520)</span>
+  </div>
+  <div class="dialogue-en">of the present. So for each of those, you could say, oh yeah, we do have backlash. Look at what&#39;s</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(55:20.880)</span>
+  </div>
+  <div class="dialogue-en">happening with abortion and so on and so forth. We have one step forward, one step back.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(55:28.400)</span>
+  </div>
+  <div class="dialogue-en">The golden age of equality was the hardest chapter to write. And I used something from</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(55:33.440)</span>
+  </div>
+  <div class="dialogue-en">the Santa Fe Institute, which is the sandpile effect, that you drop sand very slowly onto a pile</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(55:41.760)</span>
+  </div>
+  <div class="dialogue-en">and it grows and it grows and it grows until suddenly it just breaks apart. And</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(55:50.240)</span>
+  </div>
+  <div class="dialogue-en">in a way, Me Too has done that. That was the last drop of sand that broke everything apart.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(55:58.240)</span>
+  </div>
+  <div class="dialogue-en">That was a perfect example of the sandpile effect. And that made me feel good. It didn&#39;t</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(56:03.760)</span>
+  </div>
+  <div class="dialogue-en">change all of society, but it really woke a lot of people up. But are you in general optimistic</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(56:10.480)</span>
+  </div>
+  <div class="dialogue-en">about maybe after Me Too? I mean, Me Too is about a very specific kind of thing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(56:17.120)</span>
+  </div>
+  <div class="dialogue-en">Boy, solve that and you solve everything.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(56:19.920)</span>
+  </div>
+  <div class="dialogue-en">But are you in general optimistic about the future?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(56:23.200)</span>
+  </div>
+  <div class="dialogue-en">Yes. I&#39;m a congenital optimistic. I can&#39;t help it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(56:28.400)</span>
+  </div>
+  <div class="dialogue-en">What about AI? What are your thoughts about the future of AI?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(56:34.560)</span>
+  </div>
+  <div class="dialogue-en">Of course, I get asked, what do you worry about? And the one thing I worry about is the things</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(56:40.080)</span>
+  </div>
+  <div class="dialogue-en">we can&#39;t anticipate. There&#39;s going to be something out of left field that we will just say,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(56:47.440)</span>
+  </div>
+  <div class="dialogue-en">we weren&#39;t prepared for that. I am generally optimistic. When I first took up</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(56:58.240)</span>
+  </div>
+  <div class="dialogue-en">being interested in AI, like most people in the field, more intelligence was like more virtue.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(57:05.760)</span>
+  </div>
+  <div class="dialogue-en">You know, what could be bad? And in a way, I still believe that. But I realize that my</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(57:13.520)</span>
+  </div>
+  <div class="dialogue-en">notion of intelligence has broadened. There are many kinds of intelligence,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(57:19.440)</span>
+  </div>
+  <div class="dialogue-en">and we need to imbue our machines with those many kinds.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(57:24.720)</span>
+  </div>
+  <div class="dialogue-en">So you&#39;ve now just finished or in the process of finishing the book that you&#39;ve been working</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(57:32.560)</span>
+  </div>
+  <div class="dialogue-en">on, the memoir, how have you changed? I know it&#39;s just writing, but how have you changed</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(57:39.440)</span>
+  </div>
+  <div class="dialogue-en">the process? If you look back, what kind of stuff did it bring up to you that surprised you,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(57:47.600)</span>
+  </div>
+  <div class="dialogue-en">looking at the entirety of it all? The biggest thing, and it really wasn&#39;t a surprise,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(57:55.840)</span>
+  </div>
+  <div class="dialogue-en">is how lucky I was. Oh, my. To have access to the beginning of a scientific field that is going to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(58:07.520)</span>
+  </div>
+  <div class="dialogue-en">change the world. How did I luck out? And yes, of course, my view of things has widened a lot.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(58:20.240)</span>
+  </div>
+  <div class="dialogue-en">If I can get back to one feminist part of our conversation. Without knowing it,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(58:28.640)</span>
+  </div>
+  <div class="dialogue-en">it really was subconscious. I wanted AI to succeed because I was so tired of hearing</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(58:36.320)</span>
+  </div>
+  <div class="dialogue-en">that intelligence was inside the male cranium. And I thought if there was something out there</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(58:43.280)</span>
+  </div>
+  <div class="dialogue-en">that wasn&#39;t a male thinking and doing well, then that would put a lie to this whole notion of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(58:53.040)</span>
+  </div>
+  <div class="dialogue-en">intelligence resides in the male cranium. I did not know that until one night Harold Cohen and I</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(59:01.600)</span>
+  </div>
+  <div class="dialogue-en">were having a glass of wine, maybe two, and he said, what drew you to AI? And I said, oh,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(59:09.600)</span>
+  </div>
+  <div class="dialogue-en">you know, smartest people I knew, great project, blah, blah, blah. And I said, and I wanted</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(59:14.720)</span>
+  </div>
+  <div class="dialogue-en">something besides male smarts. And it just bubbled up out of me like, what?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(59:24.160)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s kind of brilliant, actually. So AI really humbles all of us and humbles the people that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(59:32.000)</span>
+  </div>
+  <div class="dialogue-en">need to be humbled the most. Let&#39;s hope.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(59:35.360)</span>
+  </div>
+  <div class="dialogue-en">Wow. That is so beautiful. Pamela, thank you so much for talking to me. It&#39;s really a huge honor.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pamela McCorduck <span class="dialogue-time">(59:40.800)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s been a great pleasure.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(59:41.840)</span>
+  </div>
+  <div class="dialogue-en">Thank you.</div>
+  
+</div></div>
+<button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 515 条对话 ↓</button>
+
+    <a href="https://lexfridman.com/pamela-mccorduck" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -867,6 +4354,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -879,6 +4418,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

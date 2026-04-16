@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -586,7 +600,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 <nav class="sidebar">
   <div class="sidebar-logo">
     <h1>Lex Fridman<br>知识图谱</h1>
-    <p>112 期节目 · 全文字幕</p>
+    <p>434 期节目 · 全文字幕</p>
   </div>
   
   <div class="sidebar-section">导航</div>
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -642,174 +658,2420 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 <div class="quote-block">
   <div class="quote-text">"actually not leaks, actually presented by U.S. intelligence and U.S. leaders about the long build up to the war."</div>
-  
+  <div class="quote-zh">实际上不是泄密，实际上是美国情报部门和美国领导人介绍的有关战争长期准备的信息。</div>
   <div class="quote-meta">— Noam Chomsky （20:31.000）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"Is that false? No, it&#39;s true. Is it propaganda? Of course it&#39;s propaganda because of what&#39;s not said and because of what&#39;s presupposed."</div>
-  
+  <div class="quote-zh">这是假的吗？不，这是真的。是宣传吗？当然，这是宣传，因为没有说出来，也因为有预设。</div>
   <div class="quote-meta">— Noam Chomsky （35:20.000）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"So as long as we have a political organization dedicated to gaining power at any cost, maximizing profit, no matter what the consequences, no future for human civilization."</div>
-  
+  <div class="quote-zh">所以只要我们还有一个不惜一切代价获取权力、追求利益最大化的政治组织，不管后果如何，人类文明就没有未来。</div>
   <div class="quote-meta">— Noam Chomsky （46:04.000）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"Noam, thank you for talking today. Thank you for talking once again. And thank you for fighting for the future of human civilization. Again, thank you."</div>
-  
+  <div class="quote-zh">诺姆，谢谢你今天的发言。谢谢你再次讲话。感谢你们为人类文明的未来而奋斗。再次感谢您。</div>
   <div class="quote-meta">— Noam Chomsky （46:22.000）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"Why did Russia invade Ukraine on February 24th? Who do you think is to blame? Who do you place the blame on?"</div>
-  
+  <div class="quote-zh">俄罗斯为何在2月24日入侵乌克兰？你认为这应该归咎于谁？你把责任归咎于谁？</div>
   <div class="quote-meta">— Noam Chomsky （14:07.000）</div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（340 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:00.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">Will there be a war between U.S. and China in the 21st century?</div>
-  
+  <div class="dialogue-zh">21世纪中美之间会发生战争吗？</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:05.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05.000)</span>
   </div>
   <div class="dialogue-en">If there is, we&#39;re finished.</div>
-  
+  <div class="dialogue-zh">如果有的话，我们就完成了。</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:08.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08.000)</span>
   </div>
   <div class="dialogue-en">A war between the U.S. and China would destroy the possibilities of organized life on Earth.</div>
-  
+  <div class="dialogue-zh">美国和中国之间的战争将摧毁地球上有组织的生命的可能性。</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:18.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:18.000)</span>
   </div>
   <div class="dialogue-en">The following is a conversation with Noam Chomsky, his second time on the podcast.</div>
-  
+  <div class="dialogue-zh">以下是与诺姆·乔姆斯基的对话，这是他第二次参加播客。</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:23.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:23.000)</span>
   </div>
   <div class="dialogue-en">This episode is focused on the war in Ukraine.</div>
-  
+  <div class="dialogue-zh">本集聚焦于乌克兰战争。</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:27.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:27.000)</span>
   </div>
   <div class="dialogue-en">And it is a departure from the way I usually do this podcast in several ways.</div>
-  
+  <div class="dialogue-zh">这在很多方面都与我通常做这个播客的方式不同。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Noam Chomsky <span class="dialogue-time">(00:32.000)</span>
   </div>
   <div class="dialogue-en">Noam is a strong and healthy 93 year old, but this conversation is remote to be cautious.</div>
-  
+  <div class="dialogue-zh">诺姆是一位强壮健康的93岁老人，但这次谈话距离遥远要谨慎。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Noam Chomsky <span class="dialogue-time">(00:40.000)</span>
   </div>
   <div class="dialogue-en">It is brief, only one hour.</div>
-  
+  <div class="dialogue-zh">时间很短，只有一个小时。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Noam Chomsky <span class="dialogue-time">(00:42.000)</span>
   </div>
   <div class="dialogue-en">It is more of an interview than a conversation due to the limitations of our audio and video connection.</div>
-  
+  <div class="dialogue-zh">由于我们的音频和视频连接的限制，这更像是一次采访而不是对话。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Noam Chomsky <span class="dialogue-time">(00:50.000)</span>
   </div>
   <div class="dialogue-en">I decided it&#39;s best to get Noam&#39;s clear thoughts on this war</div>
-  
+  <div class="dialogue-zh">我决定最好了解诺姆对这场战争的清晰想法</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:54.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:54.000)</span>
   </div>
   <div class="dialogue-en">and the complicated geopolitics of today and the rest of the 21st century that is unrolling before us,</div>
-  
+  <div class="dialogue-zh">以及今天和 21 世纪余下时间在我们面前展开的复杂地缘政治，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Noam Chomsky <span class="dialogue-time">(01:01.000)</span>
   </div>
   <div class="dialogue-en">with our decisions and actions fully capable of either helping humanity flourish</div>
-  
+  <div class="dialogue-zh">我们的决定和行动完全有能力帮助人类繁荣</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(01:06.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:06.000)</span>
   </div>
   <div class="dialogue-en">or unleashing global destruction and suffering.</div>
-  
+  <div class="dialogue-zh">或引发全球破坏和苦难。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Noam Chomsky <span class="dialogue-time">(01:10.000)</span>
   </div>
   <div class="dialogue-en">As a brief aside, perhaps you know this, but let me mention that I traveled to Ukraine</div>
-  
+  <div class="dialogue-zh">顺便说一句，也许你知道这一点，但让我提一下我去了乌克兰</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(01:16.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:16.000)</span>
   </div>
   <div class="dialogue-en">and saw, heard, felt things that are haunting and gave me a lot to think about.</div>
-  
+  <div class="dialogue-zh">看到、听到、感受到那些令人难以忘怀的事情，给了我很多思考。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Noam Chomsky <span class="dialogue-time">(01:22.000)</span>
   </div>
   <div class="dialogue-en">Because of that, I&#39;ve been really struggling to edit the videos I recorded.</div>
-  
+  <div class="dialogue-zh">正因为如此，我一直在努力编辑我录制的视频。</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(01:27.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:27.000)</span>
   </div>
   <div class="dialogue-en">I hope to finish it soon.</div>
-  
+  <div class="dialogue-zh">我希望尽快完成它。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Noam Chomsky <span class="dialogue-time">(01:29.000)</span>
   </div>
   <div class="dialogue-en">I&#39;m sorry for these delays, and I&#39;m especially sorry to the people there who gave me their time,</div>
-  
+  <div class="dialogue-zh">我对这些延误感到抱歉，尤其是对那些给我时间的人感到抱歉，</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(01:34.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:34.000)</span>
   </div>
   <div class="dialogue-en">their story, their heart.</div>
-  
+  <div class="dialogue-zh">他们的故事，他们的心。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Noam Chomsky <span class="dialogue-time">(01:37.000)</span>
   </div>
   <div class="dialogue-en">Please be patient with me.</div>
+  <div class="dialogue-zh">请耐心等待我。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:39.000)</span>
+  </div>
+  <div class="dialogue-en">I hope you understand.</div>
   
 </div>
-    <a href="https://lexfridman.com/noam-chomsky-2" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(01:41.000)</span>
+  </div>
+  <div class="dialogue-en">This is the Lex Readman Podcast.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:43.000)</span>
+  </div>
+  <div class="dialogue-en">To support it, please check out our sponsors in the description.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:46.000)</span>
+  </div>
+  <div class="dialogue-en">And now, dear friends, here&#39;s Noam Chomsky.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(01:50.000)</span>
+  </div>
+  <div class="dialogue-en">You have studied and criticized powerful leaders and nations in times of global conflict and struggles for power.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:58.000)</span>
+  </div>
+  <div class="dialogue-en">So let me ask you, what do you think motivates Vladimir Putin?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:03.000)</span>
+  </div>
+  <div class="dialogue-en">Is it power, legacy, fame, geopolitical influence, or the flourishing of a nation he loves and represents?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(02:11.000)</span>
+  </div>
+  <div class="dialogue-en">I have no particular insight into Putin&#39;s mind.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(02:18.000)</span>
+  </div>
+  <div class="dialogue-en">I can only watch the actions over the last 20, 25 years and read the statements.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(02:28.000)</span>
+  </div>
+  <div class="dialogue-en">Took power about almost 25 years ago, has held it since as prime minister or president.</div>
+  
+</div>
+<div id="dialogue-more" style="display:none">
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:38.000)</span>
+  </div>
+  <div class="dialogue-en">His first task was to try to overcome the chaos and disarray of the 1990s.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(02:51.000)</span>
+  </div>
+  <div class="dialogue-en">During the 90s, Gorbachev had a proposal, he called for a cooperative enterprise with the West.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:08.000)</span>
+  </div>
+  <div class="dialogue-en">They would share an effort to rebuild what he called a common European home,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(03:15.000)</span>
+  </div>
+  <div class="dialogue-en">in which there would be no military alliances, just Russia, Western US accommodation,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(03:24.000)</span>
+  </div>
+  <div class="dialogue-en">with a move towards social democracy and former USSR and comparable moves in the United States.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(03:36.000)</span>
+  </div>
+  <div class="dialogue-en">Well, that was quickly smashed. The United States had no interest in that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:42.000)</span>
+  </div>
+  <div class="dialogue-en">Clinton came along pretty soon, early 90s.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(03:47.000)</span>
+  </div>
+  <div class="dialogue-en">Russia was induced to adopt what was called shock therapy,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:56.000)</span>
+  </div>
+  <div class="dialogue-en">a harsh, quick market transformation, which devastated the economy,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(04:03.000)</span>
+  </div>
+  <div class="dialogue-en">created enormous social disarray, rise of what are called oligarchs, kleptocrats, high mortality.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:17.000)</span>
+  </div>
+  <div class="dialogue-en">And Clinton started the policy of expanding NATO to the East</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(04:23.000)</span>
+  </div>
+  <div class="dialogue-en">in violation of firm, unambiguous promises to Gorbachev not to do so.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(04:30.000)</span>
+  </div>
+  <div class="dialogue-en">Yeltsin, Putin&#39;s friend, opposed it. Other Russian leaders opposed it, but they didn&#39;t react.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(04:39.000)</span>
+  </div>
+  <div class="dialogue-en">They accepted it. When Putin came in, he continued that policy.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:45.000)</span>
+  </div>
+  <div class="dialogue-en">Meanwhile, did reconstruct the Russian economy.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(04:49.000)</span>
+  </div>
+  <div class="dialogue-en">Russian society became a viable, deeply authoritarian society under his tight control.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:58.000)</span>
+  </div>
+  <div class="dialogue-en">He himself organized a major kleptocracy with him in the middle,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(05:06.000)</span>
+  </div>
+  <div class="dialogue-en">apparently became very wealthy. On the international front,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:10.000)</span>
+  </div>
+  <div class="dialogue-en">he pretty much continued the former policies as US diplomats,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(05:17.000)</span>
+  </div>
+  <div class="dialogue-en">practically every diplomat who had any contact with Russia had been dispatched there,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:24.000)</span>
+  </div>
+  <div class="dialogue-en">knew about it, as they all warned from the 90s that what Clinton was doing,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(05:30.000)</span>
+  </div>
+  <div class="dialogue-en">expanded by Bush afterwards, was reckless and provocative,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:38.000)</span>
+  </div>
+  <div class="dialogue-en">that Russia did have a clear red line before Putin, which he adhered to,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(05:46.000)</span>
+  </div>
+  <div class="dialogue-en">namely no NATO membership for Ukraine and Georgia.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:51.000)</span>
+  </div>
+  <div class="dialogue-en">This is pretty much how things went on through the 2000s.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(06:00.000)</span>
+  </div>
+  <div class="dialogue-en">In 2008, President Bush did invite Ukraine to join NATO.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(06:10.000)</span>
+  </div>
+  <div class="dialogue-en">That was vetoed by France and Germany, but under US pressure, it was kept on the agenda.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(06:17.000)</span>
+  </div>
+  <div class="dialogue-en">The Russians continued to object. Western diplomats,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:22.000)</span>
+  </div>
+  <div class="dialogue-en">including the present current head of the CIA and his predecessors,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(06:29.000)</span>
+  </div>
+  <div class="dialogue-en">warned that this was reckless, provocative, shouldn&#39;t be done, continued.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:35.000)</span>
+  </div>
+  <div class="dialogue-en">Putin didn&#39;t do much. He stayed with it until pretty recently.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(06:41.000)</span>
+  </div>
+  <div class="dialogue-en">After 2014, the uprising that threw out the former president,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:51.000)</span>
+  </div>
+  <div class="dialogue-en">who was pro Russian, instituted anti Russian laws.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(06:56.000)</span>
+  </div>
+  <div class="dialogue-en">The United States and NATO began a policy of moving to effectively integrate Ukraine</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(07:07.000)</span>
+  </div>
+  <div class="dialogue-en">into the NATO command, joint military exercises, training, sending weapons and so on.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(07:17.000)</span>
+  </div>
+  <div class="dialogue-en">Putin objected. Other Russian leaders objected. They&#39;re unified on this, but didn&#39;t do much.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:26.000)</span>
+  </div>
+  <div class="dialogue-en">They continued with the proposals that Ukraine be excluded from NATO,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:37.000)</span>
+  </div>
+  <div class="dialogue-en">and that there be some form of autonomy for the Donbass region.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:43.000)</span>
+  </div>
+  <div class="dialogue-en">Meanwhile, in reaction to the uprising, the Maidan Uprising 2014,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(07:51.000)</span>
+  </div>
+  <div class="dialogue-en">Russia moved in and took over Crimea, protecting its warm water base and major naval base.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(08:01.000)</span>
+  </div>
+  <div class="dialogue-en">The US objected and recognised it, but things continued without notable conflict.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(08:09.000)</span>
+  </div>
+  <div class="dialogue-en">I won&#39;t go through all the details. When Joe Biden came in,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(08:14.000)</span>
+  </div>
+  <div class="dialogue-en">he expanded the program of what US military journals call a defective integration of Ukraine within NATO,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(08:27.000)</span>
+  </div>
+  <div class="dialogue-en">proposed September 2021, proposed enhanced program of preparation for NATO mission,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(08:40.000)</span>
+  </div>
+  <div class="dialogue-en">extended with a formal statement in November. We&#39;re now practically up to the invasion.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(08:48.000)</span>
+  </div>
+  <div class="dialogue-en">Putin&#39;s position hardened. France, mainly France, to an extent Germany,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:55.000)</span>
+  </div>
+  <div class="dialogue-en">did make some moves towards possible negotiations. Putin dismissed them,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:04.000)</span>
+  </div>
+  <div class="dialogue-en">moved on to the direct invasion. What are his, to get back to your question, what motivates him?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(09:16.000)</span>
+  </div>
+  <div class="dialogue-en">I presume what he&#39;s been saying all along, namely establishing his legacy as a leader</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(09:26.000)</span>
+  </div>
+  <div class="dialogue-en">who overcame the extensive destruction of Russia, massive weakening over it,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:35.000)</span>
+  </div>
+  <div class="dialogue-en">restored his position as a world power, prevented Ukraine from entering NATO.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(09:42.000)</span>
+  </div>
+  <div class="dialogue-en">It may have further ambitions as to dominating and controlling Ukraine, very likely.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(09:50.000)</span>
+  </div>
+  <div class="dialogue-en">There is a theory in the West that he suddenly became a total madman who wants to restore the great Russian empire.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(10:02.000)</span>
+  </div>
+  <div class="dialogue-en">This is combined with the gloating over the fact that the Russian military is a paper tiger that can&#39;t even conquer cities</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(10:16.000)</span>
+  </div>
+  <div class="dialogue-en">a couple of kilometers from the border, but defended not even by a regular army.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:23.000)</span>
+  </div>
+  <div class="dialogue-en">But somehow along with this, he&#39;s planning to attack NATO powers, conquer Europe, who knows what.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(10:32.000)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s impossible to put all these concepts together. They&#39;re totally internally contradictory.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:39.000)</span>
+  </div>
+  <div class="dialogue-en">So what&#39;s my judgment? I think what motivates him is what he&#39;s been demonstrating in his actions.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(10:48.000)</span>
+  </div>
+  <div class="dialogue-en">Restore Russia as a great power, restore its economy, control it as a total dictatorship,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(11:00.000)</span>
+  </div>
+  <div class="dialogue-en">enrich himself and his cronies, establish a legacy as a major figure in Russian history,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(11:09.000)</span>
+  </div>
+  <div class="dialogue-en">make sure that Ukraine does not join NATO, and probably by now he&#39;s hardened the position,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(11:19.000)</span>
+  </div>
+  <div class="dialogue-en">maintain Crimea and the southeastern corridor to Russia, and some ambiguous agreements about the Donbass region.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:32.000)</span>
+  </div>
+  <div class="dialogue-en">That looks like his motivation. There&#39;s much speculation that goes beyond this,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:39.000)</span>
+  </div>
+  <div class="dialogue-en">but it&#39;s very hard to reconcile with the assessment of the real world by the same people who are making the grandiose speculations.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:54.000)</span>
+  </div>
+  <div class="dialogue-en">I don&#39;t think anything&#39;s changed.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(12:04.000)</span>
+  </div>
+  <div class="dialogue-en">It seems to me his policies are about the same as what they were. They&#39;ve changed in response to changed circumstances.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:14.000)</span>
+  </div>
+  <div class="dialogue-en">So very recently, right before the invasion, a few weeks before, for the first time,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(12:22.000)</span>
+  </div>
+  <div class="dialogue-en">Putin announced recognition of the independence of the Donbass region. That&#39;s a stronger position than before, much stronger.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(12:34.000)</span>
+  </div>
+  <div class="dialogue-en">Up till then, he had pretty much kept to the longstanding position of some kind of accommodation within a federal structure</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(12:45.000)</span>
+  </div>
+  <div class="dialogue-en">in which the Donbass region would have considerable autonomy. So that&#39;s a harshening of the position.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:53.000)</span>
+  </div>
+  <div class="dialogue-en">So even the human mind of Vladimir Putin, the man?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(12:57.000)</span>
+  </div>
+  <div class="dialogue-en">I can&#39;t read his mind. I can only see the policies that he&#39;s pursued and the statements that he&#39;s made.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(13:04.000)</span>
+  </div>
+  <div class="dialogue-en">There are many people speculating about his mind. And as I say, these speculations are, first of all, not based on anything.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(13:15.000)</span>
+  </div>
+  <div class="dialogue-en">Never said anything about trying to conquer NATO. But more importantly,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(13:21.000)</span>
+  </div>
+  <div class="dialogue-en">they are totally inconsistent with the analyses of Russian power by the same people who are making the speculations.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:31.000)</span>
+  </div>
+  <div class="dialogue-en">So we see the same individual speculating about Putin&#39;s grandiose plans to become Peter the Great and conquer,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(13:46.000)</span>
+  </div>
+  <div class="dialogue-en">start attacking NATO powers, on the one hand saying that, on the other hand gloating over the fact that his military powers</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:55.000)</span>
+  </div>
+  <div class="dialogue-en">so minuscule he can&#39;t even conquer towns a couple miles from the border.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:03.000)</span>
+  </div>
+  <div class="dialogue-en">Well, it&#39;s impossible to make sense of that position.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:07.000)</span>
+  </div>
+  <div class="dialogue-en">Why did Russia invade Ukraine on February 24th? Who do you think is to blame? Who do you place the blame on?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(14:17.000)</span>
+  </div>
+  <div class="dialogue-en">Well, who&#39;s to blame? Any power that commits aggression is to blame. So I continue to say, as I have been for many months,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(14:29.000)</span>
+  </div>
+  <div class="dialogue-en">that Putin&#39;s invasion of Ukraine is on a par with such acts of aggression as the U.S. invasion of Iraq,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(14:41.000)</span>
+  </div>
+  <div class="dialogue-en">the Stalin, Hitler invasion of Poland, other acts of supreme international crime under international law.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(14:55.000)</span>
+  </div>
+  <div class="dialogue-en">Of course he&#39;s to blame.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(14:58.000)</span>
+  </div>
+  <div class="dialogue-en">The U.S. committed $6.9 billion in military assistance to Ukraine since the Russian invasion.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:04.000)</span>
+  </div>
+  <div class="dialogue-en">Should U.S. keep up with this support?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(15:08.000)</span>
+  </div>
+  <div class="dialogue-en">There are two questions. One has to do with providing support for defense against the invasion, which is certainly legitimate.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(15:18.000)</span>
+  </div>
+  <div class="dialogue-en">The other is seeking ways to end the crime before even worse disasters arise.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:28.000)</span>
+  </div>
+  <div class="dialogue-en">Now that second part is not discussed in the West, barely discussed.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(15:33.000)</span>
+  </div>
+  <div class="dialogue-en">Anyone who dares to discuss it is immediately subjected to a flood of invective and hysterical condemnation.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:43.000)</span>
+  </div>
+  <div class="dialogue-en">But if you&#39;re serious about Ukraine, there are two things you ask.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:48.000)</span>
+  </div>
+  <div class="dialogue-en">One, what can we do to support Ukraine in defense against aggression?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(15:54.000)</span>
+  </div>
+  <div class="dialogue-en">Second, how can we move to end the war before it leads to even worse destruction of Ukraine, more starvation worldwide,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(16:06.000)</span>
+  </div>
+  <div class="dialogue-en">reversing the limited efforts to deal with global warming, possibly moving up an escalation out of the war, the nuclear war.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:17.000)</span>
+  </div>
+  <div class="dialogue-en">That&#39;s the second half of the borrow, a phrase attributed to Winston Churchill.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(16:27.000)</span>
+  </div>
+  <div class="dialogue-en">There&#39;s a lot of war, war, but no joy, joy, joy.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:33.000)</span>
+  </div>
+  <div class="dialogue-en">And there ought to be joy, joy if you care about Ukraine and the rest of the world.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(16:39.000)</span>
+  </div>
+  <div class="dialogue-en">Can it be done? We don&#39;t know.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(16:41.000)</span>
+  </div>
+  <div class="dialogue-en">Official U.S. policy is to reject a diplomatic settlement, to move to weaken Russia severely so that it cannot carry out further aggression,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:56.000)</span>
+  </div>
+  <div class="dialogue-en">but not do anything on the joy, joy side, not think of how to bring the crimes and atrocities to an end.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:07.000)</span>
+  </div>
+  <div class="dialogue-en">That&#39;s the second part of the question.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(17:10.000)</span>
+  </div>
+  <div class="dialogue-en">So, yes, the U.S. should continue with the kind of calibrated support that&#39;s been given.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(17:20.000)</span>
+  </div>
+  <div class="dialogue-en">The Pentagon wisely has vetoed initiatives to go well beyond support for defense up to attack on Russia.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:34.000)</span>
+  </div>
+  <div class="dialogue-en">So far, the Pentagon, which seems to be the dovish component in the U.S. administration,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(17:42.000)</span>
+  </div>
+  <div class="dialogue-en">has vetoed plans which very likely would lead on to nuclear war, which would destroy everything.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:49.000)</span>
+  </div>
+  <div class="dialogue-en">So calibrated provision of weapons to blunt the offensive, allow Ukraine to defend itself,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(17:58.000)</span>
+  </div>
+  <div class="dialogue-en">if sensible, combined with efforts to see if something can be done to bring the crimes and atrocities to an end</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:11.000)</span>
+  </div>
+  <div class="dialogue-en">and avert the much worse consequences that are in store, that would be instead the U.S. only dealing with the first.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:21.000)</span>
+  </div>
+  <div class="dialogue-en">And all of our discussions limit themselves to the first in the United States and in Britain, not in Europe.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:29.000)</span>
+  </div>
+  <div class="dialogue-en">Do you worry about nuclear war in the 21st century? How do we avoid it?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(18:35.000)</span>
+  </div>
+  <div class="dialogue-en">Anyone who doesn&#39;t worry about nuclear war doesn&#39;t have a gray cell functioning.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(18:41.000)</span>
+  </div>
+  <div class="dialogue-en">Of course, everyone is worried about nuclear war, or should be.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(18:46.000)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s very easy to see how steps could be taken, even been recommended, that would lead to nuclear war.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:54.000)</span>
+  </div>
+  <div class="dialogue-en">So you can read articles even by liberal commentators who say we should drop all the pretenses, just go to war against Russia.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:05.000)</span>
+  </div>
+  <div class="dialogue-en">They have to be destroyed.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(19:08.000)</span>
+  </div>
+  <div class="dialogue-en">You can see proposals coming from Congress, the leading figures, saying we should establish a no fly zone.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(19:19.000)</span>
+  </div>
+  <div class="dialogue-en">Pentagon objects. They point out correctly that to establish a no fly zone, you have to have control of the air,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(19:29.000)</span>
+  </div>
+  <div class="dialogue-en">which means destroying Russian air defense systems, which happen to be inside Russia.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:37.000)</span>
+  </div>
+  <div class="dialogue-en">We don&#39;t know that Russia won&#39;t react.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(19:41.000)</span>
+  </div>
+  <div class="dialogue-en">Even the call, now almost universal, to ensure that Ukraine wins, drives out all the Russians, drives them out of the country,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:53.000)</span>
+  </div>
+  <div class="dialogue-en">sounds nice on paper, but notice the assumption.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(19:58.000)</span>
+  </div>
+  <div class="dialogue-en">The assumption is that Vladimir Putin, this madman who just seeks power and is out of control, will sit there quietly,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(20:10.000)</span>
+  </div>
+  <div class="dialogue-en">accept defeat, slink away, not use the military means that of course he has to destroy Ukraine.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(20:20.000)</span>
+  </div>
+  <div class="dialogue-en">One of the interesting comments that came out in today&#39;s long article, I think Washington Post reviewing a lot of leaks,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(20:31.000)</span>
+  </div>
+  <div class="dialogue-en">actually not leaks, actually presented by U.S. intelligence and U.S. leaders about the long build up to the war.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(20:41.000)</span>
+  </div>
+  <div class="dialogue-en">One of the points it made was surprised on the part of British and U.S. leaders about Putin&#39;s strategy</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:50.000)</span>
+  </div>
+  <div class="dialogue-en">and his failure to adopt, to fight the war the way the U.S. and Britain would, with real shock and awe,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(20:59.000)</span>
+  </div>
+  <div class="dialogue-en">destruction of communication facilities, of energy facilities and so on.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:04.000)</span>
+  </div>
+  <div class="dialogue-en">They can&#39;t understand why he hasn&#39;t done all that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(21:07.000)</span>
+  </div>
+  <div class="dialogue-en">If you want to make it very likely that that will happen, then insist on fighting until somehow Russia faces total defeat.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(21:21.000)</span>
+  </div>
+  <div class="dialogue-en">Then it&#39;s a gamble, but if he&#39;s as crazy and insane as you claim, presumably will use weapons that he hasn&#39;t used yet to destroy Ukraine.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:35.000)</span>
+  </div>
+  <div class="dialogue-en">So the West is taking an extraordinary gamble with the fate of Ukraine.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(21:41.000)</span>
+  </div>
+  <div class="dialogue-en">Gambling that the madman, lunatic, mad Vlad won&#39;t use the weapons he has to destroy Ukraine</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:52.000)</span>
+  </div>
+  <div class="dialogue-en">and set the stage for escalation of the latter which might lead to nuclear war.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:58.000)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s quite a gamble.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:00.000)</span>
+  </div>
+  <div class="dialogue-en">How much propaganda is there in the world today in Russia, in Ukraine, in the West?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:06.000)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s extraordinary.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(22:08.000)</span>
+  </div>
+  <div class="dialogue-en">In Russia, of course, it&#39;s total.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:12.000)</span>
+  </div>
+  <div class="dialogue-en">Ukraine is a different story.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(22:14.000)</span>
+  </div>
+  <div class="dialogue-en">They&#39;re at war.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:15.000)</span>
+  </div>
+  <div class="dialogue-en">They expect propaganda.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(22:17.000)</span>
+  </div>
+  <div class="dialogue-en">In the West, let me quote Graham Fuller, very highly placed in U.S. intelligence,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(22:28.000)</span>
+  </div>
+  <div class="dialogue-en">one of the top officials for decades dealing mostly with Russia and Central Asia.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(22:36.000)</span>
+  </div>
+  <div class="dialogue-en">He recently said that in all the years of the Cold War, he&#39;s never seen any extreme Russia phobia to the extent that he sees today.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:49.000)</span>
+  </div>
+  <div class="dialogue-en">I think that&#39;s pretty accurate.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(22:53.000)</span>
+  </div>
+  <div class="dialogue-en">I mean, the U.S. has even canceled Russian outlets, which means if you want to find out what Sergei Lavrov or other Russian officials are saying,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:10.000)</span>
+  </div>
+  <div class="dialogue-en">you can&#39;t look it up on their own outlets.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(23:14.000)</span>
+  </div>
+  <div class="dialogue-en">You have to go through Al Jazeera, Indian state television or someplace where they still allow Russian positions to be expressed.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:27.000)</span>
+  </div>
+  <div class="dialogue-en">And of course, the propaganda is just outlandish.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(23:31.000)</span>
+  </div>
+  <div class="dialogue-en">I think Fuller is quite correct on this.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:34.000)</span>
+  </div>
+  <div class="dialogue-en">In Russia, of course, you expect total propaganda.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(23:38.000)</span>
+  </div>
+  <div class="dialogue-en">There&#39;s nothing, any independent outlets such as there were have been crushed.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:46.000)</span>
+  </div>
+  <div class="dialogue-en">If the media is a source of inaccuracies and even lies, then how do we find the truth?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(23:54.000)</span>
+  </div>
+  <div class="dialogue-en">I don&#39;t regard the media as a source of inaccuracies and lies.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:01.000)</span>
+  </div>
+  <div class="dialogue-en">They do exist.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:03.000)</span>
+  </div>
+  <div class="dialogue-en">But by and large, media reporting is reasonably accurate.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(24:09.000)</span>
+  </div>
+  <div class="dialogue-en">Reporters, the journalists themselves, as in the past, do courageous, honest work.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(24:19.000)</span>
+  </div>
+  <div class="dialogue-en">I&#39;ve written about this for 50 years.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:23.000)</span>
+  </div>
+  <div class="dialogue-en">My opinion hasn&#39;t changed.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:26.000)</span>
+  </div>
+  <div class="dialogue-en">But they do pick certain things and not other things.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:31.000)</span>
+  </div>
+  <div class="dialogue-en">There&#39;s selection, there&#39;s framing, there&#39;s ways of presenting things.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(24:37.000)</span>
+  </div>
+  <div class="dialogue-en">All of that forms a kind of propaganda system, which you have to work your way through.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:45.000)</span>
+  </div>
+  <div class="dialogue-en">But it&#39;s rarely a matter of straight, outright lying.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:50.000)</span>
+  </div>
+  <div class="dialogue-en">So there&#39;s a difference between propaganda and lying?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:54.000)</span>
+  </div>
+  <div class="dialogue-en">Of course, a propaganda system shapes and limits the material that&#39;s presented.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(25:02.000)</span>
+  </div>
+  <div class="dialogue-en">It may tell the truth within that framework.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:05.000)</span>
+  </div>
+  <div class="dialogue-en">So let me give you a concrete example, which I wrote about extensively.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(25:12.000)</span>
+  </div>
+  <div class="dialogue-en">I have a book called Manufacturing Consent jointly with Edward Herman.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:19.000)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s about his term, which I had accepted a propaganda model of the media.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(25:26.000)</span>
+  </div>
+  <div class="dialogue-en">A large part of the book is defense of the media.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:30.000)</span>
+  </div>
+  <div class="dialogue-en">Defense of the media against harsh attacks by Freedom House.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(25:36.000)</span>
+  </div>
+  <div class="dialogue-en">Several volumes they published attacking the media,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(25:40.000)</span>
+  </div>
+  <div class="dialogue-en">charging that the media were so adversarial and dishonest that they lost the war in Vietnam.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(25:47.000)</span>
+  </div>
+  <div class="dialogue-en">Well, it took the trouble of reading through the two volumes.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:52.000)</span>
+  </div>
+  <div class="dialogue-en">One volume is charges, the next volume is evidence.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(25:57.000)</span>
+  </div>
+  <div class="dialogue-en">Turns out that all of the evidence is lies.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:01.000)</span>
+  </div>
+  <div class="dialogue-en">They had no evidence.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(26:03.000)</span>
+  </div>
+  <div class="dialogue-en">They were just lying.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:05.000)</span>
+  </div>
+  <div class="dialogue-en">The media, in fact, the journalists were doing honest, courageous work.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:11.000)</span>
+  </div>
+  <div class="dialogue-en">But within a certain framework.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(26:16.000)</span>
+  </div>
+  <div class="dialogue-en">A framework of assuming that the American cause was basically just, basically honorable,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(26:24.000)</span>
+  </div>
+  <div class="dialogue-en">making mistakes, doing bad things.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:28.000)</span>
+  </div>
+  <div class="dialogue-en">But the idea of questioning that the United States was engaged in a major war crime.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(26:38.000)</span>
+  </div>
+  <div class="dialogue-en">That&#39;s off the record.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:40.000)</span>
+  </div>
+  <div class="dialogue-en">So unfortunately, there was this crime and that crime which harmed their effort to do good and so on.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(26:50.000)</span>
+  </div>
+  <div class="dialogue-en">Well, that&#39;s not lying, it&#39;s propaganda.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:53.000)</span>
+  </div>
+  <div class="dialogue-en">So how do we find the truth?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:55.000)</span>
+  </div>
+  <div class="dialogue-en">How do we find the truth?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:58.000)</span>
+  </div>
+  <div class="dialogue-en">That&#39;s what you have a brain for.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:01.000)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s not deep.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:03.000)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s quite shallow.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:05.000)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s not quantum physics.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:07.000)</span>
+  </div>
+  <div class="dialogue-en">Put a little effort into it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:09.000)</span>
+  </div>
+  <div class="dialogue-en">Think about, look for other sources.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:13.000)</span>
+  </div>
+  <div class="dialogue-en">Think a little about history.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:15.000)</span>
+  </div>
+  <div class="dialogue-en">Look at the documentary record.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:18.000)</span>
+  </div>
+  <div class="dialogue-en">They&#39;re all pretty well fools together and you can get a reasonable understanding of what&#39;s happening.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:25.000)</span>
+  </div>
+  <div class="dialogue-en">If you could sit down with Vladimir Putin and ask him a question or talk to him about an idea, what would you say?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:35.000)</span>
+  </div>
+  <div class="dialogue-en">I would walk out of the room, just as with almost any other leader.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:40.000)</span>
+  </div>
+  <div class="dialogue-en">I know what he&#39;s going to say.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:42.000)</span>
+  </div>
+  <div class="dialogue-en">I read the party line.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:43.000)</span>
+  </div>
+  <div class="dialogue-en">I read his pronouncements.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:45.000)</span>
+  </div>
+  <div class="dialogue-en">Doesn&#39;t want to hear from me.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:47.000)</span>
+  </div>
+  <div class="dialogue-en">Am I going to say, why did you carry out a crime that&#39;s comparable to the US invasion of Iraq and the Stalin Hitler invasion of Poland?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:59.000)</span>
+  </div>
+  <div class="dialogue-en">Am I going to ask that question?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(28:02.000)</span>
+  </div>
+  <div class="dialogue-en">If I met with John F. Kennedy today, would I ask, why did you radically escalate the war in Vietnam, launch the US Air Force, start authorized napalm, drive launch programs to drive villagers who you know are supporting the National Liberation Front,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:26.000)</span>
+  </div>
+  <div class="dialogue-en">drive them into concentration camps to separate them from the forces they&#39;re defending?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:32.000)</span>
+  </div>
+  <div class="dialogue-en">Would I have asked him that?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:34.000)</span>
+  </div>
+  <div class="dialogue-en">Of course not.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:36.000)</span>
+  </div>
+  <div class="dialogue-en">Do you think the people who led us into the war in Vietnam, the war in Afghanistan and Iraq, the war in Ukraine are evil?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(28:50.000)</span>
+  </div>
+  <div class="dialogue-en">I mean, it&#39;s very hard to be in a position of leadership of a violent, aggressive power without carrying out evil acts.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:03.000)</span>
+  </div>
+  <div class="dialogue-en">Are the people evil?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:06.000)</span>
+  </div>
+  <div class="dialogue-en">I mean, I&#39;m not their moral advisors.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(29:11.000)</span>
+  </div>
+  <div class="dialogue-en">I don&#39;t know anything about them.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:13.000)</span>
+  </div>
+  <div class="dialogue-en">I look at their actions, their statements, their policies, evaluate those.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(29:19.000)</span>
+  </div>
+  <div class="dialogue-en">Their families can evaluate their personalities.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:24.000)</span>
+  </div>
+  <div class="dialogue-en">Will there be a war between US and China in the 21st century?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(29:29.000)</span>
+  </div>
+  <div class="dialogue-en">If there is, we&#39;re finished.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(29:33.000)</span>
+  </div>
+  <div class="dialogue-en">A war between the US and China would destroy the possibilities of organized life on Earth.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(29:43.000)</span>
+  </div>
+  <div class="dialogue-en">In fact, we can put it differently. Unless the US and China reach an accommodation and work together and cooperatively,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:55.000)</span>
+  </div>
+  <div class="dialogue-en">it&#39;s very unlikely that organized human society will survive.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(30:00.000)</span>
+  </div>
+  <div class="dialogue-en">We are facing enormous problems, problems, destruction of the environment, endemics, threat of nuclear war.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(30:14.000)</span>
+  </div>
+  <div class="dialogue-en">None of these decline of democratic functioning of an arena for rational discourse.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(30:23.000)</span>
+  </div>
+  <div class="dialogue-en">None of these things have boundaries.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(30:26.000)</span>
+  </div>
+  <div class="dialogue-en">We either work together to overcome them, which we can do, or we&#39;ll all sink together.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(30:34.000)</span>
+  </div>
+  <div class="dialogue-en">That&#39;s the real question we should be asking.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:37.000)</span>
+  </div>
+  <div class="dialogue-en">What the United States is doing is not helping.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:42.000)</span>
+  </div>
+  <div class="dialogue-en">So the current US policy, which is perfectly open, nothing secret about it, is to what&#39;s called encircle China with sentinel states,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(30:57.000)</span>
+  </div>
+  <div class="dialogue-en">South Korea, Japan, Australia, which will be heavily armed, provided by Biden with precision weapons aimed at China,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(31:14.000)</span>
+  </div>
+  <div class="dialogue-en">backed by major naval operations, huge naval operations just took place in the Pacific.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(31:23.000)</span>
+  </div>
+  <div class="dialogue-en">Many nations participating, RIMPAC didn&#39;t get reported here, as far as I know, but an enormous operation threatening China.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(31:32.000)</span>
+  </div>
+  <div class="dialogue-en">All of this to encircle China, to continue with policies like that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(31:41.000)</span>
+  </div>
+  <div class="dialogue-en">Somebody like Pelosi, just to probably make her look more, I don&#39;t know what her motives are, taking a highly provocative,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(31:56.000)</span>
+  </div>
+  <div class="dialogue-en">stupid act, opposed by the military, opposed by the White House.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(32:02.000)</span>
+  </div>
+  <div class="dialogue-en">Yes, acts like that, which of course called for the response of highly dangerous.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(32:09.000)</span>
+  </div>
+  <div class="dialogue-en">We don&#39;t have to do that. We don&#39;t have to increase the threat.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:14.000)</span>
+  </div>
+  <div class="dialogue-en">I mean, right now, the last NATO summit, take a look at it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(32:20.000)</span>
+  </div>
+  <div class="dialogue-en">For the first time, it invited to attend countries that are in the sentinel states surrounding China and circling China from the east.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:33.000)</span>
+  </div>
+  <div class="dialogue-en">And it, in fact, extended the range of NATO to what&#39;s called the Indo Pacific region.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:41.000)</span>
+  </div>
+  <div class="dialogue-en">So all of us by now, the North Atlantic includes the whole Indo Pacific region to try to ensure that we can overcome the so called China threat.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:55.000)</span>
+  </div>
+  <div class="dialogue-en">Certainly, we might ask exactly what the China threat is. It&#39;s done sometimes.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:03.000)</span>
+  </div>
+  <div class="dialogue-en">So former prime minister of Australia, Paul Keating, well known international diplomat, had an article a while ago in the Australian press.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(33:16.000)</span>
+  </div>
+  <div class="dialogue-en">That&#39;s right in the claws of the dragon asking, going through what the China threat is.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(33:22.000)</span>
+  </div>
+  <div class="dialogue-en">He ran through the various claims, finally concluded the China threat is that China exists.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:30.000)</span>
+  </div>
+  <div class="dialogue-en">It exists. It does not follow U.S. orders. It&#39;s not like Europe.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(33:36.000)</span>
+  </div>
+  <div class="dialogue-en">Europe does what the United States tells it to do, even if it doesn&#39;t like it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:42.000)</span>
+  </div>
+  <div class="dialogue-en">China just ignores what the U.S. says. There&#39;s a formal way of describing this.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(33:49.000)</span>
+  </div>
+  <div class="dialogue-en">There are two versions of the international order.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(33:54.000)</span>
+  </div>
+  <div class="dialogue-en">One version is the U.N. based international order, which theoretically we subscribe to, but we don&#39;t accept.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(34:04.000)</span>
+  </div>
+  <div class="dialogue-en">The U.N. based international order is unacceptable to the United States because it bans U.S. foreign policy.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(34:14.000)</span>
+  </div>
+  <div class="dialogue-en">Literally, it explicitly bans the threat or use of force in international affairs, except under circumstances that almost never arise.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(34:27.000)</span>
+  </div>
+  <div class="dialogue-en">Well, that&#39;s U.S. foreign policy. Try to find a president who isn&#39;t engaged in the threat or use of force in international affairs.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:36.000)</span>
+  </div>
+  <div class="dialogue-en">So obviously we can&#39;t accept the U.N. based international system, even though under the Constitution, that&#39;s the supreme law of the land.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(34:48.000)</span>
+  </div>
+  <div class="dialogue-en">It doesn&#39;t matter. So the United States has what&#39;s called a rule based international order.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:56.000)</span>
+  </div>
+  <div class="dialogue-en">That&#39;s acceptable because it&#39;s the United States that sets the rules.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:02.000)</span>
+  </div>
+  <div class="dialogue-en">So we want a rule based international order where the U.S. sets the rules.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(35:08.000)</span>
+  </div>
+  <div class="dialogue-en">In commentary in the United States, even in scholarship, almost 100 percent calling for a rule based international order.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(35:20.000)</span>
+  </div>
+  <div class="dialogue-en">Is that false? No, it&#39;s true. Is it propaganda? Of course it&#39;s propaganda because of what&#39;s not said and because of what&#39;s presupposed.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(35:31.000)</span>
+  </div>
+  <div class="dialogue-en">An answer to an earlier question. Well, China does not accept the rule based international order.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:39.000)</span>
+  </div>
+  <div class="dialogue-en">So when the U.S. imposes demands, Europe may not like them, but they follow them.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:47.000)</span>
+  </div>
+  <div class="dialogue-en">China ignores them. So take, for example, the U.S. sanctions on Iran.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(35:55.000)</span>
+  </div>
+  <div class="dialogue-en">The U.S. has to punish Iran because the United States pulled out of the, unilaterally pulled out of the Iran nuclear agreements.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(36:08.000)</span>
+  </div>
+  <div class="dialogue-en">So in order to punish Iran for wrecking the agreements in violation of Security Council orders, we impose very harsh sanctions.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(36:19.000)</span>
+  </div>
+  <div class="dialogue-en">Europe strongly opposes the sanctions, condemn them harshly, but it adheres to them because you don&#39;t disobey U.S. orders.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(36:35.000)</span>
+  </div>
+  <div class="dialogue-en">That&#39;s too dangerous. China ignores them. They&#39;re not keeping to the rule based international order.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(36:43.000)</span>
+  </div>
+  <div class="dialogue-en">Well, that&#39;s unacceptable. In fact, it&#39;s said pretty openly. You can hear the Secretary of State and others saying China is challenging our global hegemony.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(36:58.000)</span>
+  </div>
+  <div class="dialogue-en">Yes, they are. They don&#39;t accept U.S. global hegemony, especially in the waters off China.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(37:05.000)</span>
+  </div>
+  <div class="dialogue-en">They do a lot of rotten things, China. I mean, internally, there&#39;s all kind of repression, violence and so on.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(37:16.000)</span>
+  </div>
+  <div class="dialogue-en">But first of all, that&#39;s not a threat to us. And second, the U.S. doesn&#39;t care about it because it easily accepts and supports comparable crimes and atrocities internal to allies.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(37:29.000)</span>
+  </div>
+  <div class="dialogue-en">So, yes, we should protest it, but without hypocrisy. We have no standing to protest it. We support comparable things in all sorts of other places.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(37:41.000)</span>
+  </div>
+  <div class="dialogue-en">Just take a look at the U.S. foreign aid. The leading recipient of U.S. foreign aid is Israel, which is engaged in constant terror, violence and repression, constant, almost daily.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(37:57.000)</span>
+  </div>
+  <div class="dialogue-en">Second leading recipient is Egypt, one of the worst dictatorships in Egypt&#39;s history.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(38:05.000)</span>
+  </div>
+  <div class="dialogue-en">About 60,000 people in jail, political prisoners tortured and so on. Do we care?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(38:13.000)</span>
+  </div>
+  <div class="dialogue-en">Second leading recipient. I mean, what are we talking about? That&#39;s why most of the world just laughs at us.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(38:21.000)</span>
+  </div>
+  <div class="dialogue-en">There&#39;s a lot of failure to understand here about why the global South doesn&#39;t join us in our proxy war against Russia, fighting Russia until it&#39;s severely weakened.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(38:38.000)</span>
+  </div>
+  <div class="dialogue-en">They don&#39;t join us. Here, the question is, what&#39;s wrong with them?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(38:43.000)</span>
+  </div>
+  <div class="dialogue-en">They look into their minds to figure out what&#39;s wrong. They have a different attitude. They say, yes, we oppose the invasion of Ukraine, terrible crime.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(38:56.000)</span>
+  </div>
+  <div class="dialogue-en">But what are you talking about? This is what you do to us all the time. You don&#39;t care about crimes like this. That&#39;s most of the global South.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(39:06.000)</span>
+  </div>
+  <div class="dialogue-en">We can&#39;t comprehend that because we&#39;re so insulated that we are just obviously right and everyone who doesn&#39;t go along must be wrong.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(39:17.000)</span>
+  </div>
+  <div class="dialogue-en">Do you think the United States as a global leader, as an empire, may collapse in this century? Why and how will it happen and how can we avoid it?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(39:29.000)</span>
+  </div>
+  <div class="dialogue-en">The United States can certainly harm itself severely. That&#39;s what we&#39;re doing right now. Right now, the greatest threat to the United States is internal countries tearing itself apart.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(39:49.000)</span>
+  </div>
+  <div class="dialogue-en">I really don&#39;t have to run through it with you. Take a look at something as elementary as mortality. The United States is the only country outside of war, life expectancy is declining, mortality is increasing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(40:12.000)</span>
+  </div>
+  <div class="dialogue-en">It doesn&#39;t happen anywhere. You take a look at health outcomes generally. They&#39;re among the worst among the developed societies and health spending is about twice as high as the developed societies.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(40:28.000)</span>
+  </div>
+  <div class="dialogue-en">You look at the charts, all of this starts around the late 1970s, early 80s. If you go back to that point, the United States was pretty much a normal developed country in terms of mortality, incarceration, health expenses, other measures.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(40:50.000)</span>
+  </div>
+  <div class="dialogue-en">Since then, the United States has fallen off the chart. It&#39;s gone way off the chart. Well, that&#39;s the neoliberal assault of the last 40 years. It&#39;s had a major effect on the United States.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(41:05.000)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s left a lot of anger, resentment, violence. Meanwhile, the Republican Party has simply drifted off the spectrum. It&#39;s not a normal political party in any usual sense, not what it used to be.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(41:21.000)</span>
+  </div>
+  <div class="dialogue-en">Its main policy is block anything in order to regain power. That&#39;s its policy, stated almost openly by McConnell, followed religiously by the entire Congress.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(41:39.000)</span>
+  </div>
+  <div class="dialogue-en">That&#39;s not the acts of a political party. Of course, democracy has declined. Violence has increased. The judgements, the decisions of the Supreme Court, the court&#39;s the most reactionary court in memory.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(42:00.000)</span>
+  </div>
+  <div class="dialogue-en">To go back to the 19th century, decision after decision is an effort to create a country of white supremacist Christian nationalists. I mean, scarcely hidden, if you read the opinions of Alito, Thomas, Gorsuch, and others.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(42:28.000)</span>
+  </div>
+  <div class="dialogue-en">So yes, we can destroy ourselves within. And in fact, the ways we&#39;re doing it are almost astonishing. So it&#39;s well known, for example. Everybody knows that U.S. infrastructure, bridges, subways, and so on, is in terrible shape, needs a lot of repair.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(42:49.000)</span>
+  </div>
+  <div class="dialogue-en">The American Association of Engineers gives it a failing mark every year. Finally, Congress did pass a limited infrastructure bill, say rebuild bridges and so on.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(43:03.000)</span>
+  </div>
+  <div class="dialogue-en">It has to be called a China Competition Act. We can&#39;t rebuild their bridges because they&#39;re falling apart. We have to rebuild their bridges to beat China. It&#39;s pathological.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(43:19.000)</span>
+  </div>
+  <div class="dialogue-en">And that&#39;s what&#39;s happening inside the country. Take Thomas&#39;s decision in the recent case in which he invalidated a New York law.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(43:34.000)</span>
+  </div>
+  <div class="dialogue-en">This is last October, a couple of weeks ago, and validated a New York law going back to 1913 that required people to have some justification if they wanted to carry concealed weapons in public.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(43:51.000)</span>
+  </div>
+  <div class="dialogue-en">He went through that with a very interesting decision. He said the United States, he said, is such a decaying, collapsing, hateful society that people just have to have guns.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(44:08.000)</span>
+  </div>
+  <div class="dialogue-en">I mean, how can you expect somebody to go to the grocery store without a gun in a country as disgusting and hideous as this one? It&#39;s essentially what he said. Those weren&#39;t his words, but they were the import.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(44:24.000)</span>
+  </div>
+  <div class="dialogue-en">What gives you hope about the United States, about the future of human civilization?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(44:33.000)</span>
+  </div>
+  <div class="dialogue-en">Human civilization will not survive unless the United States takes a leading position in dealing with and overcoming the very severe crises that we face.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(44:50.000)</span>
+  </div>
+  <div class="dialogue-en">The United States is the most powerful country, not only in the world, but in human history. There&#39;s nothing to compare with it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(44:58.000)</span>
+  </div>
+  <div class="dialogue-en">What the United States does has an overwhelming impact on what happens in the world.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(45:06.000)</span>
+  </div>
+  <div class="dialogue-en">When the United States alone pulls out of the Paris agreements on dealing with climate change and insists on maximizing the use of fossil fuels and dismantling the regulatory apparatus that provides some mitigation.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(45:29.000)</span>
+  </div>
+  <div class="dialogue-en">When the United States does that, as it did under Trump, it&#39;s a blow to the future of civilization.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(45:37.000)</span>
+  </div>
+  <div class="dialogue-en">When Republican states today, right now, say they&#39;re going to punish corporations that seek to take climate change into account and their investments.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(45:53.000)</span>
+  </div>
+  <div class="dialogue-en">The U.S. is telling the world, we want to destroy all of us. Again, not their words, but their import. That&#39;s what they mean.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(46:04.000)</span>
+  </div>
+  <div class="dialogue-en">So as long as we have a political organization dedicated to gaining power at any cost, maximizing profit, no matter what the consequences, no future for human civilization.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(46:22.000)</span>
+  </div>
+  <div class="dialogue-en">Noam, thank you for talking today. Thank you for talking once again. And thank you for fighting for the future of human civilization. Again, thank you.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(46:35.000)</span>
+  </div>
+  <div class="dialogue-en">Thank you.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(46:37.000)</span>
+  </div>
+  <div class="dialogue-en">Thanks for listening to this conversation with Noam Chomsky. To support this podcast, please check out our sponsors in the description.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(46:44.000)</span>
+  </div>
+  <div class="dialogue-en">And now, let me leave you with some words from Voltaire. It is forbidden to kill. Therefore, all murderers are punished unless they kill in large numbers, and to the sound of trumpets.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(46:59.000)</span>
+  </div>
+  <div class="dialogue-en">Thank you for listening and hope to see you next time.</div>
+  
+</div></div>
+<button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 340 条对话 ↓</button>
+
+    <a href="https://lexfridman.com/noam-chomsky-2" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -867,6 +3129,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -879,6 +3193,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

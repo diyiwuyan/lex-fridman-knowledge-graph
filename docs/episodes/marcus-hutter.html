@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -641,7 +657,10 @@ a:hover { color: var(--accent); text-decoration: underline; }
   <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
   <p style="color:#64748b;font-size:14px">暂无语录</p>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（2249 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
@@ -649,140 +668,140 @@ a:hover { color: var(--accent); text-decoration: underline; }
     Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">The following is a conversation with Marcus Hutter,</div>
-  
+  <div class="dialogue-zh">以下是与马库斯·哈特的对话，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:03.480)</span>
   </div>
   <div class="dialogue-en">senior research scientist at Google DeepMind.</div>
-  
+  <div class="dialogue-zh">谷歌 DeepMind 高级研究科学家。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:06.680)</span>
   </div>
   <div class="dialogue-en">Throughout his career of research,</div>
-  
+  <div class="dialogue-zh">在他的研究生涯中，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:08.360)</span>
   </div>
   <div class="dialogue-en">including with Jürgen Schmidhuber and Shane Legge,</div>
-  
+  <div class="dialogue-zh">包括 Jürgen Schmidhuber 和 Shane Legge，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:11.760)</span>
   </div>
   <div class="dialogue-en">he has proposed a lot of interesting ideas</div>
-  
+  <div class="dialogue-zh">他提出了很多有趣的想法</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Marcus Hutter <span class="dialogue-time">(00:13.960)</span>
   </div>
   <div class="dialogue-en">in and around the field of artificial general</div>
-  
+  <div class="dialogue-zh">人工通用领域及其周边</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:16.360)</span>
   </div>
   <div class="dialogue-en">intelligence, including the development of AICSI,</div>
-  
+  <div class="dialogue-zh">情报，包括AICSI的发展，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Marcus Hutter <span class="dialogue-time">(00:20.140)</span>
   </div>
   <div class="dialogue-en">spelled AIXI model, which is a mathematical approach to AGI</div>
-  
+  <div class="dialogue-zh">拼写为 AIXI 模型，这是 AGI 的数学方法</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:25.360)</span>
   </div>
   <div class="dialogue-en">that incorporates ideas of Kolmogorov complexity,</div>
-  
+  <div class="dialogue-zh">融合了柯尔莫哥洛夫复杂性的思想，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Marcus Hutter <span class="dialogue-time">(00:28.880)</span>
   </div>
   <div class="dialogue-en">Solomonov induction, and reinforcement learning.</div>
-  
+  <div class="dialogue-zh">所罗门诺夫归纳法和强化学习。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:33.080)</span>
   </div>
   <div class="dialogue-en">In 2006, Marcus launched the 50,000 Euro Hutter Prize</div>
-  
+  <div class="dialogue-zh">2006 年，Marcus 设立了 50,000 欧元的 Hutter 奖</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Marcus Hutter <span class="dialogue-time">(00:38.200)</span>
   </div>
   <div class="dialogue-en">for lossless compression of human knowledge.</div>
-  
+  <div class="dialogue-zh">用于人类知识的无损压缩。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:41.200)</span>
   </div>
   <div class="dialogue-en">The idea behind this prize is that the ability</div>
-  
+  <div class="dialogue-zh">这个奖项背后的想法是</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Marcus Hutter <span class="dialogue-time">(00:43.720)</span>
   </div>
   <div class="dialogue-en">to compress well is closely related to intelligence.</div>
-  
+  <div class="dialogue-zh">压缩得好与智力密切相关。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:47.900)</span>
   </div>
   <div class="dialogue-en">This, to me, is a profound idea.</div>
-  
+  <div class="dialogue-zh">对我来说，这是一个深刻的想法。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Marcus Hutter <span class="dialogue-time">(00:51.260)</span>
   </div>
   <div class="dialogue-en">Specifically, if you can compress the first 100</div>
-  
+  <div class="dialogue-zh">具体来说，如果你可以压缩前 100</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:54.000)</span>
   </div>
   <div class="dialogue-en">megabytes or 1 gigabyte of Wikipedia</div>
-  
+  <div class="dialogue-zh">兆字节或 1 GB 维基百科</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Marcus Hutter <span class="dialogue-time">(00:56.520)</span>
   </div>
   <div class="dialogue-en">better than your predecessors, your compressor</div>
-  
+  <div class="dialogue-zh">比您的前辈更好，您的压缩机</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:59.000)</span>
   </div>
   <div class="dialogue-en">likely has to also be smarter.</div>
-  
+  <div class="dialogue-zh">可能还必须变得更聪明。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Marcus Hutter <span class="dialogue-time">(01:02.200)</span>
   </div>
   <div class="dialogue-en">The intention of this prize is to encourage</div>
-  
+  <div class="dialogue-zh">设立这个奖项的目的是为了鼓励</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
@@ -16390,7 +16409,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 </div></div>
 <button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 2249 条对话 ↓</button>
 
-    <a href="https://lexfridman.com/marcus-hutter" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+    <a href="https://lexfridman.com/marcus-hutter" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -16448,6 +16467,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -16460,6 +16531,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

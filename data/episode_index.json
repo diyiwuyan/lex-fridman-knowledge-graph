@@ -1,0 +1,1420 @@
+[
+  {
+    "slug": "lars-brownworth",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Lars Brownworth"
+    ],
+    "word_count": 21139,
+    "chapter_count": 13,
+    "url": "https://lexfridman.com/lars-brownworth-transcript"
+  },
+  {
+    "slug": "jensen-huang",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Jensen Huang"
+    ],
+    "word_count": 23765,
+    "chapter_count": 21,
+    "url": "https://lexfridman.com/jensen-huang-transcript"
+  },
+  {
+    "slug": "jeff-kaplan",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Jeff Kaplan",
+      "About Lex Fridman"
+    ],
+    "word_count": 49103,
+    "chapter_count": 25,
+    "url": "https://lexfridman.com/jeff-kaplan-transcript"
+  },
+  {
+    "slug": "rick-beato",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Rick Beato",
+      "About Lex Fridman"
+    ],
+    "word_count": 28027,
+    "chapter_count": 22,
+    "url": "https://lexfridman.com/rick-beato-transcript"
+  },
+  {
+    "slug": "peter-steinberger",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Peter Steinberger",
+      "About Lex Fridman"
+    ],
+    "word_count": 33442,
+    "chapter_count": 21,
+    "url": "https://lexfridman.com/peter-steinberger-transcript"
+  },
+  {
+    "slug": "paul-rosolie-3",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Paul Rosolie"
+    ],
+    "word_count": 34490,
+    "chapter_count": 15,
+    "url": "https://lexfridman.com/paul-rosolie-3-transcript"
+  },
+  {
+    "slug": "irving-finkel",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Irving Finkel",
+      "About Lex Fridman"
+    ],
+    "word_count": 21633,
+    "chapter_count": 17,
+    "url": "https://lexfridman.com/irving-finkel-transcript"
+  },
+  {
+    "slug": "dan-houser",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Dan Houser"
+    ],
+    "word_count": 32743,
+    "chapter_count": 20,
+    "url": "https://lexfridman.com/dan-houser-transcript"
+  },
+  {
+    "slug": "pavel-durov",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Kafka",
+      "About Lex Fridman",
+      "Apple",
+      "Pavel Durov"
+    ],
+    "word_count": 35571,
+    "chapter_count": 30,
+    "url": "https://lexfridman.com/pavel-durov-transcript"
+  },
+  {
+    "slug": "keyu-jin",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Keyu Jin"
+    ],
+    "word_count": 17055,
+    "chapter_count": 19,
+    "url": "https://lexfridman.com/keyu-jin-transcript"
+  },
+  {
+    "slug": "jack-weatherford",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Dan Carlin",
+      "Jack Weatherford",
+      "About Lex Fridman"
+    ],
+    "word_count": 43856,
+    "chapter_count": 21,
+    "url": "https://lexfridman.com/jack-weatherford-transcript"
+  },
+  {
+    "slug": "demis-hassabis-2",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "David Foster Wallace",
+      "Demis Hassabis",
+      "About Lex Fridman"
+    ],
+    "word_count": 26458,
+    "chapter_count": 24,
+    "url": "https://lexfridman.com/demis-hassabis-2-transcript"
+  },
+  {
+    "slug": "dhh-david-heinemeier-hansson",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Scaling",
+      "About Lex Fridman"
+    ],
+    "word_count": 66359,
+    "chapter_count": 35,
+    "url": "https://lexfridman.com/dhh-david-heinemeier-hansson-transcript"
+  },
+  {
+    "slug": "terence-tao",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Terence Tao",
+      "About Lex Fridman"
+    ],
+    "word_count": 35388,
+    "chapter_count": 24,
+    "url": "https://lexfridman.com/terence-tao-transcript"
+  },
+  {
+    "slug": "sundar-pichai",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Sundar Pichai",
+      "Gemini",
+      "About Lex Fridman",
+      "Andrew"
+    ],
+    "word_count": 21600,
+    "chapter_count": 20,
+    "url": "https://lexfridman.com/sundar-pichai-transcript"
+  },
+  {
+    "slug": "james-holland",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "James Holland",
+      "About Lex Fridman"
+    ],
+    "word_count": 36257,
+    "chapter_count": 18,
+    "url": "https://lexfridman.com/james-holland-transcript"
+  },
+  {
+    "slug": "janna-levin",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Janna Levin"
+    ],
+    "word_count": 30282,
+    "chapter_count": 23,
+    "url": "https://lexfridman.com/janna-levin-transcript"
+  },
+  {
+    "slug": "tim-sweeney",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Movies",
+      "Concurrency",
+      "About Lex Fridman",
+      "Tim Sweeney"
+    ],
+    "word_count": 47399,
+    "chapter_count": 34,
+    "url": "https://lexfridman.com/tim-sweeney-transcript"
+  },
+  {
+    "slug": "theprimeagen",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman"
+    ],
+    "word_count": 63678,
+    "chapter_count": 36,
+    "url": "https://lexfridman.com/theprimeagen-transcript"
+  },
+  {
+    "slug": "narendra-modi",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Siddhartha",
+      "Narendra Modi",
+      "About Lex Fridman"
+    ],
+    "word_count": 24511,
+    "chapter_count": 28,
+    "url": "https://lexfridman.com/narendra-modi-transcript"
+  },
+  {
+    "slug": "deepseek-dylan-patel-nathan-lambert",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Nathan Lambert",
+      "About Lex Fridman",
+      "Dylan Patel"
+    ],
+    "word_count": 58507,
+    "chapter_count": 24,
+    "url": "https://lexfridman.com/deepseek-dylan-patel-nathan-lambert-transcript"
+  },
+  {
+    "slug": "jennifer-burns",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "The Great Depression",
+      "About Lex Fridman",
+      "Jennifer Burns"
+    ],
+    "word_count": 38519,
+    "chapter_count": 29,
+    "url": "https://lexfridman.com/jennifer-burns-transcript"
+  },
+  {
+    "slug": "volodymyr-zelenskyy",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Volodymyr Zelenskyy",
+      "About Lex Fridman",
+      "Conclusion"
+    ],
+    "word_count": 26715,
+    "chapter_count": 21,
+    "url": "https://lexfridman.com/volodymyr-zelenskyy-transcript"
+  },
+  {
+    "slug": "adam-frank",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Adam Frank"
+    ],
+    "word_count": 38724,
+    "chapter_count": 26,
+    "url": "https://lexfridman.com/adam-frank-transcript"
+  },
+  {
+    "slug": "saagar-enjeti-2",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Saagar Enjeti",
+      "Bernie Sanders",
+      "About Lex Fridman",
+      "Immigration"
+    ],
+    "word_count": 41918,
+    "chapter_count": 23,
+    "url": "https://lexfridman.com/saagar-enjeti-2-transcript"
+  },
+  {
+    "slug": "javier-milei",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Javier Milei",
+      "About Lex Fridman"
+    ],
+    "word_count": 15931,
+    "chapter_count": 18,
+    "url": "https://lexfridman.com/javier-milei-transcript"
+  },
+  {
+    "slug": "bernie-sanders",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Bernie Sanders",
+      "About Lex Fridman"
+    ],
+    "word_count": 11669,
+    "chapter_count": 11,
+    "url": "https://lexfridman.com/bernie-sanders-transcript"
+  },
+  {
+    "slug": "graham-hancock",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Graham Hancock"
+    ],
+    "word_count": 25241,
+    "chapter_count": 13,
+    "url": "https://lexfridman.com/graham-hancock-transcript"
+  },
+  {
+    "slug": "cursor-team",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Sualeh",
+      "Aman",
+      "Michael",
+      "Arvid",
+      "About Lex Fridman",
+      "Lex"
+    ],
+    "word_count": 26475,
+    "chapter_count": 22,
+    "url": "https://lexfridman.com/cursor-team-transcript"
+  },
+  {
+    "slug": "ed-barnhart",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Ed Barnhart",
+      "About Lex Fridman"
+    ],
+    "word_count": 32774,
+    "chapter_count": 23,
+    "url": "https://lexfridman.com/ed-barnhart-transcript"
+  },
+  {
+    "slug": "gregory-aldrete",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Emperors",
+      "Cicero",
+      "Armor",
+      "Julius Caesar",
+      "Gestures",
+      "Conquering Greece",
+      "Gregory Aldrete",
+      "About Lex Fridman"
+    ],
+    "word_count": 39897,
+    "chapter_count": 28,
+    "url": "https://lexfridman.com/gregory-aldrete-transcript"
+  },
+  {
+    "slug": "donald-trump",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Donald Trump",
+      "China",
+      "About Lex Fridman"
+    ],
+    "word_count": 11328,
+    "chapter_count": 19,
+    "url": "https://lexfridman.com/donald-trump-transcript"
+  },
+  {
+    "slug": "pieter-levels",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Pieter Levels",
+      "About Lex Fridman"
+    ],
+    "word_count": 46664,
+    "chapter_count": 25,
+    "url": "https://lexfridman.com/pieter-levels-transcript"
+  },
+  {
+    "slug": "elon-musk-and-neuralink-team",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Elon Musk",
+      "Bliss Chapman",
+      "Noland Arbaugh",
+      "About Lex Fridman"
+    ],
+    "word_count": 88652,
+    "chapter_count": 57,
+    "url": "https://lexfridman.com/elon-musk-and-neuralink-team-transcript"
+  },
+  {
+    "slug": "ivanka-trump",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Ivanka Trump",
+      "Politics",
+      "About Lex Fridman",
+      "Architecture"
+    ],
+    "word_count": 29769,
+    "chapter_count": 28,
+    "url": "https://lexfridman.com/ivanka-trump-transcript"
+  },
+  {
+    "slug": "aravind-srinivas",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Elon Musk",
+      "Aravind Srinivas",
+      "About Lex Fridman"
+    ],
+    "word_count": 30273,
+    "chapter_count": 18,
+    "url": "https://lexfridman.com/aravind-srinivas-transcript"
+  },
+  {
+    "slug": "sara-walker-3",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Sara Walker",
+      "About Lex Fridman"
+    ],
+    "word_count": 30610,
+    "chapter_count": 17,
+    "url": "https://lexfridman.com/sara-walker-3-transcript"
+  },
+  {
+    "slug": "charan-ranganath",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Charan Ranganath",
+      "About Lex Fridman"
+    ],
+    "word_count": 32485,
+    "chapter_count": 20,
+    "url": "https://lexfridman.com/charan-ranganath-transcript"
+  },
+  {
+    "slug": "paul-rosolie-2",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Paul Rosolie"
+    ],
+    "word_count": 44021,
+    "chapter_count": 23,
+    "url": "https://lexfridman.com/paul-rosolie-2-transcript"
+  },
+  {
+    "slug": "sean-carroll-3",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Sean Carroll"
+    ],
+    "word_count": 27402,
+    "chapter_count": 17,
+    "url": "https://lexfridman.com/sean-carroll-3-transcript"
+  },
+  {
+    "slug": "andrew-callaghan",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Andrew Callaghan",
+      "Burning Man"
+    ],
+    "word_count": 34910,
+    "chapter_count": 20,
+    "url": "https://lexfridman.com/andrew-callaghan-transcript"
+  },
+  {
+    "slug": "bassem-youssef",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Bassem Youssef",
+      "About Lex Fridman"
+    ],
+    "word_count": 28890,
+    "chapter_count": 17,
+    "url": "https://lexfridman.com/bassem-youssef-transcript"
+  },
+  {
+    "slug": "tulsi-gabbard",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Warmongers",
+      "About Lex Fridman",
+      "Tulsi Gabbard"
+    ],
+    "word_count": 15920,
+    "chapter_count": 14,
+    "url": "https://lexfridman.com/tulsi-gabbard-transcript"
+  },
+  {
+    "slug": "dana-white",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Dana White"
+    ],
+    "word_count": 17129,
+    "chapter_count": 16,
+    "url": "https://lexfridman.com/dana-white-transcript"
+  },
+  {
+    "slug": "annie-jacobsen",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Annie Jacobsen",
+      "Deterrence",
+      "About Lex Fridman"
+    ],
+    "word_count": 27124,
+    "chapter_count": 30,
+    "url": "https://lexfridman.com/annie-jacobsen-transcript"
+  },
+  {
+    "slug": "sam-altman-2",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Sora",
+      "Sam Altman"
+    ],
+    "word_count": 20459,
+    "chapter_count": 14,
+    "url": "https://lexfridman.com/sam-altman-2-transcript"
+  },
+  {
+    "slug": "israel-palestine-debate",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Steven Bonnell",
+      "Mouin Rabbani",
+      "About Lex Fridman",
+      "Norman Finkelstein",
+      "Benny Morris"
+    ],
+    "word_count": 53410,
+    "chapter_count": 7,
+    "url": "https://lexfridman.com/israel-palestine-debate-transcript"
+  },
+  {
+    "slug": "serhii-plokhy",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Serhii Plokhy",
+      "About Lex Fridman"
+    ],
+    "word_count": 25511,
+    "chapter_count": 15,
+    "url": "https://lexfridman.com/serhii-plokhy-transcript"
+  },
+  {
+    "slug": "tucker-carlson",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Tucker Carlson",
+      "About Lex Fridman",
+      "Putin",
+      "Moscow"
+    ],
+    "word_count": 34940,
+    "chapter_count": 16,
+    "url": "https://lexfridman.com/tucker-carlson-transcript"
+  },
+  {
+    "slug": "bill-ackman",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Bill Ackman"
+    ],
+    "word_count": 37308,
+    "chapter_count": 23,
+    "url": "https://lexfridman.com/bill-ackman-transcript"
+  },
+  {
+    "slug": "ben-shapiro-destiny-debate",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Ben Shapiro",
+      "Destiny"
+    ],
+    "word_count": 33608,
+    "chapter_count": 13,
+    "url": "https://lexfridman.com/ben-shapiro-destiny-debate-transcript"
+  },
+  {
+    "slug": "tal-wilkenfeld",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Jeff Beck",
+      "About Lex Fridman",
+      "Tal Wilkenfeld"
+    ],
+    "word_count": 16576,
+    "chapter_count": 15,
+    "url": "https://lexfridman.com/tal-wilkenfeld-transcript"
+  },
+  {
+    "slug": "jeff-bezos",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Jeff Bezos",
+      "About Lex Fridman",
+      "Ranch"
+    ],
+    "word_count": 21183,
+    "chapter_count": 10,
+    "url": "https://lexfridman.com/jeff-bezos-transcript"
+  },
+  {
+    "slug": "lisa-randall",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Lisa Randall",
+      "About Lex Fridman"
+    ],
+    "word_count": 10891,
+    "chapter_count": 5,
+    "url": "https://lexfridman.com/lisa-randall-transcript"
+  },
+  {
+    "slug": "john-mearsheimer",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Power",
+      "About Lex Fridman",
+      "John Mearsheimer"
+    ],
+    "word_count": 29850,
+    "chapter_count": 7,
+    "url": "https://lexfridman.com/john-mearsheimer-transcript"
+  },
+  {
+    "slug": "elon-musk-4",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Introduction",
+      "Elon Musk",
+      "About Lex Fridman"
+    ],
+    "word_count": 20630,
+    "chapter_count": 20,
+    "url": "https://lexfridman.com/elon-musk-4-transcript"
+  },
+  {
+    "slug": "jared-kushner",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Jared Kushner"
+    ],
+    "word_count": 43372,
+    "chapter_count": 31,
+    "url": "https://lexfridman.com/jared-kushner-transcript"
+  },
+  {
+    "slug": "mark-zuckerberg-3",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Mark Zuckerberg",
+      "About Lex Fridman"
+    ],
+    "word_count": 11395,
+    "chapter_count": 7,
+    "url": "https://lexfridman.com/mark-zuckerberg-3-transcript"
+  },
+  {
+    "slug": "james-sexton",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "James Sexton"
+    ],
+    "word_count": 39194,
+    "chapter_count": 18,
+    "url": "https://lexfridman.com/james-sexton-transcript"
+  },
+  {
+    "slug": "neri-oxman",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Neri Oxman",
+      "About Lex Fridman"
+    ],
+    "word_count": 20183,
+    "chapter_count": 15,
+    "url": "https://lexfridman.com/neri-oxman-transcript"
+  },
+  {
+    "slug": "george-hotz-3",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "George Hotz"
+    ],
+    "word_count": 35799,
+    "chapter_count": 17,
+    "url": "https://lexfridman.com/george-hotz-3-transcript"
+  },
+  {
+    "slug": "ben-shapiro",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Andrew Breitbart",
+      "About Lex Fridman",
+      "Ben Shapiro"
+    ],
+    "word_count": 32081,
+    "chapter_count": 20,
+    "url": "https://lexfridman.com/ben-shapiro-transcript"
+  },
+  {
+    "slug": "nick-lane",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Neanderthals",
+      "Nick Lane"
+    ],
+    "word_count": 37853,
+    "chapter_count": 21,
+    "url": "https://lexfridman.com/nick-lane-transcript"
+  },
+  {
+    "slug": "ai-sota-2026",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Sebastian Raschka",
+      "About Lex Fridman",
+      "Nathan Lambert"
+    ],
+    "word_count": 47575,
+    "chapter_count": 26,
+    "url": "https://lexfridman.com/ai-sota-2026-transcript"
+  },
+  {
+    "slug": "joel-david-hamkins",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Joel David Hamkins"
+    ],
+    "word_count": 39940,
+    "chapter_count": 18,
+    "url": "https://lexfridman.com/joel-david-hamkins-transcript"
+  },
+  {
+    "slug": "michael-levin-2",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Michael Levin"
+    ],
+    "word_count": 38844,
+    "chapter_count": 14,
+    "url": "https://lexfridman.com/michael-levin-2-transcript"
+  },
+  {
+    "slug": "david-kirtley",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "David Kirtley"
+    ],
+    "word_count": 27828,
+    "chapter_count": 15,
+    "url": "https://lexfridman.com/david-kirtley-transcript"
+  },
+  {
+    "slug": "julia-shaw",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Julia Shaw"
+    ],
+    "word_count": 31357,
+    "chapter_count": 14,
+    "url": "https://lexfridman.com/julia-shaw-transcript"
+  },
+  {
+    "slug": "norman-ohler",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Norman Ohler",
+      "About Lex Fridman"
+    ],
+    "word_count": 45587,
+    "chapter_count": 23,
+    "url": "https://lexfridman.com/norman-ohler-transcript"
+  },
+  {
+    "slug": "dave-hone",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Dave Hone"
+    ],
+    "word_count": 41853,
+    "chapter_count": 17,
+    "url": "https://lexfridman.com/dave-hone-transcript"
+  },
+  {
+    "slug": "dave-plummer",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Dave Plummer",
+      "About Lex Fridman"
+    ],
+    "word_count": 24677,
+    "chapter_count": 19,
+    "url": "https://lexfridman.com/dave-plummer-transcript"
+  },
+  {
+    "slug": "iran-war-debate",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Mark Dubowitz",
+      "Scott Horton"
+    ],
+    "word_count": 48505,
+    "chapter_count": 15,
+    "url": "https://lexfridman.com/iran-war-debate-transcript"
+  },
+  {
+    "slug": "oliver-anthony",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Nature",
+      "About Lex Fridman",
+      "Oliver Anthony",
+      "Fame"
+    ],
+    "word_count": 25232,
+    "chapter_count": 14,
+    "url": "https://lexfridman.com/oliver-anthony-transcript"
+  },
+  {
+    "slug": "jeffrey-wasserstrom",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Jeffrey Wasserstrom",
+      "Taiwan",
+      "About Lex Fridman",
+      "Mao Zedong"
+    ],
+    "word_count": 27646,
+    "chapter_count": 14,
+    "url": "https://lexfridman.com/jeffrey-wasserstrom-transcript"
+  },
+  {
+    "slug": "robert-rodriguez",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "El Mariachi",
+      "Creativity",
+      "Robert Rodriguez",
+      "Ever",
+      "Editing",
+      "About Lex Fridman",
+      "Danny Trejo"
+    ],
+    "word_count": 48118,
+    "chapter_count": 24,
+    "url": "https://lexfridman.com/robert-rodriguez-transcript"
+  },
+  {
+    "slug": "dave-smith",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Dave Smith",
+      "About Lex Fridman"
+    ],
+    "word_count": 35707,
+    "chapter_count": 21,
+    "url": "https://lexfridman.com/dave-smith-transcript"
+  },
+  {
+    "slug": "douglas-murray-2",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Douglas Murray",
+      "About Lex Fridman",
+      "War"
+    ],
+    "word_count": 27699,
+    "chapter_count": 16,
+    "url": "https://lexfridman.com/douglas-murray-2-transcript"
+  },
+  {
+    "slug": "ezra-klein-and-derek-thompson",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Derek Thompson",
+      "About Lex Fridman",
+      "Ezra Klein"
+    ],
+    "word_count": 36934,
+    "chapter_count": 14,
+    "url": "https://lexfridman.com/ezra-klein-and-derek-thompson-transcript"
+  },
+  {
+    "slug": "marc-andreessen-2",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Marc Andreessen",
+      "About Lex Fridman"
+    ],
+    "word_count": 46851,
+    "chapter_count": 24,
+    "url": "https://lexfridman.com/marc-andreessen-2-transcript"
+  },
+  {
+    "slug": "dario-amodei",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Amanda",
+      "Chris Olah",
+      "Dario Amodei",
+      "About Lex Fridman"
+    ],
+    "word_count": 57022,
+    "chapter_count": 40,
+    "url": "https://lexfridman.com/dario-amodei-transcript"
+  },
+  {
+    "slug": "rick-spence",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Rick Spence"
+    ],
+    "word_count": 30809,
+    "chapter_count": 14,
+    "url": "https://lexfridman.com/rick-spence-transcript"
+  },
+  {
+    "slug": "jordan-peterson-2",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Jordan Peterson"
+    ],
+    "word_count": 23613,
+    "chapter_count": 14,
+    "url": "https://lexfridman.com/jordan-peterson-2-transcript"
+  },
+  {
+    "slug": "vivek-ramaswamy",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Vivek Ramaswamy"
+    ],
+    "word_count": 31457,
+    "chapter_count": 14,
+    "url": "https://lexfridman.com/vivek-ramaswamy-transcript"
+  },
+  {
+    "slug": "vejas-liulevicius",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Vejas Liulevicius",
+      "About Lex Fridman"
+    ],
+    "word_count": 28068,
+    "chapter_count": 22,
+    "url": "https://lexfridman.com/vejas-liulevicius-transcript"
+  },
+  {
+    "slug": "cenk-uygur",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "The Young Turks",
+      "About Lex Fridman",
+      "Cenk Uygur"
+    ],
+    "word_count": 43988,
+    "chapter_count": 21,
+    "url": "https://lexfridman.com/cenk-uygur-transcript"
+  },
+  {
+    "slug": "craig-jones-2",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Craig Jones"
+    ],
+    "word_count": 25073,
+    "chapter_count": 18,
+    "url": "https://lexfridman.com/craig-jones-2-transcript"
+  },
+  {
+    "slug": "jordan-jonas",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Jordan Jonas"
+    ],
+    "word_count": 31391,
+    "chapter_count": 13,
+    "url": "https://lexfridman.com/jordan-jonas-transcript"
+  },
+  {
+    "slug": "andrew-huberman-5",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Nicotine",
+      "About Lex Fridman",
+      "Andrew Huberman"
+    ],
+    "word_count": 20035,
+    "chapter_count": 15,
+    "url": "https://lexfridman.com/andrew-huberman-5-transcript"
+  },
+  {
+    "slug": "kevin-spacey",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Jack Lemmon",
+      "Kevin Spacey",
+      "Seven",
+      "American Beauty",
+      "David Fincher",
+      "About Lex Fridman"
+    ],
+    "word_count": 20514,
+    "chapter_count": 17,
+    "url": "https://lexfridman.com/kevin-spacey-transcript"
+  },
+  {
+    "slug": "roman-yampolskiy",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Verification",
+      "About Lex Fridman",
+      "Roman Yampolskiy"
+    ],
+    "word_count": 22197,
+    "chapter_count": 22,
+    "url": "https://lexfridman.com/roman-yampolskiy-transcript"
+  },
+  {
+    "slug": "neil-adams",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Neil Adams",
+      "About Lex Fridman"
+    ],
+    "word_count": 25233,
+    "chapter_count": 11,
+    "url": "https://lexfridman.com/neil-adams-transcript"
+  },
+  {
+    "slug": "edward-gibson",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Edward Gibson",
+      "About Lex Fridman"
+    ],
+    "word_count": 31827,
+    "chapter_count": 16,
+    "url": "https://lexfridman.com/edward-gibson-transcript"
+  },
+  {
+    "slug": "mark-cuban",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Mark Cuban",
+      "About Lex Fridman",
+      "Entrepreneurship"
+    ],
+    "word_count": 24354,
+    "chapter_count": 11,
+    "url": "https://lexfridman.com/mark-cuban-transcript"
+  },
+  {
+    "slug": "kimbal-musk",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Kimbal Musk"
+    ],
+    "word_count": 19017,
+    "chapter_count": 12,
+    "url": "https://lexfridman.com/kimbal-musk-transcript"
+  },
+  {
+    "slug": "yann-lecun-3",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Introduction",
+      "About Lex Fridman",
+      "Marc Andreesen"
+    ],
+    "word_count": 26059,
+    "chapter_count": 23,
+    "url": "https://lexfridman.com/yann-lecun-3-transcript"
+  },
+  {
+    "slug": "marc-raibert",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Marc Raibert",
+      "About Lex Fridman"
+    ],
+    "word_count": 17890,
+    "chapter_count": 18,
+    "url": "https://lexfridman.com/marc-raibert-transcript"
+  },
+  {
+    "slug": "omar-suleiman-2",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Omar Suleiman"
+    ],
+    "word_count": 21316,
+    "chapter_count": 16,
+    "url": "https://lexfridman.com/omar-suleiman-2-transcript"
+  },
+  {
+    "slug": "matthew-cox",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Matthew Cox",
+      "About Lex Fridman",
+      "Interviewer"
+    ],
+    "word_count": 64463,
+    "chapter_count": 24,
+    "url": "https://lexfridman.com/matthew-cox-transcript"
+  },
+  {
+    "slug": "guillaume-verdon",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Beff Jezos",
+      "Guillaume Verdon",
+      "About Lex Fridman",
+      "Doxxing"
+    ],
+    "word_count": 24383,
+    "chapter_count": 28,
+    "url": "https://lexfridman.com/guillaume-verdon-transcript"
+  },
+  {
+    "slug": "teddy-atlas",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Teddy Atlas",
+      "About Lex Fridman"
+    ],
+    "word_count": 20035,
+    "chapter_count": 6,
+    "url": "https://lexfridman.com/teddy-atlas-transcript"
+  },
+  {
+    "slug": "lee-cronin-3",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Lee Cronin",
+      "About Lex Fridman"
+    ],
+    "word_count": 34528,
+    "chapter_count": 16,
+    "url": "https://lexfridman.com/lee-cronin-3-transcript"
+  },
+  {
+    "slug": "michael-malice-7",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Michael Malice",
+      "About Lex Fridman"
+    ],
+    "word_count": 19110,
+    "chapter_count": 13,
+    "url": "https://lexfridman.com/michael-malice-7-transcript"
+  },
+  {
+    "slug": "greg-lukianoff",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Greg Lukianoff"
+    ],
+    "word_count": 26481,
+    "chapter_count": 17,
+    "url": "https://lexfridman.com/greg-lukianoff-transcript"
+  },
+  {
+    "slug": "walter-isaacson",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Jennifer Doudna",
+      "About Lex Fridman",
+      "Walter Isaacson"
+    ],
+    "word_count": 19880,
+    "chapter_count": 16,
+    "url": "https://lexfridman.com/walter-isaacson-transcript"
+  },
+  {
+    "slug": "andrew-huberman-4",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "About Lex Fridman",
+      "Andrew Huberman"
+    ],
+    "word_count": 23659,
+    "chapter_count": 14,
+    "url": "https://lexfridman.com/andrew-huberman-4-transcript"
+  },
+  {
+    "slug": "joscha-bach-3",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Joscha Bach",
+      "About Lex Fridman"
+    ],
+    "word_count": 30554,
+    "chapter_count": 20,
+    "url": "https://lexfridman.com/joscha-bach-3-transcript"
+  },
+  {
+    "slug": "mohammed-el-kurd",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Introduction",
+      "Palestine",
+      "About Lex Fridman"
+    ],
+    "word_count": 20034,
+    "chapter_count": 15,
+    "url": "https://lexfridman.com/mohammed-el-kurd-transcript"
+  },
+  {
+    "slug": "yuval-noah-harari",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Yuval Noah Harari",
+      "About Lex Fridman",
+      "Benjamin Netanyahu",
+      "Intelligence"
+    ],
+    "word_count": 24978,
+    "chapter_count": 14,
+    "url": "https://lexfridman.com/yuval-noah-harari-transcript"
+  },
+  {
+    "slug": "benjamin-netanyahu",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Hate",
+      "About Lex Fridman",
+      "Benjamin Netanyahu"
+    ],
+    "word_count": 11196,
+    "chapter_count": 11,
+    "url": "https://lexfridman.com/benjamin-netanyahu-transcript"
+  },
+  {
+    "slug": "robert-f-kennedy-jr",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Introduction",
+      "About Lex Fridman"
+    ],
+    "word_count": 21851,
+    "chapter_count": 16,
+    "url": "https://lexfridman.com/robert-f-kennedy-jr-transcript"
+  },
+  {
+    "slug": "jimmy-wales",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Jimmy Wales",
+      "About Lex Fridman"
+    ],
+    "word_count": 33987,
+    "chapter_count": 20,
+    "url": "https://lexfridman.com/jimmy-wales-transcript"
+  },
+  {
+    "slug": "michael-saylor",
+    "title": "Lex Fridman",
+    "episode_num": null,
+    "speakers": [
+      "Michael Saylor",
+      "About Lex Fridman"
+    ],
+    "word_count": 35475,
+    "chapter_count": 22,
+    "url": "https://lexfridman.com/michael-saylor-transcript"
+  }
+]

@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -586,7 +600,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 <nav class="sidebar">
   <div class="sidebar-logo">
     <h1>Lex Fridman<br>知识图谱</h1>
-    <p>112 期节目 · 全文字幕</p>
+    <p>434 期节目 · 全文字幕</p>
   </div>
   
   <div class="sidebar-section">导航</div>
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -641,150 +657,4867 @@ a:hover { color: var(--accent); text-decoration: underline; }
   <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
   <p style="color:#64748b;font-size:14px">暂无语录</p>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（693 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:00.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">The following is a conversation with Noam Chomsky.</div>
-  
+  <div class="dialogue-zh">以下是与诺姆·乔姆斯基的对话。</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:03.800)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03.800)</span>
   </div>
   <div class="dialogue-en">He&#39;s truly one of the great minds of our time</div>
-  
+  <div class="dialogue-zh">他确实是我们这个时代最伟大的思想家之一</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:06.760)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06.760)</span>
   </div>
   <div class="dialogue-en">and is one of the most cited scholars</div>
-  
+  <div class="dialogue-zh">是被引用最多的学者之一</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:08.400)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08.400)</span>
   </div>
   <div class="dialogue-en">in the history of our civilization.</div>
-  
+  <div class="dialogue-zh">在我们的文明史上。</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:10.760)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10.760)</span>
   </div>
   <div class="dialogue-en">He has spent over 60 years at MIT</div>
-  
+  <div class="dialogue-zh">他在麻省理工学院工作了 60 多年</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:13.400)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:13.400)</span>
   </div>
   <div class="dialogue-en">and recently also joined the University of Arizona,</div>
-  
+  <div class="dialogue-zh">最近还加入了亚利桑那大学，</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:16.320)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:16.320)</span>
   </div>
   <div class="dialogue-en">where we met for this conversation.</div>
-  
+  <div class="dialogue-zh">我们在这次谈话中见面的地方。</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:18.640)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:18.640)</span>
   </div>
   <div class="dialogue-en">But it was at MIT about four and a half years ago</div>
-  
+  <div class="dialogue-zh">但那是大约四年半前在麻省理工学院的事了</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:21.760)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:21.760)</span>
   </div>
   <div class="dialogue-en">when I first met Noam.</div>
-  
+  <div class="dialogue-zh">当我第一次见到诺姆时。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Noam Chomsky <span class="dialogue-time">(00:23.440)</span>
   </div>
   <div class="dialogue-en">My first few days there,</div>
-  
+  <div class="dialogue-zh">我在那里的头几天，</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:24.760)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:24.760)</span>
   </div>
   <div class="dialogue-en">I remember getting into an elevator at Stata Center,</div>
-  
+  <div class="dialogue-zh">我记得走进斯塔塔中心的电梯时</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Noam Chomsky <span class="dialogue-time">(00:27.400)</span>
   </div>
   <div class="dialogue-en">pressing the button for whatever floor,</div>
-  
+  <div class="dialogue-zh">按下任何楼层的按钮，</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:29.480)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:29.480)</span>
   </div>
   <div class="dialogue-en">looking up and realizing it was just me and Noam Chomsky</div>
-  
+  <div class="dialogue-zh">抬头一看，发现只有我和诺姆·乔姆斯基</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Noam Chomsky <span class="dialogue-time">(00:33.560)</span>
   </div>
   <div class="dialogue-en">riding the elevator,</div>
-  
+  <div class="dialogue-zh">乘坐电梯，</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:35.480)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:35.480)</span>
   </div>
   <div class="dialogue-en">just me and one of the seminal figures of linguistics,</div>
-  
+  <div class="dialogue-zh">只有我和语言学的一位开创性人物，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Noam Chomsky <span class="dialogue-time">(00:38.400)</span>
   </div>
   <div class="dialogue-en">cognitive science, philosophy,</div>
-  
+  <div class="dialogue-zh">认知科学、哲学、</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:40.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:40.000)</span>
   </div>
   <div class="dialogue-en">and political thought in the past century, if not ever.</div>
-  
+  <div class="dialogue-zh">以及上个世纪（如果不是曾经）的政治思想。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Noam Chomsky <span class="dialogue-time">(00:43.920)</span>
   </div>
   <div class="dialogue-en">I tell that silly story because I think life is made up</div>
-  
+  <div class="dialogue-zh">我讲那个愚蠢的故事是因为我认为生活是编造的</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Noam Chomsky <span class="dialogue-time">(00:47.320)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:47.320)</span>
   </div>
   <div class="dialogue-en">of funny little defining moments that you never forget</div>
-  
+  <div class="dialogue-zh">您永远不会忘记的有趣的小决定时刻</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Noam Chomsky <span class="dialogue-time">(00:50.740)</span>
   </div>
   <div class="dialogue-en">for reasons that may be too poetic to try and explain.</div>
+  <div class="dialogue-zh">其原因可能过于诗意而无法解释。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:54.880)</span>
+  </div>
+  <div class="dialogue-en">That was one of mine.</div>
   
 </div>
-    <a href="https://lexfridman.com/noam-chomsky" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(00:56.140)</span>
+  </div>
+  <div class="dialogue-en">Noam has been an inspiration to me and millions of others.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:59.940)</span>
+  </div>
+  <div class="dialogue-en">It was truly an honor for me</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(01:01.500)</span>
+  </div>
+  <div class="dialogue-en">to sit down with him in Arizona.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:03.580)</span>
+  </div>
+  <div class="dialogue-en">I traveled there just for this conversation.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:06.500)</span>
+  </div>
+  <div class="dialogue-en">And in a rare, heartbreaking moment,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:09.140)</span>
+  </div>
+  <div class="dialogue-en">after everything was set up and tested,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(01:11.740)</span>
+  </div>
+  <div class="dialogue-en">the camera was moved and accidentally,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:13.500)</span>
+  </div>
+  <div class="dialogue-en">the recording button was pressed, stopping the recording.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:17.540)</span>
+  </div>
+  <div class="dialogue-en">So I have good audio of both of us, but no video of Noam.</div>
+  
+</div>
+<div id="dialogue-more" style="display:none">
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:21.140)</span>
+  </div>
+  <div class="dialogue-en">Just the video of me and my sleep deprived but excited face</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(01:25.340)</span>
+  </div>
+  <div class="dialogue-en">that I get to keep as a reminder of my failures.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:29.620)</span>
+  </div>
+  <div class="dialogue-en">Most people just listen to this audio version</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(01:31.500)</span>
+  </div>
+  <div class="dialogue-en">for the podcast as opposed to watching it on YouTube.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:34.860)</span>
+  </div>
+  <div class="dialogue-en">But still, it&#39;s heartbreaking for me.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(01:38.140)</span>
+  </div>
+  <div class="dialogue-en">I hope you understand and still enjoy this conversation</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:40.900)</span>
+  </div>
+  <div class="dialogue-en">as much as I did.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(01:42.220)</span>
+  </div>
+  <div class="dialogue-en">The depth of intellect that Noam showed</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:44.460)</span>
+  </div>
+  <div class="dialogue-en">and his willingness to truly listen to me,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(01:47.460)</span>
+  </div>
+  <div class="dialogue-en">a silly looking Russian in a suit.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:50.300)</span>
+  </div>
+  <div class="dialogue-en">It was humbling and something I&#39;m deeply grateful for.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(01:55.580)</span>
+  </div>
+  <div class="dialogue-en">As some of you know, this podcast is a side project for me,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:59.660)</span>
+  </div>
+  <div class="dialogue-en">where my main journey and dream is to build AI systems</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(02:03.580)</span>
+  </div>
+  <div class="dialogue-en">that do some good for the world.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:05.480)</span>
+  </div>
+  <div class="dialogue-en">This latter effort takes up most of my time,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:07.820)</span>
+  </div>
+  <div class="dialogue-en">but for the moment has been mostly private.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:10.540)</span>
+  </div>
+  <div class="dialogue-en">But the former, the podcast,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(02:12.820)</span>
+  </div>
+  <div class="dialogue-en">is something I put my heart and soul into.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:15.380)</span>
+  </div>
+  <div class="dialogue-en">And I hope you feel that, even when I screw things up.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(02:18.600)</span>
+  </div>
+  <div class="dialogue-en">I recently started doing ads</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:21.120)</span>
+  </div>
+  <div class="dialogue-en">at the end of the introduction.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(02:22.840)</span>
+  </div>
+  <div class="dialogue-en">I&#39;ll do one or two minutes after introducing the episode</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:25.640)</span>
+  </div>
+  <div class="dialogue-en">and never any ads in the middle</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(02:27.400)</span>
+  </div>
+  <div class="dialogue-en">that break the flow of the conversation.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:29.720)</span>
+  </div>
+  <div class="dialogue-en">I hope that works for you</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:31.160)</span>
+  </div>
+  <div class="dialogue-en">and doesn&#39;t hurt the listening experience.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:33.960)</span>
+  </div>
+  <div class="dialogue-en">This is the Artificial Intelligence Podcast.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(02:37.200)</span>
+  </div>
+  <div class="dialogue-en">If you enjoy it, subscribe on YouTube,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:39.800)</span>
+  </div>
+  <div class="dialogue-en">give it five stars on Apple Podcast,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(02:41.840)</span>
+  </div>
+  <div class="dialogue-en">support it on Patreon,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:43.240)</span>
+  </div>
+  <div class="dialogue-en">or simply connect with me on Twitter,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(02:45.400)</span>
+  </div>
+  <div class="dialogue-en">at Lex Friedman, spelled F R I D M A N.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:49.440)</span>
+  </div>
+  <div class="dialogue-en">This show is presented by Cash App,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(02:51.720)</span>
+  </div>
+  <div class="dialogue-en">the number one finance app in the App Store.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:54.240)</span>
+  </div>
+  <div class="dialogue-en">I personally use Cash App to send money to friends,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:56.800)</span>
+  </div>
+  <div class="dialogue-en">but you can also use it to buy, sell,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:58.760)</span>
+  </div>
+  <div class="dialogue-en">and deposit Bitcoin in just seconds.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(03:01.320)</span>
+  </div>
+  <div class="dialogue-en">Cash App also has a new investing feature.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:04.160)</span>
+  </div>
+  <div class="dialogue-en">You can buy fractions of a stock, say $1 worth,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(03:07.120)</span>
+  </div>
+  <div class="dialogue-en">no matter what the stock price is.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:09.200)</span>
+  </div>
+  <div class="dialogue-en">Broker services are provided by Cash App Investing,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(03:11.960)</span>
+  </div>
+  <div class="dialogue-en">a subsidiary of Square and member SIPC.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:15.560)</span>
+  </div>
+  <div class="dialogue-en">I&#39;m excited to be working with Cash App</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(03:17.680)</span>
+  </div>
+  <div class="dialogue-en">to support one of my favorite organizations called The First,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:20.920)</span>
+  </div>
+  <div class="dialogue-en">best known for their FIRST Robotics and Lego competitions.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(03:24.360)</span>
+  </div>
+  <div class="dialogue-en">They educate and inspire hundreds of thousands of students</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:27.720)</span>
+  </div>
+  <div class="dialogue-en">in over 110 countries</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:29.640)</span>
+  </div>
+  <div class="dialogue-en">and have a perfect rating on Charity Navigator,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:31.840)</span>
+  </div>
+  <div class="dialogue-en">which means the donated money</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(03:33.840)</span>
+  </div>
+  <div class="dialogue-en">is used to maximum effectiveness.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:36.560)</span>
+  </div>
+  <div class="dialogue-en">When you get Cash App from the App Store,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(03:38.680)</span>
+  </div>
+  <div class="dialogue-en">Google Play and use code LexPodcast,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:42.800)</span>
+  </div>
+  <div class="dialogue-en">you&#39;ll get $10 and Cash App will also donate $10 to FIRST,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(03:47.120)</span>
+  </div>
+  <div class="dialogue-en">which again is an organization that I&#39;ve personally seen</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:49.800)</span>
+  </div>
+  <div class="dialogue-en">inspire girls and boys to dream of engineering a better world.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:54.520)</span>
+  </div>
+  <div class="dialogue-en">And now here&#39;s my conversation with Noam Chomsky.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:59.840)</span>
+  </div>
+  <div class="dialogue-en">I apologize for the absurd philosophical question,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:04.160)</span>
+  </div>
+  <div class="dialogue-en">but if an alien species were to visit Earth,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:07.120)</span>
+  </div>
+  <div class="dialogue-en">do you think we would be able to find a common language</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:10.920)</span>
+  </div>
+  <div class="dialogue-en">or protocol of communication with them?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:13.680)</span>
+  </div>
+  <div class="dialogue-en">There are arguments to the effect that we could.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(04:18.320)</span>
+  </div>
+  <div class="dialogue-en">In fact, one of them was Marv Minsky&#39;s.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:22.440)</span>
+  </div>
+  <div class="dialogue-en">Back about 20 or 30 years ago,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(04:24.760)</span>
+  </div>
+  <div class="dialogue-en">he performed a brief experiment with a student of his,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:30.040)</span>
+  </div>
+  <div class="dialogue-en">Dan Bobrow, they essentially ran</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(04:33.760)</span>
+  </div>
+  <div class="dialogue-en">the simplest possible touring machines,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:36.720)</span>
+  </div>
+  <div class="dialogue-en">just free to see what would happen.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:39.560)</span>
+  </div>
+  <div class="dialogue-en">And most of them crashed,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:42.560)</span>
+  </div>
+  <div class="dialogue-en">either got into an infinite loop or stopped.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(04:47.800)</span>
+  </div>
+  <div class="dialogue-en">The few that persisted,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:51.000)</span>
+  </div>
+  <div class="dialogue-en">essentially gave something like arithmetic.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:55.960)</span>
+  </div>
+  <div class="dialogue-en">And his conclusion from that was that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:59.980)</span>
+  </div>
+  <div class="dialogue-en">if some alien species developed higher intelligence,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(05:04.980)</span>
+  </div>
+  <div class="dialogue-en">they would at least have arithmetic,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:07.440)</span>
+  </div>
+  <div class="dialogue-en">they would at least have what the simplest computer would do.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:12.940)</span>
+  </div>
+  <div class="dialogue-en">And in fact, he didn&#39;t know that at the time,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:16.040)</span>
+  </div>
+  <div class="dialogue-en">but the core principles of natural language</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(05:20.760)</span>
+  </div>
+  <div class="dialogue-en">are based on operations which yield something</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:25.220)</span>
+  </div>
+  <div class="dialogue-en">like arithmetic in the limiting case, in the minimal case.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:29.360)</span>
+  </div>
+  <div class="dialogue-en">So it&#39;s conceivable that a mode of communication</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:34.040)</span>
+  </div>
+  <div class="dialogue-en">could be established based on the core properties</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(05:38.560)</span>
+  </div>
+  <div class="dialogue-en">of human language and the core properties of arithmetic,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:41.460)</span>
+  </div>
+  <div class="dialogue-en">which maybe are universally shared.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:44.920)</span>
+  </div>
+  <div class="dialogue-en">So it&#39;s conceivable.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:46.680)</span>
+  </div>
+  <div class="dialogue-en">What is the structure of that language,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(05:50.800)</span>
+  </div>
+  <div class="dialogue-en">of language as an internal system inside our mind</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:55.160)</span>
+  </div>
+  <div class="dialogue-en">versus an external system as it&#39;s expressed?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(05:58.920)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s not an alternative,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:00.880)</span>
+  </div>
+  <div class="dialogue-en">it&#39;s two different concepts of language.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(06:02.960)</span>
+  </div>
+  <div class="dialogue-en">Different.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:03.780)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s a simple fact that there&#39;s something about you,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(06:07.280)</span>
+  </div>
+  <div class="dialogue-en">a trait of yours, part of the organism, you,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:11.640)</span>
+  </div>
+  <div class="dialogue-en">that determines that you&#39;re talking English</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:14.600)</span>
+  </div>
+  <div class="dialogue-en">and not Tagalog, let&#39;s say.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:16.980)</span>
+  </div>
+  <div class="dialogue-en">So there is an inner system.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(06:19.480)</span>
+  </div>
+  <div class="dialogue-en">It determines the sound and meaning</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:22.960)</span>
+  </div>
+  <div class="dialogue-en">of the infinite number of expressions of your language.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(06:27.120)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s localized.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:28.720)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s not on your foot, obviously, it&#39;s in your brain.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(06:31.760)</span>
+  </div>
+  <div class="dialogue-en">If you look more closely, it&#39;s in specific configurations</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:35.240)</span>
+  </div>
+  <div class="dialogue-en">of your brain.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:36.480)</span>
+  </div>
+  <div class="dialogue-en">And that&#39;s essentially like the internal structure</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:40.600)</span>
+  </div>
+  <div class="dialogue-en">of your laptop, whatever programs it has are in there.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(06:44.960)</span>
+  </div>
+  <div class="dialogue-en">Now, one of the things you can do with language,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:47.840)</span>
+  </div>
+  <div class="dialogue-en">it&#39;s a marginal thing, in fact,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(06:50.040)</span>
+  </div>
+  <div class="dialogue-en">is use it to externalize what&#39;s in your head.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:54.800)</span>
+  </div>
+  <div class="dialogue-en">Actually, most of your use of language</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(06:56.660)</span>
+  </div>
+  <div class="dialogue-en">is thought, internal thought.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:58.820)</span>
+  </div>
+  <div class="dialogue-en">But you can do what you and I are now doing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(07:00.920)</span>
+  </div>
+  <div class="dialogue-en">We can externalize it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:02.640)</span>
+  </div>
+  <div class="dialogue-en">Well, the set of things that we&#39;re externalizing</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(07:05.640)</span>
+  </div>
+  <div class="dialogue-en">are an external system.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:07.680)</span>
+  </div>
+  <div class="dialogue-en">They&#39;re noises in the atmosphere.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:11.160)</span>
+  </div>
+  <div class="dialogue-en">And you can call that language</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:12.920)</span>
+  </div>
+  <div class="dialogue-en">in some other sense of the word.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:14.360)</span>
+  </div>
+  <div class="dialogue-en">But it&#39;s not a set of alternatives.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:16.800)</span>
+  </div>
+  <div class="dialogue-en">These are just different concepts.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:18.980)</span>
+  </div>
+  <div class="dialogue-en">So how deep do the roots of language go in our brain?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:23.500)</span>
+  </div>
+  <div class="dialogue-en">Our mind, is it yet another feature like vision,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(07:26.780)</span>
+  </div>
+  <div class="dialogue-en">or is it something more fundamental</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:28.480)</span>
+  </div>
+  <div class="dialogue-en">from which everything else springs in the human mind?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(07:31.520)</span>
+  </div>
+  <div class="dialogue-en">Well, in a way, it&#39;s like vision.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:33.720)</span>
+  </div>
+  <div class="dialogue-en">There&#39;s something about our genetic endowment</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(07:38.580)</span>
+  </div>
+  <div class="dialogue-en">that determines that we have a mammalian</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:41.600)</span>
+  </div>
+  <div class="dialogue-en">rather than an insect visual system.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:44.720)</span>
+  </div>
+  <div class="dialogue-en">And there&#39;s something in our genetic endowment</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:47.440)</span>
+  </div>
+  <div class="dialogue-en">that determines that we have a human language faculty.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(07:51.440)</span>
+  </div>
+  <div class="dialogue-en">No other organism has anything remotely similar.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:55.200)</span>
+  </div>
+  <div class="dialogue-en">So in that sense, it&#39;s internal.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(07:58.280)</span>
+  </div>
+  <div class="dialogue-en">Now there is a long tradition,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:59.720)</span>
+  </div>
+  <div class="dialogue-en">which I think is valid going back centuries</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(08:03.600)</span>
+  </div>
+  <div class="dialogue-en">to the early scientific revolution,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:05.500)</span>
+  </div>
+  <div class="dialogue-en">at least that holds that language</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(08:09.340)</span>
+  </div>
+  <div class="dialogue-en">is the sort of the core of human cognitive nature.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:13.620)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s the source, it&#39;s the mode for constructing thoughts</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:18.080)</span>
+  </div>
+  <div class="dialogue-en">and expressing them.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:19.640)</span>
+  </div>
+  <div class="dialogue-en">That is what forms thought.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:22.760)</span>
+  </div>
+  <div class="dialogue-en">And it&#39;s got fundamental creative capacities.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:27.200)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s free, independent, unbounded, and so on.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:31.320)</span>
+  </div>
+  <div class="dialogue-en">And undoubtedly, I think the basis</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:34.860)</span>
+  </div>
+  <div class="dialogue-en">for our creative capacities</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:38.480)</span>
+  </div>
+  <div class="dialogue-en">and the other remarkable human capacities</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:43.840)</span>
+  </div>
+  <div class="dialogue-en">that lead to the unique achievements</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:47.500)</span>
+  </div>
+  <div class="dialogue-en">and not so great achievements of the species.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:51.300)</span>
+  </div>
+  <div class="dialogue-en">The capacity to think and reason,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:53.620)</span>
+  </div>
+  <div class="dialogue-en">do you think that&#39;s deeply linked with language?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:56.240)</span>
+  </div>
+  <div class="dialogue-en">Do you think the way we,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(08:58.200)</span>
+  </div>
+  <div class="dialogue-en">the internal language system is essentially the mechanism</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:01.560)</span>
+  </div>
+  <div class="dialogue-en">by which we also reason internally?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(09:04.120)</span>
+  </div>
+  <div class="dialogue-en">It is undoubtedly the mechanism by which we reason.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:06.920)</span>
+  </div>
+  <div class="dialogue-en">There may also be other fact,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(09:09.320)</span>
+  </div>
+  <div class="dialogue-en">there are undoubtedly other faculties involved in reasoning.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:14.720)</span>
+  </div>
+  <div class="dialogue-en">We have a kind of scientific faculty,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(09:17.520)</span>
+  </div>
+  <div class="dialogue-en">nobody knows what it is,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:18.840)</span>
+  </div>
+  <div class="dialogue-en">but whatever it is that enables us</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(09:20.920)</span>
+  </div>
+  <div class="dialogue-en">to pursue certain lines of endeavor and inquiry</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:25.440)</span>
+  </div>
+  <div class="dialogue-en">and to decide what makes sense and doesn&#39;t make sense</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:29.760)</span>
+  </div>
+  <div class="dialogue-en">and to achieve a certain degree</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:32.200)</span>
+  </div>
+  <div class="dialogue-en">of understanding of the world,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(09:33.640)</span>
+  </div>
+  <div class="dialogue-en">that uses language, but goes beyond it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:37.440)</span>
+  </div>
+  <div class="dialogue-en">Just as using our capacity for arithmetic</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(09:42.000)</span>
+  </div>
+  <div class="dialogue-en">is not the same as having the capacity.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:44.880)</span>
+  </div>
+  <div class="dialogue-en">The idea of capacity, our biology, evolution,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(09:49.360)</span>
+  </div>
+  <div class="dialogue-en">you&#39;ve talked about it defining essentially our capacity,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:52.520)</span>
+  </div>
+  <div class="dialogue-en">our limit and our scope.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:55.200)</span>
+  </div>
+  <div class="dialogue-en">Can you try to define what limit and scope are?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:58.840)</span>
+  </div>
+  <div class="dialogue-en">And the bigger question,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:01.160)</span>
+  </div>
+  <div class="dialogue-en">do you think it&#39;s possible to find the limit</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:04.800)</span>
+  </div>
+  <div class="dialogue-en">of human cognition?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(10:07.560)</span>
+  </div>
+  <div class="dialogue-en">Well, that&#39;s an interesting question.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:09.880)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s commonly believed, most scientists believe</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(10:13.080)</span>
+  </div>
+  <div class="dialogue-en">that human intelligence can answer any question</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:17.640)</span>
+  </div>
+  <div class="dialogue-en">in principle.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(10:19.340)</span>
+  </div>
+  <div class="dialogue-en">I think that&#39;s a very strange belief.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:21.800)</span>
+  </div>
+  <div class="dialogue-en">If we&#39;re biological organisms,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(10:24.280)</span>
+  </div>
+  <div class="dialogue-en">which are not angels,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:26.160)</span>
+  </div>
+  <div class="dialogue-en">then our capacities ought to have scope</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:31.800)</span>
+  </div>
+  <div class="dialogue-en">and limits which are interrelated.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:34.920)</span>
+  </div>
+  <div class="dialogue-en">Can you define those two terms?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(10:36.620)</span>
+  </div>
+  <div class="dialogue-en">Well, let&#39;s take a concrete example.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:40.740)</span>
+  </div>
+  <div class="dialogue-en">Your genetic endowment determines</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(10:44.040)</span>
+  </div>
+  <div class="dialogue-en">that you can have a male in visual system,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:46.840)</span>
+  </div>
+  <div class="dialogue-en">arms and legs and so on,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:49.260)</span>
+  </div>
+  <div class="dialogue-en">but it therefore become a rich, complex organism.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:53.440)</span>
+  </div>
+  <div class="dialogue-en">But if you look at that same genetic endowment,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(10:56.240)</span>
+  </div>
+  <div class="dialogue-en">it prevents you from developing in other directions.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:59.980)</span>
+  </div>
+  <div class="dialogue-en">There&#39;s no kind of experience</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(11:01.720)</span>
+  </div>
+  <div class="dialogue-en">which would yield the embryo</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:05.760)</span>
+  </div>
+  <div class="dialogue-en">to develop an insect visual system</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(11:08.760)</span>
+  </div>
+  <div class="dialogue-en">or to develop wings instead of arms.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:11.960)</span>
+  </div>
+  <div class="dialogue-en">So the very endowment that confers richness and complexity</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(11:16.960)</span>
+  </div>
+  <div class="dialogue-en">also sets bounds on what can be attained.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:23.600)</span>
+  </div>
+  <div class="dialogue-en">Now, I assume that our cognitive capacities</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(11:27.440)</span>
+  </div>
+  <div class="dialogue-en">are part of the organic world.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:29.640)</span>
+  </div>
+  <div class="dialogue-en">Therefore, they should have the same properties.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(11:32.260)</span>
+  </div>
+  <div class="dialogue-en">If they had no built in capacity</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:35.700)</span>
+  </div>
+  <div class="dialogue-en">to develop a rich and complex structure,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(11:39.180)</span>
+  </div>
+  <div class="dialogue-en">we would understand nothing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:41.920)</span>
+  </div>
+  <div class="dialogue-en">Just as if your genetic endowment</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(11:46.080)</span>
+  </div>
+  <div class="dialogue-en">did not compel you to develop arms and legs,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:50.320)</span>
+  </div>
+  <div class="dialogue-en">you would just be some kind of random amoeboid creature</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(11:54.000)</span>
+  </div>
+  <div class="dialogue-en">with no structure at all.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:56.080)</span>
+  </div>
+  <div class="dialogue-en">So I think it&#39;s plausible to assume that there are limits</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:00.240)</span>
+  </div>
+  <div class="dialogue-en">and I think we even have some evidence as to what they are.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:03.680)</span>
+  </div>
+  <div class="dialogue-en">So for example, there&#39;s a classic moment</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(12:06.660)</span>
+  </div>
+  <div class="dialogue-en">in the history of science at the time of Newton.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:11.620)</span>
+  </div>
+  <div class="dialogue-en">There was a from Galileo to Newton modern science</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(12:15.360)</span>
+  </div>
+  <div class="dialogue-en">developed on a fundamental assumption</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:17.920)</span>
+  </div>
+  <div class="dialogue-en">which Newton also accepted.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(12:20.120)</span>
+  </div>
+  <div class="dialogue-en">Namely that the world is an entire universe</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:24.100)</span>
+  </div>
+  <div class="dialogue-en">is a mechanical object.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:26.340)</span>
+  </div>
+  <div class="dialogue-en">And by mechanical, they meant something like</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:29.260)</span>
+  </div>
+  <div class="dialogue-en">the kinds of artifacts that were being developed</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(12:31.640)</span>
+  </div>
+  <div class="dialogue-en">by skilled artisans all over Europe,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:34.260)</span>
+  </div>
+  <div class="dialogue-en">the gears, levers and so on.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:37.120)</span>
+  </div>
+  <div class="dialogue-en">And their belief was well,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:39.320)</span>
+  </div>
+  <div class="dialogue-en">the world is just a more complex variant of this.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(12:42.000)</span>
+  </div>
+  <div class="dialogue-en">Newton, to his astonishment and distress,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:48.400)</span>
+  </div>
+  <div class="dialogue-en">proved that there are no machines,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(12:50.960)</span>
+  </div>
+  <div class="dialogue-en">that there&#39;s interaction without contact.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:54.300)</span>
+  </div>
+  <div class="dialogue-en">His contemporaries like Leibniz and Huygens</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(12:57.640)</span>
+  </div>
+  <div class="dialogue-en">just dismissed this as returning to the mysticism</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:02.560)</span>
+  </div>
+  <div class="dialogue-en">of the neo scholastics.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:03.960)</span>
+  </div>
+  <div class="dialogue-en">And Newton agreed.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:05.840)</span>
+  </div>
+  <div class="dialogue-en">He said it is totally absurd.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(13:08.240)</span>
+  </div>
+  <div class="dialogue-en">No person of any scientific intelligence</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:11.120)</span>
+  </div>
+  <div class="dialogue-en">could ever accept this for a moment.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(13:13.760)</span>
+  </div>
+  <div class="dialogue-en">In fact, he spent the rest of his life</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:15.280)</span>
+  </div>
+  <div class="dialogue-en">trying to get around it somehow,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(13:17.720)</span>
+  </div>
+  <div class="dialogue-en">as did many other scientists.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:20.320)</span>
+  </div>
+  <div class="dialogue-en">That was the very criterion of intelligibility</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(13:24.040)</span>
+  </div>
+  <div class="dialogue-en">for say Galileo or Newton.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:27.640)</span>
+  </div>
+  <div class="dialogue-en">Theory did not produce an intelligible world</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(13:31.260)</span>
+  </div>
+  <div class="dialogue-en">unless you could duplicate it in a machine.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:34.040)</span>
+  </div>
+  <div class="dialogue-en">He showed you can&#39;t, there are no machines, any.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(13:37.520)</span>
+  </div>
+  <div class="dialogue-en">Finally, after a long struggle, took a long time,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:41.240)</span>
+  </div>
+  <div class="dialogue-en">scientists just accepted this as common sense.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:45.240)</span>
+  </div>
+  <div class="dialogue-en">But that&#39;s a significant moment.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:47.400)</span>
+  </div>
+  <div class="dialogue-en">That means they abandoned the search</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(13:49.360)</span>
+  </div>
+  <div class="dialogue-en">for an intelligible world.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:51.780)</span>
+  </div>
+  <div class="dialogue-en">And the great philosophers of the time</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(13:54.800)</span>
+  </div>
+  <div class="dialogue-en">understood that very well.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:57.000)</span>
+  </div>
+  <div class="dialogue-en">So for example, David Hume in his encomium to Newton</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(14:02.320)</span>
+  </div>
+  <div class="dialogue-en">wrote that who was the greatest thinker ever and so on.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:05.560)</span>
+  </div>
+  <div class="dialogue-en">He said that he unveiled many of the secrets of nature,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:10.520)</span>
+  </div>
+  <div class="dialogue-en">but by showing the imperfections</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:13.320)</span>
+  </div>
+  <div class="dialogue-en">of the mechanical philosophy, mechanical science,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(14:17.520)</span>
+  </div>
+  <div class="dialogue-en">he left us with, he showed that there are mysteries</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:21.240)</span>
+  </div>
+  <div class="dialogue-en">which ever will remain.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:23.560)</span>
+  </div>
+  <div class="dialogue-en">And science just changed its goals.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:26.760)</span>
+  </div>
+  <div class="dialogue-en">It abandoned the mysteries.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(14:28.720)</span>
+  </div>
+  <div class="dialogue-en">It can&#39;t solve it, we&#39;ll put it aside.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:31.480)</span>
+  </div>
+  <div class="dialogue-en">We only look for intelligible theories.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(14:34.740)</span>
+  </div>
+  <div class="dialogue-en">Newton&#39;s theories were intelligible.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:36.680)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s just what they described wasn&#39;t.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(14:39.080)</span>
+  </div>
+  <div class="dialogue-en">Well, Locke said the same thing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:42.780)</span>
+  </div>
+  <div class="dialogue-en">I think they&#39;re basically right.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:44.800)</span>
+  </div>
+  <div class="dialogue-en">And if so, that showed something</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:47.000)</span>
+  </div>
+  <div class="dialogue-en">about the limits of human cognition.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(14:49.680)</span>
+  </div>
+  <div class="dialogue-en">We cannot attain the goal of understanding the world,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:55.680)</span>
+  </div>
+  <div class="dialogue-en">of finding an intelligible world.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(14:58.400)</span>
+  </div>
+  <div class="dialogue-en">This mechanical philosophy Galileo to Newton,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:02.540)</span>
+  </div>
+  <div class="dialogue-en">there&#39;s a good case that can be made</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(15:05.260)</span>
+  </div>
+  <div class="dialogue-en">that that&#39;s our instinctive conception of how things work.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:10.980)</span>
+  </div>
+  <div class="dialogue-en">So if say infants are tested with things that,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(15:16.220)</span>
+  </div>
+  <div class="dialogue-en">if this moves and then this moves,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:18.660)</span>
+  </div>
+  <div class="dialogue-en">they kind of invent something that must be invisible</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(15:22.060)</span>
+  </div>
+  <div class="dialogue-en">that&#39;s in between them that&#39;s making them move and so on.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:24.940)</span>
+  </div>
+  <div class="dialogue-en">Yeah, we like physical contact.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(15:26.500)</span>
+  </div>
+  <div class="dialogue-en">Something about our brain seeks.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:28.940)</span>
+  </div>
+  <div class="dialogue-en">Makes us want a world like that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(15:31.540)</span>
+  </div>
+  <div class="dialogue-en">Just like it wants a world</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:32.940)</span>
+  </div>
+  <div class="dialogue-en">that has regular geometric figures.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:36.620)</span>
+  </div>
+  <div class="dialogue-en">So for example, Descartes pointed this out</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:38.900)</span>
+  </div>
+  <div class="dialogue-en">that if you have an infant</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(15:41.820)</span>
+  </div>
+  <div class="dialogue-en">who&#39;s never seen a triangle before and you draw a triangle,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:47.660)</span>
+  </div>
+  <div class="dialogue-en">the infant will see a distorted triangle,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(15:52.220)</span>
+  </div>
+  <div class="dialogue-en">not whatever crazy figure it actually is.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:56.340)</span>
+  </div>
+  <div class="dialogue-en">Three lines not coming quite together,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(15:58.420)</span>
+  </div>
+  <div class="dialogue-en">one of them a little bit curved and so on.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:00.300)</span>
+  </div>
+  <div class="dialogue-en">We just impose a conception of the world</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(16:04.500)</span>
+  </div>
+  <div class="dialogue-en">in terms of geometric, perfect geometric objects.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:09.340)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s now been shown that goes way beyond that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(16:12.140)</span>
+  </div>
+  <div class="dialogue-en">That if you show on a tachistoscope,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:15.420)</span>
+  </div>
+  <div class="dialogue-en">let&#39;s say a couple of lights shining,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(16:18.540)</span>
+  </div>
+  <div class="dialogue-en">you do it three or four times in a row.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:20.860)</span>
+  </div>
+  <div class="dialogue-en">What people actually see is a rigid object in motion,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(16:25.240)</span>
+  </div>
+  <div class="dialogue-en">not whatever&#39;s there.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:26.900)</span>
+  </div>
+  <div class="dialogue-en">We all know that from a television set basically.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:31.900)</span>
+  </div>
+  <div class="dialogue-en">So that gives us hints of potential limits</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:34.660)</span>
+  </div>
+  <div class="dialogue-en">to our cognition.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(16:35.980)</span>
+  </div>
+  <div class="dialogue-en">I think it does, but it&#39;s a very contested view.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:39.420)</span>
+  </div>
+  <div class="dialogue-en">If you do a poll among scientists,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(16:42.300)</span>
+  </div>
+  <div class="dialogue-en">it&#39;s impossible we can understand anything.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:46.360)</span>
+  </div>
+  <div class="dialogue-en">Let me ask and give me a chance with this.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:48.620)</span>
+  </div>
+  <div class="dialogue-en">So I just spent a day at a company called Neuralink</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:52.540)</span>
+  </div>
+  <div class="dialogue-en">and what they do is try to design</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(16:56.380)</span>
+  </div>
+  <div class="dialogue-en">what&#39;s called the brain machine, brain computer interface.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:59.580)</span>
+  </div>
+  <div class="dialogue-en">So they try to do thousands readings in the brain,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(17:03.300)</span>
+  </div>
+  <div class="dialogue-en">be able to read what the neurons are firing</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:05.580)</span>
+  </div>
+  <div class="dialogue-en">and then stimulate back, so two way.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:08.540)</span>
+  </div>
+  <div class="dialogue-en">Do you think their dream is to expand the capacity</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:12.780)</span>
+  </div>
+  <div class="dialogue-en">of the brain to attain information,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(17:16.660)</span>
+  </div>
+  <div class="dialogue-en">sort of increase the bandwidth</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:18.180)</span>
+  </div>
+  <div class="dialogue-en">of which we can search Google kind of thing?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:22.460)</span>
+  </div>
+  <div class="dialogue-en">Do you think our cognitive capacity might be expanded</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:26.260)</span>
+  </div>
+  <div class="dialogue-en">our linguistic capacity, our ability to reason</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:29.340)</span>
+  </div>
+  <div class="dialogue-en">might be expanded by adding a machine into the picture?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:33.180)</span>
+  </div>
+  <div class="dialogue-en">Can be expanded in a certain sense,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:35.620)</span>
+  </div>
+  <div class="dialogue-en">but a sense that was known thousands of years ago.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:39.860)</span>
+  </div>
+  <div class="dialogue-en">A book expands your cognitive capacity.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(17:43.700)</span>
+  </div>
+  <div class="dialogue-en">Okay, so this could expand it too.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:46.060)</span>
+  </div>
+  <div class="dialogue-en">But it&#39;s not a fundamental expansion.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(17:47.940)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s not totally new things could be understood.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:50.940)</span>
+  </div>
+  <div class="dialogue-en">Well, nothing that goes beyond</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(17:53.060)</span>
+  </div>
+  <div class="dialogue-en">their native cognitive capacities.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:56.500)</span>
+  </div>
+  <div class="dialogue-en">Just like you can&#39;t turn the visual system</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(17:58.620)</span>
+  </div>
+  <div class="dialogue-en">into an insect system.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:00.660)</span>
+  </div>
+  <div class="dialogue-en">Well, I mean, the thought is,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(18:04.220)</span>
+  </div>
+  <div class="dialogue-en">the thought is perhaps you can&#39;t directly,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:06.820)</span>
+  </div>
+  <div class="dialogue-en">but you can map sort of.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(18:08.660)</span>
+  </div>
+  <div class="dialogue-en">You couldn&#39;t, but we already,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:10.060)</span>
+  </div>
+  <div class="dialogue-en">we know that without this experiment.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(18:12.380)</span>
+  </div>
+  <div class="dialogue-en">You could map what a bee sees and present it in a form</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:16.740)</span>
+  </div>
+  <div class="dialogue-en">so that we could follow it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(18:17.980)</span>
+  </div>
+  <div class="dialogue-en">In fact, every bee scientist does that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:19.940)</span>
+  </div>
+  <div class="dialogue-en">But you don&#39;t think there&#39;s something greater than bees</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(18:25.380)</span>
+  </div>
+  <div class="dialogue-en">that we can map and then all of a sudden discover something,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:29.700)</span>
+  </div>
+  <div class="dialogue-en">be able to understand a quantum world, quantum mechanics,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(18:33.780)</span>
+  </div>
+  <div class="dialogue-en">be able to start to be able to make sense.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:35.980)</span>
+  </div>
+  <div class="dialogue-en">Students at MIT study and understand quantum mechanics.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:41.660)</span>
+  </div>
+  <div class="dialogue-en">But they always reduce it to the infant, the physical.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:45.100)</span>
+  </div>
+  <div class="dialogue-en">I mean, they don&#39;t really understand.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(18:46.900)</span>
+  </div>
+  <div class="dialogue-en">Oh, you don&#39;t, there&#39;s thing, that may be another area</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:50.260)</span>
+  </div>
+  <div class="dialogue-en">where there&#39;s just a limit to understanding.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(18:52.740)</span>
+  </div>
+  <div class="dialogue-en">We understand the theories,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:54.500)</span>
+  </div>
+  <div class="dialogue-en">but the world that it describes doesn&#39;t make any sense.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(18:58.420)</span>
+  </div>
+  <div class="dialogue-en">So, you know, the experiment, Schrodinger&#39;s cat,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:01.460)</span>
+  </div>
+  <div class="dialogue-en">for example, can understand the theory,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:03.700)</span>
+  </div>
+  <div class="dialogue-en">but as Schrodinger pointed out,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:05.780)</span>
+  </div>
+  <div class="dialogue-en">it&#39;s an unintelligible world.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(19:09.300)</span>
+  </div>
+  <div class="dialogue-en">One of the reasons why Einstein</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:11.140)</span>
+  </div>
+  <div class="dialogue-en">was always very skeptical about quantum theory,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(19:14.420)</span>
+  </div>
+  <div class="dialogue-en">was that he described himself as a classical realist,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:19.340)</span>
+  </div>
+  <div class="dialogue-en">in one&#39;s intelligibility.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(19:23.060)</span>
+  </div>
+  <div class="dialogue-en">He has something in common with infants in that way.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:27.460)</span>
+  </div>
+  <div class="dialogue-en">So, back to linguistics.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(19:30.940)</span>
+  </div>
+  <div class="dialogue-en">If you could humor me, what are the most beautiful</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:34.020)</span>
+  </div>
+  <div class="dialogue-en">or fascinating aspects of language</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(19:36.100)</span>
+  </div>
+  <div class="dialogue-en">or ideas in linguistics or cognitive science</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:38.740)</span>
+  </div>
+  <div class="dialogue-en">that you&#39;ve seen in a lifetime of studying language</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:42.060)</span>
+  </div>
+  <div class="dialogue-en">and studying the human mind?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:44.180)</span>
+  </div>
+  <div class="dialogue-en">Well, I think the deepest property of language</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:50.140)</span>
+  </div>
+  <div class="dialogue-en">and puzzling property that&#39;s been discovered</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:52.820)</span>
+  </div>
+  <div class="dialogue-en">is what is sometimes called structure dependence.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(19:57.180)</span>
+  </div>
+  <div class="dialogue-en">We now understand it pretty well,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:59.580)</span>
+  </div>
+  <div class="dialogue-en">but it was puzzling for a long time.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(20:01.940)</span>
+  </div>
+  <div class="dialogue-en">I&#39;ll give you a concrete example.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:03.620)</span>
+  </div>
+  <div class="dialogue-en">So, suppose you say the guy who fixed the car</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(20:09.420)</span>
+  </div>
+  <div class="dialogue-en">carefully packed his tools, it&#39;s ambiguous.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:13.100)</span>
+  </div>
+  <div class="dialogue-en">He could fix the car carefully or carefully pack his tools.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(20:17.940)</span>
+  </div>
+  <div class="dialogue-en">Suppose you put carefully in front,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:21.060)</span>
+  </div>
+  <div class="dialogue-en">carefully the guy who fixed the car packed his tools,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(20:25.860)</span>
+  </div>
+  <div class="dialogue-en">then it&#39;s carefully packed, not carefully fixed.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:29.380)</span>
+  </div>
+  <div class="dialogue-en">And in fact, you do that even if it makes no sense.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(20:32.300)</span>
+  </div>
+  <div class="dialogue-en">So, suppose you say carefully,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:34.620)</span>
+  </div>
+  <div class="dialogue-en">the guy who fixed the car is tall.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(20:39.340)</span>
+  </div>
+  <div class="dialogue-en">You have to interpret it as carefully he&#39;s tall,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:41.860)</span>
+  </div>
+  <div class="dialogue-en">even though that doesn&#39;t make any sense.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:44.300)</span>
+  </div>
+  <div class="dialogue-en">And notice that that&#39;s a very puzzling fact</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:47.180)</span>
+  </div>
+  <div class="dialogue-en">because you&#39;re relating carefully</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(20:50.060)</span>
+  </div>
+  <div class="dialogue-en">not to the linearly closest verb,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:53.620)</span>
+  </div>
+  <div class="dialogue-en">but to the linearly more remote verb.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(20:57.300)</span>
+  </div>
+  <div class="dialogue-en">A linear closeness is an easy computation,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:02.340)</span>
+  </div>
+  <div class="dialogue-en">but here you&#39;re doing a much more,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:03.700)</span>
+  </div>
+  <div class="dialogue-en">what looks like a more complex computation.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:06.780)</span>
+  </div>
+  <div class="dialogue-en">You&#39;re doing something that&#39;s taking you essentially</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(21:10.180)</span>
+  </div>
+  <div class="dialogue-en">to the more remote thing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:13.580)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s now, if you look at the actual structure</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(21:16.620)</span>
+  </div>
+  <div class="dialogue-en">of the sentence, where the phrases are and so on,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:20.140)</span>
+  </div>
+  <div class="dialogue-en">turns out you&#39;re picking out the structurally closest thing,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:24.180)</span>
+  </div>
+  <div class="dialogue-en">but the linearly more remote thing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:27.940)</span>
+  </div>
+  <div class="dialogue-en">But notice that what&#39;s linear is 100% of what you hear.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(21:32.500)</span>
+  </div>
+  <div class="dialogue-en">You never hear structure, can&#39;t.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:35.140)</span>
+  </div>
+  <div class="dialogue-en">So, what you&#39;re doing is,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:37.300)</span>
+  </div>
+  <div class="dialogue-en">and certainly this is universal, all constructions,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:40.660)</span>
+  </div>
+  <div class="dialogue-en">all languages, and what we&#39;re compelled to do</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(21:44.660)</span>
+  </div>
+  <div class="dialogue-en">is carry out what looks like the more complex computation</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:48.660)</span>
+  </div>
+  <div class="dialogue-en">on material that we never hear,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:52.260)</span>
+  </div>
+  <div class="dialogue-en">and we ignore 100% of what we hear</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:55.380)</span>
+  </div>
+  <div class="dialogue-en">and the simplest computation.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(21:57.500)</span>
+  </div>
+  <div class="dialogue-en">By now, there&#39;s even a neural basis for this</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:00.700)</span>
+  </div>
+  <div class="dialogue-en">that&#39;s somewhat understood,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:02.860)</span>
+  </div>
+  <div class="dialogue-en">and there&#39;s good theories by now</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:04.380)</span>
+  </div>
+  <div class="dialogue-en">that explain why it&#39;s true.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(22:06.620)</span>
+  </div>
+  <div class="dialogue-en">That&#39;s a deep insight into the surprising nature of language</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:11.580)</span>
+  </div>
+  <div class="dialogue-en">with many consequences.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(22:14.100)</span>
+  </div>
+  <div class="dialogue-en">Let me ask you about a field of machine learning,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:17.540)</span>
+  </div>
+  <div class="dialogue-en">deep learning.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(22:18.940)</span>
+  </div>
+  <div class="dialogue-en">There&#39;s been a lot of progress in neural networks based,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:22.060)</span>
+  </div>
+  <div class="dialogue-en">neural network based machine learning in the recent decade.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(22:26.380)</span>
+  </div>
+  <div class="dialogue-en">Of course, neural network research goes back many decades.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:30.780)</span>
+  </div>
+  <div class="dialogue-en">What do you think are the limits of deep learning,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:35.580)</span>
+  </div>
+  <div class="dialogue-en">of neural network based machine learning?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:38.500)</span>
+  </div>
+  <div class="dialogue-en">Well, to give a real answer to that,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(22:41.140)</span>
+  </div>
+  <div class="dialogue-en">you&#39;d have to understand the exact processes</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:44.940)</span>
+  </div>
+  <div class="dialogue-en">that are taking place, and those are pretty opaque.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(22:47.940)</span>
+  </div>
+  <div class="dialogue-en">So, it&#39;s pretty hard to prove a theorem</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:50.260)</span>
+  </div>
+  <div class="dialogue-en">about what can be done and what can&#39;t be done,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:54.060)</span>
+  </div>
+  <div class="dialogue-en">but I think it&#39;s reasonably clear.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:56.820)</span>
+  </div>
+  <div class="dialogue-en">I mean, putting technicalities aside,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:59.180)</span>
+  </div>
+  <div class="dialogue-en">what deep learning is doing</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:01.940)</span>
+  </div>
+  <div class="dialogue-en">is taking huge numbers of examples</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:05.340)</span>
+  </div>
+  <div class="dialogue-en">and finding some patterns.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:07.740)</span>
+  </div>
+  <div class="dialogue-en">Okay, that could be interesting in some areas it is,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:11.980)</span>
+  </div>
+  <div class="dialogue-en">but we have to ask here a certain question.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:15.060)</span>
+  </div>
+  <div class="dialogue-en">Is it engineering or is it science?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(23:18.220)</span>
+  </div>
+  <div class="dialogue-en">Engineering in the sense of just trying</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:20.580)</span>
+  </div>
+  <div class="dialogue-en">to build something that&#39;s useful,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(23:22.820)</span>
+  </div>
+  <div class="dialogue-en">or science in the sense that it&#39;s trying</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:24.780)</span>
+  </div>
+  <div class="dialogue-en">to understand something about elements of the world.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(23:28.740)</span>
+  </div>
+  <div class="dialogue-en">So, take, say, a Google parser.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:31.820)</span>
+  </div>
+  <div class="dialogue-en">We can ask that question.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(23:33.860)</span>
+  </div>
+  <div class="dialogue-en">Is it useful, yeah, it&#39;s pretty useful.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:36.860)</span>
+  </div>
+  <div class="dialogue-en">I use a Google translator, so on engineering grounds,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(23:41.860)</span>
+  </div>
+  <div class="dialogue-en">it&#39;s kind of worth having, like a bulldozer.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:45.740)</span>
+  </div>
+  <div class="dialogue-en">Does it tell you anything about human language?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(23:48.900)</span>
+  </div>
+  <div class="dialogue-en">Zero, nothing, and in fact, it&#39;s very striking.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:54.940)</span>
+  </div>
+  <div class="dialogue-en">From the very beginning,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(23:56.780)</span>
+  </div>
+  <div class="dialogue-en">it&#39;s just totally remote from science.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:00.300)</span>
+  </div>
+  <div class="dialogue-en">So, what is a Google parser doing?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(24:02.580)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s taking an enormous text,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:05.140)</span>
+  </div>
+  <div class="dialogue-en">let&#39;s say the Wall Street Journal corpus,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:07.700)</span>
+  </div>
+  <div class="dialogue-en">and asking how close can we come</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:10.540)</span>
+  </div>
+  <div class="dialogue-en">to getting the right description</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(24:14.100)</span>
+  </div>
+  <div class="dialogue-en">of every sentence in the corpus.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:16.380)</span>
+  </div>
+  <div class="dialogue-en">Well, every sentence in the corpus</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(24:18.500)</span>
+  </div>
+  <div class="dialogue-en">is essentially an experiment.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:21.540)</span>
+  </div>
+  <div class="dialogue-en">Each sentence that you produce is an experiment</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:24.740)</span>
+  </div>
+  <div class="dialogue-en">which says, am I a grammatical sentence?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:27.700)</span>
+  </div>
+  <div class="dialogue-en">The answer is usually yes.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(24:29.620)</span>
+  </div>
+  <div class="dialogue-en">So, most of the stuff in the corpus</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:31.300)</span>
+  </div>
+  <div class="dialogue-en">is grammatical sentences.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:33.220)</span>
+  </div>
+  <div class="dialogue-en">But now, ask yourself, is there any science</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:36.820)</span>
+  </div>
+  <div class="dialogue-en">which takes random experiments</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(24:40.140)</span>
+  </div>
+  <div class="dialogue-en">which are carried out for no reason whatsoever</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:43.700)</span>
+  </div>
+  <div class="dialogue-en">and tries to find out something from them?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(24:46.500)</span>
+  </div>
+  <div class="dialogue-en">Like if you&#39;re, say, a chemistry PhD student,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:49.660)</span>
+  </div>
+  <div class="dialogue-en">you wanna get a thesis, can you say,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(24:51.180)</span>
+  </div>
+  <div class="dialogue-en">well, I&#39;m just gonna mix a lot of things together,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:55.380)</span>
+  </div>
+  <div class="dialogue-en">no purpose, and maybe I&#39;ll find something.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(24:59.660)</span>
+  </div>
+  <div class="dialogue-en">You&#39;d be laughed out of the department.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:02.420)</span>
+  </div>
+  <div class="dialogue-en">Science tries to find critical experiments,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(25:06.180)</span>
+  </div>
+  <div class="dialogue-en">ones that answer some theoretical question.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:09.100)</span>
+  </div>
+  <div class="dialogue-en">Doesn&#39;t care about coverage of millions of experiments.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(25:12.940)</span>
+  </div>
+  <div class="dialogue-en">So, it just begins by being very remote from science</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:16.220)</span>
+  </div>
+  <div class="dialogue-en">and it continues like that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(25:18.220)</span>
+  </div>
+  <div class="dialogue-en">So, the usual question that&#39;s asked about,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:21.620)</span>
+  </div>
+  <div class="dialogue-en">say, a Google parser is how well does it do,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:25.180)</span>
+  </div>
+  <div class="dialogue-en">or some parser, how well does it do on a corpus?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:28.300)</span>
+  </div>
+  <div class="dialogue-en">But there&#39;s another question that&#39;s never asked.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:31.100)</span>
+  </div>
+  <div class="dialogue-en">How well does it do on something</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:32.900)</span>
+  </div>
+  <div class="dialogue-en">that violates all the rules of language?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(25:36.060)</span>
+  </div>
+  <div class="dialogue-en">So, for example, take the structure dependence case</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:38.700)</span>
+  </div>
+  <div class="dialogue-en">that I mentioned.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(25:39.660)</span>
+  </div>
+  <div class="dialogue-en">Suppose there was a language</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:41.580)</span>
+  </div>
+  <div class="dialogue-en">in which you used linear proximity</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(25:45.780)</span>
+  </div>
+  <div class="dialogue-en">as the mode of interpretation.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:49.020)</span>
+  </div>
+  <div class="dialogue-en">These deep learning would work very easily on that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(25:51.700)</span>
+  </div>
+  <div class="dialogue-en">In fact, much more easily on an actual language.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:54.740)</span>
+  </div>
+  <div class="dialogue-en">Is that a success?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(25:55.900)</span>
+  </div>
+  <div class="dialogue-en">No, that&#39;s a failure from a scientific point of view.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:59.020)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s a failure.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(26:00.340)</span>
+  </div>
+  <div class="dialogue-en">It shows that we&#39;re not discovering</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:03.460)</span>
+  </div>
+  <div class="dialogue-en">the nature of the system at all,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(26:05.780)</span>
+  </div>
+  <div class="dialogue-en">because it does just as well or even better</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:07.700)</span>
+  </div>
+  <div class="dialogue-en">on things that violate the structure of the system.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:10.820)</span>
+  </div>
+  <div class="dialogue-en">And it goes on from there.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:12.660)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s not an argument against doing it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(26:14.740)</span>
+  </div>
+  <div class="dialogue-en">It is useful to have devices like this.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:17.140)</span>
+  </div>
+  <div class="dialogue-en">So, yes, so neural networks are kind of approximators</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:20.620)</span>
+  </div>
+  <div class="dialogue-en">that look, there&#39;s echoes of the behavioral debates, right?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:24.340)</span>
+  </div>
+  <div class="dialogue-en">Behavioralism.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(26:26.140)</span>
+  </div>
+  <div class="dialogue-en">More than echoes.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:27.580)</span>
+  </div>
+  <div class="dialogue-en">Many of the people in deep learning</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(26:30.060)</span>
+  </div>
+  <div class="dialogue-en">say they&#39;ve vindicated Terry Sanyosky, for example,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:34.540)</span>
+  </div>
+  <div class="dialogue-en">in his recent books,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(26:35.700)</span>
+  </div>
+  <div class="dialogue-en">as this vindicates Skinnerian behaviors.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:39.500)</span>
+  </div>
+  <div class="dialogue-en">It doesn&#39;t have anything to do with it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(26:41.420)</span>
+  </div>
+  <div class="dialogue-en">Yes, but I think there&#39;s something</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:44.620)</span>
+  </div>
+  <div class="dialogue-en">actually fundamentally different</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(26:46.140)</span>
+  </div>
+  <div class="dialogue-en">when the data set is huge.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:48.260)</span>
+  </div>
+  <div class="dialogue-en">But your point is extremely well taken.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:51.140)</span>
+  </div>
+  <div class="dialogue-en">But do you think we can learn, approximate</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:55.380)</span>
+  </div>
+  <div class="dialogue-en">that interesting complex structure of language</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(26:58.780)</span>
+  </div>
+  <div class="dialogue-en">with neural networks</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:00.100)</span>
+  </div>
+  <div class="dialogue-en">that will somehow help us understand the science?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:03.620)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s possible.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:04.460)</span>
+  </div>
+  <div class="dialogue-en">I mean, you find patterns that you hadn&#39;t noticed,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:07.220)</span>
+  </div>
+  <div class="dialogue-en">let&#39;s say, could be.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:09.700)</span>
+  </div>
+  <div class="dialogue-en">In fact, it&#39;s very much like a kind of linguistics</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:13.580)</span>
+  </div>
+  <div class="dialogue-en">that&#39;s done, what&#39;s called corpus linguistics.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:18.060)</span>
+  </div>
+  <div class="dialogue-en">When you, suppose you have some language</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:21.060)</span>
+  </div>
+  <div class="dialogue-en">where all the speakers have died out,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:23.420)</span>
+  </div>
+  <div class="dialogue-en">but you have records.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:25.100)</span>
+  </div>
+  <div class="dialogue-en">So you just look at the records</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:28.060)</span>
+  </div>
+  <div class="dialogue-en">and see what you can figure out from that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:30.580)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s much better than,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:31.900)</span>
+  </div>
+  <div class="dialogue-en">it&#39;s much better to have actual speakers</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:33.660)</span>
+  </div>
+  <div class="dialogue-en">where you can do critical experiments.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:36.060)</span>
+  </div>
+  <div class="dialogue-en">But if they&#39;re all dead, you can&#39;t do them.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:38.500)</span>
+  </div>
+  <div class="dialogue-en">So you have to try to see what you can find out</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:40.780)</span>
+  </div>
+  <div class="dialogue-en">from just looking at the data that&#39;s around.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:43.860)</span>
+  </div>
+  <div class="dialogue-en">You can learn things.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:45.020)</span>
+  </div>
+  <div class="dialogue-en">Actually, paleoanthropology is very much like that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:48.380)</span>
+  </div>
+  <div class="dialogue-en">You can&#39;t do a critical experiment on</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:51.220)</span>
+  </div>
+  <div class="dialogue-en">what happened two million years ago.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:53.500)</span>
+  </div>
+  <div class="dialogue-en">So you&#39;re kind of forced just to take what data&#39;s around</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:56.540)</span>
+  </div>
+  <div class="dialogue-en">and see what you can figure out from it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(27:59.220)</span>
+  </div>
+  <div class="dialogue-en">Okay, it&#39;s a serious study.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:01.420)</span>
+  </div>
+  <div class="dialogue-en">So let me venture into another whole body of work</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:05.580)</span>
+  </div>
+  <div class="dialogue-en">and philosophical question.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:08.380)</span>
+  </div>
+  <div class="dialogue-en">You&#39;ve said that evil in society arises from institutions,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(28:13.060)</span>
+  </div>
+  <div class="dialogue-en">not inherently from our nature.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:15.540)</span>
+  </div>
+  <div class="dialogue-en">Do you think most human beings are good,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:17.780)</span>
+  </div>
+  <div class="dialogue-en">they have good intent?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:19.580)</span>
+  </div>
+  <div class="dialogue-en">Or do most have the capacity for intentional evil</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(28:22.860)</span>
+  </div>
+  <div class="dialogue-en">that depends on their upbringing,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:24.620)</span>
+  </div>
+  <div class="dialogue-en">depends on their environment, on context?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(28:27.180)</span>
+  </div>
+  <div class="dialogue-en">I wouldn&#39;t say that they don&#39;t arise from our nature.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:30.960)</span>
+  </div>
+  <div class="dialogue-en">Anything we do arises from our nature.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:34.020)</span>
+  </div>
+  <div class="dialogue-en">And the fact that we have certain institutions, not others,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:38.100)</span>
+  </div>
+  <div class="dialogue-en">is one mode in which human nature has expressed itself.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:43.700)</span>
+  </div>
+  <div class="dialogue-en">But as far as we know,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:45.420)</span>
+  </div>
+  <div class="dialogue-en">human nature could yield many different kinds</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(28:48.500)</span>
+  </div>
+  <div class="dialogue-en">of institutions.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:50.220)</span>
+  </div>
+  <div class="dialogue-en">The particular ones that have developed</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(28:53.140)</span>
+  </div>
+  <div class="dialogue-en">have to do with historical contingency,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:56.940)</span>
+  </div>
+  <div class="dialogue-en">who conquered whom, and that sort of thing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(29:00.560)</span>
+  </div>
+  <div class="dialogue-en">They&#39;re not rooted in our nature</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:03.840)</span>
+  </div>
+  <div class="dialogue-en">in the sense that they&#39;re essential to our nature.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:06.740)</span>
+  </div>
+  <div class="dialogue-en">So it&#39;s commonly argued that these days</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:10.140)</span>
+  </div>
+  <div class="dialogue-en">that something like market systems</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(29:12.920)</span>
+  </div>
+  <div class="dialogue-en">is just part of our nature.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:15.580)</span>
+  </div>
+  <div class="dialogue-en">But we know from a huge amount of evidence</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(29:18.660)</span>
+  </div>
+  <div class="dialogue-en">that that&#39;s not true.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:19.500)</span>
+  </div>
+  <div class="dialogue-en">There&#39;s all kinds of other structures.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(29:21.740)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s a particular fact of a moment of modern history.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:26.220)</span>
+  </div>
+  <div class="dialogue-en">Others have argued that the roots of classical liberalism</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(29:30.740)</span>
+  </div>
+  <div class="dialogue-en">actually argue that what&#39;s called sometimes</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:34.420)</span>
+  </div>
+  <div class="dialogue-en">an instinct for freedom,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(29:36.460)</span>
+  </div>
+  <div class="dialogue-en">the instinct to be free of domination</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:39.920)</span>
+  </div>
+  <div class="dialogue-en">by illegitimate authority is the core of our nature.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(29:43.660)</span>
+  </div>
+  <div class="dialogue-en">That would be the opposite of this.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:45.620)</span>
+  </div>
+  <div class="dialogue-en">And we don&#39;t know.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(29:47.500)</span>
+  </div>
+  <div class="dialogue-en">We just know that human nature can accommodate both kinds.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:52.220)</span>
+  </div>
+  <div class="dialogue-en">If you look back at your life,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(29:54.900)</span>
+  </div>
+  <div class="dialogue-en">is there a moment in your intellectual life</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:58.100)</span>
+  </div>
+  <div class="dialogue-en">or life in general that jumps from memory</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(30:00.180)</span>
+  </div>
+  <div class="dialogue-en">that brought you happiness</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:02.100)</span>
+  </div>
+  <div class="dialogue-en">that you would love to relive again?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(30:05.100)</span>
+  </div>
+  <div class="dialogue-en">Sure.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:06.460)</span>
+  </div>
+  <div class="dialogue-en">Falling in love, having children.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:10.100)</span>
+  </div>
+  <div class="dialogue-en">What about, so you have put forward into the world</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:13.860)</span>
+  </div>
+  <div class="dialogue-en">a lot of incredible ideas in linguistics,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(30:17.660)</span>
+  </div>
+  <div class="dialogue-en">in cognitive science, in terms of ideas</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:22.300)</span>
+  </div>
+  <div class="dialogue-en">that just excites you when it first came to you</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(30:26.060)</span>
+  </div>
+  <div class="dialogue-en">that you would love to relive those moments.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:28.940)</span>
+  </div>
+  <div class="dialogue-en">Well, I mean, when you make a discovery</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(30:32.140)</span>
+  </div>
+  <div class="dialogue-en">about something that&#39;s exciting,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:34.100)</span>
+  </div>
+  <div class="dialogue-en">like, say, even the observation of structure dependence</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:40.500)</span>
+  </div>
+  <div class="dialogue-en">and on from that, the explanation for it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:44.440)</span>
+  </div>
+  <div class="dialogue-en">But the major things just seem like common sense.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:49.460)</span>
+  </div>
+  <div class="dialogue-en">So if you go back to take your question</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:53.160)</span>
+  </div>
+  <div class="dialogue-en">about external and internal language,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(30:55.820)</span>
+  </div>
+  <div class="dialogue-en">you go back to, say, the 1950s,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:59.140)</span>
+  </div>
+  <div class="dialogue-en">almost entirely languages regarded an external object,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(31:03.900)</span>
+  </div>
+  <div class="dialogue-en">something outside the mind.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:06.260)</span>
+  </div>
+  <div class="dialogue-en">It just seemed obvious that that can&#39;t be true.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(31:10.700)</span>
+  </div>
+  <div class="dialogue-en">Like I said, there&#39;s something about you</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:13.220)</span>
+  </div>
+  <div class="dialogue-en">that determines you&#39;re talking English,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(31:15.340)</span>
+  </div>
+  <div class="dialogue-en">not Swahili or something.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:18.640)</span>
+  </div>
+  <div class="dialogue-en">But that&#39;s not really a discovery.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(31:20.280)</span>
+  </div>
+  <div class="dialogue-en">That&#39;s just an observation, what&#39;s transparent.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:24.100)</span>
+  </div>
+  <div class="dialogue-en">You might say it&#39;s kind of like the 17th century,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(31:30.660)</span>
+  </div>
+  <div class="dialogue-en">the beginnings of modern science, 17th century.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:33.460)</span>
+  </div>
+  <div class="dialogue-en">They came from being willing to be puzzled</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(31:37.980)</span>
+  </div>
+  <div class="dialogue-en">about things that seemed obvious.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:40.400)</span>
+  </div>
+  <div class="dialogue-en">So it seems obvious that a heavy ball of lead</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(31:44.280)</span>
+  </div>
+  <div class="dialogue-en">will fall faster than a light ball of lead.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:47.580)</span>
+  </div>
+  <div class="dialogue-en">But Galileo was not impressed by the fact</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(31:50.900)</span>
+  </div>
+  <div class="dialogue-en">that it seemed obvious.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:52.680)</span>
+  </div>
+  <div class="dialogue-en">So he wanted to know if it&#39;s true.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(31:54.900)</span>
+  </div>
+  <div class="dialogue-en">They carried out experiments, actually thought experiments,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:59.140)</span>
+  </div>
+  <div class="dialogue-en">never actually carried them out,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(32:01.180)</span>
+  </div>
+  <div class="dialogue-en">which that can&#39;t be true.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:04.460)</span>
+  </div>
+  <div class="dialogue-en">And out of things like that, observations of that kind,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:11.600)</span>
+  </div>
+  <div class="dialogue-en">why does a ball fall to the ground instead of rising,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:15.740)</span>
+  </div>
+  <div class="dialogue-en">let&#39;s say, seems obvious, till you start thinking about it,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(32:20.060)</span>
+  </div>
+  <div class="dialogue-en">because why does steam rise, let&#39;s say.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:23.900)</span>
+  </div>
+  <div class="dialogue-en">And I think the beginnings of modern linguistics,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(32:27.260)</span>
+  </div>
+  <div class="dialogue-en">roughly in the 50s, are kind of like that,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:30.060)</span>
+  </div>
+  <div class="dialogue-en">just being willing to be puzzled about phenomena</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(32:33.620)</span>
+  </div>
+  <div class="dialogue-en">that looked, from some point of view, obvious.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:38.020)</span>
+  </div>
+  <div class="dialogue-en">And for example, a kind of doctrine,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(32:41.340)</span>
+  </div>
+  <div class="dialogue-en">almost official doctrine of structural linguistics</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:44.960)</span>
+  </div>
+  <div class="dialogue-en">in the 50s was that languages can differ</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(32:49.620)</span>
+  </div>
+  <div class="dialogue-en">from one another in arbitrary ways,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:52.660)</span>
+  </div>
+  <div class="dialogue-en">and each one has to be studied on its own</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(32:56.460)</span>
+  </div>
+  <div class="dialogue-en">without any presuppositions.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:58.900)</span>
+  </div>
+  <div class="dialogue-en">In fact, there were similar views among biologists</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(33:02.380)</span>
+  </div>
+  <div class="dialogue-en">about the nature of organisms, that each one&#39;s,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:05.880)</span>
+  </div>
+  <div class="dialogue-en">they&#39;re so different when you look at them</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(33:07.780)</span>
+  </div>
+  <div class="dialogue-en">that almost anything, you could be almost anything.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:10.980)</span>
+  </div>
+  <div class="dialogue-en">Well, in both domains, it&#39;s been learned</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(33:13.140)</span>
+  </div>
+  <div class="dialogue-en">that that&#39;s very far from true.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:15.500)</span>
+  </div>
+  <div class="dialogue-en">There are narrow constraints on what could be an organism</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(33:18.860)</span>
+  </div>
+  <div class="dialogue-en">or what could be a language.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:21.580)</span>
+  </div>
+  <div class="dialogue-en">But these are, that&#39;s just the nature of inquiry.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(33:25.540)</span>
+  </div>
+  <div class="dialogue-en">Inquiry. Science in general, yeah, inquiry.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:29.380)</span>
+  </div>
+  <div class="dialogue-en">So one of the peculiar things about us human beings</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(33:33.420)</span>
+  </div>
+  <div class="dialogue-en">is our mortality.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:35.300)</span>
+  </div>
+  <div class="dialogue-en">Ernest Becker explored it in general.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:38.220)</span>
+  </div>
+  <div class="dialogue-en">Do you ponder the value of mortality?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:40.460)</span>
+  </div>
+  <div class="dialogue-en">Do you think about your own mortality?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(33:43.460)</span>
+  </div>
+  <div class="dialogue-en">I used to when I was about 12 years old.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:48.100)</span>
+  </div>
+  <div class="dialogue-en">I wondered, I didn&#39;t care much about my own mortality,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:51.940)</span>
+  </div>
+  <div class="dialogue-en">but I was worried about the fact that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:54.540)</span>
+  </div>
+  <div class="dialogue-en">if my consciousness disappeared,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:57.700)</span>
+  </div>
+  <div class="dialogue-en">would the entire universe disappear?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:00.300)</span>
+  </div>
+  <div class="dialogue-en">That was frightening.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:01.580)</span>
+  </div>
+  <div class="dialogue-en">Did you ever find an answer to that question?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:03.740)</span>
+  </div>
+  <div class="dialogue-en">No, nobody&#39;s ever found an answer,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:05.900)</span>
+  </div>
+  <div class="dialogue-en">but I stopped being bothered by it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:07.900)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s kind of like Woody Allen in one of his films,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(34:10.380)</span>
+  </div>
+  <div class="dialogue-en">you may recall, he starts, he goes to a shrink</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:14.100)</span>
+  </div>
+  <div class="dialogue-en">when he&#39;s a child and the shrink asks him,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:16.460)</span>
+  </div>
+  <div class="dialogue-en">what&#39;s your problem?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:17.500)</span>
+  </div>
+  <div class="dialogue-en">He says, I just learned that the universe is expanding.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(34:21.700)</span>
+  </div>
+  <div class="dialogue-en">I can&#39;t handle that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:22.740)</span>
+  </div>
+  <div class="dialogue-en">And then another absurd question is,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:27.220)</span>
+  </div>
+  <div class="dialogue-en">what do you think is the meaning of our existence here,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:32.620)</span>
+  </div>
+  <div class="dialogue-en">our life on Earth, our brief little moment in time?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(34:35.980)</span>
+  </div>
+  <div class="dialogue-en">That&#39;s something we answer by our own activities.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:40.620)</span>
+  </div>
+  <div class="dialogue-en">There&#39;s no general answer.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(34:42.340)</span>
+  </div>
+  <div class="dialogue-en">We determine what the meaning of it is.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:46.620)</span>
+  </div>
+  <div class="dialogue-en">The action determine the meaning.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(34:48.700)</span>
+  </div>
+  <div class="dialogue-en">Meaning in the sense of significance,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:50.580)</span>
+  </div>
+  <div class="dialogue-en">not meaning in the sense that chair means this.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:55.420)</span>
+  </div>
+  <div class="dialogue-en">But the significance of your life is something you create.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:01.060)</span>
+  </div>
+  <div class="dialogue-en">No, thank you so much for talking to me today.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(35:02.540)</span>
+  </div>
+  <div class="dialogue-en">It was a huge honor.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:04.140)</span>
+  </div>
+  <div class="dialogue-en">Thank you so much.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(35:05.940)</span>
+  </div>
+  <div class="dialogue-en">Thanks for listening to this conversation with Noah Chomsky</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:08.660)</span>
+  </div>
+  <div class="dialogue-en">and thank you to our presenting sponsor, Cash App.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(35:11.980)</span>
+  </div>
+  <div class="dialogue-en">Download it, use code LexPodcast, you&#39;ll get $10</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:16.180)</span>
+  </div>
+  <div class="dialogue-en">and $10 will go to FIRST, a STEM education nonprofit</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(35:19.660)</span>
+  </div>
+  <div class="dialogue-en">that inspires hundreds of thousands of young minds</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:22.340)</span>
+  </div>
+  <div class="dialogue-en">to learn and to dream of engineering our future.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(35:25.980)</span>
+  </div>
+  <div class="dialogue-en">If you enjoy this podcast, subscribe on YouTube,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:28.620)</span>
+  </div>
+  <div class="dialogue-en">give it five stars on Apple Podcast, support on Patreon,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Noam Chomsky <span class="dialogue-time">(35:32.060)</span>
+  </div>
+  <div class="dialogue-en">or connect with me on Twitter.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:34.260)</span>
+  </div>
+  <div class="dialogue-en">Thank you for listening and hope to see you next time.</div>
+  
+</div></div>
+<button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 693 条对话 ↓</button>
+
+    <a href="https://lexfridman.com/noam-chomsky" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -842,6 +5575,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -854,6 +5639,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

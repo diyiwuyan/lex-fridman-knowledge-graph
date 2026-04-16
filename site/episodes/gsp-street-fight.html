@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -586,7 +600,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 <nav class="sidebar">
   <div class="sidebar-logo">
     <h1>Lex Fridman<br>知识图谱</h1>
-    <p>112 期节目 · 全文字幕</p>
+    <p>434 期节目 · 全文字幕</p>
   </div>
   
   <div class="sidebar-section">导航</div>
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -642,11 +658,14 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 <div class="quote-block">
   <div class="quote-text">"Host of Lex Fridman Podcast. Research Scientist at MIT, working on human-AI interaction, robotics, and machine learning. View all posts by Lex Fridman →"</div>
-  
+  <div class="quote-zh">莱克斯·弗里德曼播客的主持人。麻省理工学院的研究科学家，致力于人机交互、机器人和机器学习。查看莱克斯·弗里德曼发表的所有帖子 →</div>
   <div class="quote-meta">— About Lex Fridman </div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（29 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
@@ -654,142 +673,205 @@ a:hover { color: var(--accent); text-decoration: underline; }
     Lex Fridman <span class="dialogue-time">(00:00:06)</span>
   </div>
   <div class="dialogue-en">Let me tell you first that I’ve been around. I’ve been a bouncer for many, many years. Bang! Bang! Bang! It’s a street fight. Everybody underestimates the kick in the groin. It’s boom, that’s the first thing to do. I follow up, bang, bang, bang. Right away after that, danga-da-danga-da-dang. See what I’m doing? Boom! That’s the left elbow right there. Georges St-Pierre</div>
-  
+  <div class="dialogue-zh">让我先告诉你，我一直在身边。我当保镖很多很多年了。砰!砰!砰!这是一场街头斗殴。每个人都低估了腹股沟的踢击。这是繁荣，这是要做的第一件事。我跟着，砰，砰，砰。紧接着，“danga-da-danga-da-dang”。看到我在做什么吗？繁荣！那是左肘。乔治·圣皮埃尔</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:00:33)</span>
   </div>
-  <div class="dialogue-en">Yeah, so very often people ask me the difference between a street fight and a fight in mixed martial arts. The difference is in the street, there is no referee. And there’s an instigator, and there is the other person. The best in life for a street fight is always to not be the instigator because you have the element of surprise. So if you’re in a heated argument with someone and you feel that you...</div>
-  
+  <div class="dialogue-en">Yeah, so very often people ask me the difference between a street fight and a fight in mixed martial arts. The difference is in the street, there is no referee. And there’s an instigator, and there is the other person. The best in life for a street fight is always to not be the instigator because you have the element of surprise. So if you’re in a heated argument with someone and you feel that you’re potentially going to be in a fight, the best thing to do is to never show your center line, to always go on the side and put your hands up like this. Now, that’s one of the best things to do. It’s a self-defense tactic that is used all around the world. Because from there, the distance that I have to travel to cause a lot of damage to him is very minimal. Georges St-Pierre</div>
+  <div class="dialogue-zh">是的，经常有人问我街头格斗和综合格斗之间的区别。不同的是在街上，没有裁判。有一个煽动者，还有另一个人。对于街头斗殴来说，最好的办法就是不要成为煽动者，因为你有出其不意的因素。因此，如果您与某人发生激烈争吵，并且您觉得自己</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:01:27)</span>
   </div>
-  <div class="dialogue-en">You know, it’s very short. I can go boom. I can go boom. And I’m protected because if he ever tried to do anything, my hands are already up, but I’m ready to respond to any aggression. So the first thing is, if you’re in an argument and you feel the heat is rising, is to hit first. You don’t want to fight, but you want to hit first. You want to hit first, you know? So it’s either boom, hit first, ...</div>
-  
+  <div class="dialogue-en">You know, it’s very short. I can go boom. I can go boom. And I’m protected because if he ever tried to do anything, my hands are already up, but I’m ready to respond to any aggression. So the first thing is, if you’re in an argument and you feel the heat is rising, is to hit first. You don’t want to fight, but you want to hit first. You want to hit first, you know? So it’s either boom, hit first, depending on the situation. If you’re someone who is much less physically strong than the aggressor, you can use the eyes, the genitals, the neck, you know? And then you can leave the scene. However, if I’m like this, the minute he touches me, he declares war. Now I can go and perform a self-defense move.</div>
+  <div class="dialogue-zh">你知道，它很短。我可以去繁荣。我可以去繁荣。我受到保护，因为如果他试图做任何事情，我的手已经举起来，但我已经准备好应对任何侵略。所以，第一件事是，如果你们在争吵中并且感觉气氛正在升温，那就先出击。你不想打，但你想先打。你想先打，知道吗？所以要么是繁荣，先击中，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:02:25)</span>
   </div>
   <div class="dialogue-en">So striking, not wrestling? Georges St-Pierre</div>
-  
+  <div class="dialogue-zh">这么引人注目，不是摔跤吗？乔治·圣皮埃尔</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:02:27)</span>
   </div>
-  <div class="dialogue-en">Yes. It’s always striking first and leave the scene. If you’re, for example, a kid or someone who doesn’t have the physical strength of your aggressor. Of course, I’m a UFC champion— …so that does not apply to me. But the key is, tactically, we always use the element of surprise, and when you strike, strike first. And strike to cause as much damage as possible. The eyes, you can do the neck, you c...</div>
-  
+  <div class="dialogue-en">Yes. It’s always striking first and leave the scene. If you’re, for example, a kid or someone who doesn’t have the physical strength of your aggressor. Of course, I’m a UFC champion— …so that does not apply to me. But the key is, tactically, we always use the element of surprise, and when you strike, strike first. And strike to cause as much damage as possible. The eyes, you can do the neck, you can do the genitals. And then after, you can leave the scene. That’s the goal of having the element of surprise.</div>
+  <div class="dialogue-zh">是的。它总是先引人注目，然后离开现场。例如，如果你是一个孩子或一个没有攻击者体力的人。当然，我是 UFC 冠军——……所以这不适用于我。但关键是，在战术上，我们总是使用出其不意的元素，当你出击时，先出击。并进行攻击以造成尽可能多的伤害。眼睛，你可以做脖子，你可以做</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:03:08)</span>
   </div>
   <div class="dialogue-en">Okay, you were talking about knives. What about if weapons are involved, run faster? Georges St-Pierre</div>
-  
+  <div class="dialogue-zh">好吧，你说的是刀。如果涉及武器，跑得更快怎么办？乔治·圣皮埃尔</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:03:13)</span>
   </div>
-  <div class="dialogue-en">So weapons are very important. If someone has a weapon and attacks me for my money, I give him my money even if I’m Georges St-Pierre and I’m a UFC champion. However, if someone puts a knife to my throat here and he’s telling me to go in the trunk… now, I don’t want to go in the trunk because I know it’s a bad ending. So things that I can do first is always make sure that I try to keep my hands as...</div>
-  
+  <div class="dialogue-en">So weapons are very important. If someone has a weapon and attacks me for my money, I give him my money even if I’m Georges St-Pierre and I’m a UFC champion. However, if someone puts a knife to my throat here and he’s telling me to go in the trunk… now, I don’t want to go in the trunk because I know it’s a bad ending. So things that I can do first is always make sure that I try to keep my hands as close as possible to the weapon. And I try to be at as close range as possible. I can act like I want to—</div>
+  <div class="dialogue-zh">所以武器非常重要。如果有人拥有武器并为了我的钱而攻击我，即使我是乔治·圣皮埃尔并且我是 UFC 冠军，我也会给他我的钱。然而，如果有人把刀架在我的喉咙上，然后他让我进入后备箱……现在，我不想进入后备箱，因为我知道这是一个糟糕的结局。所以我首先能做的就是始终确保我的双手保持在正常状态</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:03:50)</span>
   </div>
   <div class="dialogue-en">Look scared? Georges St-Pierre</div>
-  
+  <div class="dialogue-zh">看起来害怕吗？乔治·圣皮埃尔</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:03:51)</span>
   </div>
-  <div class="dialogue-en">Yeah. “Please, please, please,” boom. See, here I use my body, and then I can go and break, you know? So the idea is to use your entire body to deflect the weapon. So if the weapon is like this and the blade is coming out this way, I use the element of surprise. You see, I use my body, not only grabbing him like this, so if he tries to come back with the knife, it’s solid, and I can go and break. ...</div>
-  
+  <div class="dialogue-en">Yeah. “Please, please, please,” boom. See, here I use my body, and then I can go and break, you know? So the idea is to use your entire body to deflect the weapon. So if the weapon is like this and the blade is coming out this way, I use the element of surprise. You see, I use my body, not only grabbing him like this, so if he tries to come back with the knife, it’s solid, and I can go and break. If the blade is pointing the other side, it’s something here, here, and here. Here I can use my body always to smother the weapon and—</div>
+  <div class="dialogue-zh">是的。 “拜托，拜托，拜托，”繁荣。看，我在这里用我的身体，然后我就可以去打破，你知道吗？所以我们的想法是用你的整个身体来偏转武器。因此，如果武器是这样的并且刀片是这样出来的，我就会使用出其不意的元素。你看，我用我的身体，不仅仅是这样抓住他，所以如果他试图拿刀回来，它是固体的，我可以去打破。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:04:29)</span>
   </div>
   <div class="dialogue-en">Controlling the wrist, yeah. But if it’s out here… unassigned</div>
-  
+  <div class="dialogue-zh">控制手腕，是的。但如果它在这里……未分配</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:04:32)</span>
   </div>
   <div class="dialogue-en">It’s through his clothes. Georges St-Pierre</div>
-  
+  <div class="dialogue-zh">是透过他的衣服。乔治·圣皮埃尔</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:04:32)</span>
   </div>
-  <div class="dialogue-en">If it’s out here, and yes, exactly. There’s too much distance. You want to make sure you get close to the weapon because that’s what can cause the most damage. This is very important. There are other situations. Let’s say you’re a kid or someone comes to grab you by the body. What I can do is grab the head and put my fingers inside the eyes; that will make my opponent release me immediately. Then ...</div>
-  
+  <div class="dialogue-en">If it’s out here, and yes, exactly. There’s too much distance. You want to make sure you get close to the weapon because that’s what can cause the most damage. This is very important. There are other situations. Let’s say you’re a kid or someone comes to grab you by the body. What I can do is grab the head and put my fingers inside the eyes; that will make my opponent release me immediately. Then I can go and leave, you know?</div>
+  <div class="dialogue-zh">如果它就在这里，是的，确实如此。距离太远了。你要确保靠近武器，因为这会造成最大的伤害。这非常重要。还有其他情况。假设你是个孩子，或者有人来抓住你的身体。我能做的就是抓住头部并将手指放入眼睛内；这会让我的对手立即释放我。然后</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:05:06)</span>
   </div>
   <div class="dialogue-en">Like thumb in? Like thumb? Georges St-Pierre</div>
-  
+  <div class="dialogue-zh">比如拇指伸进去？像拇指一样？乔治·圣皮埃尔</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:05:08)</span>
   </div>
   <div class="dialogue-en">Yeah, thumb in the eyes. You push in the eyes.</div>
-  
+  <div class="dialogue-zh">是的，拇指放在眼睛里。你推入眼睛。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:05:11)</span>
   </div>
   <div class="dialogue-en">Blind them. Georges St-Pierre</div>
-  
+  <div class="dialogue-zh">让他们失明。乔治·圣皮埃尔</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:05:12)</span>
   </div>
   <div class="dialogue-en">There are no rules. The eyes are always my favorite choice to go for because if you cannot see, it’s very hard to fight. And normally the reflex for most people, when they can’t see, they grab their eyes, you know? So it releases the grip.</div>
-  
+  <div class="dialogue-zh">没有规则。眼睛始终是我最喜欢的选择，因为如果你看不见，就很难战斗。通常，大多数人的本能反应是，当他们看不到时，他们会抓住自己的眼睛，你知道吗？所以它释放了抓地力。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:05:32)</span>
   </div>
   <div class="dialogue-en">I’m now going to ask you about the tie because I think you’re wrong still about that. I think it’s possible to use it as a… same as for a head snatch, like this kind of situation, to choke. Georges St-Pierre</div>
-  
+  <div class="dialogue-zh">我现在要问你关于领带的问题，因为我认为你在这一点上仍然是错误的。我认为可以将其用作……与抓头一样，就像这种情况一样，窒息。乔治·圣皮埃尔</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:05:45)</span>
   </div>
   <div class="dialogue-en">I think it could be an advantage if it’s a fake tie. If it’s something that can go, like it can—</div>
-  
+  <div class="dialogue-zh">我认为如果这是一条假领带，这可能是一个优势。如果它是可以走的东西，就像它可以一样——</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:05:53)</span>
   </div>
   <div class="dialogue-en">Clip off? Georges St-Pierre</div>
-  
+  <div class="dialogue-zh">剪掉吗？乔治·圣皮埃尔</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:05:53)</span>
   </div>
   <div class="dialogue-en">Like a tail of a reptile that can go. So if you try to pull my tie, it comes out, and now I know I get a head start.</div>
+  <div class="dialogue-zh">就像爬行动物的尾巴一样，可以行走。所以如果你试图拉我的领带，它就会出来，现在我知道我已经领先了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:02)</span>
+  </div>
+  <div class="dialogue-en">Element of surprise unassigned</div>
   
 </div>
-    <a href="https://lexfridman.com/gsp-street-fight-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:03)</span>
+  </div>
+  <div class="dialogue-en">Exactly, it’s all about the element of surprise. You want to strike first; the element of surprise in the street.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:08)</span>
+  </div>
+  <div class="dialogue-en">Georges, thank you so much for talking today. Georges St-Pierre</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:11)</span>
+  </div>
+  <div class="dialogue-en">My pleasure.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:11)</span>
+  </div>
+  <div class="dialogue-en">Thank you for looking sharp. Georges St-Pierre</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:13)</span>
+  </div>
+  <div class="dialogue-en">Man in black, baby!</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:14)</span>
+  </div>
+  <div class="dialogue-en">Man in black. This entry was posted in transcripts on February 5, 2026 by</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman
+  </div>
+  <div class="dialogue-en">.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman
+  </div>
+  <div class="dialogue-en">Host of Lex Fridman Podcast. Research Scientist at MIT, working on human-AI interaction, robotics, and machine learning. View all posts by Lex Fridman →</div>
+  
+</div>
+    <a href="https://lexfridman.com/gsp-street-fight-transcript" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -831,6 +913,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -843,6 +977,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

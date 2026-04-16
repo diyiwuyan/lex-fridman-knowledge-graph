@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#06b6d422;color:#06b6d4;border:1px solid #06b6d444;font-size:13px;padding:4px 12px">太空与探索</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -642,31 +658,34 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 <div class="quote-block">
   <div class="quote-text">"So I give you examples of futuristic technologies and I can give you examples of current technologies."</div>
-  
+  <div class="quote-zh">所以我给你们提供了未来技术的例子，我也可以给你们提供当前技术的例子。</div>
   <div class="quote-meta">— Neal Stephenson （07:48.600）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"Fascist technologies is, I personally, I mentioned to you offline, sort of love artificial intelligence."</div>
-  
+  <div class="quote-zh">法西斯技术，我个人，我在线下向你们提到过，有点喜欢人工智能。</div>
   <div class="quote-meta">— Neal Stephenson （08:40.780）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"There are some dangerous consequences to this particular idea of blasting software of geoengineering."</div>
-  
+  <div class="quote-zh">这种地球工程爆破软件的特殊想法会带来一些危险的后果。</div>
   <div class="quote-meta">— Neal Stephenson （1:03:00.940）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"And so they&#39;re pretty simple, but it&#39;s interesting to watch people&#39;s emotional reactions to different"</div>
-  
+  <div class="quote-zh">所以它们很简单，但是观察人们对不同事物的情绪反应很有趣</div>
   <div class="quote-meta">— Neal Stephenson （1:35:08.500）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"I meant more like they&#39;re not trying to conceal themselves, but we&#39;re just our cognitive capabilities"</div>
-  
+  <div class="quote-zh">我的意思更像是他们并没有试图隐藏自己，但我们只是我们的认知能力</div>
   <div class="quote-meta">— Neal Stephenson （34:50.940）</div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（1997 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
@@ -674,140 +693,140 @@ a:hover { color: var(--accent); text-decoration: underline; }
     Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">The following is a conversation with Neal Stephenson, a legendary science fiction writer</div>
-  
+  <div class="dialogue-zh">以下是与传奇科幻作家尼尔·史蒂芬森的对话</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:04.760)</span>
   </div>
   <div class="dialogue-en">exploring ideas in mathematics, science, cryptography, money, linguistics, philosophy, and virtual</div>
-  
+  <div class="dialogue-zh">探索数学、科学、密码学、货币、语言学、哲学和虚拟领域的思想</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:10.680)</span>
   </div>
   <div class="dialogue-en">reality, from his early book Snow Crash to his new one called Termination Shock.</div>
-  
+  <div class="dialogue-zh">现实，从他早期的书《雪崩》到他的新书《终结冲击》。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:17.140)</span>
   </div>
   <div class="dialogue-en">He doesn&#39;t just write novels.</div>
-  
+  <div class="dialogue-zh">他不只是写小说。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:19.020)</span>
   </div>
   <div class="dialogue-en">He worked at the space company Blue Origin for many years, including technically being</div>
-  
+  <div class="dialogue-zh">他在太空公司蓝色起源工作了多年，包括在技术上</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Neal Stephenson <span class="dialogue-time">(00:25.100)</span>
   </div>
   <div class="dialogue-en">Blue Origin&#39;s first employee.</div>
-  
+  <div class="dialogue-zh">蓝色起源的第一位员工。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:27.180)</span>
   </div>
   <div class="dialogue-en">He also was the chief futurist at the virtual reality company Magic Leap.</div>
-  
+  <div class="dialogue-zh">他还是虚拟现实公司 Magic Leap 的首席未来学家。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Neal Stephenson <span class="dialogue-time">(00:33.280)</span>
   </div>
   <div class="dialogue-en">This is the Lex Friedman Podcast.</div>
-  
+  <div class="dialogue-zh">这是莱克斯·弗里德曼播客。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:35.200)</span>
   </div>
   <div class="dialogue-en">To support it, please check out our sponsors in the description.</div>
-  
+  <div class="dialogue-zh">为了支持它，请在说明中查看我们的赞助商。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:38.680)</span>
   </div>
   <div class="dialogue-en">And now, here&#39;s my conversation with Neal Stephenson.</div>
-  
+  <div class="dialogue-zh">现在，这是我与尼尔·史蒂芬森的对话。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Neal Stephenson <span class="dialogue-time">(00:43.560)</span>
   </div>
   <div class="dialogue-en">You write both historical fiction, like World War II in Cryptonomicon, and science fiction,</div>
-  
+  <div class="dialogue-zh">你既写历史小说，比如《密码学》中的第二次世界大战，也写科幻小说，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Neal Stephenson <span class="dialogue-time">(00:50.840)</span>
   </div>
   <div class="dialogue-en">looking both into the past and the future.</div>
-  
+  <div class="dialogue-zh">展望过去和未来。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:53.240)</span>
   </div>
   <div class="dialogue-en">So let me ask, does history repeat itself, in which way does it repeat itself, in which</div>
-  
+  <div class="dialogue-zh">那么我问一下，历史会重演吗？以何种方式重演？以何种方式重演？</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:58.280)</span>
   </div>
   <div class="dialogue-en">way does it not?</div>
-  
+  <div class="dialogue-zh">方式不是吗？</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:59.720)</span>
   </div>
   <div class="dialogue-en">I&#39;m afraid it repeats itself a lot.</div>
-  
+  <div class="dialogue-zh">恐怕它会重复很多次。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:02.760)</span>
   </div>
   <div class="dialogue-en">So I think human nature kind of is what it is.</div>
-  
+  <div class="dialogue-zh">所以我认为人性就是这样。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:05.920)</span>
   </div>
   <div class="dialogue-en">And so we tend to see similar behavior patterns emerging again and again.</div>
-  
+  <div class="dialogue-zh">因此，我们往往会看到类似的行为模式一次又一次地出现。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:12.320)</span>
   </div>
   <div class="dialogue-en">And so it&#39;s kind of the exception rather than the rule when something new happens.</div>
-  
+  <div class="dialogue-zh">因此，当新的事情发生时，这只是例外，而不是规则。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:20.120)</span>
   </div>
   <div class="dialogue-en">What role does technology play in the suppression or in revealing human nature?</div>
-  
+  <div class="dialogue-zh">技术在压制或揭示人性方面发挥什么作用？</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Neal Stephenson <span class="dialogue-time">(01:25.600)</span>
   </div>
   <div class="dialogue-en">Well, the standards of living, life expectancy, all that have gotten incredibly better within</div>
-  
+  <div class="dialogue-zh">嗯，生活水平、预期寿命，所有这些都变得令人难以置信地更好</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
@@ -14651,7 +14670,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 </div></div>
 <button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 1997 条对话 ↓</button>
 
-    <a href="https://lexfridman.com/neal-stephenson" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+    <a href="https://lexfridman.com/neal-stephenson" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -14709,6 +14728,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -14721,6 +14792,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

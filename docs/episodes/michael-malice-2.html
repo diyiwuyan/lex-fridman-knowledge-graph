@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -642,31 +658,34 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 <div class="quote-block">
   <div class="quote-text">"So if it&#39;s very clear with, with free countries through what&#39;s in the press, whether the institutional"</div>
-  
+  <div class="quote-zh">因此，如果通过媒体报道，自由国家非常清楚，机构是否</div>
   <div class="quote-meta">— Michael Malice （1:12:25.800）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"Yeah, that was universally condemned, Kristallnacht, and that was very shocking, its level of barbarism"</div>
-  
+  <div class="quote-zh">是的，这受到了普遍的谴责，水晶之夜，这非常令人震惊，其野蛮程度</div>
   <div class="quote-meta">— Michael Malice （1:22:37.520）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"are in place that my mistake or limited information isn&#39;t going to have the deleterious consequences?"</div>
-  
+  <div class="quote-zh">我的错误或有限的信息不会造成有害后果吗？</div>
   <div class="quote-meta">— Michael Malice （1:31:59.920）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"So you&#39;re saying that&#39;s a way to see communication with the world, as you say something uncontroversial"</div>
-  
+  <div class="quote-zh">所以你说这是一种与世界沟通的方式，正如你所说的一些没有争议的事情一样</div>
   <div class="quote-meta">— Michael Malice （2:03:29.920）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"And you don&#39;t have to be a Republican or conservative to be delighted at the collapse of totalitarianism"</div>
-  
+  <div class="quote-zh">你不必是共和党人或保守派人士才能对极权主义的崩溃感到高兴</div>
   <div class="quote-meta">— Michael Malice （44:31.080）</div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（3108 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
@@ -674,140 +693,140 @@ a:hover { color: var(--accent); text-decoration: underline; }
     Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">The following is a conversation with Michael Malice, his second time on the podcast.</div>
-  
+  <div class="dialogue-zh">以下是与迈克尔·马利斯的对话，这是他第二次参加播客。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:05.200)</span>
   </div>
   <div class="dialogue-en">He&#39;s an anarchist, political thinker, podcaster, and author.</div>
-  
+  <div class="dialogue-zh">他是一位无政府主义者、政治思想家、播客和作家。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:10.320)</span>
   </div>
   <div class="dialogue-en">He wrote Dear Reader, which is a book on North Korea, and The New Right, a book on the various</div>
-  
+  <div class="dialogue-zh">他写了《亲爱的读者》（Dear Reader），这是一本关于朝鲜的书，还有《新右派》（The New Right），这是一本关于各种问题的书。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:17.260)</span>
   </div>
   <div class="dialogue-en">ideological movements at the fringe of American politics.</div>
-  
+  <div class="dialogue-zh">美国政治边缘的意识形态运动。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:20.940)</span>
   </div>
   <div class="dialogue-en">He hosts a podcast called You&#39;re Welcome, spelled Y O U R, and in general, there&#39;s</div>
-  
+  <div class="dialogue-zh">他主持了一个名为“不客气”的播客，拼写为“Y O U R”，总的来说，有</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(00:26.960)</span>
   </div>
   <div class="dialogue-en">a lot of live shows on YouTube that are at times profoundly absurd, and at other times</div>
-  
+  <div class="dialogue-zh">YouTube 上有很多现场表演，有时非常荒谬，有时又非常荒谬</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:33.780)</span>
   </div>
   <div class="dialogue-en">absurdly profound, and always full of humor and wisdom.</div>
-  
+  <div class="dialogue-zh">极其深刻，而且总是充满幽默和智慧。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(00:38.720)</span>
   </div>
   <div class="dialogue-en">He is the Joker to my Batman, and the Caviar to my Vodka.</div>
-  
+  <div class="dialogue-zh">他是我的蝙蝠侠的小丑，也是我的伏特加的鱼子酱。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(00:44.100)</span>
   </div>
   <div class="dialogue-en">His masterful dance between dark humor and difficult, even dangerous ideas, challenges</div>
-  
+  <div class="dialogue-zh">他在黑色幽默和困难甚至危险的想法、挑战之间巧妙地舞蹈</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(00:50.320)</span>
   </div>
   <div class="dialogue-en">me to think deeply about this world, and when that fails, at least smile and have a good</div>
-  
+  <div class="dialogue-zh">我要深入思考这个世界，当失败时，至少微笑并过得愉快</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:55.920)</span>
   </div>
   <div class="dialogue-en">laugh at the absurdity of it all.</div>
-  
+  <div class="dialogue-zh">嘲笑这一切的荒谬。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(00:58.560)</span>
   </div>
   <div class="dialogue-en">This episode has much of that.</div>
-  
+  <div class="dialogue-zh">这一集有很多这样的内容。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(01:00.880)</span>
   </div>
   <div class="dialogue-en">His outfit, for example, the exact inverse of mine, with a white suit and a black shirt,</div>
-  
+  <div class="dialogue-zh">例如，他的服装与我的完全相反，白色西装和黑色衬衫，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(01:10.320)</span>
   </div>
   <div class="dialogue-en">is just one example of that, of the humor, trolling, and brilliance that is Michael Malice.</div>
-  
+  <div class="dialogue-zh">这只是迈克尔·马利斯 (Michael Malice) 的幽默、恶搞和才华的一个例子。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(01:18.560)</span>
   </div>
   <div class="dialogue-en">Quick mention of our sponsors, NetSuite, Business Management Software, Athletic Greens, All</div>
-  
+  <div class="dialogue-zh">快速提及我们的赞助商、NetSuite、业务管理软件、Athletic Greens 等</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(01:25.560)</span>
   </div>
   <div class="dialogue-en">In One Nutrition Drink, Sun Basket, Meal Delivery Service, and Cash App.</div>
-  
+  <div class="dialogue-zh">集营养饮料、太阳篮、送餐服务和现金应用于一体。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:32.560)</span>
   </div>
   <div class="dialogue-en">So the choice is success, health, food, or money.</div>
-  
+  <div class="dialogue-zh">所以选择是成功、健康、食物或金钱。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(01:38.320)</span>
   </div>
   <div class="dialogue-en">Choose wisely, my friends, and if you wish, click the sponsor links below to get a discount</div>
-  
+  <div class="dialogue-zh">朋友们，请明智地选择，如果您愿意，请点击下面的赞助商链接以获得折扣</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:43.540)</span>
   </div>
   <div class="dialogue-en">and to support this podcast.</div>
-  
+  <div class="dialogue-zh">并支持这个播客。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(01:46.040)</span>
   </div>
   <div class="dialogue-en">As a side note, let me say that Michael is, in many ways, a man of radical ideas, but</div>
-  
+  <div class="dialogue-zh">作为旁注，我要说的是，迈克尔在很多方面都是一个思想激进的人，但是</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
@@ -22428,7 +22447,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 </div></div>
 <button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 3108 条对话 ↓</button>
 
-    <a href="https://lexfridman.com/michael-malice-2" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+    <a href="https://lexfridman.com/michael-malice-2" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -22486,6 +22505,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -22498,6 +22569,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

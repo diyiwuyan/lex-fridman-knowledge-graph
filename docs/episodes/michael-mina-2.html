@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -642,31 +658,34 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 <div class="quote-block">
   <div class="quote-text">"scaling them up. So on that front, I think finally there is success. People are actually understanding"</div>
-  
+  <div class="quote-zh">扩大规模。 So on that front, I think finally there is success.人们其实都在理解</div>
   <div class="quote-meta">— Michael Mina （03:59.920）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"the reason it&#39;s taking long, I think, is because every agency and government is generally deferential"</div>
-  
+  <div class="quote-zh">我认为，之所以需要很长时间，是因为每个机构和政府通常都很恭敬</div>
   <div class="quote-meta">— Michael Mina （18:06.240）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"vaccinate or test, if our goal is to actually stop transmission, that&#39;s confusing because vaccines are"</div>
-  
+  <div class="quote-zh">接种疫苗或进行测试，如果我们的目标是真正阻止传播，那就会令人​​困惑，因为疫苗是</div>
   <div class="quote-meta">— Michael Mina （1:03:09.440）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"think now we actually are in the time where it has been set and we have to deal with the crisis before"</div>
-  
+  <div class="quote-zh">想想现在我们实际上正处于既定的时间，我们必须在此之前应对危机</div>
   <div class="quote-meta">— Michael Mina （1:06:18.880）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"it&#39;s not that important. And the pandemic&#39;s going away. But this was like 100% predictable, everything"</div>
-  
+  <div class="quote-zh">这并不重要。大流行病正在消失。但这就像100%可预测的，一切</div>
   <div class="quote-meta">— Michael Mina （19:30.240）</div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（1040 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
@@ -674,140 +693,140 @@ a:hover { color: var(--accent); text-decoration: underline; }
     Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">The following is a conversation with Michael Mina, his second time on the podcast.</div>
-  
+  <div class="dialogue-zh">以下是与迈克尔·米纳的对话，这是他第二次参加播客。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:04.720)</span>
   </div>
   <div class="dialogue-en">He&#39;s a professor at Harvard doing research on infectious disease and immunology. In my view,</div>
-  
+  <div class="dialogue-zh">他是哈佛大学的教授，从事传染病和免疫学研究。在我看来，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:11.840)</span>
   </div>
   <div class="dialogue-en">the most powerful, doable, and obvious solution to COVID 19 from the very beginning is rapid</div>
-  
+  <div class="dialogue-zh">从一开始，针对 COVID 19 的最强大、可行且明显的解决方案就是快速</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:18.640)</span>
   </div>
   <div class="dialogue-en">at home testing. This is what Michael has been talking about and writing about since the beginning</div>
-  
+  <div class="dialogue-zh">在家测试。这就是迈克尔从一开始就一直在谈论和撰写的内容</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:24.080)</span>
   </div>
   <div class="dialogue-en">of the pandemic. The accuracy of these tests is high for the task of detecting contagiousness,</div>
-  
+  <div class="dialogue-zh">大流行病。对于检测传染性的任务来说，这些测试的准确性很高，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Mina <span class="dialogue-time">(00:30.400)</span>
   </div>
   <div class="dialogue-en">which is what matters. Hundreds of millions can be manufactured quickly and relatively cheaply.</div>
-  
+  <div class="dialogue-zh">这才是重要的。可以快速且相对便宜地制造数亿个。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Mina <span class="dialogue-time">(00:36.160)</span>
   </div>
   <div class="dialogue-en">Privacy and individual freedoms are preserved. I believe that if you give people the power of</div>
-  
+  <div class="dialogue-zh">隐私和个人自由得到保护。我相信如果你赋予人们力量</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Mina <span class="dialogue-time">(00:41.920)</span>
   </div>
   <div class="dialogue-en">information, information about whether they are contagious or not, they will do the right thing</div>
-  
+  <div class="dialogue-zh">信息，关于他们是否具有传染性的信息，他们会做正确的事情</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Mina <span class="dialogue-time">(00:47.760)</span>
   </div>
   <div class="dialogue-en">at scale, all while respecting their freedom and minimizing the destructive effects of the pandemic</div>
-  
+  <div class="dialogue-zh">大规模，同时尊重他们的自由并尽量减少大流行的破坏性影响</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Mina <span class="dialogue-time">(00:54.560)</span>
   </div>
   <div class="dialogue-en">on our health and our economy. The solution was obvious in May of 2020. It was obvious when Michael</div>
-  
+  <div class="dialogue-zh">关乎我们的健康和经济。解决方案在 2020 年 5 月就已经显而易见。当 Michael</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:01.680)</span>
   </div>
   <div class="dialogue-en">and I spoke the first time a year ago, and it is obvious today. We talk about why it has not yet</div>
-  
+  <div class="dialogue-zh">一年前我第一次发言，今天就很明显了。我们讨论为什么还没有</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Mina <span class="dialogue-time">(01:08.240)</span>
   </div>
   <div class="dialogue-en">been done and how we can still do it. This is the Lex Friedman podcast. To support it, please check</div>
-  
+  <div class="dialogue-zh">已经完成以及我们如何仍然可以做到这一点。这是莱克斯·弗里德曼的播客。要支持它，请检查</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Mina <span class="dialogue-time">(01:15.600)</span>
   </div>
   <div class="dialogue-en">out our sponsors in the description. And now here&#39;s my conversation with Michael Mina.</div>
-  
+  <div class="dialogue-zh">在描述中注明我们的赞助商。现在这是我与迈克尔·米纳的对话。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Mina <span class="dialogue-time">(01:22.240)</span>
   </div>
   <div class="dialogue-en">We spoke a year ago about rapid at home testing, and I think you think it should have been,</div>
-  
+  <div class="dialogue-zh">我们一年前谈到过快速家庭测试，我认为你认为应该是这样的，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Mina <span class="dialogue-time">(01:30.000)</span>
   </div>
   <div class="dialogue-en">still should be a big part of the solution to COVID. So let&#39;s recap. Where do things stand</div>
-  
+  <div class="dialogue-zh">仍然应该成为解决新冠病毒问题的重要组成部分。让我们回顾一下。情况如何</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Mina <span class="dialogue-time">(01:36.480)</span>
   </div>
   <div class="dialogue-en">today in terms of rapid at home testing? Well, it&#39;s certainly something that you&#39;re right,</div>
-  
+  <div class="dialogue-zh">今天在快速家庭测试方面？嗯，你确实是对的，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Mina <span class="dialogue-time">(01:44.640)</span>
   </div>
   <div class="dialogue-en">I do think we should have them today. We&#39;ve now had almost 20 months of living in anxiety,</div>
-  
+  <div class="dialogue-zh">我确实认为我们今天应该拥有它们。我们现在已经快20个月生活在焦虑之中了，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Mina <span class="dialogue-time">(01:53.520)</span>
   </div>
   <div class="dialogue-en">uncertainty, being afraid for our health, for our family&#39;s health, for our friends, you know,</div>
-  
+  <div class="dialogue-zh">不确定性，担心我们的健康、家人的健康、朋友的健康，你知道，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Mina <span class="dialogue-time">(01:59.360)</span>
   </div>
   <div class="dialogue-en">shutdowns, economic instability, everything has been uncertain because of this virus.</div>
-  
+  <div class="dialogue-zh">由于这种病毒，停工、经济不稳定，一切都变得不确定。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(02:05.280)</span>
   </div>
   <div class="dialogue-en">And then there&#39;s this little test, and it&#39;s the first time for many people that they&#39;re using it</div>
-  
+  <div class="dialogue-zh">然后是这个小测试，对于很多人来说这是第一次使用它</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
@@ -7952,7 +7971,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 </div></div>
 <button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 1040 条对话 ↓</button>
 
-    <a href="https://lexfridman.com/michael-mina-2" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+    <a href="https://lexfridman.com/michael-mina-2" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -8010,6 +8029,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -8022,6 +8093,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

@@ -1,0 +1,22 @@
+{
+  "slug": "sam-altman-2",
+  "guest": "Sam Altman",
+  "title_en": "OpenAI, GPT-5, Sora, Board Saga, Elon Musk, Ilya, Power & AGI",
+  "title_zh": "Sam Altman谈OpenAI宫斗、GPT-5、Sora与AGI之路",
+  "summary_zh": "这是 Sam Altman 第二次登上 Lex Fridman 播客，时间节点正值 OpenAI 董事会风波平息后不久。对话涵盖了那场震惊科技界的「宫斗」内幕、Sora 视频生成模型、GPT-5 的能力预期、7万亿美元算力计划，以及 AGI 到来的时间线与权力格局。",
+  "key_points_zh": [
+    "OpenAI 董事会风波是 Altman 职业生涯中「最痛苦的经历」，但他认为这件事发生在相对早期是幸运的，帮助 OpenAI 建立了应对未来更大挑战的韧性。",
+    "Altman 预测到本十年末，将出现让人们惊叹「这真的很了不起」的 AI 系统，算力将成为未来最珍贵的商品，甚至超越石油。",
+    "关于 Sora，他认为这是理解物理世界的重要一步，视频生成不只是娱乐工具，而是 AI 建立世界模型的证据。",
+    "他坦承 AGI 的到来将引发巨大的权力争夺，并认为这是不可避免的——谁先建成 AGI，谁就获得巨大权力，这需要全社会提前思考治理框架。",
+    "关于 Ilya Sutskever 在董事会事件中的角色，Altman 表示理解但不认同，认为 Ilya 是真正关心 AI 安全的人，两人关系复杂但相互尊重。",
+    "他对 Q* 项目的存在既不否认也不确认，但强调 OpenAI 在推理能力上的突破是真实的，GPT-5 将在多个维度上显著超越 GPT-4。"
+  ],
+  "topics_zh": ["OpenAI", "AGI", "GPT-5", "Sora", "AI治理", "算力"],
+  "notable_quotes_zh": [
+    "Altman：算力将是未来的货币，可能是世界上最珍贵的商品。",
+    "Altman：通往 AGI 的道路应该是一场巨大的权力争夺，我预期会是这样。",
+    "Lex：谁先建成 AGI 就获得巨大权力，你信任自己拥有那么大的权力吗？"
+  ],
+  "guest_intro_zh": "Sam Altman 是 OpenAI 的 CEO，该公司开发了 GPT-4、ChatGPT、Sora 等划时代 AI 产品。他曾是 Y Combinator 总裁，被认为是推动 AGI 研究最具影响力的人物之一。"
+}

@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -586,7 +600,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 <nav class="sidebar">
   <div class="sidebar-logo">
     <h1>Lex Fridman<br>知识图谱</h1>
-    <p>112 期节目 · 全文字幕</p>
+    <p>434 期节目 · 全文字幕</p>
   </div>
   
   <div class="sidebar-section">导航</div>
@@ -626,6 +640,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
   </div>
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
@@ -678,150 +694,513 @@ a:hover { color: var(--accent); text-decoration: underline; }
   <div class="quote-meta">— About Lex Fridman </div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（71 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:00:00)</span>
   </div>
-  <div class="dialogue-en">“There was truth, and there was untruth. And if you clung to the truth, even against the whole world, you were not mad.” 1984 by George Orwell is one of the most impactful books ever written. It has been widely used and misused in political discourse by all kinds of ideologues. Into that discourse, it entered terms like Big Brother, thoughtcrime, Doublethink, Newspeak, Thought Police, and Orwellia...</div>
+  <div class="dialogue-en">“There was truth, and there was untruth. And if you clung to the truth, even against the whole world, you were not mad.” 1984 by George Orwell is one of the most impactful books ever written. It has been widely used and misused in political discourse by all kinds of ideologues. Into that discourse, it entered terms like Big Brother, thoughtcrime, Doublethink, Newspeak, Thought Police, and Orwellian, strangely enough, as a synonym for the very thing that the author, Orwell, was against. It’s been translated into over 65 languages, has sold over 30 million copies, and has been banned in many countries, especially authoritarian regimes. It was banned under Stalin, and as recently as 2022 in Belarus. In this video, I’ll give a quick summary with spoilers and a few takeaways. World of 1984</div>
   <div class="dialogue-zh">“有真理，也有谎言。如果你坚持真理，即使反对整个世界，你也没有疯。”乔治·奥威尔的《1984》是有史以来最具影响力的书籍之一。它已被各种理论家在政治话语中广泛使用和误用。在该话语中，它输入了诸如“老大哥”、“思想犯罪”、“双重思想”、“新话”、“思想警察”和“奥韦利亚”等术语</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:00:55)</span>
   </div>
-  <div class="dialogue-en">I’d like to try to make it somewhat interesting to people who both have and have not read the book. Let’s see how it goes. The world in the book 1984 is a dystopian future society, a nation, maybe you can say superstate named Oceania. It’s fully controlled by a totalitarian political party called Ingsoc. It’s led by Big Brother who, as we might discuss, may or may not be a real person. He might ju...</div>
+  <div class="dialogue-en">I’d like to try to make it somewhat interesting to people who both have and have not read the book. Let’s see how it goes. The world in the book 1984 is a dystopian future society, a nation, maybe you can say superstate named Oceania. It’s fully controlled by a totalitarian political party called Ingsoc. It’s led by Big Brother who, as we might discuss, may or may not be a real person. He might just be a symbol used by the party. The party wants only to increase its power, also something we might talk about. It uses technology, telescreens, for mass surveillance. It’s creating a new language called Newspeak, which removes words from English that could lead to rebellion.</div>
   <div class="dialogue-zh">我想尝试让读过和没读过这本书的人都对它感兴趣。让我们看看进展如何。 《1984》中的世界是一个反乌托邦的未来社会，一个国家，也许你可以说是一个名为大洋洲的超级国家。它完全由一个名为 Ingsoc 的极权主义政党控制。它由老大哥领导，正如我们可能讨论的那样，他可能是也可能不是一个真实的人。他可能会</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:01:38)</span>
   </div>
-  <div class="dialogue-en">It uses Doublethink to control thought by, perhaps you could say, forcing you to hold contradictory beliefs and accept them as true. If not, the Thought Police arrest you for committing a thoughtcrime. Examples of Doublethink are “War is peace,” “Freedom is slavery,” and “Ignorance is strength.” And finally, the party constantly rewrites history. As the quote goes, “Who controls the past controls ...</div>
+  <div class="dialogue-en">It uses Doublethink to control thought by, perhaps you could say, forcing you to hold contradictory beliefs and accept them as true. If not, the Thought Police arrest you for committing a thoughtcrime. Examples of Doublethink are “War is peace,” “Freedom is slavery,” and “Ignorance is strength.” And finally, the party constantly rewrites history. As the quote goes, “Who controls the past controls the future. Who controls the present controls the past.” There are four ministries. The Ministry of Truth is responsible for propaganda and, like I said, rewriting history. The Ministry of Love is responsible for brainwashing people through torture. The Ministry of Plenty is responsible for rationing food, supplies, and goods.</div>
   <div class="dialogue-zh">也许你可以说，它利用双重思想来控制思想，迫使你持有相互矛盾的信念并接受它们为真。如果没有，思想警察就会以犯有思想罪的罪名逮捕你。双重思想的例子有“战争就是和平”、“自由就是奴役”和“无知就是力量”。最后，党不断改写历史。正如那句话所说，“谁控制了过去</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:02:27)</span>
   </div>
-  <div class="dialogue-en">And the Ministry of Peace, of course, is responsible for maintaining a constant state of war. Society is divided into three levels: the Inner Party, the Outer Party, and the Proles. The term stands for, I guess, proletariats; it’s the working class. The Inner Party’s tiny. The Outer Party’s a little bit bigger, and the majority of the people—I forget what the percentage is, maybe 80%—are the Prole...</div>
+  <div class="dialogue-en">And the Ministry of Peace, of course, is responsible for maintaining a constant state of war. Society is divided into three levels: the Inner Party, the Outer Party, and the Proles. The term stands for, I guess, proletariats; it’s the working class. The Inner Party’s tiny. The Outer Party’s a little bit bigger, and the majority of the people—I forget what the percentage is, maybe 80%—are the Proles, the working class. There are several key characters. Winston, the main character, is a low-ranking member of Ingsoc. He works at the Ministry of Truth where he rewrites history. Julia is a girl who Winston falls in love with, and she with him.</div>
   <div class="dialogue-zh">当然，和平部负责维持持续的战争状态。社会分为三个阶层：核心党、外围党、无产者。我想，这个词代表的是无产阶级。这是工人阶级。核心党很小。外围党稍微大一点，大多数人——我忘了​​比例是多少，可能是80%——是无产阶级</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:03:11)</span>
   </div>
-  <div class="dialogue-en">They have sex, and this is maybe a good place to mention that love and passionate sex are forbidden in this society. “Goodsex” I think is a term under Newspeak; it’s the kind of sex that leads to procreation, which is the only kind allowed and the only kind that’s “good.” O’Brien is another central character. He’s the member of the Inner Party that convinces Winston he’s part of the Brotherhood, w...</div>
+  <div class="dialogue-en">They have sex, and this is maybe a good place to mention that love and passionate sex are forbidden in this society. “Goodsex” I think is a term under Newspeak; it’s the kind of sex that leads to procreation, which is the only kind allowed and the only kind that’s “good.” O’Brien is another central character. He’s the member of the Inner Party that convinces Winston he’s part of the Brotherhood, which is a lie, and he eventually is the man who tortures Winston and breaks his mind, breaks his heart. Big Brother and Emmanuel Goldstein are these symbolic characters that we never actually get to meet. They may or may not exist.</div>
   <div class="dialogue-zh">他们发生性行为，这也许是一个很好的地方来提一下，爱情和激情的性行为在这个社会是被禁止的。 “Goodsex”我认为是新话下的一个术语；这是一种能够繁衍后代的性行为，是唯一被允许的性行为，也是唯一一种“好的”性行为。奥布莱恩是另一个中心人物。他是核心党的成员，让温斯顿相信他是兄弟会的一员，w</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:03:59)</span>
   </div>
-  <div class="dialogue-en">Big Brother is the head of the party Ingsoc, and Emmanuel Goldstein is the leader of the so-called Brotherhood, which is this mysterious group that lurks in the shadows and works to overthrow the party. Again, they may or may not exist. We’ll maybe talk about the importance of that in a totalitarian state. So, a few key takeaways. I’ll try to do my best—I have disparate notes that I took for mysel...</div>
+  <div class="dialogue-en">Big Brother is the head of the party Ingsoc, and Emmanuel Goldstein is the leader of the so-called Brotherhood, which is this mysterious group that lurks in the shadows and works to overthrow the party. Again, they may or may not exist. We’ll maybe talk about the importance of that in a totalitarian state. So, a few key takeaways. I’ll try to do my best—I have disparate notes that I took for myself—to integrate them together to make some cohesive thoughts. Part of the reason I wanted to do this is that while I have read 1984 many times, and many of the books on the reading list I’ve read many times, I haven’t often really concretized my thoughts about them.</div>
   <div class="dialogue-zh">老大哥是英社党的领袖，伊曼纽尔·戈尔茨坦是所谓兄弟会的领袖，这个神秘组织潜伏在暗处，致力于推翻该党。同样，它们可能存在也可能不存在。我们也许会讨论这一点在极权国家中的重要性。因此，有一些关键要点。我会尽力做到最好——我自己做了不同的笔记</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:04:52)</span>
   </div>
-  <div class="dialogue-en">I just take the journey and let the thoughts wander around in the background as I live my life. I wanted to put them on paper and maybe share them with others to see what they think my concrete takeaways are from the book, if I could try to convert them into words. So the first one for me, especially later in life as I’ve been reading this book, is that when everything else or most things that mak...</div>
+  <div class="dialogue-en">I just take the journey and let the thoughts wander around in the background as I live my life. I wanted to put them on paper and maybe share them with others to see what they think my concrete takeaways are from the book, if I could try to convert them into words. So the first one for me, especially later in life as I’ve been reading this book, is that when everything else or most things that make you human are taken away by a totalitarian state, the last thing that’s left, which is the most difficult to take away, is love. Love for other human beings, love for life itself. That’s the little flame from which hope springs. The key revolutionary act is the act of love.</div>
   <div class="dialogue-zh">我只是踏上旅程，让思绪在我的生活中徘徊。我想把它们写在纸上，也许可以与其他人分享，看看他们认为我从书中得到的具体收获是什么，如果我可以尝试将它们转换成文字的话。所以对我来说，第一个，尤其是在我读这本书的后来的生活中，是当其他一切或大多数事情</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:05:49)</span>
   </div>
-  <div class="dialogue-en">So when the ability to speak is taken away, when the ability to think rational thoughts is taken away, the last thing that’s left, and the thing that ultimately gives hope, is love. That’s a big takeaway for me. The note that Julia gives to Winston reading “I love you” is the kind of revolutionary act that leads to a society beyond the one they exist in. I think a lot of the book has an interestin...</div>
+  <div class="dialogue-en">So when the ability to speak is taken away, when the ability to think rational thoughts is taken away, the last thing that’s left, and the thing that ultimately gives hope, is love. That’s a big takeaway for me. The note that Julia gives to Winston reading “I love you” is the kind of revolutionary act that leads to a society beyond the one they exist in. I think a lot of the book has an interesting hypocrisy to it, where the main character, Winston, is almost in an animalistic way obsessed with destroying the state in rebellion and revolution. But I think love is the thing that allows you to believe in a place beyond the state, in believing that you can build something better, versus just destroying the thing you’re in.</div>
   <div class="dialogue-zh">因此，当说话的能力被剥夺，当理性思考的能力被剥夺时，最后剩下的东西，也是最终给人希望的东西，就是爱。这对我来说是一个很大的收获。朱莉娅在读“我爱你”时给温斯顿的便条是一种革命性的行为，它导致了一个超越他们所处社会的社会。我认为这本书的很多内容都感兴趣</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:06:51)</span>
   </div>
-  <div class="dialogue-en">I think you have to be careful as a revolutionary not to obsess 100% with destruction. Because beyond destruction, there could be chaos that leads to something much worse. I think love is the basic human thing that connects all of us, the messy thing that connects all of us, that allows you to build a better society after the totalitarian one is overthrown. What else did I want to say? There’s an ...</div>
+  <div class="dialogue-en">I think you have to be careful as a revolutionary not to obsess 100% with destruction. Because beyond destruction, there could be chaos that leads to something much worse. I think love is the basic human thing that connects all of us, the messy thing that connects all of us, that allows you to build a better society after the totalitarian one is overthrown. What else did I want to say? There’s an interesting tension there between love and lust. I think there’s a quote that pure love or pure lust was impossible or forbidden. “Pure” here meaning unadulterated, uncensored intensity of feeling, maybe intimacy.</div>
   <div class="dialogue-zh">我认为作为一名革命者必须小心，不要百分百沉迷于破坏。因为除了破坏之外，混乱还可能导致更糟糕的情况。我认为爱是连接我们所有人的基本人类事物，是连接我们所有人的混乱事物，它可以让你在极权主义被推翻后建立一个更好的社会。我还想说什么？有一个</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:07:44)</span>
   </div>
-  <div class="dialogue-en">And there was an interesting question raised by the book, both by Winston and Julia: what is ultimately the most powerful act of rebellion? Is it between us humans when everything is forbidden? Is it animalistic like sex? Just lust for another human? Or is it love? The kind of love you have for a romantic partner, but even love for family and love for friends. I don’t know. I think the book almost...</div>
+  <div class="dialogue-en">And there was an interesting question raised by the book, both by Winston and Julia: what is ultimately the most powerful act of rebellion? Is it between us humans when everything is forbidden? Is it animalistic like sex? Just lust for another human? Or is it love? The kind of love you have for a romantic partner, but even love for family and love for friends. I don’t know. I think the book almost claims that it is sex, but I think what the book also shows is that if sex is your manifestation of rebellion, that ultimately leads to something that doesn’t last. That ultimately leads to a focus on destruction versus building beyond the horizon when the state falls. So, some quotes from Winston on this.</div>
   <div class="dialogue-zh">温斯顿和朱莉娅在书中提出了一个有趣的问题：最终最有力的反叛行为是什么？当一切都被禁止时，我们人类之间是这样吗？是像性一样的动物性吗？只是对另一个人的欲望？还是爱？你对浪漫伴侣的爱，甚至是对家人的爱和对朋友的爱。我不知道。我觉得这本书差不多</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:08:42)</span>
   </div>
-  <div class="dialogue-en">“The more men you’ve had sex with…” Julia admitted to having sex with quite a lot of people. He says, “The more men you’ve had sex with, the more I love you. I hate purity. I hate virtue. I want everyone to be corrupt to the bone.” This kind of rubbed me the wrong way because, again, this seems to be obsessed with the hatred towards the state versus a longing and a hope—which I think hope is reall...</div>
+  <div class="dialogue-en">“The more men you’ve had sex with…” Julia admitted to having sex with quite a lot of people. He says, “The more men you’ve had sex with, the more I love you. I hate purity. I hate virtue. I want everyone to be corrupt to the bone.” This kind of rubbed me the wrong way because, again, this seems to be obsessed with the hatred towards the state versus a longing and a hope—which I think hope is really important here—a hope for a better future beyond the state. Again, another quote from the book: “Their embrace had been a battle, the climax a victory. It was a blow struck against the Party. It was a political act.” So there, again, I think sex is seen as a political act of rebellion. I think that’s not the deeply human thing here.</div>
   <div class="dialogue-zh">“你和越多的男人发生过性关系……”朱莉娅承认和很多人发生过性关系。他说：“你和越多的男人发生性关系，我就越爱你。我讨厌纯洁。我讨厌美德。我希望每个人都腐败到骨子里。”这让我感到不舒服，因为这似乎又痴迷于对国家的仇恨，而不是渴望和希望——我认为希望是真实的</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:09:31)</span>
   </div>
-  <div class="dialogue-en">The deeply human thing is, again, the act of love. It’s a source of hope; it’s the catalyst for building a better future beyond the revolution. An interesting side note here—and there could be a million interesting side notes, and I’m desperately trying not to go on a million tangents, to hold myself together and stay focused—is on family. There’s all kinds of love, and I think family love is a re...</div>
+  <div class="dialogue-en">The deeply human thing is, again, the act of love. It’s a source of hope; it’s the catalyst for building a better future beyond the revolution. An interesting side note here—and there could be a million interesting side notes, and I’m desperately trying not to go on a million tangents, to hold myself together and stay focused—is on family. There’s all kinds of love, and I think family love is a really powerful bond that connects us, and that’s one of the things that totalitarian states really go after.</div>
   <div class="dialogue-zh">人类最深层次的东西就是爱的行为。这是希望的源泉；它是在革命之外建设更美好未来的催化剂。这里有一个有趣的旁注——可能有一百万个有趣的旁注，我拼命地试图不要继续一百万个切线，让自己保持冷静并保持专注——是关于家庭。爱有很多种，我认为亲情是一种爱</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:10:06)</span>
   </div>
-  <div class="dialogue-en">And I should mention, I’m loosely using the terms authoritarian and totalitarian here. To me, authoritarian means there’s a government with complete centralized control of political affairs. A totalitarian state is beyond that; it is complete control of not just politics but also social, economic, everything. Nazi Germany is an example of that, I think, where there’s just complete control of every...</div>
+  <div class="dialogue-en">And I should mention, I’m loosely using the terms authoritarian and totalitarian here. To me, authoritarian means there’s a government with complete centralized control of political affairs. A totalitarian state is beyond that; it is complete control of not just politics but also social, economic, everything. Nazi Germany is an example of that, I think, where there’s just complete control of every single thing, from the war effort to social interactions, the rules that govern social interaction, the press, all that kind of stuff.</div>
   <div class="dialogue-zh">我应该提到，我在这里宽松地使用了威权主义和极权主义这两个术语。对我来说，独裁意味着有一个政府对政治事务完全集中控制。极权国家远不止于此。它不仅完全控制政治，而且还完全控制社会、经济等一切。我认为纳粹德国就是一个例子，那里的一切都被完全控制。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:10:57)</span>
   </div>
-  <div class="dialogue-en">So I think this book is more about, at least in my definition of the term, totalitarianism. Anyway, as I was saying about family, I think the way they destroy family is, one, of course with your romantic partner by forbidding passion—passionate sex, but really just passion and longing for another human being in that romantic way. And they also really reward and encourage children at a young age; t...</div>
+  <div class="dialogue-en">So I think this book is more about, at least in my definition of the term, totalitarianism. Anyway, as I was saying about family, I think the way they destroy family is, one, of course with your romantic partner by forbidding passion—passionate sex, but really just passion and longing for another human being in that romantic way. And they also really reward and encourage children at a young age; they indoctrinate them to turn their parents in for thoughtcrime, whether real or not, which of course is a silly notion because there’s no nature of truth. You can just accuse anyone of anything and they’re guilty just by existing. So that’s a way to attack the family.</div>
   <div class="dialogue-zh">所以我认为这本书更多的是关于极权主义，至少在我对这个词的定义上是如此。不管怎样，正如我所说的关于家庭的那样，我认为他们破坏家庭的方式当然是通过禁止激情——激情的性爱——来破坏你的浪漫伴侣，但实际上只是以那种浪漫的方式对另一个人的激情和渴望。他们也确实在孩子很小的时候奖励和鼓励他们； t</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:11:43)</span>
   </div>
-  <div class="dialogue-en">And I should also have mentioned on the topic of love that I think the goal of the Party, the final destination as described by O’Brien through the process of torture, is to break your mind, heart, and soul completely so that the only love you can have—and it could be felt as a pure love—is for Big Brother. This is the kind of thing you see in North Korea, where the only love you’re allowed to hav...</div>
+  <div class="dialogue-en">And I should also have mentioned on the topic of love that I think the goal of the Party, the final destination as described by O’Brien through the process of torture, is to break your mind, heart, and soul completely so that the only love you can have—and it could be felt as a pure love—is for Big Brother. This is the kind of thing you see in North Korea, where the only love you’re allowed to have, the remaining inklings of feeling that might still exist in you, you can channel only not towards family, romantic partners, or friends, but towards this leader, this godlike messianic figure. In this case, one who may or may not exist.</div>
   <div class="dialogue-zh">我还应该在爱的话题上提到，我认为党的目标，正如奥布莱恩所描述的通过酷刑过程的最终目的地，是彻底打破你的思想、心灵和灵魂，这样你就能拥有的唯一的爱——而且可以被感觉到是一种纯粹的爱——就是对老大哥的爱。这就是你在朝鲜看到的那种事情，在那里你唯一可以拥有的爱</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:12:32)</span>
   </div>
-  <div class="dialogue-en">In all cases, that figure, while there is a human associated with it, is really much bigger than the human, and that’s the only love you’re allowed to have. So the other takeaway I have is on the topic of hate. I think all humans have the capacity, almost an animalistic craving, for hate of the “other,” the enemy. Whether it’s individuals like Emmanuel Goldstein or nations like Eurasia and East As...</div>
+  <div class="dialogue-en">In all cases, that figure, while there is a human associated with it, is really much bigger than the human, and that’s the only love you’re allowed to have. So the other takeaway I have is on the topic of hate. I think all humans have the capacity, almost an animalistic craving, for hate of the “other,” the enemy. Whether it’s individuals like Emmanuel Goldstein or nations like Eurasia and East Asia—which are the two other superstates described in this book—they’re constantly at war with each other. Again, the fascinating thing about the way this book is written is you don’t know if Eurasia or East Asia even exist. You really don’t know what is true beyond the local interactions of the main character.</div>
   <div class="dialogue-zh">在所有情况下，这个人物虽然有一个人类与之相关，但实际上比人类大得多，这是你被允许拥有的唯一的爱。所以我的另一个收获是关于仇恨的话题。我认为所有人类都有能力，几乎是一种动物性的渴望，憎恨“他者”，即敌人。无论是像伊曼纽尔·戈尔茨坦这样的个人，还是像欧亚大陆和东亚这样的国家</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:13:28)</span>
   </div>
-  <div class="dialogue-en">And that, I think, is the point. When you don’t really know, there’s no steady footing on which to construct a worldview from which you can have hope for a better future. This animalistic craving for hate, especially when we’re in crowds, is most powerfully illustrated in the “Two Minutes of Hate” practiced by that society. The quote is, “The horrible thing about the Two Minutes of Hate was not th...</div>
+  <div class="dialogue-en">And that, I think, is the point. When you don’t really know, there’s no steady footing on which to construct a worldview from which you can have hope for a better future. This animalistic craving for hate, especially when we’re in crowds, is most powerfully illustrated in the “Two Minutes of Hate” practiced by that society. The quote is, “The horrible thing about the Two Minutes of Hate was not that one was obliged to act a part, but that it was impossible to avoid joining in. Within thirty seconds any pretence was always unnecessary.</div>
   <div class="dialogue-zh">我认为这就是重点。当你不真正了解时，就没有稳固的基础来构建你对更美好未来抱有希望的世界观。这种对仇恨的兽性渴望，尤其是当我们身处人群中时，在该社会实行的“两分钟仇恨”中得到了最有力的体现。引用是，“两分钟仇恨的可怕之处不在于</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:14:13)</span>
   </div>
-  <div class="dialogue-en">A hideous ecstasy of fear and vindictiveness, a desire to kill, to torture, to smash faces in with a sledge-hammer, seemed to flow through the whole group of people like an electric current, turning one even against one’s will into a grimacing, screaming lunatic. And yet the rage that one felt was an abstract, undirected emotion which could be switched from one object to another like the flame of ...</div>
+  <div class="dialogue-en">A hideous ecstasy of fear and vindictiveness, a desire to kill, to torture, to smash faces in with a sledge-hammer, seemed to flow through the whole group of people like an electric current, turning one even against one’s will into a grimacing, screaming lunatic. And yet the rage that one felt was an abstract, undirected emotion which could be switched from one object to another like the flame of a blowlamp.” That’s the point: you get the crowd together, and you get them to hate Goldstein or Eurasia or East Asia. You get them to hate anything. And that feeling, that drug, that mass hypnosis, can be directed by the state in any direction.</div>
   <div class="dialogue-zh">一种可怕的恐惧和报复的狂喜，一种杀人的欲望，一种折磨的欲望，一种用大锤把脸砸碎的欲望，似乎像电流一样流遍了整个人群，让一个人甚至不情愿地变成一个鬼脸、尖叫的疯子。然而，人们感受到的愤怒是一种抽象的、无方向的情感，它可以像火焰一样从一个物体切换到另一个物体。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:15:02)</span>
   </div>
-  <div class="dialogue-en">And because you have complete control of history, you can direct it on a day-by-day basis towards any target. As long as the hate is catalyzed through these kinds of rituals, it can overpower the individualistic feeling of love we have for each other. So that hate is a more animalistic desire. I don’t know what to make of it. And of course, it’s also important to say that this book was intended or...</div>
+  <div class="dialogue-en">And because you have complete control of history, you can direct it on a day-by-day basis towards any target. As long as the hate is catalyzed through these kinds of rituals, it can overpower the individualistic feeling of love we have for each other. So that hate is a more animalistic desire. I don’t know what to make of it. And of course, it’s also important to say that this book was intended originally by Orwell as a satire, although a satire that has quite a lot of torture at the end and doesn’t seem to have much humor. But I think if you read it as a satire, that’s the best way to understand its relevance in our society today.</div>
   <div class="dialogue-zh">而且由于您可以完全控制历史记录，因此您可以每天将其引导至任何目标。只要通过这些仪式催化仇恨，它就可以压倒我们对彼此的个人主义爱的感觉。因此，仇恨是一种更加兽性的欲望。我不知道该怎么办。当然，同样重要的是要说这本书的目的或目的</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:15:53)</span>
   </div>
-  <div class="dialogue-en">Because a lot of things, like the Two Minutes of Hate, are almost a caricature of what hate looks like in a mass gathering. But if you take it as a caricature, it can reveal some of the elements that already exist in human nature that we should be very cautious about. It reveals the very thing that, if not monitored by ourselves, can result in a slippery slope that leads to tribalism, the destruct...</div>
+  <div class="dialogue-en">Because a lot of things, like the Two Minutes of Hate, are almost a caricature of what hate looks like in a mass gathering. But if you take it as a caricature, it can reveal some of the elements that already exist in human nature that we should be very cautious about. It reveals the very thing that, if not monitored by ourselves, can result in a slippery slope that leads to tribalism, the destruction of other groups, and then control of the collective intelligence of our species through a totalitarian state. I think there’s elements of this under illustration in social media today, though I don’t want to overstate it.</div>
   <div class="dialogue-zh">因为很多事情，比如《两分钟仇恨》，几乎都是大规模集会中仇恨的讽刺画。但如果你把它当作一幅漫画，它可以揭示人性中已经存在的一些我们应该非常谨慎的元素。它揭示了这样一个事实，如果我们不加以监控，可能会导致滑坡，导致部落主义、破坏</div>
 </div>
-    <a href="https://lexfridman.com/book-1984-george-orwell-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:16:44)</span>
+  </div>
+  <div class="dialogue-en">I think just like comparing things to Hitler, comparing things to 1984 is a reach in most cases. But social media does reveal this kind of mass hysteria, this capacity of humans to be outraged based on tribalism. So we have to understand it. We have to resist giving into it on the individual level. And I do believe we have the responsibility to create technology that helps us resist it, that incentivizes us not to be cruel to each other just because the people in whatever tribe we define ourselves in are being cruel to a particular person or group. Another takeaway I have is about power. Ingsoc, the totalitarian state, wants only one thing, and that is power. Power is both the means and the end. Absolute power.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:17:35)</span>
+  </div>
+  <div class="dialogue-en">As O’Brien describes in the torture part of the book: “The real power, the power we have to fight for night and day, is not power over things, but power over men. Power is inflicting pain and humiliation. Power is in tearing human minds to pieces and putting them together again in new shapes of your own choosing. Power is not a means, it is an end. One does not establish a dictatorship in order to safeguard a revolution; one makes the revolution in order to establish a dictatorship. The object of persecution is persecution. The object of torture is torture. The object of power is power.” This, of course, is another aspect of human nature: the will to power and the tendency of that power to corrupt.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:18:36)</span>
+  </div>
+  <div class="dialogue-en">O’Brien says also, “The weariness of the cell is the vigour of the organism.” Through the torture and breaking of the individual, the individual doesn’t matter. What matters is the organism. There’s been a lot of brilliant comments throughout social media and on Reddit—I just want to highlight something about this because I had the exact same feeling as I was rereading it. There’s a comment from a Reddit user whose name is BraveSky6764.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:19:13)</span>
+  </div>
+  <div class="dialogue-en">He said the conversation between Lex and Michael Levin, who is a brilliant biologist and engineer, came to mind when O’Brien made an analogy to an organism which survives even as the individual cells pass away, and the great purges are analogous to the cutting of a fingernail. If you see society as an organism—which I think is the way a totalitarian state sees it—then the destruction of a large percentage of that society, the murder, the torture, and all kinds of atrocities and genocide become “justifiable” as long as the organism flourishes. That’s how you get to the ideas Stalin had: it’s okay to break a few eggs to make an omelet. This devaluation of a human being as having fundamental importance in a society…</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:20:23)</span>
+  </div>
+  <div class="dialogue-en">is a slippery slope into atrocities. It’s not just deeply unethical from our understanding of morals and ethics; it is also very unproductive. It destroys the human spirit, and the human spirit is essential for building a great society of constant progress. I think that’s also one of the other messages of the book, is about utopia—that totalitarianism results when you chase perfection, when you present this idea of utopia. There is no utopia; there is no perfect society. I think, at least for me, that’s the takeaway. I think the optimal state of being for an individual and for a state is constant change and constant turnover.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:21:09)</span>
+  </div>
+  <div class="dialogue-en">In the case of a state, it’s a constant turnover of leaders and ideas, always hopefully making progress towards a better world. But it’s always going to be messy. Perfection only exists in an oppressive state. Perfection only exists when you remove the basic humanity of the individuals that make up that state, when you destroy the human spirit or suppress all freedoms. Freedom is going to be messy and chaotic, but that freedom, ultimately, in the long arc of history, is going to create progress.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:21:48)</span>
+  </div>
+  <div class="dialogue-en">So yes, as the Redditor BraveSky6764 says, that does give you a perspective of a biological system made of living organisms. Each one of us is made up of living organisms, and we take for granted all the “atrocities” happening there; we don’t seem to give a damn. I think that’s a good metaphor. If you want to put yourself in the mind of the Inner Party, of Big Brother, or the people in power, I think most, if not all of them, see themselves as doing good for society. They are able to justify things the way we justify the death of different cells in our body.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:22:35)</span>
+  </div>
+  <div class="dialogue-en">You don’t even think of them as worthy of consideration. You don’t think of them as living beings having the same value as you. That’s one of the really powerful ideas at the founding of the United States: that all men are created equal, that there’s an equal worth to a human being no matter who they are. That idea, as flawed as its implementations have been, is a really powerful and non-trivial idea, and it resists the drug of totalitarianism and power. I do believe that on the topic of power and politics, 1984 has been misused by political ideologues.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:23:23)</span>
+  </div>
+  <div class="dialogue-en">I’ve seen it, for example, when conservatives in the United States have used 1984 to call left-wing policies “Orwellian.” I think that’s an overstatement, of course used for dramatic effect, but it should at least be said that Orwell was a democratic socialist. 1984 is not a criticism of socialism; it’s a criticism of totalitarianism. I think the point is a warning that all political ideologies can succumb to the allure of power and be corrupted by it. People on both the left and the right in the United States can be corrupted by power. This one-way criticism of policies as Orwellian is a convenient shorthand, but the reality is all politicians are capable of…</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:24:28)</span>
+  </div>
+  <div class="dialogue-en">creating an Orwellian world. And I think one of the things that is highlighted in the book very well is the hypocrisy of Winston. When O’Brien asks Winston what he’s willing to do to overthrow the Party, Winston admits he is willing to commit atrocities. He’s willing to do evil unto children, to commit murder, anything. This is a powerful illustration that both the totalitarian state and a blind, immoral rebellion against it can be evil. This is where I return to love as the thing that carries hope for a world beyond this battle for freedom. You have to have that.</div>
+  
+</div>
+<div id="dialogue-more" style="display:none">
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:25:23)</span>
+  </div>
+  <div class="dialogue-en">Otherwise, the Orwellian state and the resistance to an Orwellian state can both destroy basic human rights and freedoms. I think in the character of Winston, that’s illustrated well. And I should also mention that there’s interesting writing… Now, I’m not obviously a scholar of Orwell, and there’s a lot of books been written and I should probably recommend them somewhere. There’s just great books written on 1984, on Orwell, on the historical context in which he was operating and all that kind of stuff. But as far as I see, Orwell also with 1984 and himself politically, he was not espousing the complete opposite of totalitarianism.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:26:06)</span>
+  </div>
+  <div class="dialogue-en">There is, again, democratic socialism—that there is value to the connection between human beings, that you have to lean on each other, help each other, that society is fundamentally more a cohesive collective than a completely disparate set of sovereign individuals. It’s both. And I think he was torn about that idea, because in order to resist a totalitarian state you have to fight for those basic individual freedoms. But at the same time, a well-functioning society allows for that freedom to manifest as collaboration. And so that’s the difficult challenge there.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:26:52)</span>
+  </div>
+  <div class="dialogue-en">Again, that’s why he was a democratic socialist and the criticism of the book was against totalitarianism, of a centralized state that controls speech, thought, the press, and all the basic human freedoms. Controls truth. And I think a lot of people would ask the question, and I hear this tossed around: “Do we live in the world of 1984 today?” And I think that’s used as a shorthand to sort of criticize different policies and different governments. I generally don’t like the use of that kind of language because it’s basically crying wolf. If everything is 1984, if everybody is Hitler, then you’re not going to…</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:27:35)</span>
+  </div>
+  <div class="dialogue-en">There’s no way to properly normalize the discussion of the lesser of two evils, which is ultimately what democracy is about. You have a collection of things you’re picking. They all kind of suck, but you want to pick the one that sucks the least. That’s human society, you know? That’s human nature. It’s messy. And so I don’t think we live in a 1984 state, but there’s a lot of elements that this book reveals about human nature and about the operation of a totalitarian state that we should be on the watch for. So surveillance, a state of doublethink, of controlling language, of being in a constant state of war as a way to control the population and the flow of resources.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:28:24)</span>
+  </div>
+  <div class="dialogue-en">All those things have elements of almost useful tools for the establishment of complete control of a populace. And the moment you notice those elements, it’s our job to resist those elements. So I think the point is we have to be vigilant to the slippery slope of the will to power in centralized institutions. Another thing I want to mention is that I think a lot of people rightfully compliment Orwell for predicting some of the elements of future society, especially with technological capabilities, for example, telescreens used by the state to control the population. Maybe I can make a few comments on technology in general.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:29:10)</span>
+  </div>
+  <div class="dialogue-en">People who criticize technology will often use 1984 as an example that technology is a tool for a totalitarian state. It’s a way they can achieve full control, and we should be extremely cautious of it. And I think there’s a kernel of truth to that. But it’s not obvious to me that on the whole, technology is a tool for totalitarian control. I think it is also a tool for freedom. The internet is an incredible tool for freedom. And so of course, we have to fight for that freedom, but I believe in general, the greater… Let’s just take the internet broadly as an example, and there’s a lot of sub-elements of that, and like a more platonic sense of what the internet is, which is digital interconnectivity.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:30:01)</span>
+  </div>
+  <div class="dialogue-en">We have to fight for freedom, but in general, the greater reach and access that the internet has, the more powerful the resistance to totalitarianism. Technology is a double-edged sword. It provides the tools for oppression and the tools for the ongoing fight for freedom. And as long as the will to fight arises in the human heart, technology, I think, helps humanity win. And of course, there’s been a lot of discussion about free speech and the freedom of thought, and there’s a lot to be said there that’s much more nuanced than the book 1984 provides. I think 1984 just shows the end, horrible conclusion of complete totalitarian control over speech, over thought, over feeling, over everything. But in general, my view of it is it’s a kind of inspiration to…</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:30:57)</span>
+  </div>
+  <div class="dialogue-en">In order to prevent ourselves from slipping into an authoritarian or a totalitarian state, Orwellian type of dystopias—to avoid them, we have to value critical and independent thought. I think thought first, before speech. Just thought. I think you have to learn to think deeply from first principles, independent of whatever tribe you find yourselves in. Independent of government, independent of groups, independent of the people around you, the people you love, that love you. You have to learn, at least sometimes, to think independently. Now, this is the Nietzsche, “If you gaze long into the abyss, the abyss gazes into you.” If you think too independently, it can break your mind. I mean, we are social creatures. We need that connection.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:31:45)</span>
+  </div>
+  <div class="dialogue-en">But I think it’s like with Tom Waits: “I like my town with a little drop of poison.” I think of truly, deeply independent thought as a little drop of poison that’s necessary for your mind. Most of your life you live, you kind of assume most things around you are true, and that’s very useful. We stand on the shoulders of giants. But you, on a regular occasion, have to question. Question your assumptions, question your biases, question everything. Question the things you’ve taken for granted. Question what everybody’s telling you. But not too much. It’s a tricky balance, but the act of rebellion against a totalitarian state, against the slippery slope into that state, is that independent thought. And of course, speech is a manifestation of that thought.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:32:28)</span>
+  </div>
+  <div class="dialogue-en">So we have to avoid echo chambers in both thought and speech. Like I said, you have to question your assumptions, challenge your biases. I think that’s the way out. Or maybe that’s a resistance mechanism to slipping into authoritarianism. And maybe I have a few more things to say about the latter part of the book, the part where there’s torture—where there’s Room 101 that has the thing you fear the most, which is different for all of us, and for Winston, that’s rats. It makes you wonder what that thing is for each of us. I left a mental note for myself to do more research into the historical context, the psychology, the neuroscience, the effectiveness of torture. I think there’s probably a lot of really good work.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:33:22)</span>
+  </div>
+  <div class="dialogue-en">I had a brief conversation with Andrew Huberman on the phone about this topic. Andrew Huberman, the brilliant Andrew Huberman, host of the Huberman Lab podcast that you should listen to. And he mentioned to me that there’s a bunch of papers on these topics. This has been studied, sort of the carrot and the stick of the ability of incentives and disincentives to control the perception and the mental state of people and animals. And he mentioned to me a few folks that I could talk to on a podcast about this topic, and a few books. So, I’ll definitely look into this more. I think 1984 uses torture as a philosophical description, as a caricature of the operation of a totalitarian state.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:34:08)</span>
+  </div>
+  <div class="dialogue-en">But at the same time, a lot of those elements were all done under Stalin in the Soviet Union, so it’s not like it’s very different or very far from reality. It’s very, very real. The question is about the actual effect it has on the human mind, which I really have to think because torture in this case breaks Winston. In fact, I’d like to believe that many people, in the most fundamental of ways, can’t be broken in this way. I’ve seen science… again, without extensively reading, so please correct me if I’m wrong. But I’ve seen science that shows that torture, for the purpose of intelligence gathering, is not effective.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:34:55)</span>
+  </div>
+  <div class="dialogue-en">It’s not effective to get accurate information because people will tell you anything, really, to stop the torture, stop the physical and the mental and the emotional suffering. But I think this book is about the use of torture to completely break your ability to think and to perceive the world. One of the things I talked to Andrew about is whether it’s possible to control perception through these kinds of things. And it seems that there is literature that shows it’s possible to literally change your perception of the world. Like in this case, in 1984, it’s when you’re holding up four fingers, can you actually make the person believe that you’re holding up five fingers?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:35:39)</span>
+  </div>
+  <div class="dialogue-en">Not because of some weird delusion or just because your vision is blurry, but you literally, when you look, are holding four fingers and what you see is five fingers. Not because your vision is poor. No, your visual cortex, the way you’re processing that information, something about the processing changes completely your perception. If I tell you there’s a straight line, can, through incentive or disincentive, you start seeing a crooked line or something like that? Anyway, I think that there’s literature that supports that, which is, by the way, terrifying. But the thing I’d like to research more is if that can be long-lasting. I just don’t believe it can be.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:36:24)</span>
+  </div>
+  <div class="dialogue-en">If you’re not pushed to your death, yes, maybe perception, maybe your willingness to think, but your actual ability to think independent thoughts? Maybe you’re terrified. I understand if you’re terrified of any more thinking that leads to rebellious thoughts. Like the book mentions, the idea of face crime, where you can reveal your thoughts, the inner workings of your mind, by the subtleties of your expressions in your face. And I think also, like O’Brien says, “If you want to keep a secret, you must also hide it from yourself.” So I can understand that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:37:11)</span>
+  </div>
+  <div class="dialogue-en">And maybe that is the basic mechanism that torture leads to: that your body, your mind learns to hide the truth from yourself. Like you don’t even allow yourself to think it because you know if you think it, it’s going to lead to face crime and thought crime, and that’s going to lead to more torture. That’s possible. But I just can’t imagine the capacity for love in the human heart to be extinguished through torture, finally extinguished. Temporarily, yes, but finally, irrecoverably, which I think is the basic claim of the book. That they break… so because through the worst of the torture Winston gives up Julia, the object of his love, he says that some things like that—the fact that you said, “Torture her, not me.”</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:38:15)</span>
+  </div>
+  <div class="dialogue-en">“Anything to make this stop,” the fact that you said that, the fact that you thought that, is a statement, is a thought you can’t walk back to yourself. So it’s irrecoverable. You just destroyed your faith in love? I don’t think so. I think it’s possible we have to remember that this is one particular character. This is one particular story. I think there’s a lot of people in which the capacity to love cannot be broken, no matter the torture. But that’s an interesting scientific question, but it’s also a human question. I think Man’s Search for Meaning—there’s a lot of books that explore those kinds of questions. In the worst of conditions that humans had to suffer through, what still persists? What is the source of meaning?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:39:03)</span>
+  </div>
+  <div class="dialogue-en">And I just think that the flame of love persists through atrocities, through torture, through suffering, through all of it. But the claim of the book is that yes, a totalitarian state can use torture to break even that, even that which leads to the only love you’re allowed to have, which is the love for Big Brother. So I think, practically speaking, from the Party’s perspective, I think the point of O’Brien’s torture of Winston was to suffocate the hope in his mind and heart, so there is no hope, by completely destroying the knowledge of what is and isn’t true, so being betrayed.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:39:53)</span>
+  </div>
+  <div class="dialogue-en">And this kind of Goldstein’s book about the society, not knowing if that’s true, not knowing anything about Julia, is basically having no emotional or intellectual ground to stand on. It’s very difficult to have a sense of where you are. To have hope, you have to have a sense of where you are and where things could be. And then you also betray yourself. To force you to be a hypocrite on your own deepest feelings of love, I think basically puts you in a place where there’s no hope, there’s no point. It’s apathy. It’s nihilism. And there, a hardworking member of society that is nihilistic is probably what the Party wants, because that human will not rebel.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:40:42)</span>
+  </div>
+  <div class="dialogue-en">But on the point of hope, I should mention that there’s a kind of long-running theory that since the appendix… The appendix is about the details of Newspeak, the language that the Party is creating and enforcing. Because that appendix was written in the past tense, and it’s talking about Newspeak in the past tense and it’s written in English, sort of non-Newspeak, that means the Party and Newspeak and all of its elements that we see in the story are in the past. That the world from which the book is created has escaped that. And that’s a message of hope. That whatever the rebellion against the Party—whether it’s passionate lust and sex, whether it’s love, whether it’s seeking truth in a world full of lies—whatever it is, there’s a way out.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:41:40)</span>
+  </div>
+  <div class="dialogue-en">Again, to me, the way out is love. But that’s a hopeful message in this dystopian novel, that even these perfectly executed totalitarian states will fall. I took a few random notes here that maybe I’ll comment on. I wrote a quote: “The masses cannot rebel until they become conscious.” That might be either a Winston observation or an O’Brien statement. I’m not sure. But yeah, so you have to think, 80% plus are proles of the working class. They have the power if they want it, but they don’t want it. They don’t want to take it. That’s the whole point of the totalitarian state: to break your will for freedom, your desire for freedom, break your ability to know that you’re not free.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:42:28)</span>
+  </div>
+  <div class="dialogue-en">And that’s where all of it—the changing of history, the doublethink, the thought crime—all of that comes into play: the torture and the Ministry of Love. All of that is about preventing the populace from becoming conscious. And again, as per the cells discussion earlier, I wrote down the O’Brien quote: “The death of the individual is not death. The Party is immortal.” And this is just an interesting observation about the operation of a totalitarian state, that it’s the idea and a kind of amorphous symbol of the messianic figure in Big Brother is all you need for the Party to persist. That person doesn’t actually have to exist. Any one individual doesn’t have to exist.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:43:18)</span>
+  </div>
+  <div class="dialogue-en">It’s just the division of society into high, middle, and low, and the oppression of the low by the high by the centralized Inner Party. That’s all you need, and the individual does not matter in that. And again, the way to fight that is to fight for individual freedoms. An interesting side note is just a quote I wrote down from Julia, I think: “If you keep the small rules, you can break the big ones.” And so she, in the book, is somebody that follows to the T all the rules of the Party. She attends all the committee meetings and all that kind of stuff, and just is like the model citizen from the perspective of the Party. And so that allows her to break the big rules, like having passionate sex with people—the really…</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:44:11)</span>
+  </div>
+  <div class="dialogue-en">or falling in love, all the forbidden things. And I think that’s actually a good way to exist in the world. I think for a lot of us, there’s probably a bunch of things that bother us in the local world around us, in the bigger world, and I think you have to pick your battles. You have to not get lost in the muck of small battles if you want to have at least one or a few big victories in your life that make for a better world. I think, at least in my sense, it’s easy to get distracted by the little things that bother you in life.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:44:49)</span>
+  </div>
+  <div class="dialogue-en">And I think staying focused on the big things, again, picking your battles, and staying with that for as long as possible, working your ass off to solve one problem for as long as possible, not giving up against impossible odds, against all the criticism—that’s the way to solve those big problems. And of course, that’s not what Julia is talking about. But in a sense, she is also, because in that particular case, a totalitarian state is the problem. And the way to rebel is to plant that seed of rebellion in each of the people she has sex with: that we are human, that we have lust for each other, that we have the ability to love each other, and that is the necessary act of rebellion there.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:45:36)</span>
+  </div>
+  <div class="dialogue-en">That is the big leap for her, at least in that kind of society. I should also mention that there’s a lot of interpretations of the different small and big things in this book. So it’s very possible in the case of Julia that Winston was played. He was set up with Julia. He was set up to feel all those things. He was set up to have that little secret cove where he can write on his desk in the diary and dream of rebelling against the state, dreaming of the Brotherhood. It’s unclear to me why an oppressive state would want people to have that little journey of desiring freedom in all its manifestations. I’m not sure.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:46:26)</span>
+  </div>
+  <div class="dialogue-en">But maybe O’Brien’s statement that the purpose of torture is torture holds some wisdom: that to attain absolute power, you also have to have a willingness and a mechanism to attain absolute suffering in the populace. And maybe this is a way to maximize suffering: to give them hope before you crush it. Again, the way out to me and the takeaway from this book—the way out is love. Perhaps this is a good place to also mention a little bit of a fun little controversy that evolved over Twitter. So I posted a reading list quickly before heading off to a New Year’s party of books that I hope to read in 2023, and these are based on books that I asked people to vote on; these are many of the ones they selected. Reading list controversy</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:47:42)</span>
+  </div>
+  <div class="dialogue-en">And they happened to be many of the books I’ve read many times throughout my life and really enjoyed, and they were like old friends that I love visiting and revisiting. Every time I read them, I get something new and they just read differently throughout life. You know, the way in my teens when I read The Stranger by Camus is very different than it was in my 20s and different in my 30s. I’ll say my favorite book now by Camus is probably The Plague, and all of that has evolved. With Dostoevsky, I read The Idiot several times. I read The Brothers Karamazov both in English and Russian, and Notes from Underground. I mean, I love Dostoevsky. And a lot of these books are just…</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:48:24)</span>
+  </div>
+  <div class="dialogue-en">Yes, they are classics, but they’re also deeply profound and they move me on an intellectual level, but also just as a human being. They’re like travel companions. They’re like old friends. Old dead friends. So yeah, I wanted to celebrate my love for books. And it was very strange to me that—and if I’m just being honest for a second, it was kind of painful that some prominent figures that I respect were kind of cruel about the list. They responded and they mocked it and all that kind of stuff, basically taking the worst possible interpretation. I have to be honest and say it wasn’t fun, because it was just a silly kid—me—kind of in a joyful New Year’s mood, sharing with the world books I love.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:49:32)</span>
+  </div>
+  <div class="dialogue-en">And I think what was happening—and this seems to be happening a bit more—is there’s a bunch of people that are just almost waiting or hoping that I fail, or maybe that I’m some kind of bad human being. They’re looking, they’re trying to discover things about me that reveal that I’m a bad human being, and maybe somehow this reading list reveals that. I don’t know. So, one criticism was that everybody read these books in school, and they’re basic. I think my response to that criticism is: no. First of all, most people have not read them in school; maybe they read CliffNotes. And they’re not basic; they’re deeply profound, some of the greatest words ever written.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:50:26)</span>
+  </div>
+  <div class="dialogue-en">But also, I don’t think I’ve ever gotten a lot from books I was forced to read in school when I had to read them for an assignment. Some of these books I think I read in school, but most of them not. It’s only when I read them outside of school on my own volition that I really gained a lot from it, and especially throughout my life at regular times—as a teenager, in my 20s, and in my 30s. So, no. These books are profound and deserve returning to. Like I said, they are old friends that give me a lot of meaning every time I revisit the ideas, and they give me a new perspective on life. Another criticism was very nitpicky. The list was put together really quickly, and the goal—I like setting tough goals.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:51:14)</span>
+  </div>
+  <div class="dialogue-en">The goal was to read a book a week. And, you know, on one week I had The Little Prince followed by The Brothers Karamazov. And people criticized that: “How can you possibly read The Brothers Karamazov in one week?” Maybe I won’t. Maybe I’ll fail miserably. But I love trying. But that wasn’t actually the goal. I should’ve said I intend to finish reading it by the end of that week. So, you start earlier because The Little Prince takes an hour or two to read. And then for The Brothers Karamazov, I could have the two weeks. It should take about 30, 40, or 50 hours to read it. That said, friends, I’ve read it already in English and in Russian.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:51:59)</span>
+  </div>
+  <div class="dialogue-en">I’m interviewing the world-famous, amazing translators of The Brothers Karamazov, of Dostoevsky, and of Tolstoy—Richard Pevear and Larissa Volokhonsky—probably across multiple days. So, this book means a lot to me. I’m not somebody just kind of rolling in, “What are the cool kids reading these days?” These books have been lifelong companions to me. And the fact that people just want to stomp on that—and a large number of people did, people I respect—yeah, I’d be lying if I said it didn’t suck a bit. Anyway, the love for reading persists. I have to say, after that, I was very hesitant to even make this particular video on Orwell, on 1984. And I’m not sure I want to be public with my reading after this.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:52:59)</span>
+  </div>
+  <div class="dialogue-en">And I know a lot of people will say, “No, we’re here with you.” They’re very supportive, and I love you. I mean, I meet so many incredible people, but the reality is it just does suck to be vulnerable and share something with the world and receive that kind of mockery at scale. So I will definitely—I will not be affected or broken by any of that kind of stuff for something that’s actually meaningful, like the conversations—some of the very difficult conversations I’m going to do. But for a silly side hobby thing of reading that I do throughout my life to be a source of mockery, I’m just going to do that privately. So, I’m a little torn on that, and I’ll try to figure out a way.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:53:41)</span>
+  </div>
+  <div class="dialogue-en">Also, I should say that that list, like a lot of things, is kind of aspirational because if I take a job at a tech company, or if I start a tech company, or if I have to travel for extremely difficult conversations and really have to prepare for them—all that kind of stuff is going to affect my ability to both read and enjoy reading, which I think is a prerequisite for this kind of reading. But in general, what I do is I read about one hour a day on Kindle—on the sort of physical device, in my eyes. And depending on the workout I do and the chores I have, it’s going to be about two hours of audiobooks. So, most of the things I do during chores is audiobooks.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:54:30)</span>
+  </div>
+  <div class="dialogue-en">And when I run—and I usually run about 10 to 15 miles, so you’re talking about—I often run over two hours. It’s like a slow pace. When the days are not insane, it gives me a chance to think and a chance to listen to audiobooks, so I love that process. It’s an escape from the world, a chance for me to collect my thoughts. And yeah, it’s again a source of happiness and joy, and I wanted to share that. I think you can get quite a lot of reading done through that process, especially if it’s a book you’ve read before. It is very challenging to do this kind of takeaway video, or to concretize your thoughts down on paper, especially when you have to present them in this kind of way.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:55:12)</span>
+  </div>
+  <div class="dialogue-en">I’m not sure I’m going to do that much, because it’s an extra bit of effort. But it’s also a chance to share that joy with the world, and to find cool people that also enjoy it. So it’s a trade-off. Anyway, it’s just a temporary thing, but it did suck for a short amount of time—for a few hours, for a couple of days. But in general, I’ll persist with my love of reading. I might not talk about it publicly as much. But again, let me emphasize that this kind of response and mockery will not affect anything of importance that I do. I try to read comments; I try to see criticism. I really value especially high-effort criticism. I try to grow and constantly try to improve.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:56:05)</span>
+  </div>
+  <div class="dialogue-en">But that’s for things that I take very seriously, like the podcast conversations that I do. But for silly things, like book lists, Spotify music playlists, the food I like to eat—I don’t know, anything, any fun side thing—it’s not that important. If it’s something that others don’t enjoy, then whatever. I’ll enjoy them probably with my friends locally here, or the people I meet. So, anyway, I love reading. I love reading classics. I love returning to old friends in book form, and making new ones.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:56:49)</span>
+  </div>
+  <div class="dialogue-en">There’s a bunch of science fiction that I embarrassingly have not read and would love to, because those worlds are so meaningful to so many of the people I’m friends with that I can’t wait to visit those worlds and sort of make new friends in the form of books. So, definitely the love for books, the love for reading persists. And if you share in that love, that’s beautiful. So thank you for joining me on this journey. Thank you for watching this silly little video. And I hope to see you next time. Love you all. This entry was posted in transcripts on February 4, 2026 by</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman
+  </div>
+  <div class="dialogue-en">.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman
+  </div>
+  <div class="dialogue-en">Host of Lex Fridman Podcast. Research Scientist at MIT, working on human-AI interaction, robotics, and machine learning. View all posts by Lex Fridman →</div>
+  
+</div></div>
+<button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 71 条对话 ↓</button>
+
+    <a href="https://lexfridman.com/book-1984-george-orwell-transcript" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -879,6 +1258,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -891,6 +1322,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

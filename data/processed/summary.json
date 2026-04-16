@@ -1,0 +1,147 @@
+{
+  "total_episodes": 434,
+  "total_guests": 376,
+  "total_topics": 14,
+  "total_words": 10432556,
+  "avg_words_per_episode": 24038,
+  "top_guests": [
+    [
+      "Andrew Huberman",
+      5
+    ],
+    [
+      "Elon Musk",
+      5
+    ],
+    [
+      "Michael Malice",
+      5
+    ],
+    [
+      "Eric Weinstein",
+      4
+    ],
+    [
+      "Manolis Kellis",
+      4
+    ],
+    [
+      "George Hotz",
+      3
+    ],
+    [
+      "Joscha Bach",
+      3
+    ],
+    [
+      "Sean Carroll",
+      3
+    ],
+    [
+      "Stephen Wolfram",
+      3
+    ],
+    [
+      "Ben Shapiro",
+      2
+    ],
+    [
+      "Chris Lattner",
+      2
+    ],
+    [
+      "Demis Hassabis",
+      2
+    ],
+    [
+      "Dmitry Korkin",
+      2
+    ],
+    [
+      "Donald Knuth",
+      2
+    ],
+    [
+      "Douglas Murray",
+      2
+    ],
+    [
+      "François Chollet",
+      2
+    ],
+    [
+      "Grant Sanderson",
+      2
+    ],
+    [
+      "Jeff Hawkins",
+      2
+    ],
+    [
+      "Jim Keller",
+      2
+    ],
+    [
+      "Joe Rogan",
+      2
+    ]
+  ],
+  "top_topics": [
+    [
+      "Music & Arts",
+      411
+    ],
+    [
+      "Technology & Programming",
+      366
+    ],
+    [
+      "Psychology & Human Nature",
+      275
+    ],
+    [
+      "Biology & Evolution",
+      252
+    ],
+    [
+      "AI & Machine Learning",
+      205
+    ],
+    [
+      "Politics & Society",
+      193
+    ],
+    [
+      "History & Civilization",
+      160
+    ],
+    [
+      "Business & Entrepreneurship",
+      74
+    ],
+    [
+      "Philosophy & Religion",
+      73
+    ],
+    [
+      "Physics & Cosmology",
+      47
+    ],
+    [
+      "Space & Exploration",
+      40
+    ],
+    [
+      "Sports & Martial Arts",
+      27
+    ],
+    [
+      "Mathematics",
+      24
+    ],
+    [
+      "Gaming & Virtual Worlds",
+      3
+    ]
+  ]
+}

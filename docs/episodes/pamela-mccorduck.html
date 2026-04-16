@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -642,31 +658,34 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 <div class="quote-block">
   <div class="quote-text">"of the time scale at which breakthroughs in AI happen? I really don&#39;t. Because look at Deep Learning."</div>
-  
+  <div class="quote-zh">人工智能取得突破的时间尺度是多少？我真的不知道。因为看看深度学习。</div>
   <div class="quote-meta">— Pamela McCorduck （44:24.240）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"this is somehow blasphemous. We shouldn&#39;t be going there. Now, you can say, yeah, but there are going"</div>
-  
+  <div class="quote-zh">这在某种程度上是亵渎的。我们不应该去那里。现在，你可以说，是的，但是有</div>
   <div class="quote-meta">— Pamela McCorduck （14:08.800）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"person in expert systems, for example, how is that, how are these folks who you&#39;ve interviewed in the"</div>
-  
+  <div class="quote-zh">例如，专家系统中的人，那怎么样，你在专家系统中采访过的这些人怎么样？</div>
   <div class="quote-meta">— Pamela McCorduck （16:45.000）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"answer. But here&#39;s how we could get over that and then blah, blah, blah. And one of his favorite things"</div>
-  
+  <div class="quote-zh">回答。但这就是我们如何克服这个问题，然后等等等等。还有他最喜欢的事情之一</div>
   <div class="quote-meta">— Pamela McCorduck （20:03.440）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"Fe Institute. I thought, algorithms, yeah, they&#39;re in the service of, but they&#39;re not the main event."</div>
-  
+  <div class="quote-zh">铁研究所。我想，算法，是的，它们是服务的，但它们不是主要事件。</div>
   <div class="quote-meta">— Pamela McCorduck （36:33.200）</div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（515 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
@@ -674,140 +693,140 @@ a:hover { color: var(--accent); text-decoration: underline; }
     Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">The following is a conversation with Pamela McCordick. She&#39;s an author who has written on</div>
-  
+  <div class="dialogue-zh">以下是与帕梅拉·麦考迪克的对话。她是一位作家，曾写过</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:04.800)</span>
   </div>
   <div class="dialogue-en">the history and the philosophical significance of artificial intelligence. Her books include</div>
-  
+  <div class="dialogue-zh">人工智能的历史和哲学意义。她的书包括</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:10.400)</span>
   </div>
   <div class="dialogue-en">Machines Who Think in 1979, The Fifth Generation in 1983 with Ed Feigenbaum, who&#39;s considered to</div>
-  
+  <div class="dialogue-zh">1979 年的《会思考的机器》，1983 年与 Ed Feigenbaum 合作的第五代机器，他被认为是</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:18.160)</span>
   </div>
   <div class="dialogue-en">be the father of expert systems, The Edge of Chaos that features women, and many more books.</div>
-  
+  <div class="dialogue-zh">成为专家系统之父、以女性为主角的《混沌边缘》以及更多书籍。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:24.000)</span>
   </div>
   <div class="dialogue-en">I came across her work in an unusual way by stumbling in a quote from Machines Who Think</div>
-  
+  <div class="dialogue-zh">我以一种不寻常的方式看到了她的作品，偶然引用了《思考的机器》中的一段话</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(00:29.520)</span>
   </div>
   <div class="dialogue-en">that is something like, artificial intelligence began with the ancient wish to forge the gods.</div>
-  
+  <div class="dialogue-zh">就好像，人工智能始于古老的锻造神的愿望。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(00:37.040)</span>
   </div>
   <div class="dialogue-en">That was a beautiful way to draw a connecting line between our societal relationship with AI</div>
-  
+  <div class="dialogue-zh">这是在我们与人工智能的社会关系之间建立联系的一种美妙方式</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(00:42.960)</span>
   </div>
   <div class="dialogue-en">from the grounded day to day science, math and engineering, to popular stories and science</div>
-  
+  <div class="dialogue-zh">从扎根的日常科学、数学和工程，到流行的故事和科学</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(00:48.560)</span>
   </div>
   <div class="dialogue-en">fiction and myths of automatons that go back for centuries. Through her literary work,</div>
-  
+  <div class="dialogue-zh">几个世纪以来关于机器人的小说和神话。通过她的文学作品，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(00:54.800)</span>
   </div>
   <div class="dialogue-en">she has spent a lot of time with the seminal figures of artificial intelligence, including</div>
-  
+  <div class="dialogue-zh">她花了很多时间研究人工智能的开创性人物，包括</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:00.480)</span>
   </div>
   <div class="dialogue-en">the founding fathers of AI from the 1956 Dartmouth summer workshop where the field was launched.</div>
-  
+  <div class="dialogue-zh">人工智能的奠基人来自 1956 年达特茅斯夏季研讨会，该领域正是在该研讨会上启动的。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:08.480)</span>
   </div>
   <div class="dialogue-en">I reached out to Pamela for a conversation in hopes of getting a sense of what those early</div>
-  
+  <div class="dialogue-zh">我联系帕梅拉进行了一次谈话，希望了解早期的情况</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:13.760)</span>
   </div>
   <div class="dialogue-en">days were like, and how their dreams continue to reverberate through the work of our community</div>
-  
+  <div class="dialogue-zh">日子是怎样的，以及他们的梦想如何继续在我们社区的工作中产生反响</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:19.200)</span>
   </div>
   <div class="dialogue-en">today. I often don&#39;t know where the conversation may take us, but I jump in and see. Having no</div>
-  
+  <div class="dialogue-zh">今天。我常常不知道谈话会把我们带向何方，但我会跳进去看看。没有</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:25.600)</span>
   </div>
   <div class="dialogue-en">constraints, rules, or goals is a wonderful way to discover new ideas. This is the Artificial</div>
-  
+  <div class="dialogue-zh">约束、规则或目标是发现新想法的好方法。这就是人工</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:31.760)</span>
   </div>
   <div class="dialogue-en">Intelligence Podcast. If you enjoy it, subscribe on YouTube, give it five stars on iTunes,</div>
-  
+  <div class="dialogue-zh">情报播客。如果您喜欢它，请在 YouTube 上订阅，在 iTunes 上给它五颗星，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:37.840)</span>
   </div>
   <div class="dialogue-en">support it on Patreon, or simply connect with me on Twitter, at Lex Friedman, spelled F R I D M</div>
-  
+  <div class="dialogue-zh">在 Patreon 上支持它，或者直接在 Twitter 上与我联系，地址为 Lex Friedman（拼写为 F R I D M）</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:44.720)</span>
   </div>
   <div class="dialogue-en">A N. And now, here&#39;s my conversation with Pamela McCordick. In 1979, your book Machines Who Think</div>
-  
+  <div class="dialogue-zh">A N. 现在，这是我与帕梅拉·麦考迪克的对话。 1979 年，您的著作《思考的机器》</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(01:55.040)</span>
   </div>
   <div class="dialogue-en">was published. In it, you interview some of the early AI pioneers and explore the idea that</div>
-  
+  <div class="dialogue-zh">已发布。在其中，您采访了一些早期的人工智能先驱，并探讨了这样的想法：</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Pamela McCorduck <span class="dialogue-time">(02:00.720)</span>
   </div>
   <div class="dialogue-en">AI was born not out of maybe math and computer science, but out of myth and legend. So, tell me</div>
-  
+  <div class="dialogue-zh">人工智能的诞生可能不是数学和计算机科学，而是神话和传说。所以告诉我</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
@@ -4277,7 +4296,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 </div></div>
 <button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 515 条对话 ↓</button>
 
-    <a href="https://lexfridman.com/pamela-mccorduck" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+    <a href="https://lexfridman.com/pamela-mccorduck" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -4335,6 +4354,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -4347,6 +4418,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -586,7 +600,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 <nav class="sidebar">
   <div class="sidebar-logo">
     <h1>Lex Fridman<br>知识图谱</h1>
-    <p>112 期节目 · 全文字幕</p>
+    <p>434 期节目 · 全文字幕</p>
   </div>
   
   <div class="sidebar-section">导航</div>
@@ -626,6 +640,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
   </div>
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  
 
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
@@ -710,12 +726,15 @@ a:hover { color: var(--accent); text-decoration: underline; }
   <div class="quote-meta">— Benjamin Netanyahu （00:15:09）</div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（158 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Benjamin Netanyahu <span class="dialogue-time">(00:00:00)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
   </div>
   <div class="dialogue-en">We should never, and I never sit aside and say, oh, they’re just threatening to destroy us. They won’t do it. If somebody threatens to eliminate you as Iran is doing today, and as Hitler did then and people discounted it, well, if somebody threatens to annihilate us, take them seriously and act to prevent it early on. Don’t let them have the means to do so because that may be too late.</div>
   <div class="dialogue-zh">我们永远不应该，我也永远不会袖手旁观，说，哦，他们只是威胁要摧毁我们。他们不会这么做。如果有人威胁要消灭你们，就像伊朗今天所做的那样，就像希特勒当时所做的那样，人们对此不以为然，那么，如果有人威胁要消灭我们，请认真对待他们，并尽早采取行动阻止这种情况发生。不要让他们有办法这样做，因为那可能为时已晚。</div>
@@ -731,14 +750,14 @@ a:hover { color: var(--accent); text-decoration: underline; }
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:00:47)</span>
   </div>
-  <div class="dialogue-en">As we spoke, and as I speak now, large scale protests are breaking out all over Israel over this government’s proposed judicial reform that seeks to weaken the Supreme Court in a bold accumulation of power. Given the current intense political battles in Israel, our previous intention to speak for three hours was adjusted to one hour for the time being, but we agreed to speak again for much longer ...</div>
+  <div class="dialogue-en">As we spoke, and as I speak now, large scale protests are breaking out all over Israel over this government’s proposed judicial reform that seeks to weaken the Supreme Court in a bold accumulation of power. Given the current intense political battles in Israel, our previous intention to speak for three hours was adjusted to one hour for the time being, but we agreed to speak again for much longer in the future. I will also interview people who harshly disagree with words spoken in this conversation. I will speak with other world leaders, with religious leaders, with historians and activists, and with people who have lived and have suffered through the pain of war, destruction and loss that stoke the fires of anger and hate in their heart.</div>
   <div class="dialogue-zh">正如我们所说，正如我现在所说，以色列各地正在爆发大规模抗议活动，抗议本届政府拟议的司法改革，该改革旨在大胆积累权力，削弱最高法院。鉴于目前以色列政治斗争激烈，我们原定的三小时演讲暂时调整为一小时，但我们同意再次演讲更长的时间</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:01:35)</span>
   </div>
-  <div class="dialogue-en">For this, I will travel anywhere no matter how dangerous if there’s any chance, it may help add to understanding and love in the world. I believe in the power of conversation to do just this, to remind us of our common humanity. I know I’m under-qualified and under-skilled for these conversations, so I will often fall short and I will certainly get attacked, derided and slandered. But I will alway...</div>
+  <div class="dialogue-en">For this, I will travel anywhere no matter how dangerous if there’s any chance, it may help add to understanding and love in the world. I believe in the power of conversation to do just this, to remind us of our common humanity. I know I’m under-qualified and under-skilled for these conversations, so I will often fall short and I will certainly get attacked, derided and slandered. But I will always turn the other cheek and use these attacks to learn to improve, and no matter what, never give into cynicism.</div>
   <div class="dialogue-zh">为此，无论多么危险，只要有机会，我都会去旅行，这可能有助于增加世界上的理解和爱。我相信对话的力量可以做到这一点，提醒我们共同的人性。我知道我对这些对话的资格和技能不够，所以我经常会达不到要求，我肯定会受到攻击、嘲笑和诽谤。但我会永远</div>
 </div>
 <div class="dialogue-item">
@@ -766,14 +785,14 @@ a:hover { color: var(--accent); text-decoration: underline; }
   <div class="dialogue-speaker" style="color:#818cf8">
     Benjamin Netanyahu <span class="dialogue-time">(00:02:58)</span>
   </div>
-  <div class="dialogue-en">I disagree with the premise of your question. I think I’ve enjoyed a very broad support around the world. There are certain corners in which we have this animosity that you describe, and it sort of permeates in some of the newspapers and the news organs and so on in the United States, but it certainly doesn’t reflect the broad support that I have. I just gave an interview on an Iranian channel, 60...</div>
+  <div class="dialogue-en">I disagree with the premise of your question. I think I’ve enjoyed a very broad support around the world. There are certain corners in which we have this animosity that you describe, and it sort of permeates in some of the newspapers and the news organs and so on in the United States, but it certainly doesn’t reflect the broad support that I have. I just gave an interview on an Iranian channel, 60 million viewers. I gave another one, just did a little video a few years ago, 25 million viewers from Iran. Certainly no hate there I have to tell you, not from the regime.</div>
   <div class="dialogue-zh">我不同意你问题的前提。我想我在世界各地都得到了非常广泛的支持。在某些角落，我们存在你所描述的这种敌意，它渗透到美国的一些报纸和新闻机构等中，但这肯定不能反映出我所获得的广泛支持。我刚刚接受了伊朗频道的采访，60</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Benjamin Netanyahu <span class="dialogue-time">(00:03:45)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:45)</span>
   </div>
-  <div class="dialogue-en">And when I go around the world and I’ve been around the world, people want to hear what we have to say. What I have to say as a leader of Israel whom they respect increasingly as a rising power in the world. So I disagree with that. And the most important thing that goes against what you said is the respect that we receive from the Arab world and the fact that we’ve made four historic peace agreem...</div>
+  <div class="dialogue-en">And when I go around the world and I’ve been around the world, people want to hear what we have to say. What I have to say as a leader of Israel whom they respect increasingly as a rising power in the world. So I disagree with that. And the most important thing that goes against what you said is the respect that we receive from the Arab world and the fact that we’ve made four historic peace agreements with Arab countries. And they made it with me, they didn’t make it with anyone else. And I respect them and they respect me and probably more to come. So I think the premise is wrong, that’s all.</div>
   <div class="dialogue-zh">当我环游世界并且我已经环游世界时，人们想听听我们要说的话。作为以色列的领导人，我不得不说，他们越来越尊重以色列作为世界上崛起的大国。所以我不同意这一点。与你所说的相反的最重要的是我们从阿拉伯世界得到的尊重以及我们达成了四项历史性和平协议的事实</div>
 </div>
 <div class="dialogue-item">
@@ -784,8 +803,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
   <div class="dialogue-zh">嗯，有很多爱，是的。许多领导人正在合作——</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Benjamin Netanyahu <span class="dialogue-time">(00:04:32)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:32)</span>
   </div>
   <div class="dialogue-en">Respect, I said not love.</div>
   <div class="dialogue-zh">我说的是尊重，不是爱。</div>
@@ -798,8 +817,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
   <div class="dialogue-zh">好的。好的。嗯，这是一个范围，但有些人对以色列没有好话可说，他们心里确实对以色列怀有仇恨。</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Benjamin Netanyahu <span class="dialogue-time">(00:04:45)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:45)</span>
   </div>
   <div class="dialogue-en">Yeah.</div>
   <div class="dialogue-zh">是的。</div>
@@ -815,14 +834,14 @@ a:hover { color: var(--accent); text-decoration: underline; }
   <div class="dialogue-speaker" style="color:#818cf8">
     Benjamin Netanyahu <span class="dialogue-time">(00:04:49)</span>
   </div>
-  <div class="dialogue-en">Well, I think they don’t know very much. I think they’re guided by a lot of ignorance. They don’t know about Israel. They don’t know that Israel is a stellar democracy, that it happens to be one of the most advanced societies on the planet. That what Israel develops helps humanity in every field, in medicine, in agriculture and in the environment and telecoms and talk about AI in a minute. But cha...</div>
+  <div class="dialogue-en">Well, I think they don’t know very much. I think they’re guided by a lot of ignorance. They don’t know about Israel. They don’t know that Israel is a stellar democracy, that it happens to be one of the most advanced societies on the planet. That what Israel develops helps humanity in every field, in medicine, in agriculture and in the environment and telecoms and talk about AI in a minute. But changing the world for the better and spreading this among six continents.</div>
   <div class="dialogue-zh">嗯，我认为他们知道的不多。我认为他们受到很多无知的引导。他们不了解以色列。他们不知道以色列是一个出色的民主国家，而且它恰好是地球上最先进的社会之一。以色列开发的技术可以帮助人类在医学、农业、环境和电信等各个领域，稍后就谈谈人工智能。但查</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Benjamin Netanyahu <span class="dialogue-time">(00:05:21)</span>
   </div>
-  <div class="dialogue-en">We’ve sent rescue teams more than any other country in the world, and we’re one 10th of 1% of the world’s population. But when there’s an earthquake or a devastation in Haiti or in the Philippines, Israel is there. When there’s an devastating earthquake in Turkey, Israel was there. When there’s something in Nepal, Israel is there, and it’s the second country. It’s the second country after, in one ...</div>
+  <div class="dialogue-en">We’ve sent rescue teams more than any other country in the world, and we’re one 10th of 1% of the world’s population. But when there’s an earthquake or a devastation in Haiti or in the Philippines, Israel is there. When there’s an devastating earthquake in Turkey, Israel was there. When there’s something in Nepal, Israel is there, and it’s the second country. It’s the second country after, in one case, India or after another case, the United States, Israel is there. Tiny Israel is a benefactor to all of humanity.</div>
   <div class="dialogue-zh">我们派出的救援队比世界上任何其他国家都多，而且我们的人口只占世界人口的十分之一。但当海地或菲律宾发生地震或破坏时，以色列就会在那里。当土耳其发生毁灭性地震时，以色列就在那里。当尼泊尔有什么东西的时候，以色列就在那里，它是第二个国家。这是继之后的第二个国家</div>
 </div>
 <div class="dialogue-item">
@@ -840,10 +859,10 @@ a:hover { color: var(--accent); text-decoration: underline; }
   <div class="dialogue-zh">嗯，我学到的是，你必须将坏事消灭在萌芽状态。有一个拉丁术语说[外语00:06:29]，勿以恶小而为之。蓄意的仇恨，煽动对一个群体的仇恨，随之而来的妖魔化、非法化是一件非常危险的事情。</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Benjamin Netanyahu <span class="dialogue-time">(00:06:48)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:48)</span>
   </div>
-  <div class="dialogue-en">And that happened in the case of the Jews. What started with the Jews soon spread to all of humanity. So what we’ve learned is that we should never, and I never sit aside and say, “Oh, they’re just threatening to destroy us. They won’t do it.” If somebody threatens to eliminate you as Iran is doing today, and as Hitler did then, and people discounted it, well, if somebody threatens to annihilate u...</div>
+  <div class="dialogue-en">And that happened in the case of the Jews. What started with the Jews soon spread to all of humanity. So what we’ve learned is that we should never, and I never sit aside and say, “Oh, they’re just threatening to destroy us. They won’t do it.” If somebody threatens to eliminate you as Iran is doing today, and as Hitler did then, and people discounted it, well, if somebody threatens to annihilate us, take them seriously and act to prevent it early on. Don’t let them have the means to do so because that may be too late.</div>
   <div class="dialogue-zh">And that happened in the case of the Jews.从犹太人开始的事情很快就蔓延到全人类。所以我们学到的是，我们永远不应该，我也从来不会袖手旁观，说：“哦，他们只是威胁要摧毁我们。他们不会这么做。”如果有人威胁要消灭你，就像伊朗今天所做的那样，就像希特勒当时所做的那样，而人们对此不以为然，那么，如果有人威胁要消灭你</div>
 </div>
 <div class="dialogue-item">
@@ -853,7 +872,976 @@ a:hover { color: var(--accent); text-decoration: underline; }
   <div class="dialogue-en">So in those threats underlying that hatred, how much of it is anti-Zionism, and how much of it is anti-Semitism?</div>
   <div class="dialogue-zh">那么，在这些仇恨背后的威胁中，有多少是反犹太复国主义的，有多少是反犹太主义的？</div>
 </div>
-    <a href="https://lexfridman.com/benjamin-netanyahu-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:07:31)</span>
+  </div>
+  <div class="dialogue-en">I don’t distinguish between the two. You can’t say, “Well, I’m, I’m okay with Jews, but I just don’t think there should be a Jewish state.” It’s like saying, “I’m not anti-American, I just don’t think there should be an America.” That’s basically what people are saying vis-a-vis anti-Semitism and anti-Zionism.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:07:49)</span>
+  </div>
+  <div class="dialogue-en">When you’re saying anti-Zionism you’re saying that Jewish people don’t have a right to have a state of their own. And that is a denial of a basic principle that I think completely unmasks what is involved here. Today anti-Semitism is anti-Zionism. Those who oppose the Jewish people oppose the Jewish state. Judicial reform and protests</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:15)</span>
+  </div>
+  <div class="dialogue-en">If we jump from human history to the current particular moment, there’s protests in Israel now about the proposed judicial reform that gives power to your government to override the Supreme Court. So the critics say that this gives too much power to you, virtually making you a dictator.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:08:35)</span>
+  </div>
+  <div class="dialogue-en">Yeah. Well, that’s ridiculous. The mere fact that you have so many demonstrations and protests, some dictatorship, huh? There’s a lot of democracy here, more rambunctious and more robust than just anywhere on the planet.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:52)</span>
+  </div>
+  <div class="dialogue-en">Can you still man the case that this may give too much power to the coalition government, to the prime minister, not just to you, but to those who follow?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:09:04)</span>
+  </div>
+  <div class="dialogue-en">No, I think that’s complete hogwash because I think there’s very few people who are demonstrating against this. Quite a few, quite many, don’t have an idea what is being discussed. They’re basically being sloganized. You can sloganized, you know something about not mass media right now, but the social network, you can basically feed deliberately with big data and big money, you can just feed slogans and get into people’s minds. I’m sure you don’t think I exaggerate, because you can tell me more about that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:38)</span>
+  </div>
+  <div class="dialogue-en">And you can create mass mobilization based on these absurd slogans. So here’s where I come from and what we’re doing, what we’re trying to do, and what we’ve changed in what we’re trying to do. I’m a 19th century democrat in my, small D yes, in my views. That is I ask the question, “What is democracy?” So democracy is the will of the majority and the protection of the rights of, they call it the rights of the minority, but I say the rights of the individual.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:11)</span>
+  </div>
+  <div class="dialogue-en">So how do you balance the two? How do you avoid mobocracy? And how do you avoid dictatorship? The opposite side. The way you avoid it is something that was built essentially by British philosophers and French philosophers, but was encapsulated by the Founding Fathers of the United States. You create a balance between the three branches of government, the legislative, the executive, and the judiciary.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:41)</span>
+  </div>
+  <div class="dialogue-en">And this balance is what assures the balance between majority rights and individual rights. And you have to balance all of them. That balance was maintained in Israel in its first 50 years, and was gradually overtaken and basically broken by the most activist judicial court on the planet. That’s what happened here. And gradually over the last two, three decades, the court aggregated for itself the powers of the parliament and the executive. So we’re trying to bring it back into line. Bringing it back into line, into what is common in all parliamentary democracies and in the United States, doesn’t mean taking the pendulum from one side and bringing it to the other side.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:11:29)</span>
+  </div>
+  <div class="dialogue-en">We want checks and balances, not unrivaled power. Just as we said, we want an independent judiciary, but not an all powerful judiciary. That balance does not mean, bringing it back into line, doesn’t mean that you can have the parliament, our Knesset, override any decision that the Supreme Court does. So I pretty much early on said, after the judicial reform was introduced, “Get rid of the idea of sweeping override clause that would have, with 61 votes, that’s a majority of one, you can just nullify any Supreme Court decision, so let’s move it back into the center.” So that’s gone. And most of the criticism on the judicial reform was based on an unlimited override clause, which I’ve said is simply not going to happen. People are discussing something that already for six months does not exist.</div>
+  
+</div>
+<div id="dialogue-more" style="display:none">
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:12:20)</span>
+  </div>
+  <div class="dialogue-en">The second point that we received criticism on was the structure of how do you choose Supreme Court judges? Okay, how do you choose them? And the critics of the reform are saying that the idea that elected officials should choose Supreme Court judges is the end of democracy. If that’s the case, the United States is not a democracy. Neither is France and neither are just, I don’t know, just about every democracy on the planet. So there is a view here that you can’t have the sordid hands of elected officials involved in the choosing of judges.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:12:59)</span>
+  </div>
+  <div class="dialogue-en">And in the Israeli system, the judicial activism went so far that effectively the sitting judges have an effective veto on choosing judges, which means that this is a self-selecting court that just perpetrates itself. And we want to correct that. Again, we want to correct it in a balanced way. And that’s basically what we’re trying to do. So I think there’s a lot of misinformation about that. We’re trying to bring Israeli democracy to where it was in its first 50 years. And it was a stellar democracy. It still is. Israel is a democracy, will remain a democracy, a vibrant democracy. And believe me, the fact that people are arguing and demonstrating in the streets and protesting is the best proof of that, and that’s how it’ll remain.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:13:49)</span>
+  </div>
+  <div class="dialogue-en">We spoke about tech companies offline, there’s a lot of tech companies nervous about this judicial reform. Can you speak to why large and small companies have a future in Israel?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:14:03)</span>
+  </div>
+  <div class="dialogue-en">Because Israel is a free market economy. I had something to do with that. I introduced dozens and dozens of free market reforms that made Israel move from $17,000 per capita income within very short time to $54,000. That’s nominal GDP per capita according to the IMF. And we’ve overtaken in that Japan, France, Britain, Germany.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:14:29)</span>
+  </div>
+  <div class="dialogue-en">And how did that happen? Because we unleashed the genius that we have and the initiative and the entrepreneurship that is latent in our population. And to do that, we had to create free markets. So we created that. So Israel has one of the most vibrant free market economies in the world. And the second thing we have is a permanent investment in conceptual products because we have a permanent investment in the military, in our security services, creating basically knowledge workers who then become knowledge entrepreneurs. And so we create this structure, and that’s not going to go away.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:15:09)</span>
+  </div>
+  <div class="dialogue-en">There’s been a decline in investments in high-tech globally. I think that’s driven by many factors. But the most important one is the interest rate, which I think will, it’ll fluctuate up and down. But Israel will remain a very attractive country because it produces so many knowledge workers in a knowledge based economy. And it’s changing so rapidly. The world is changing. You’re looking for the places that have innovation. The future belongs to those who innovate.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:15:41)</span>
+  </div>
+  <div class="dialogue-en">Israel is the preeminent innovation nation. It has few competitors. And if we would say, “All right, where do you have this close cross-disciplinary fermentation of various skills in areas?” I would say “It’s in Israel.” And I’ll tell you why. We used to be just telecoms because people went out of the military intelligence, RNSA, but that’s been now broad based. So you find it in medicine, you find it in biology, you find it in agritech, you find it everywhere. Everything is becoming technologized.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:16:17)</span>
+  </div>
+  <div class="dialogue-en">And in Israel, everybody is dealing in everything, and that’s a potent reservoir of talent that the world is not going to pass up. And in fact, it’s coming to us. We just had Nvidia coming here, and they decided to build a supercomputer in Israel. Wonder why? We’ve had Intel coming here and deciding now to invest $25 billion, just now, in a new plant in Israel. I wonder why? I don’t wonder why. They know why. Because the talent is here and the freedom is here. And it will remain so. AI</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:16:52)</span>
+  </div>
+  <div class="dialogue-en">You had a conversation about AI with Sam Altman of Open AI and with Elon Musk.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:16:57)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:16:57)</span>
+  </div>
+  <div class="dialogue-en">What was the content of that conversation? What’s your vision for this very highest of tech, which is artificial intelligence?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:17:09)</span>
+  </div>
+  <div class="dialogue-en">Well, first of all, I have a high regard for the people I talked to. And I understand that they understand things I don’t understand, and I don’t pretend to understand everything. But I do understand one thing. I understand that AI is developing at a geometric rate and mostly in political life and in life in general people don’t have an intuitive grasp of geometric growth. You understand things basically in linear increments. And the idea that you’re coming up a ski slope is very foreign to people. So they don’t understand it, and they’re naturally also sort of taken aback by it. Because what do you do? So I think there’s several conclusions from my conversations with them and from my other observations that I’ve been talking about for many years. I’m talking about the need-</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:18:00)</span>
+  </div>
+  <div class="dialogue-en">… observations that I’ve been talking about for many years. I’m talking about the need to do this. Well, the first thing is this. There is no possibility of not entering AI with full force. Secondly, there is a need for regulation. Third, it’s not clear there will be global regulation. Fourth, it’s not clear where it ends up. I certainly cannot say that. Now, you might say, “Does it come to control us?” Okay, that’s a question. Does it come to control us? I don’t know the answer to that. I think that, as one observation that I had from these conversations is if it does come to control us, that’s probably the only chance of having universal regulation, because I don’t see anyone deciding to avoid the race and cooperate unless you have that threat. Doesn’t mean you can’t regulate AI within countries even without that understanding, but it does mean that there’s a limit to regulation because every country will want to make sure that it doesn’t give up competitive advantage if there is no universal regulation.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:19:19)</span>
+  </div>
+  <div class="dialogue-en">I think that right now, just as 10 years ago, I read a novel. I don’t read novels, but I was forced to read one by a scientific advisor. I read history, I read about economics, I read about technology. I just don’t read novels. In this, I follow Churchill. He said, “Fact is better than fiction.” Well, this fiction would become fact. It was a book, it was a novel about a Chinese/American future cyber war. I read the book in one sitting, called in a team of experts, and I said, “All right, let’s turn Israel into one of the world’s five cyber powers and let’s do it very quickly.” And we did actually. We did exactly that. I think AI is bigger than that and related to that, because it’ll affect … Well, cyber affects everything, but AI will affect it even more fundamentally. And the joining of the two could be very powerful.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:20:19)</span>
+  </div>
+  <div class="dialogue-en">So I think in Israel, we have to do it anyway for security reasons and we’re doing it. But I think, what about our databases that are already very robust on the medical records of 98% of our population? Why don’t we stick a genetic database on that? Why don’t we do other things that could bring what are seemingly magical cures and drugs and medical instruments for that? That’s one possibility. We have it, as I said, in every single field. The conclusion is this. We have to move on AI. We are moving on AI, just as we moved on cyber, and I think Israel will be one of the leading AI powers in the world. The questions I don’t have an answer to is, where does it go? How much does it chew up on jobs?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:21:19)</span>
+  </div>
+  <div class="dialogue-en">There’s an assumption that I’m not sure is true, that the two big previous revolutions in the human condition, namely the agricultural revolution and the industrial revolution, definitely produced more jobs than they consumed. That is not obvious to me at all. I mean, I could see new jobs creating, and yes, I have that comforting statement, but it’s not quite true, because I think on balance, they’ll probably consume more jobs, many more jobs than they’ll create.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:21:58)</span>
+  </div>
+  <div class="dialogue-en">At least in the short term. And we don’t know about the long term.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:22:01)</span>
+  </div>
+  <div class="dialogue-en">No, I don’t know about the long term, but I used to have the comfort being a free market guy. I always said, “We’re going to produce more jobs by, I don’t know, limiting certain government jobs.” We’re actually putting out in the market, will create more jobs, which obviously happened. We had one telecom company, a government company. When I said, “We’re going to create competition,” they said, “You’re going to run us out. We’re not going to have more workers.” They had 13,000 workers. They went down to seven, but we created another 40,000 in the other companies. So, that was a comforting thought. I always knew that was true.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:22:36)</span>
+  </div>
+  <div class="dialogue-en">Not only that. I also knew that wealth would spread by opening up the markets, completely opposite to the socialist and semi-socialist creed that they had here. They said, “You’re going to make the rich richer and the poor poorer.” No. And made everyone richer, and actually the people who entered the job market because of the reforms we did, actually became a lot richer on the lower ladders of the socioeconomic measure.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:23:05)</span>
+  </div>
+  <div class="dialogue-en">But here’s the point, I don’t know. I don’t know that we will not have what Elon Musk calls the end of scarcity. So you’ll have the end of scarcity. You’ll have enormous productivity. Very few people are producing enormous added value. You’re going to have to tax that to pass it to the others. You’re going to have to do that. That’s a political question. I’m not sure how we answer that. What if you tax and somebody else doesn’t tax? You’re going to get everybody to go there. That’s an international issue that we constantly have to deal with.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:23:42)</span>
+  </div>
+  <div class="dialogue-en">And the second question you have is, suppose you solve that problem and you deliver money to those who are not involved in the AI economy, what do they do? The first question you ask somebody whom you just met after the polite exchanges is, what do you do? Well, people define themselves by their profession. It’s going to be difficult if you don’t have a profession. People will spend more time self-searching, more time in the arts, more time in leisure. I understand that. If I have to bet, it will annihilate many more jobs than it will create and it’ll force a structural change in our economics, in our economic models, and in our politics. And I’m not sure where it’s going to go.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:24:40)</span>
+  </div>
+  <div class="dialogue-en">And that’s something we have to respond to at the nation level and just as a human civilization, both the threat of AI to just us as a human species and then the effect on the jobs. And like you said, cybersecurity.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:24:55)</span>
+  </div>
+  <div class="dialogue-en">What do you think? You think we’re going to lose control?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:25:00)</span>
+  </div>
+  <div class="dialogue-en">No, first of all, I do believe, maybe naively, that it will create more jobs than it takes.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:25:05)</span>
+  </div>
+  <div class="dialogue-en">Write that down and we’ll check it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:25:07)</span>
+  </div>
+  <div class="dialogue-en">It’s on record.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:25:09)</span>
+  </div>
+  <div class="dialogue-en">We don’t say, “We’ll check it after our lifetime.” No, we’ll see it in a few years.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:25:12)</span>
+  </div>
+  <div class="dialogue-en">We’ll see it in a few years. I’m really concerned about cybersecurity and the nature of how that changes with the power of AI. In terms of existential threats, I think there will be so much threats that aren’t existential along the way that that’s the thing I’m mostly concerned about, versus AI taking complete control and superseding the human species. Although that is something you should consider seriously because of the exponential growth of its capabilities.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:25:43)</span>
+  </div>
+  <div class="dialogue-en">Yeah, it’s exactly the exponential growth, which we understand is before us, but we don’t really … It’s very hard to project forward.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:25:51)</span>
+  </div>
+  <div class="dialogue-en">To really understand.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:25:52)</span>
+  </div>
+  <div class="dialogue-en">That’s right. Exactly right. So I deal with what I can and where I can affect something. I tend not to worry about things I don’t control, because there’s at a certain point, there’s no point. I mean, you have to decide what you’re spending your time on. So in practical terms, I think we’ll make Israel a formidable AI power. We understand the limitation of skill, computing power and other things. But I think within those limits, I think we can make here this miracle that we did in many other things. We do more with less. I don’t care if it’s the production of water or the production of energy or the production of knowledge or the production of cyber capabilities, defense and other, we just do more with less. And I think in AI, we’re going to do a lot more with a relatively small but highly gifted population. Very gifted.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:26:53)</span>
+  </div>
+  <div class="dialogue-en">So taking a small tangent, as we talked about offline, you have a background in TaeKwonDo?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:27:00)</span>
+  </div>
+  <div class="dialogue-en">Oh, yeah.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:27:01)</span>
+  </div>
+  <div class="dialogue-en">We mentioned Elon Musk. I’ve trained with both. Just as a quick question, who are you betting on in a fight?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:27:08)</span>
+  </div>
+  <div class="dialogue-en">Well, I refuse to answer that. I will say this.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:27:13)</span>
+  </div>
+  <div class="dialogue-en">Such a politician, you are.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:27:14)</span>
+  </div>
+  <div class="dialogue-en">Yeah, of course. Here, I’m a politician. I’m openly telling you that I’m dodging the question. But I’ll say this. Actually, I spent five years in our special forces in the military, and we barely spent a minute on martial arts. I actually learned TaeKwonDo later when I came to … It wasn’t even at MIT. At MIT, I think I did karate. But when I came to the UN, I had a martial arts expert who taught me TaeKwonDo, which was interesting. Now, the question you really have to ask is, why did we learn martial arts in this special elite unit? And the answer is, there’s no point. If you saw Indiana Jones, there’s no point. You just pull the trigger. That’s simple. Now, I don’t expect anyone to pull the trigger on this combat, and I’m sure you’ll make sure that doesn’t happen.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:28:15)</span>
+  </div>
+  <div class="dialogue-en">Yeah. I mean, martial arts is bigger than just combat. It’s this journey of humility.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:28:21)</span>
+  </div>
+  <div class="dialogue-en">Oh, sure.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:28:23)</span>
+  </div>
+  <div class="dialogue-en">It’s an art form. It truly is an art. But it’s fascinating that these two figures in tech are facing each other. I won’t ask the question of who you would face and how you would do, but …</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:28:34)</span>
+  </div>
+  <div class="dialogue-en">Well, I’m facing opponents all the time.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:28:36)</span>
+  </div>
+  <div class="dialogue-en">All the time?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:28:37)</span>
+  </div>
+  <div class="dialogue-en">Yeah, that’s part of life.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:28:41)</span>
+  </div>
+  <div class="dialogue-en">Not yet.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:28:41)</span>
+  </div>
+  <div class="dialogue-en">I’m not sure about that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:28:42)</span>
+  </div>
+  <div class="dialogue-en">Are you announcing any fights?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:28:44)</span>
+  </div>
+  <div class="dialogue-en">No, no. Part of life is competition. The only time competition ends is death. But political life, economic life, cultural life is engaged continuously in creativity and competition. The problem I have with that is, as I mentioned earlier just before we began the podcast, is that at a certain point, you want to put barriers to monopoly. And if you’re a really able competitor, you’re going to create a monopoly. That’s what Peter Till says is a natural course of things. It’s what I learned basically in the Boston Consulting Group. If you are a very able competitor, you’ll create scale advantages that gives you the ability to lock out your competition. And as a prime minister, I want to assure that there is competition in the markets, so you have to limit this competitive power at a certain point, and that becomes increasingly hard in a world where everything is intermixed.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:29:49)</span>
+  </div>
+  <div class="dialogue-en">Where do you define market segments? Where do you define monopoly? How do you do that? That, actually conceptually, I find very challenging, because of all the dozens of economic reforms that I’ve made, the most difficult part is the conceptual part. Once you’ve ironed it out and you say, “Here’s what I want to do. Here’s the right thing to do,” then you have a practical problem of overcoming union resistance, political resistance, press calumny, opponents from this or that corner. That’s a practical matter. But if you have it conceptually defined, you can move ahead to reform economies or reform education or reform transportation. Fine.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:30:38)</span>
+  </div>
+  <div class="dialogue-en">In the question of the growing power of large companies, big tech companies to monopolize the markets because they’re better at it, they provide a service, they provide it at a lower cost, at rapidly declining cost. Where do you stop? Where do you stop monopoly power is a crucial question because it also becomes now a political question. If you amass enormous amount of economic power, which is information power, that also monopolizes the political process. These are real questions that are not obvious. I don’t have an obvious answer because as I said, as a 19th century Democrat, these are questions of the 21st century, which people should begin to think. Do you have a solution to that?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:31:27)</span>
+  </div>
+  <div class="dialogue-en">The solution of monopolies growing arbitrarily-</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:31:30)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:31:31)</span>
+  </div>
+  <div class="dialogue-en">… unstoppably in power?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:31:33)</span>
+  </div>
+  <div class="dialogue-en">In economic power, and therefore in political power.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:31:36)</span>
+  </div>
+  <div class="dialogue-en">I mean, some of that is regulation, some of that is competition.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:31:40)</span>
+  </div>
+  <div class="dialogue-en">Do you know where to draw the line? It’s not breaking up AT&amp;T. It’s not that simple.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:31:49)</span>
+  </div>
+  <div class="dialogue-en">Well, I believe in the power of competition, that there will always be somebody that challenges the big guys, especially in the space of AI. The more open source movements are taking hold, the more the little guy can become the big guy.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:32:02)</span>
+  </div>
+  <div class="dialogue-en">So you’re saying basically the regulatory instrument is the market?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:32:09)</span>
+  </div>
+  <div class="dialogue-en">In large part, in most part, that’s the hope. Maybe I’m a dreamer.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:32:13)</span>
+  </div>
+  <div class="dialogue-en">That’s been in many ways my policy up to now, that the best regulator is the market. The best regulator in economic activity is the market and the best regulator in political matters is the political market. That’s called elections. That’s what regulates. You have a lousy government and people make lousy decisions, well, you don’t need the wise men raised above the masses to decide what is good and what is bad. Let the masses decide. Let them vote every four years or whatever, and they throw you out.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:32:54)</span>
+  </div>
+  <div class="dialogue-en">By the way, it happened to me. There’s life after political death. There’s actually political life. I was reelected five or six times, and this is my sixth term. So I believe in that. I’m not sure that in economic matters, in the geometric growth of tech companies, that you’ll always have the little guy, the nimble mammal, that will come out and slay the dinosaurs or overcome the dinosaurs, which is essentially what you said.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:33:25)</span>
+  </div>
+  <div class="dialogue-en">Yeah, I wouldn’t count out the little guy.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:33:27)</span>
+  </div>
+  <div class="dialogue-en">You wouldn’t count out the little?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:33:28)</span>
+  </div>
+  <div class="dialogue-en">No.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:33:29)</span>
+  </div>
+  <div class="dialogue-en">Well, I hope you’re right. Power and corruption</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:33:31)</span>
+  </div>
+  <div class="dialogue-en">Well, let me ask you about this market of politics. So you have served six terms as prime minister over 15 years in power. Let me ask you again, human nature. Do you worry about the corrupting nature of power on you as a leader, on you as a man?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:33:48)</span>
+  </div>
+  <div class="dialogue-en">Not at all. Because I think that, again, the thing that drives me is nothing but the mission that I took to assure the survival and thriving of the Jewish state. That is, its economic prosperity, but its security and its ability to achieve peace with our neighbors. And I’m committed to it. I think there are many things that have been done. There are a few big things that I can still do, but it doesn’t only depend on my sense of mission. It depends on the market, as we say. It depends really on the will of the Israeli voters. And the Israeli voters have decided to vote for me again and again, even though I wield no power in the press, no power in many quarters here and so on, nothing. I mean, probably, I’m going to be very soon the longest serving prime minister in the last half century in the Western democracies. But that’s not because I amassed great political power in any of the institutions.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:34:56)</span>
+  </div>
+  <div class="dialogue-en">I remember I had a conversation with Silvio Berlusconi, who recently died, and he said to me about, I don’t know, 15 years ago, something like that, he said, “So Bibi, how many of Israel’s television stations do you have?” And I said, “None.” He said, “You have none?”</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:35:23)</span>
+  </div>
+  <div class="dialogue-en">Do you have?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:35:24)</span>
+  </div>
+  <div class="dialogue-en">“Do you have?” I said, “None. I have two.” He said, “No, no. What, you mean you don’t have any that you control?” I said, “Not only do I have none that I control, they’re all against me.” So he says, “So how do you win elections with both hands tied behind your back?” And I said, “The hard way.” That’s why I have the largest party, but I don’t have many more seats than I would have if I had a sympathetic voice in the media. And Israel until recently, was dominated completely by one side of the political spectrum that often vilified me, not me, because they viewed-</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:36:01)</span>
+  </div>
+  <div class="dialogue-en">… vilified me, not me, because they viewed me as representing basically the conservative voices in Israel that are majority. And so the idea that I’m an omnipotent, authoritarian dictator is ridiculous. I would say I’m not merely a champion of democracy and democratization. I believe ultimately the decision is with the voters and the voters, even though they have constant press attacks, they’ve chosen to put me back in. So I don’t believe in this thing of amassing the corrupting power of if you don’t have elections. If you control the means of influencing the voters, I understand what you’re saying, but in my case, it’s exact opposite. I have to constantly go in elections, constantly with a disadvantage that the major media outlets are very violently sometimes against me, but it’s fine. And I keep on winning. So I don’t know what you’re talking about. I would say the concentration of power lies elsewhere, not here.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:37:15)</span>
+  </div>
+  <div class="dialogue-en">Well, you have been involved in several corruption cases. How much corruption is there in Israel and how do you fight it in your own party and in Israel?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:37:24)</span>
+  </div>
+  <div class="dialogue-en">Well, you should ask a different question. What’s happened to these cases? These cases basically are collapsing before our eyes, there was recently an event in which the three judges in my case, called in the prosecution and said, “Your flagship, the so-called bribery charges is gone, doesn’t exist,” before a single defense witness was called. And it sort of tells you that this thing is evaporating. It’s quite astounding even that I have to say, was covered even by the mainstream press in Israel because it’s such an earthquake. So a lot of these charges are not a lot. These charges will prove to be nothing. I always said, “Listen, I stand before the legal process.” I don’t claim that I’m exempt from it in any way. On the contrary, I think the truth will come out and it’s coming out. And we see that not only that, but with other things.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:38:28)</span>
+  </div>
+  <div class="dialogue-en">So I think it’s kind of instructive that no politician has been more vilified. None has been put to such a, what is it? About a quarter of a billion shekels were used to scrutinize me, scour my bank accounts, sending people to the Philippines, into Mexico, into Europe, into America, and everybody using spyware, the most advanced spyware on the planet against my associates, blackmailing witnesses, telling them, “Think about your family, think about your wife. You better tell us what you want.” All that is coming out of the trial. So I would say that most people now are not asking, are no longer asking, including my opponents. It’s sort of trickling in as the stuff comes out. People are not saying, “What did Netanyahu do, because apparently he did nothing?” “What was done to him?” is something that people ask.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:39:31)</span>
+  </div>
+  <div class="dialogue-en">“What was done to him? What was done to our democracy, what was done in the attempt to put down somebody who keeps winning elections, despite the handicaps that I described? Maybe we can nail him by framing him.” And the one thing I can say about this court trial is that things are coming up and that’s very good, just objective things are coming out and changing the picture. So I would say the attempt to brand me as corrupt is falling on its face. But the thing that is being uncovered in the trial, such as the use of spyware on a politician, a politician’s surroundings to try to shake them down in investigations, put them in flea-ridden cells for 21 days. Invite their 84 year old mother to investigations without cause, bringing in their mistresses in the corridor, shaking them down, that’s what people are asking. That corruption is what they want corrected.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:40:46)</span>
+  </div>
+  <div class="dialogue-en">What is the top obstacle to peaceful coexistence of Israelis and Palestinians? Let’s talk about the big question of peace in this part of the world.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:40:55)</span>
+  </div>
+  <div class="dialogue-en">Well, I think the reason you have the persistence of the Palestinian Israeli conflict, which goes back about a century, is the persistent Palestinian refusal to recognize a Jewish state, a nation state for the Jewish people in any boundary. That’s why they opposed the establishment of the state of Israel before we had a state. Now that’s why they’ve opposed it after we had a state. They opposed it when we didn’t have Judea and Samaria, the West Bank in our hands and Gaza, and they oppose it after we have it. It doesn’t make a difference. It’s basically their persistent refusal to recognize a Jewish state in any boundaries. And I think that their tragedy is that they’ve been commandeered for a century by leadership that refused to compromise with the idea of Zionism, namely that the Jews deserve a state in this part of the world.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:41:49)</span>
+  </div>
+  <div class="dialogue-en">The territorial dispute is something else. You have a territorial dispute if you say, “Okay, you are living on this side, we’re living on that side. Let’s decide where the border is and so on.” That’s not what the argument is. The Palestinian society, which is itself fragmented, but all the factions agree, there shouldn’t be a Jewish state anywhere. They just disagree between Hamas that says, “Oh, well you should have it. We should get rid of it with terror.” And the others who say, “We know we should also use political means to dissolve it.” So that is the problem.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:42:28)</span>
+  </div>
+  <div class="dialogue-en">So even as part of a two-state solution, they’re still against the idea.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:42:33)</span>
+  </div>
+  <div class="dialogue-en">Well, they don’t want a state next to Israel. They want a state instead of Israel. And they say, “If we get a state, we’ll use it as a springboard to destroy the smaller Israeli state.” Which is what happened when Israel unilaterally walked out of Gaza and effectively established a Hamas state there. They didn’t say, “Oh good, now we have our own territory, our own state. Israel is no longer there. Let’s build peace. Let’s build economic projects. Let’s enfranchise our people.” No, they turned it basically into a terror bastion from which they fired 10,000 rockets into Israel. When Israel left Lebanon because we had terrorist attacks from there, then we had Lebanon taken over by Hezbollah, a terrorist organization that seeks to destroy Israel. And therefore every time we just walked out, what we got was not peace, we didn’t give territory for peace, we got territory for terror. That’s what we had.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:43:35)</span>
+  </div>
+  <div class="dialogue-en">And that’s what would happen as long as the reigning ideology says, “We don’t want Israel in any border.” So the idea of two states assumes that you’d have on the other side a state that wants to live in peace and not one that will be overtaken by Iran in its proxies in two seconds and become a base to destroy Israel. And therefore, I think that most Israelis today, if you ask them, they’d say it’s not going to work in that concept, so what do you do with the Palestinians? They’re still there. And unlike them, I don’t want to throw them out. They’re going to be living here and we’re going to be living here in an area, which is by the way, just to understand the area, the entire area of so-called West Bank and Israel is the width of the Washington Beltway, more or less.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:44:26)</span>
+  </div>
+  <div class="dialogue-en">Just a little more, not much more. You can’t really divide it up. You can’t say, “Well, you’re going to fly in. Who controls the airspace?” Well, it takes you about two and a half minutes to cross it with a regular 747. With a fighter plane it takes you a minute and a half, okay? So how are you going to divide the airspace? Well, you’re not going to divide it. Israel’s going to control that airspace and the electromagnetic space and so on. So security has to be in the hands of Israel. My view of how you solve this problem is a simple principle. The Palestinians should have all the powers to govern themselves and none of the powers to threaten Israel, which basically means that the responsibility for overall security remains with Israel. And from a practical point of view, we’ve seen that every time that Israel leaves a territory and takes its security forces out of an area, it immediately is overtaken by Hamas or Hezbollah or Jihadist who basically are committed to the destruction of Israel and also bring misery to the Palestinians or Arab subjects.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:45:40)</span>
+  </div>
+  <div class="dialogue-en">So I think that principle is less than perfect sovereignty because you’re taking a certain amount of sovereign powers, especially security away. But I think it’s the only practical solution. So people say, “Ah, but it’s not a perfect state.” I say, “Okay, call it what you will. Call it, I don’t know, limited sovereignty. Call it the autonomy plus. Call it whatever you want to call it.” But that’s the reality. And right now, if you ask Israelis across the political spectrum, except the very hard left, most Israelis agree with that. They don’t really debate it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:46:14)</span>
+  </div>
+  <div class="dialogue-en">So a two-state solution where Israel controls the security of the entire region.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:46:18)</span>
+  </div>
+  <div class="dialogue-en">We don’t call it quite that. I mean there are different names, but the idea is yes, Israel controls security in the, is the entire area. It’s this tiny area between the Jordan River and the sea. I mean it’s like, you can walk it in not one afternoon. If you’re really fit, you can do it in a day, less than a day. I did.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:46:39)</span>
+  </div>
+  <div class="dialogue-en">So the expansion of settlements in the West Bank has been a top priority for this new government. So people may harshly criticize this as contributing to escalating the Israel-Palestine tensions. Can you understand that perspective, that this expansion of settlements is not good for this two-state solution?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:46:59)</span>
+  </div>
+  <div class="dialogue-en">Yeah, I can understand what they’re saying, and they don’t understand why they’re wrong. First, most Israelis who live in Judea, Samaria live in urban blocks, and that accounts for about 90% of the population. And everybody recognizes that those urban blocks are going to be part of Israel in any future arrangement. So they’re really arguing about something that has already been decided and agreed upon, really by Americans, even by Arabs, many Arabs, they don’t think that Israel is going to dismantle these blocks. You look outside the window here, and within about a kilometer or a mile from here, as you have Jerusalem, half of Jerusalem grew naturally beyond the old 1967 border. So you’re not going to dismantle half of Jerusalem. That’s not going to happen. And most people don’t expect that. Then you have the other 10% scattered in tiny, small communities, and people say, “Well, you’re going to have to take them out.” Why?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:48:05)</span>
+  </div>
+  <div class="dialogue-en">Remember that in pre-1967 Israel, we have over a million and a half Arabs here. We don’t say, “Oh, Israel has to be ethnically cleansed from its Arab citizens in order to have peace.” Of course not. Jews can live among Arabs, and Arabs can live among Jews. And what is being advanced by those people who say that we can’t live in our ancestral homeland in these disputed areas. Nobody says that this is Palestinian areas and nobody says that these are Israeli areas. We claim them, they claim them. We’ve only been attached to this land for oh, 3,500 years. But it’s a dispute, I agree. But I don’t agree that we should throw out the Arabs. And I don’t think that they should throw out the Jews. And if somebody said to you, “The only way we’re going to have peace with Israel is to have an ethnically cleansed Palestinian entity,” that’s outrageous.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:49:00)</span>
+  </div>
+  <div class="dialogue-en">If you said you shouldn’t have Jews living in, I don’t know, in suburbs of London or New York and so on, I don’t think that will play too well. The world is actually advancing a solution that says that Jews cannot live among Arabs, and Arabs cannot live among Jews. I don’t think that’s the right way to do it. And I think there’s a solution out there, but I don’t think we’re going to get to it, which is less than perfect sovereignty, which involves Israeli security, maintained for the entire territory by Israel, which involves not rooting out anybody. Not kicking out, uprooting Arabs or Palestinians. They’re going to live in enclaves in sovereign Israel and we’re going to live in probably in enclaves there, probably through transportation continuity as opposed to territorial continuity. For example, you can have tunnels and overpasses and so on that connect the various communities.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:49:57)</span>
+  </div>
+  <div class="dialogue-en">We’re doing that right now, and it actually works. I think there is a solution to this. It’s not the perfect world that people think of because that model I think doesn’t apply here. If it applies elsewhere, it’s a question. I don’t think so. But I think there’s one other thing, and that’s the main thing that I’ve been involved in. People said, “If you don’t solve the Palestinian problem, you’re not going to get to the Arab world. You’re not going to have peace with the Arab world.” Remember, the Palestinians are about 2% of the Arab world, and the other 98%, you’re not going to make peace with them. And that’s our goal.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:50:39)</span>
+  </div>
+  <div class="dialogue-en">And for a long time, people accepted that. After the initial peace treaties with Egypt, with Prime Minister Begin of the Likud and President Sadat of Egypt, and then with Jordan between Prime Minister Rabin and King Hussein. For a quarter of a century we didn’t have any more peace treaties because people said, “You got to go through the Palestinians” and the Palestinians, they don’t want a solution of the kind that I described or any kind except the one that involved the dissolution of the state of Israel.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:51:08)</span>
+  </div>
+  <div class="dialogue-en">So we could wait another half century. And I said, “No, I don’t think that we should accept the premise that we have to wait for the Palestinians because we’ll have to wait forever.” So I decided to do it differently. I decided to go directly to the Arab capitals and to make the historic Abraham Accords and essentially reversing the equation, not a peace process that goes inside out, but outside in. And we went directly to these countries and forged these breakthrough peace accords with the United Arab Emirates, with Bahrain, with Morocco and with Sudan. And we’re now trying to expand that in a quantum leap with Saudi Arabia.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:51:56)</span>
+  </div>
+  <div class="dialogue-en">What does it take to do that with Saudi Arabia, with the Saudi Crown Prince Mohammed bin Salman.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:52:01)</span>
+  </div>
+  <div class="dialogue-en">I’m a student of history, and I read a lot of history, and I read that in the Versailles discussions after World War I, President Woodrow Wilson said, “I believe in open covenants openly arrived at.” I have my correction. I believed in open covenants secretly arrived at so we’re not going to advance a Saudi-Israeli peace by having it publicly discussed. And in any case, it’s a decision of the Saudis if they want to do it, but there’s obviously a mutual interest. So here’s my view, if we try to wait for the 2% in order to get to the 98%, we’re going to fail and we have failed. If we go to the 98%, we have a much greater chance of persuading the 2%. You know why? Because the 2% the Palestinian hope to vanquish the state of Israel and not make peace with it, is based, among other things, on the assumption that eventually the 98%, the rest of the Arab world, will kick in and destroy the Jewish state, help them dissolve or destroy the Jewish state.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:53:08)</span>
+  </div>
+  <div class="dialogue-en">When that hope is taken away, then you begin to have a turn to the realistic solutions of coexistence. By the way, they’ll require compromise on the Israeli side too. And then I’m perfectly cognizant of that and willing to do that. But I think a realistic compromise will be struck much more readily when the conflict between Israel and the Arab states, the Arab world, is effectively solved. And I think we’re on that path. It was a conceptual change just like I’ve been involved in a few, I told you the conceptual battle is always the most difficult one. And I had to fight this battle to convert a semi-socialist state into a free market capitalist state. And I have to say that most people today recognize the power of competition and the benefits of free markets. So we also had to fight this battle-</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:54:00)</span>
+  </div>
+  <div class="dialogue-en">… free markets. So we also had to fight this battle that said you have to go through the Palestinian straight, S-T-R-A-I-T, to get to the other places. There’s no way to avoid this, you have to go through this impassable pass. And I think that now people are recognizing that we’ll go around it and probably circle back. And that, I think, actually gives hope not only to have an Arab-Israeli peace, but circling back in Israeli-Palestinian peace. And obviously this is not something that you find in the soundbites and so on, but in the popular discussion of the press. But that idea is permeating and I think it’s the right idea, because I think it’s the only one that will work.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:54:50)</span>
+  </div>
+  <div class="dialogue-en">So expanding the circle of peace, just to linger on that requires what? Secretly talking man-to-man, human-to-human, to leaders of other nations and-</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:55:03)</span>
+  </div>
+  <div class="dialogue-en">Theoretically, you’re right. War in Ukraine</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:55:04)</span>
+  </div>
+  <div class="dialogue-en">Theoretically. Okay. Well, let me ask you another theoretical question on this circle of peace. As a student of history, looking at the ideas of war and peace, what do you think can achieve peace in the war in Ukraine looking at another part of the world? If you consider the fight for peace in this part of the world, how can you apply that to that other part of the world between Russia and Ukraine now?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:55:38)</span>
+  </div>
+  <div class="dialogue-en">I think it’s one of the savage horrors of history and one of the great tragedies that is occurring. Let me say in advance that if I have any opportunity to use my contacts to help bring about an end to this tragedy, I’ll do so. I know both leaders, but I don’t just jump in and assume if there’s be a desire at a certain point because the conditions have created the possibility of helping stop this carnage, then I’ll do it. And that’s why I choose my words carefully, because I think that may be the best thing that I could do. Look, I think what you see in Ukraine is what happens if you have territorial designs on a territory by a country that has nuclear weapons. And that, to me, you see the change in the equation. Now, I think that people are loathed to use nuclear weapons, and I’m not sure that I would think that the Russian side would use them with happy abandon.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:56:59)</span>
+  </div>
+  <div class="dialogue-en">I don’t think that’s the question, but you see how the whole configuration changes when that happens. So you have to be very careful on how you resolve this conflict. So it doesn’t… well, it doesn’t go off the rails, so to speak. That’s, by the way, the corollaries here. We don’t want Iran, which is an aggressive force with just aggressive ideology of dominating first the Muslim world, and then eliminating Israel, and then becoming a global force, having nuclear weapons. It’s totally different when they don’t have it than when they do have it. And that’s why one of my main goals has been to prevent Iran from having the means of mass destruction, which will be used, atomic bombs, which they openly say will be used against us. And you can understand that. How to bring about an end to Ukraine? I have my ideas. I don’t think that’s worthwhile discussing them now because they might be required later on.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:58:06)</span>
+  </div>
+  <div class="dialogue-en">Do you believe in the power of conversation? Since you have contacts with Volodymyr Zelenskyy and Vladimir Putin, just leaders sitting in a room and discussing how the end of war can be brought about?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:58:19)</span>
+  </div>
+  <div class="dialogue-en">I think it’s a combination of that, but I think it’s the question of interest and whether you have to get both sides to a point where they think that that conversation would lead to something useful. I don’t think they’re there right now.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:58:37)</span>
+  </div>
+  <div class="dialogue-en">What part of this is just basic human ego, stubbornness all of this between leaders, which is why I bring up the power of conversation, of sitting in a room realizing we’re human beings, and then there’s a history that connects Ukraine and Russia?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:58:52)</span>
+  </div>
+  <div class="dialogue-en">I don’t think they’re in a position to enter a room right now, realistically. I mean, you can posit that it would be good if that could happen, but entering the room is sometimes more complicated than what happens in the room. And there’s a lot of pre-negotiations on the negotiation, then you negotiate endlessly on the negotiation. They’re not even there.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:59:11)</span>
+  </div>
+  <div class="dialogue-en">It took a lot of work for you to get to a handshake in the past.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:59:15)</span>
+  </div>
+  <div class="dialogue-en">It’s an interesting question. How did the peace, the Abraham Accords, how did that begin? We had decades. We had 70 years or 65 years where these people would not meet openly or even secretly with an Israeli leader. Yeah, we had the Mossad making contacts with him all the time, and so on, but how do we break the ice to the top level of leadership? Well, we broke the ice because I took a very strong stance against Iran, and the Gulf states understood that Iran is a formidable danger to them, so we had a common interest. And the second thing is that because of the economic reforms that we had produced in Israel, Israel became a technological powerhouse. And that could help their nations, not only… in terms of anything, of just bettering the life of their peoples.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:00:12)</span>
+  </div>
+  <div class="dialogue-en">And the combination of the desire to have some kind of protection against Iran or some kind of cooperation against Iran and civilian economic cooperation came to a head when I gave a speech in the American Congress, which I didn’t do lightheartedly, I had to decide to challenge a sitting American president and on the so-called Iranian deal, which I thought would pave Iran’s path with gold to be an effective nuclear power. That’s what would happen. So I went there. And in the course of giving that speech before the joint session of Congress, our delegation received calls from Gulf states who said, “We can’t believe what your prime minister is doing. He’s challenging the President of the United States.” Well, I had no choice because I thought my country’s own existence was imperiled. And remember, we always understand through changing administrations that America under… no matter what leadership is always the irreplaceable and indispensable ally of Israel and will always remain that we can have arguments as we have, but in the family, as we say in [foreign language 01:01:32], it’s the family.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:01:35)</span>
+  </div>
+  <div class="dialogue-en">But nevertheless, I was forced to take a stand. That produced calls from Gulf states that ultimately led to clandestine meetings that ultimately flowered into the Abraham Accords then. And I think we’re at a point where the idea of ending the Arab-Israeli conflict, not the Palestinian-Israeli conflict, the Arab-Israeli conflict can happen. I’m not sure it will. It depends on quite a few things, but it could happen. And if it happens, it might open up the ending of the Israeli-Islamic conflict. Remember, the Arab world is a small part, it’s an important part, but it’s small. There are large Islamic populations and it could bring about an end to an historic enmity between Islam and Judaism. It could be a great thing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:02:31)</span>
+  </div>
+  <div class="dialogue-en">So I’m looking at this larger thing. You can be hobbled by saying, “Oh, well, you’ve had this hiccup in Gaza or this or that thing happening in the Palestinians.” It’s important for us because we want security. But I think the larger question is can we break out into a much wider peace and ultimately come back and make the peace between Israel and the Palestinians rather than waiting to solve that and never getting to paint on the larger canvas? I want to paint on the larger canvas and come back to the Palestinian-Israeli conflict.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:03:16)</span>
+  </div>
+  <div class="dialogue-en">As you write about in your book, what have you learned about life from your father?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(01:03:21)</span>
+  </div>
+  <div class="dialogue-en">My father was a great historian and well, he taught me several things. He said that the first condition for a living organism is to identify danger in time, because if you don’t, you could be devoured. You could be destroyed very quickly. And that’s the nature of human conflict. In fact, for the Jewish people, we lost the capacity to identify danger in time, and we were almost devoured and destroyed by the Nazi threat. So when I see somebody parroting the Nazi goal of destroying the Jewish state, I try to mobilize the country and the world in time because I think Iran is a global threat, not only a threat to Israel. That’s the first thing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(01:04:17)</span>
+  </div>
+  <div class="dialogue-en">The second thing is I once asked him, before I got elected, I said, “Well, what do you think is the most important quality for a prime minister of Israel?” And he came back with a question, “What do you think?” And I said, “Well, you have to have vision and you have to have the flexibility of navigating and working towards that vision. Be flexible, but understand where you’re heading.” And he said, “Well, you need that for anything. You need it if you’re a university president or if you’re a leader of a corporation or anything, anybody would’ve to have that.” I said, “All right, so what do you need to be the leader of Israel?” He came back to me with a word that stunned me. He said, “Education. You need a broad and deep education, or you’ll be at the mercy of your clerks or the press or whatever. You have to be able to do that.” Now, as I spend time in government, being reelected by the people of Israel, I recognize more and more how right he was.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(01:05:37)</span>
+  </div>
+  <div class="dialogue-en">You need to constantly ask yourself, “Where’s the direction we want to take the country? How do we achieve that goal?” But also understand that new disciplines are being added. You have to learn all the time. You have to add to your intellectual capital all the time. Kissinger said that he wrote that once you enter public life, you begin to draw on your intellectual capital and it’ll be depleted very quickly if you stay a long time. I disagree with that. I think you have to constantly increase your understanding of things as they change, because my father was right. You need to broaden and deepen your education as you go along. You can’t just sit back and say, “Well, I studied some things in university, or in college, or in Boston, or at MIT, and that’s enough. I’ve done it.” No, learn, learn, learn, learn. Never stop.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:06:34)</span>
+  </div>
+  <div class="dialogue-en">And if I may suggest as part of the education, I would add in a little literature, maybe Dostoevsky, in the plentiful of time you have as a prime minister to read.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:06:44)</span>
+  </div>
+  <div class="dialogue-en">Well, I read him, but I’ll tell you what I think is bigger than Dostoevsky.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:06:47)</span>
+  </div>
+  <div class="dialogue-en">Oh, no. Who’s that?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(01:06:49)</span>
+  </div>
+  <div class="dialogue-en">Not who’s that, but what’s that? Dan Rather came to see me with his grandson a few years ago. And the grandson asked me, he was a student in Ivy League college. He’s 18 years old and he wants to study to enter politics. And he said, “What’s the most important thing that I have to study to enter a political life?” And I said, “You have three things you have to study. Okay? History, history and history.” That’s the fundamental discipline for political life. But then you have to study other things, study economics, study politics and so on, and study the military if you have… I had an advantage because I spent some years there, so I learned a lot of that, but I had to acquire the other disciplines. And you never acquire enough. So read, read, read. And by the way, if I have to choose, I read history, history and history. Good works of history, not lousy books.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:08:02)</span>
+  </div>
+  <div class="dialogue-en">Last question. You’ve talked about a survival of a nation. You, yourself, are a mortal being. Do you contemplate your mortality? Do you contemplate your death? Are you afraid of death?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:08:15)</span>
+  </div>
+  <div class="dialogue-en">Aren’t you?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:08:16)</span>
+  </div>
+  <div class="dialogue-en">Yes.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(01:08:16)</span>
+  </div>
+  <div class="dialogue-en">Who is not? I mean, if you’re a conscience, if you’re a being with conscience, I mean, one of the unhappy things about the human brain is that it can contemplate its own demise. And so, we all make our compromises with this, but I think the question is what lives on? What lives on beyond us? And I think that you have to define how much of posterity do you want to influence. I cannot influence the course of humanity. We all are specs, little specs. So that’s not the issue. But in my case, I’ve devoted my life to a very defined purpose. And that is to assure the future and security, and I would say permanence, but that is obviously a limited thing, of the Jewish state and the Jewish people. I don’t think one can exist without the other. So I’ve devoted my life to that. And I hope that in my time on this Earth and in my years in office, I’d have contributed to that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:09:29)</span>
+  </div>
+  <div class="dialogue-en">Well, you had one heck of a life, starting from MIT to six terms as prime minister. Thank you for this stroll through human history and for this conversation. It was an honor.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(01:09:44)</span>
+  </div>
+  <div class="dialogue-en">Thank you. And I hope you come back to Israel many times. Remember it’s the innovation nation. It’s a robust democracy. Don’t believe all the stuff that you are being told. It’ll remain that. It cannot be any other way. I’ll tell you the other thing, it’s the best ally of the United States, and its importance is growing by the day because our capacities in the information world are growing by the day. We need a coalition of the like-minded smarts. This is a smart nation. And we share the basic values of freedom and liberty with the United States. So the coalition of the smarts means Israel is the sixth eye and America has no better ally.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:10:33)</span>
+  </div>
+  <div class="dialogue-en">All right. Now off mic, I’m going to force you to finally tell me who is going to win. Elon Musk or Mark Zuckerberg? But it’s a good time that we ran out of time here.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:10:41)</span>
+  </div>
+  <div class="dialogue-en">I’ll tell you outside.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:10:44)</span>
+  </div>
+  <div class="dialogue-en">Thanks for listening to this conversation with Benjamin Netanyahu. To support this podcast, please check out our sponsors in the description. And now, let me leave you with some words from Mahatma Gandhi, “An eye for an eye will only make the whole world blind.” Thank you for listening and I hope to see you next time. This entry was posted in transcripts on July 12, 2023 by</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman
+  </div>
+  <div class="dialogue-en">.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman
+  </div>
+  <div class="dialogue-en">Host of Lex Fridman Podcast. Research Scientist at MIT, working on human-AI interaction, robotics, and machine learning. View all posts by Lex Fridman →</div>
+  
+</div></div>
+<button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 158 条对话 ↓</button>
+
+    <a href="https://lexfridman.com/benjamin-netanyahu-transcript" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -911,6 +1899,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -923,6 +1963,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

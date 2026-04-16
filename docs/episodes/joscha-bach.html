@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -642,31 +658,34 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 <div class="quote-block">
   <div class="quote-text">"this idea, if you don&#39;t think that you are special, you realize it&#39;s just one of many people and it&#39;s"</div>
-  
+  <div class="quote-zh">这个想法，如果你不认为自己很特别，你就会意识到这只是许多人中的一个，而且它是</div>
   <div class="quote-meta">— Joscha Bach （2:02:21.520）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"it to you? I think that if you look at the meaning of life, you look at what the cell is. Life is the"</div>
-  
+  <div class="quote-zh">给你吗？我认为如果你看生命的意义，你就会看细胞是什么。生命就是</div>
   <div class="quote-meta">— Joscha Bach （2:49:59.440）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"free and you can enter nirvana because you&#39;re done. And actually, this is a good time to pause and say"</div>
-  
+  <div class="quote-zh">自由了，你可以进入涅槃，因为你已经完成了。事实上，现在是停下来说的好时机</div>
   <div class="quote-meta">— Joscha Bach （46:12.000）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"adolescence where you basically feel misunderstood by the world and you don&#39;t understand that all the"</div>
-  
+  <div class="quote-zh">青春期，你基本上感觉被世界误解了，你不明白所有的事情</div>
   <div class="quote-meta">— Joscha Bach （09:34.160）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"right way to think about it. Yes. And Wittgenstein could see it. And Wittgenstein basically preempted"</div>
-  
+  <div class="quote-zh">正确的思考方式。是的。维特根斯坦可以看到这一点。维特根斯坦基本上抢先了</div>
   <div class="quote-meta">— Joscha Bach （16:44.240）</div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（1973 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
@@ -674,140 +693,140 @@ a:hover { color: var(--accent); text-decoration: underline; }
     Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">The following is a conversation with Yosha Bach, VP of Research at the AI Foundation,</div>
-  
+  <div class="dialogue-zh">以下是与人工智能基金会研究副总裁 Yosha Bach 的对话，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:05.520)</span>
   </div>
   <div class="dialogue-en">with a history of research positions at MIT and Harvard. Yosha is one of the most unique</div>
-  
+  <div class="dialogue-zh">曾在麻省理工学院和哈佛大学担任研究职务。 Yosha 是最独特的人之一</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:12.160)</span>
   </div>
   <div class="dialogue-en">and brilliant people in the artificial intelligence community, exploring the workings</div>
-  
+  <div class="dialogue-zh">以及人工智能界的杰出人士，探索其运作方式</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:16.720)</span>
   </div>
   <div class="dialogue-en">of the human mind, intelligence, consciousness, life on Earth, and the possibly simulated</div>
-  
+  <div class="dialogue-zh">人类思想、智力、意识、地球上的生命以及可能的模拟</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:23.360)</span>
   </div>
   <div class="dialogue-en">fabric of our universe. I could see myself talking to Yosha many times in the future.</div>
-  
+  <div class="dialogue-zh">我们宇宙的结构。我可以想象自己在未来会多次与 Yosha 交谈。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Joscha Bach <span class="dialogue-time">(00:28.640)</span>
   </div>
   <div class="dialogue-en">Quick summary of the ads. Two sponsors, ExpressVPN and Cash App. Please consider supporting the</div>
-  
+  <div class="dialogue-zh">广告的快速摘要。两个赞助商，ExpressVPN 和 Cash App。请考虑支持</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Joscha Bach <span class="dialogue-time">(00:35.600)</span>
   </div>
   <div class="dialogue-en">podcast by signing up at expressvpn.com slash LexPod and downloading Cash App and using code</div>
-  
+  <div class="dialogue-zh">通过在expressvpn.com 上注册播客并使用LexPod 下载Cash App 并使用代码</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Joscha Bach <span class="dialogue-time">(00:42.880)</span>
   </div>
   <div class="dialogue-en">LEXPodcast. This is the Artificial Intelligence Podcast. If you enjoy it, subscribe on YouTube,</div>
-  
+  <div class="dialogue-zh">LEX播客。这是人工智能播客。如果您喜欢，请在 YouTube 上订阅，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Joscha Bach <span class="dialogue-time">(00:50.240)</span>
   </div>
   <div class="dialogue-en">review it with five stars on Apple Podcast, support it on Patreon, or simply connect with</div>
-  
+  <div class="dialogue-zh">在 Apple Podcast 上以五颗星评价它，在 Patreon 上支持它，或者直接联系</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Joscha Bach <span class="dialogue-time">(00:54.720)</span>
   </div>
   <div class="dialogue-en">me on Twitter at LexFriedman. Since this comes up more often than I ever would have imagined,</div>
-  
+  <div class="dialogue-zh">我在 Twitter 上的 LexFriedman。因为这种情况出现的频率比我想象的要多，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Joscha Bach <span class="dialogue-time">(01:02.480)</span>
   </div>
   <div class="dialogue-en">I challenge you to try to figure out how to spell my last name without using the letter E.</div>
-  
+  <div class="dialogue-zh">我挑战你尝试找出如何在不使用字母 E 的情况下拼写我的姓氏。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:08.480)</span>
   </div>
   <div class="dialogue-en">And it&#39;ll probably be the correct way. As usual, I&#39;ll do a few minutes of ads now and never hear</div>
-  
+  <div class="dialogue-zh">这可能是正确的方法。像往常一样，我现在会做几分钟的广告，但永远不会听到</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Joscha Bach <span class="dialogue-time">(01:14.240)</span>
   </div>
   <div class="dialogue-en">any yas in the middle that can break the flow of the conversation. This show is sponsored by</div>
-  
+  <div class="dialogue-zh">中间任何可能打断谈话流程的事情。本次演出由</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Joscha Bach <span class="dialogue-time">(01:19.120)</span>
   </div>
   <div class="dialogue-en">ExpressVPN. Get it at expressvpn.com slash LexPod to support this podcast and to get an extra three</div>
-  
+  <div class="dialogue-zh">ExpressVPN。在expressvpn.com 上获取它斜线LexPod 以支持此播客并获得额外的三个</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Joscha Bach <span class="dialogue-time">(01:27.120)</span>
   </div>
   <div class="dialogue-en">months free on a one year package. I&#39;ve been using ExpressVPN for many years. I love it.</div>
-  
+  <div class="dialogue-zh">一年套餐免费几个月。我已经使用 ExpressVPN 多年了。我喜欢它。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Joscha Bach <span class="dialogue-time">(01:34.160)</span>
   </div>
   <div class="dialogue-en">I think ExpressVPN is the best VPN out there. They told me to say it, but I think it actually</div>
-  
+  <div class="dialogue-zh">我认为 ExpressVPN 是目前最好的 VPN。他们让我这么说，但我认为实际上是这样</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Joscha Bach <span class="dialogue-time">(01:40.240)</span>
   </div>
   <div class="dialogue-en">happens to be true. It doesn&#39;t log your data, it&#39;s crazy fast, and it&#39;s easy to use. Literally,</div>
-  
+  <div class="dialogue-zh">碰巧是真的。它不会记录您的数据，速度极快，而且易于使用。字面上地，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Joscha Bach <span class="dialogue-time">(01:46.880)</span>
   </div>
   <div class="dialogue-en">just one big power on button. Again, for obvious reasons, it&#39;s really important that they don&#39;t</div>
-  
+  <div class="dialogue-zh">只有一个大的电源按钮。再次强调，出于显而易见的原因，他们不这样做非常重要</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Joscha Bach <span class="dialogue-time">(01:52.640)</span>
   </div>
   <div class="dialogue-en">log your data. It works on Linux and everywhere else too. Shout out to my favorite flavor of Linux,</div>
-  
+  <div class="dialogue-zh">记录您的数据。它可以在 Linux 上运行，也可以在其他地方运行。大声说出我最喜欢的 Linux 风格，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Joscha Bach <span class="dialogue-time">(01:59.040)</span>
   </div>
   <div class="dialogue-en">Bantu Mate 2004. Once again, get it at expressvpn.com slash LexPod to support this podcast and to get</div>
-  
+  <div class="dialogue-zh">Bantu Mate 2004。再次从expressvpn.com 获取它斜线 LexPod 以支持此播客并获取</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
@@ -14483,7 +14502,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 </div></div>
 <button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 1973 条对话 ↓</button>
 
-    <a href="https://lexfridman.com/joscha-bach" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+    <a href="https://lexfridman.com/joscha-bach" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -14541,6 +14560,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -14553,6 +14624,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

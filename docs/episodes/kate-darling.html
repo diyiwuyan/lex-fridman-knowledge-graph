@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -642,31 +658,34 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 <div class="quote-block">
   <div class="quote-text">"approaches, will help us actually get to the core of what is right and what is wrong under our current"</div>
-  
+  <div class="quote-zh">方法，将帮助我们真正了解当前情况下什么是正确的，什么是错误的核心</div>
   <div class="quote-meta">— Kate Darling （29:49.680）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"useful enough to get people to adopt the technology in great numbers. I think what we did see from the"</div>
-  
+  <div class="quote-zh">足够有用，足以让人们大量采用该技术。我认为我们确实从</div>
   <div class="quote-meta">— Kate Darling （48:17.280）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"review it with five stars on Apple Podcast, support it on Patreon, or simply connect with me on Twitter"</div>
-  
+  <div class="quote-zh">在 Apple Podcast 上以五颗星评价它，在 Patreon 上支持它，或者在 Twitter 上与我联系</div>
   <div class="quote-meta">— Kate Darling （00:51.280）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"use it on Linux. Shout out to Ubuntu, 2004, Windows, Android, but it&#39;s available everywhere else too."</div>
-  
+  <div class="quote-zh">在 Linux 上使用它。值得称赞的是 Ubuntu、2004、Windows、Android，但它也可以在其他任何地方使用。</div>
   <div class="quote-meta">— Kate Darling （03:08.640）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"to something in our physical space than something on a screen. We will treat it much more viscerally,"</div>
-  
+  <div class="quote-zh">我们的物理空间中的某些东西而不是屏幕上的某些东西。我们会更加发自内心地对待它，</div>
   <div class="quote-meta">— Kate Darling （09:23.280）</div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（737 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
@@ -674,98 +693,98 @@ a:hover { color: var(--accent); text-decoration: underline; }
     Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">The following is a conversation with Kate Darling, a researcher at MIT,</div>
-  
+  <div class="dialogue-zh">以下是与麻省理工学院研究员 Kate Darling 的对话，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:04.480)</span>
   </div>
   <div class="dialogue-en">interested in social robotics, robot ethics, and generally how technology intersects with society.</div>
-  
+  <div class="dialogue-zh">对社交机器人、机器人伦理以及技术如何与社会交叉感兴趣。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:11.040)</span>
   </div>
   <div class="dialogue-en">She explores the emotional connection between human beings and lifelike machines,</div>
-  
+  <div class="dialogue-zh">她探索人类与栩栩如生的机器之间的情感联系，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:15.680)</span>
   </div>
   <div class="dialogue-en">which for me is one of the most exciting topics in all of artificial intelligence.</div>
-  
+  <div class="dialogue-zh">对我来说，这是所有人工智能中最令人兴奋的主题之一。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:21.360)</span>
   </div>
   <div class="dialogue-en">As she writes in her bio, she is a caretaker of several domestic robots,</div>
-  
+  <div class="dialogue-zh">正如她在个人简介中所写，她是几个家用机器人的看护者，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Kate Darling <span class="dialogue-time">(00:26.240)</span>
   </div>
   <div class="dialogue-en">including her plio dinosaur robots named Yochai, Peter, and Mr. Spaghetti.</div>
-  
+  <div class="dialogue-zh">包括她的 plio 恐龙机器人 Yochai、Peter 和 Mr. Spaghetti。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Kate Darling <span class="dialogue-time">(00:33.600)</span>
   </div>
   <div class="dialogue-en">She is one of the funniest and brightest minds I&#39;ve ever had the fortune to talk to.</div>
-  
+  <div class="dialogue-zh">她是我有幸交谈过的最有趣、最聪明的人之一。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Kate Darling <span class="dialogue-time">(00:37.840)</span>
   </div>
   <div class="dialogue-en">This conversation was recorded recently, but before the outbreak of the pandemic.</div>
-  
+  <div class="dialogue-zh">这段对话是最近录制的，但在大流行爆发之前。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:42.240)</span>
   </div>
   <div class="dialogue-en">For everyone feeling the burden of this crisis, I&#39;m sending love your way.</div>
-  
+  <div class="dialogue-zh">对于每一个感受到这场危机负担的人，我向你们表达爱。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Kate Darling <span class="dialogue-time">(00:46.720)</span>
   </div>
   <div class="dialogue-en">This is the Artificial Intelligence Podcast. If you enjoy it, subscribe on YouTube,</div>
-  
+  <div class="dialogue-zh">这是人工智能播客。如果您喜欢，请在 YouTube 上订阅，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Kate Darling <span class="dialogue-time">(00:51.280)</span>
   </div>
   <div class="dialogue-en">review it with five stars on Apple Podcast, support it on Patreon, or simply connect with me on Twitter</div>
-  
+  <div class="dialogue-zh">在 Apple Podcast 上以五颗星评价它，在 Patreon 上支持它，或者在 Twitter 上与我联系</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Kate Darling <span class="dialogue-time">(00:56.800)</span>
   </div>
   <div class="dialogue-en">at Lex Friedman, spelled F R I D M A N. As usual, I&#39;ll do a few minutes of ads now and never any</div>
-  
+  <div class="dialogue-zh">Lex Friedman，拼写为 F R I D M A N。像往常一样，我现在会做几分钟的广告，而且永远不会做任何广告。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Kate Darling <span class="dialogue-time">(01:03.440)</span>
   </div>
   <div class="dialogue-en">ads in the middle that can break the flow of the conversation. I hope that works for you and</div>
-  
+  <div class="dialogue-zh">中间的广告可能会打断对话的流畅性。我希望这对你有用</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Kate Darling <span class="dialogue-time">(01:08.000)</span>
   </div>
   <div class="dialogue-en">doesn&#39;t hurt the listening experience. Quick summary of the ads. Two sponsors,</div>
-  
+  <div class="dialogue-zh">不影响聆听体验。广告的快速摘要。两位赞助商，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
@@ -779,35 +798,35 @@ a:hover { color: var(--accent); text-decoration: underline; }
     Kate Darling <span class="dialogue-time">(01:19.040)</span>
   </div>
   <div class="dialogue-en">Masterclass at masterclass.com slash Lex and getting ExpressVPN at expressvpn.com slash Lex</div>
-  
+  <div class="dialogue-zh">masterclass.com 的 Masterclass 斜线 Lex 并在expressvpn.com 斜线 Lex 获取 ExpressVPN</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Kate Darling <span class="dialogue-time">(01:27.120)</span>
   </div>
   <div class="dialogue-en">Pod. This show is sponsored by Masterclass. Sign up at masterclass.com slash Lex to get a discount</div>
-  
+  <div class="dialogue-zh">荚。本次演出由大师班赞助。在 masterclass.com 上注册并削减 Lex 即可获得折扣</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:35.440)</span>
   </div>
   <div class="dialogue-en">and to support this podcast. When I first heard about Masterclass, I thought it was too good to</div>
-  
+  <div class="dialogue-zh">并支持这个播客。当我第一次听说大师班时，我觉得它太好了</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Kate Darling <span class="dialogue-time">(01:40.720)</span>
   </div>
   <div class="dialogue-en">be true. For $180 a year, you get an all access pass to watch courses from, to list some of my</div>
-  
+  <div class="dialogue-zh">说实话。每年只需 180 美元，您就可以获得观看课程的所有访问通行证，并列出我的一些课程</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Kate Darling <span class="dialogue-time">(01:47.680)</span>
   </div>
   <div class="dialogue-en">favorites. Chris Hadfield on space exploration, Neil deGrasse Tyson on scientific thinking and</div>
-  
+  <div class="dialogue-zh">最喜欢的。克里斯·哈德菲尔德 (Chris Hadfield) 谈太空探索，尼尔​​·德格拉斯·泰森 (Neil deGrasse Tyson) 谈科学思维和</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
@@ -5831,7 +5850,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 </div></div>
 <button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 737 条对话 ↓</button>
 
-    <a href="https://lexfridman.com/kate-darling" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+    <a href="https://lexfridman.com/kate-darling" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -5889,6 +5908,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -5901,6 +5972,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

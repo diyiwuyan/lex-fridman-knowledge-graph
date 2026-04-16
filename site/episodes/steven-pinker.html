@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -586,7 +600,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 <nav class="sidebar">
   <div class="sidebar-logo">
     <h1>Lex Fridman<br>知识图谱</h1>
-    <p>112 期节目 · 全文字幕</p>
+    <p>434 期节目 · 全文字幕</p>
   </div>
   
   <div class="sidebar-section">导航</div>
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -666,40 +682,43 @@ a:hover { color: var(--accent); text-decoration: underline; }
   <div class="quote-meta">— Steven Pinker （08:21.600）</div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（373 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Steven Pinker <span class="dialogue-time">(00:00.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">You&#39;ve studied the human mind, cognition, language, vision, evolution, psychology,</div>
   
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Steven Pinker <span class="dialogue-time">(00:05.280)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05.280)</span>
   </div>
   <div class="dialogue-en">from child to adult, from the level of individual to the level of our entire civilization.</div>
   
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Steven Pinker <span class="dialogue-time">(00:11.680)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:11.680)</span>
   </div>
   <div class="dialogue-en">So I feel like I can start with a simple multiple choice question.</div>
   
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Steven Pinker <span class="dialogue-time">(00:16.240)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:16.240)</span>
   </div>
   <div class="dialogue-en">What is the meaning of life? Is it A. to attain knowledge as Plato said,</div>
   
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Steven Pinker <span class="dialogue-time">(00:22.400)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:22.400)</span>
   </div>
   <div class="dialogue-en">B. to attain power as Nietzsche said, C. to escape death as Ernest Becker said,</div>
   
@@ -712,8 +731,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Steven Pinker <span class="dialogue-time">(00:33.200)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:33.200)</span>
   </div>
   <div class="dialogue-en">E. there is no meaning as the nihilists have said,</div>
   
@@ -726,8 +745,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Steven Pinker <span class="dialogue-time">(00:42.960)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:42.960)</span>
   </div>
   <div class="dialogue-en">based on my interpretation 20 years ago, and G. none of the above.</div>
   
@@ -768,15 +787,15 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Steven Pinker <span class="dialogue-time">(01:17.680)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:17.680)</span>
   </div>
   <div class="dialogue-en">meaning that the brain that they lead to sets for itself.</div>
   
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Steven Pinker <span class="dialogue-time">(01:22.400)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:22.400)</span>
   </div>
   <div class="dialogue-en">So to you knowledge is a small subset or a large subset?</div>
   
@@ -809,7 +828,2481 @@ a:hover { color: var(--accent); text-decoration: underline; }
   <div class="dialogue-en">For some of us more than others, certainly for me that&#39;s one of the top five.</div>
   
 </div>
-    <a href="https://lexfridman.com/steven-pinker" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:54.560)</span>
+  </div>
+  <div class="dialogue-en">So is that a fundamental aspect? Are you just describing your own preference or is this a</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(02:00.080)</span>
+  </div>
+  <div class="dialogue-en">fundamental aspect of human nature is to seek knowledge? In your latest book you talk about</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(02:05.920)</span>
+  </div>
+  <div class="dialogue-en">the power, the usefulness of rationality and reason and so on. Is that a fundamental</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:11.760)</span>
+  </div>
+  <div class="dialogue-en">nature of human beings or is it something we should just strive for?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(02:17.040)</span>
+  </div>
+  <div class="dialogue-en">Both. We&#39;re capable of striving for it because it is one of the things that make us what we are,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(02:23.920)</span>
+  </div>
+  <div class="dialogue-en">homo sapiens, wise men. We are unusual among animals in the degree to which we acquire</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(02:32.320)</span>
+  </div>
+  <div class="dialogue-en">knowledge and use it to survive. We make tools. We strike agreements via language. We extract</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(02:41.600)</span>
+  </div>
+  <div class="dialogue-en">poisons. We predict the behavior of animals. We try to get at the workings of plants.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:47.760)</span>
+  </div>
+  <div class="dialogue-en">And when I say we, I don&#39;t just mean we in the modern West, but we as a species everywhere,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(02:52.640)</span>
+  </div>
+  <div class="dialogue-en">which is how we&#39;ve managed to occupy every niche on the planet, how we&#39;ve managed to drive other</div>
+  
+</div>
+<div id="dialogue-more" style="display:none">
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(02:58.160)</span>
+  </div>
+  <div class="dialogue-en">animals to extinction. And the refinement of reason in pursuit of human wellbeing, of health,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(03:06.480)</span>
+  </div>
+  <div class="dialogue-en">happiness, social richness, cultural richness is our main challenge in the present. That is</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(03:14.480)</span>
+  </div>
+  <div class="dialogue-en">using our intellect, using our knowledge to figure out how the world works, how we work</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(03:19.280)</span>
+  </div>
+  <div class="dialogue-en">in order to make discoveries and strike agreements that make us all better off in the long run.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(03:25.200)</span>
+  </div>
+  <div class="dialogue-en">Right. And you do that almost undeniably and in a data driven way in your recent book,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:31.840)</span>
+  </div>
+  <div class="dialogue-en">but I&#39;d like to focus on the artificial intelligence aspect of things and not just</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(03:36.400)</span>
+  </div>
+  <div class="dialogue-en">artificial intelligence, but natural intelligence too. So 20 years ago in a book you&#39;ve written on</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:41.920)</span>
+  </div>
+  <div class="dialogue-en">how the mind works, you conjecture again, am I right to interpret things? You can correct me</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(03:49.520)</span>
+  </div>
+  <div class="dialogue-en">if I&#39;m wrong, but you conjecture that human thought in the brain may be a result of a</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(03:54.400)</span>
+  </div>
+  <div class="dialogue-en">massive network of highly interconnected neurons. So from this interconnectivity emerges thought</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(04:01.280)</span>
+  </div>
+  <div class="dialogue-en">compared to artificial neural networks, which we use for machine learning today,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(04:06.160)</span>
+  </div>
+  <div class="dialogue-en">is there something fundamentally more complex, mysterious, even magical about the biological</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(04:12.640)</span>
+  </div>
+  <div class="dialogue-en">neural networks versus the ones we&#39;ve been starting to use over the past 60 years and</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(04:19.440)</span>
+  </div>
+  <div class="dialogue-en">have become to success in the past 10? There is something a little bit mysterious</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(04:24.720)</span>
+  </div>
+  <div class="dialogue-en">about the human neural networks, which is that each one of us who is a neural network knows that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(04:31.600)</span>
+  </div>
+  <div class="dialogue-en">we ourselves are conscious. Conscious not in the sense of registering our surroundings or even</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(04:36.960)</span>
+  </div>
+  <div class="dialogue-en">registering our internal state, but in having subjective first person, present tense experience.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(04:42.720)</span>
+  </div>
+  <div class="dialogue-en">That is when I see red, it&#39;s not just different from green, but there&#39;s a redness to it that I</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(04:49.840)</span>
+  </div>
+  <div class="dialogue-en">feel. Whether an artificial system would experience that or not, I don&#39;t know and I don&#39;t think I can</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(04:54.960)</span>
+  </div>
+  <div class="dialogue-en">know. That&#39;s why it&#39;s mysterious. If we had a perfectly lifelike robot that was behaviorally</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(05:00.480)</span>
+  </div>
+  <div class="dialogue-en">indistinguishable from a human, would we attribute consciousness to it or ought we to attribute</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(05:06.800)</span>
+  </div>
+  <div class="dialogue-en">consciousness to it? And that&#39;s something that it&#39;s very hard to know. But putting that aside,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(05:12.160)</span>
+  </div>
+  <div class="dialogue-en">putting aside that largely philosophical question, the question is, is there some difference between</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(05:19.040)</span>
+  </div>
+  <div class="dialogue-en">the human neural network and the ones that we&#39;re building in artificial intelligence will mean</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(05:23.760)</span>
+  </div>
+  <div class="dialogue-en">that we&#39;re on the current trajectory, not going to reach the point where we&#39;ve got a lifelike</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(05:30.000)</span>
+  </div>
+  <div class="dialogue-en">robot indistinguishable from a human because the way their so called neural networks are organized</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(05:35.120)</span>
+  </div>
+  <div class="dialogue-en">are different from the way ours are organized. I think there&#39;s overlap, but I think there are</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(05:39.760)</span>
+  </div>
+  <div class="dialogue-en">some big differences that current neural networks, current so called deep learning systems are in</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(05:48.800)</span>
+  </div>
+  <div class="dialogue-en">reality not all that deep. That is, they are very good at extracting high order statistical</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(05:53.840)</span>
+  </div>
+  <div class="dialogue-en">regularities, but most of the systems don&#39;t have a semantic level, a level of actual understanding</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(06:00.640)</span>
+  </div>
+  <div class="dialogue-en">of who did what to whom, why, where, how things work, what causes what else. Do you think that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(06:07.520)</span>
+  </div>
+  <div class="dialogue-en">kind of thing can emerge as it does? So artificial neural networks are much smaller, the number of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(06:11.840)</span>
+  </div>
+  <div class="dialogue-en">connections and so on than the current human biological networks, but do you think sort of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(06:18.320)</span>
+  </div>
+  <div class="dialogue-en">to go to consciousness or to go to this higher level semantic reasoning about things, do you</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:22.800)</span>
+  </div>
+  <div class="dialogue-en">think that can emerge with just a larger network with a more richly weirdly interconnected network?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(06:29.760)</span>
+  </div>
+  <div class="dialogue-en">Separate it in consciousness because consciousness is even a matter of complexity.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:33.280)</span>
+  </div>
+  <div class="dialogue-en">A really weird one.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(06:34.320)</span>
+  </div>
+  <div class="dialogue-en">Yeah, you could sensibly ask the question of whether shrimp are conscious, for example,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(06:38.400)</span>
+  </div>
+  <div class="dialogue-en">they&#39;re not terribly complex, but maybe they feel pain. So let&#39;s just put that part of it aside.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:44.400)</span>
+  </div>
+  <div class="dialogue-en">But I think sheer size of a neural network is not enough to give it structure and knowledge,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:52.480)</span>
+  </div>
+  <div class="dialogue-en">but if it&#39;s suitably engineered, then why not? That is, we&#39;re neural networks, natural selection</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(06:59.520)</span>
+  </div>
+  <div class="dialogue-en">did a kind of equivalent of engineering of our brains. So I don&#39;t think there&#39;s anything mysterious</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(07:04.880)</span>
+  </div>
+  <div class="dialogue-en">in the sense that no system made out of silicon could ever do what a human brain can do. I think</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(07:11.760)</span>
+  </div>
+  <div class="dialogue-en">it&#39;s possible in principle. Whether it&#39;ll ever happen depends not only on how clever we are</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(07:17.360)</span>
+  </div>
+  <div class="dialogue-en">in engineering these systems, but whether we even want to, whether that&#39;s even a sensible goal.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:22.240)</span>
+  </div>
+  <div class="dialogue-en">That is, you can ask the question, is there any locomotion system that is as good as a human?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(07:29.920)</span>
+  </div>
+  <div class="dialogue-en">Well, we kind of want to do better than a human ultimately in terms of legged locomotion.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(07:35.520)</span>
+  </div>
+  <div class="dialogue-en">There&#39;s no reason that humans should be our benchmark. They&#39;re tools that might be better</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(07:39.760)</span>
+  </div>
+  <div class="dialogue-en">in some ways. It may be that we can&#39;t duplicate a natural system because at some point it&#39;s so much</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(07:49.760)</span>
+  </div>
+  <div class="dialogue-en">cheaper to use a natural system that we&#39;re not going to invest more brainpower and resources.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:54.560)</span>
+  </div>
+  <div class="dialogue-en">So for example, we don&#39;t really have an exact substitute for wood. We still build houses out</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(08:00.480)</span>
+  </div>
+  <div class="dialogue-en">of wood. We still build furniture out of wood. We like the look. We like the feel. It has certain</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(08:05.040)</span>
+  </div>
+  <div class="dialogue-en">properties that synthetics don&#39;t. It&#39;s not that there&#39;s anything magical or mysterious about wood.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(08:11.120)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s just that the extra steps of duplicating everything about wood is something we just haven&#39;t</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(08:17.600)</span>
+  </div>
+  <div class="dialogue-en">bothered because we have wood. Likewise, say cotton. I&#39;m wearing cotton clothing now. It feels</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(08:21.600)</span>
+  </div>
+  <div class="dialogue-en">much better than polyester. It&#39;s not that cotton has something magic in it. It&#39;s not that we couldn&#39;t</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(08:29.760)</span>
+  </div>
+  <div class="dialogue-en">ever synthesize something exactly like cotton, but at some point it&#39;s just not worth it. We&#39;ve got</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(08:35.920)</span>
+  </div>
+  <div class="dialogue-en">cotton. Likewise, in the case of human intelligence, the goal of making an artificial system that is</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(08:42.000)</span>
+  </div>
+  <div class="dialogue-en">exactly like the human brain is a goal that we probably know is going to pursue to the bitter</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(08:47.840)</span>
+  </div>
+  <div class="dialogue-en">end, I suspect, because if you want tools that do things better than humans, you&#39;re not going to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(08:53.120)</span>
+  </div>
+  <div class="dialogue-en">care whether it does something like humans. So for example, diagnosing cancer or predicting the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(08:58.240)</span>
+  </div>
+  <div class="dialogue-en">weather, why set humans as your benchmark? But in general, I suspect you also believe</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(09:05.840)</span>
+  </div>
+  <div class="dialogue-en">that even if the human should not be a benchmark and we don&#39;t want to imitate humans in their</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(09:10.480)</span>
+  </div>
+  <div class="dialogue-en">system, there&#39;s a lot to be learned about how to create an artificial intelligence system by</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(09:15.520)</span>
+  </div>
+  <div class="dialogue-en">studying the human. Yeah, I think that&#39;s right. In the same way that to build flying machines,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(09:22.480)</span>
+  </div>
+  <div class="dialogue-en">we want to understand the laws of aerodynamics, including birds, but not mimic the birds,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:27.760)</span>
+  </div>
+  <div class="dialogue-en">but they&#39;re the same laws. You have a view on AI, artificial intelligence, and safety</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(09:35.440)</span>
+  </div>
+  <div class="dialogue-en">that, from my perspective, is refreshingly rational or perhaps more importantly, has elements</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(09:47.040)</span>
+  </div>
+  <div class="dialogue-en">of positivity to it, which I think can be inspiring and empowering as opposed to paralyzing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(09:53.600)</span>
+  </div>
+  <div class="dialogue-en">For many people, including AI researchers, the eventual existential threat of AI is obvious,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(09:59.840)</span>
+  </div>
+  <div class="dialogue-en">not only possible, but obvious. And for many others, including AI researchers, the threat</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(10:05.840)</span>
+  </div>
+  <div class="dialogue-en">is not obvious. So Elon Musk is famously in the highly concerned about AI camp, saying things like</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(10:14.640)</span>
+  </div>
+  <div class="dialogue-en">AI is far more dangerous than nuclear weapons, and that AI will likely destroy human civilization.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(10:21.200)</span>
+  </div>
+  <div class="dialogue-en">Human civilization. So in February, he said that if Elon was really serious about AI, the threat</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(10:29.360)</span>
+  </div>
+  <div class="dialogue-en">of AI, he would stop building self driving cars that he&#39;s doing very successfully as part of Tesla.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(10:35.760)</span>
+  </div>
+  <div class="dialogue-en">Then he said, wow, if even Pinker doesn&#39;t understand the difference between narrow AI,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(10:40.800)</span>
+  </div>
+  <div class="dialogue-en">like a car and general AI, when the latter literally has a million times more compute power</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:47.280)</span>
+  </div>
+  <div class="dialogue-en">and an open ended utility function, humanity is in deep trouble. So first, what did you mean by</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:54.160)</span>
+  </div>
+  <div class="dialogue-en">the statement about Elon Musk should stop building self driving cars if he&#39;s deeply concerned?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(11:00.080)</span>
+  </div>
+  <div class="dialogue-en">Not the last time that Elon Musk has fired off an intemperate tweet.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:04.320)</span>
+  </div>
+  <div class="dialogue-en">Well, we live in a world where Twitter has power.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(11:07.680)</span>
+  </div>
+  <div class="dialogue-en">Yes. Yeah, I think there are two kinds of existential threat that have been discussed</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(11:16.640)</span>
+  </div>
+  <div class="dialogue-en">in connection with artificial intelligence, and I think that they&#39;re both incoherent.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(11:20.480)</span>
+  </div>
+  <div class="dialogue-en">One of them is a vague fear of AI takeover, that just as we subjugated animals and less technologically</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(11:29.520)</span>
+  </div>
+  <div class="dialogue-en">advanced peoples, so if we build something that&#39;s more advanced than us, it will inevitably turn us</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(11:34.640)</span>
+  </div>
+  <div class="dialogue-en">into pets or slaves or domesticated animal equivalents. I think this confuses intelligence</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(11:42.320)</span>
+  </div>
+  <div class="dialogue-en">with a will to power, that it so happens that in the intelligence system we are most familiar with,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(11:49.200)</span>
+  </div>
+  <div class="dialogue-en">namely homo sapiens, we are products of natural selection, which is a competitive process,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:54.160)</span>
+  </div>
+  <div class="dialogue-en">and so bundled together with our problem solving capacity are a number of nasty traits like</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(12:00.320)</span>
+  </div>
+  <div class="dialogue-en">dominance and exploitation and maximization of power and glory and resources and influence.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(12:08.720)</span>
+  </div>
+  <div class="dialogue-en">There&#39;s no reason to think that sheer problem solving capability will set that as one of its</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(12:13.120)</span>
+  </div>
+  <div class="dialogue-en">goals. Its goals will be whatever we set its goals as, and as long as someone isn&#39;t building a</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(12:18.720)</span>
+  </div>
+  <div class="dialogue-en">megalomaniacal artificial intelligence, then there&#39;s no reason to think that it would naturally</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(12:24.320)</span>
+  </div>
+  <div class="dialogue-en">evolve in that direction. Now, you might say, well, what if we gave it the goal of maximizing</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(12:28.960)</span>
+  </div>
+  <div class="dialogue-en">its own power source? That&#39;s a pretty stupid goal to give an autonomous system. You don&#39;t give it</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(12:34.880)</span>
+  </div>
+  <div class="dialogue-en">that goal. I mean, that&#39;s just self evidently idiotic. So if you look at the history of the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(12:40.720)</span>
+  </div>
+  <div class="dialogue-en">world, there&#39;s been a lot of opportunities where engineers could instill in a system</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(12:45.120)</span>
+  </div>
+  <div class="dialogue-en">destructive power and they choose not to because that&#39;s the natural process of engineering.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(12:49.440)</span>
+  </div>
+  <div class="dialogue-en">Well, except for weapons. I mean, if you&#39;re building a weapon, its goal is to destroy people,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:53.680)</span>
+  </div>
+  <div class="dialogue-en">and so I think there are good reasons to not build certain kinds of weapons. I think building</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(12:58.560)</span>
+  </div>
+  <div class="dialogue-en">nuclear weapons was a massive mistake. You do. So maybe pause on that because that is one of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(13:06.480)</span>
+  </div>
+  <div class="dialogue-en">the serious threats. Do you think that it was a mistake in a sense that it should have been</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(13:12.800)</span>
+  </div>
+  <div class="dialogue-en">stopped early on? Or do you think it&#39;s just an unfortunate event of invention that this was</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(13:19.200)</span>
+  </div>
+  <div class="dialogue-en">invented? Do you think it&#39;s possible to stop? I guess is the question. It&#39;s hard to rewind the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(13:23.280)</span>
+  </div>
+  <div class="dialogue-en">clock because of course it was invented in the context of World War II and the fear that the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(13:28.320)</span>
+  </div>
+  <div class="dialogue-en">Nazis might develop one first. Then once it was initiated for that reason, it was hard to turn</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(13:35.120)</span>
+  </div>
+  <div class="dialogue-en">off, especially since winning the war against the Japanese and the Nazis was such an overwhelming</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(13:42.080)</span>
+  </div>
+  <div class="dialogue-en">goal of every responsible person that there&#39;s just nothing that people wouldn&#39;t have done then</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(13:47.120)</span>
+  </div>
+  <div class="dialogue-en">to ensure victory. It&#39;s quite possible if World War II hadn&#39;t happened that nuclear weapons</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(13:52.560)</span>
+  </div>
+  <div class="dialogue-en">wouldn&#39;t have been invented. We can&#39;t know, but I don&#39;t think it was by any means a necessity,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(13:57.440)</span>
+  </div>
+  <div class="dialogue-en">any more than some of the other weapon systems that were envisioned but never implemented,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(14:02.720)</span>
+  </div>
+  <div class="dialogue-en">like planes that would disperse poison gas over cities like crop dusters or systems to try to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:10.560)</span>
+  </div>
+  <div class="dialogue-en">create earthquakes and tsunamis in enemy countries, to weaponize the weather,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(14:16.000)</span>
+  </div>
+  <div class="dialogue-en">weaponize solar flares, all kinds of crazy schemes that we thought the better of.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(14:21.120)</span>
+  </div>
+  <div class="dialogue-en">I think analogies between nuclear weapons and artificial intelligence are fundamentally</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(14:25.840)</span>
+  </div>
+  <div class="dialogue-en">misguided because the whole point of nuclear weapons is to destroy things. The point of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:30.560)</span>
+  </div>
+  <div class="dialogue-en">artificial intelligence is not to destroy things. So the analogy is misleading.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:36.080)</span>
+  </div>
+  <div class="dialogue-en">So there&#39;s two artificial intelligence you mentioned. The first one I guess is highly</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:39.920)</span>
+  </div>
+  <div class="dialogue-en">intelligent or power hungry.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(14:42.080)</span>
+  </div>
+  <div class="dialogue-en">Yeah, it&#39;s a system that we design ourselves where we give it the goals. Goals are external to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(14:46.800)</span>
+  </div>
+  <div class="dialogue-en">the means to attain the goals. If we don&#39;t design an artificially intelligent system to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(14:55.200)</span>
+  </div>
+  <div class="dialogue-en">maximize dominance, then it won&#39;t maximize dominance. It&#39;s just that we&#39;re so familiar</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(15:00.800)</span>
+  </div>
+  <div class="dialogue-en">with homo sapiens where these two traits come bundled together, particularly in men,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(15:06.320)</span>
+  </div>
+  <div class="dialogue-en">that we are apt to confuse high intelligence with a will to power, but that&#39;s just an error.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(15:15.520)</span>
+  </div>
+  <div class="dialogue-en">The other fear is that will be collateral damage that will give artificial intelligence a goal</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(15:21.440)</span>
+  </div>
+  <div class="dialogue-en">like make paper clips and it will pursue that goal so brilliantly that before we can stop it,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(15:27.440)</span>
+  </div>
+  <div class="dialogue-en">it turns us into paper clips. We&#39;ll give it the goal of curing cancer and it will turn us into</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(15:32.800)</span>
+  </div>
+  <div class="dialogue-en">guinea pigs for lethal experiments or give it the goal of world peace and its conception of world</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(15:38.720)</span>
+  </div>
+  <div class="dialogue-en">peace is no people, therefore no fighting and so it will kill us all. Now I think these are utterly</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(15:43.680)</span>
+  </div>
+  <div class="dialogue-en">fanciful. In fact, I think they&#39;re actually self defeating. They first of all assume that we&#39;re</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(15:49.040)</span>
+  </div>
+  <div class="dialogue-en">going to be so brilliant that we can design an artificial intelligence that can cure cancer,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:53.600)</span>
+  </div>
+  <div class="dialogue-en">but so stupid that we don&#39;t specify what we mean by curing cancer in enough detail that it won&#39;t</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(15:59.600)</span>
+  </div>
+  <div class="dialogue-en">kill us in the process and it assumes that the system will be so smart that it can cure cancer,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:06.240)</span>
+  </div>
+  <div class="dialogue-en">but so idiotic that it can&#39;t figure out that what we mean by curing cancer is not killing everyone.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(16:12.880)</span>
+  </div>
+  <div class="dialogue-en">I think that the collateral damage scenario, the value alignment problem is also based on</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(16:18.320)</span>
+  </div>
+  <div class="dialogue-en">a misconception. So one of the challenges, of course, we don&#39;t know how to build either system</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(16:23.200)</span>
+  </div>
+  <div class="dialogue-en">currently or are we even close to knowing? Of course, those things can change overnight,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:27.440)</span>
+  </div>
+  <div class="dialogue-en">but at this time, theorizing about it is very challenging in either direction. So that&#39;s</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(16:33.840)</span>
+  </div>
+  <div class="dialogue-en">probably at the core of the problem is without that ability to reason about the real engineering</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(16:39.600)</span>
+  </div>
+  <div class="dialogue-en">things here at hand is your imagination runs away with things. Exactly. But let me sort of ask,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:45.120)</span>
+  </div>
+  <div class="dialogue-en">what do you think was the motivation, the thought process of Elon Musk? I build autonomous vehicles,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(16:52.320)</span>
+  </div>
+  <div class="dialogue-en">I study autonomous vehicles, I study Tesla autopilot. I think it is one of the greatest</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(16:57.680)</span>
+  </div>
+  <div class="dialogue-en">currently large scale application of artificial intelligence in the world. It has potentially a</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(17:04.400)</span>
+  </div>
+  <div class="dialogue-en">very positive impact on society. So how does a person who&#39;s creating this very good quote unquote</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(17:10.880)</span>
+  </div>
+  <div class="dialogue-en">narrow AI system also seem to be so concerned about this other general AI? What do you think</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(17:19.280)</span>
+  </div>
+  <div class="dialogue-en">is the motivation there? What do you think is the thing? Well, you probably have to ask him,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:23.040)</span>
+  </div>
+  <div class="dialogue-en">but there, and he is notoriously flamboyant, impulsive to the, as we have just seen,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(17:31.520)</span>
+  </div>
+  <div class="dialogue-en">to the detriment of his own goals of the health of the company. So I don&#39;t know what&#39;s going on</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(17:37.360)</span>
+  </div>
+  <div class="dialogue-en">in his mind. You probably have to ask him, but I don&#39;t think the, and I don&#39;t think the distinction</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(17:42.560)</span>
+  </div>
+  <div class="dialogue-en">between special purpose AI and so called general AI is relevant that in the same way that special</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(17:50.240)</span>
+  </div>
+  <div class="dialogue-en">purpose AI is not going to do anything conceivable in order to attain a goal. All engineering systems</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(17:57.760)</span>
+  </div>
+  <div class="dialogue-en">are designed to trade off across multiple goals. When we build cars in the first place,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(18:02.800)</span>
+  </div>
+  <div class="dialogue-en">we didn&#39;t forget to install brakes because the goal of a car is to go fast. It occurred to people,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(18:08.880)</span>
+  </div>
+  <div class="dialogue-en">yes, you want it to go fast, but not always. So you would build in brakes too. Likewise,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(18:13.920)</span>
+  </div>
+  <div class="dialogue-en">if a car is going to be autonomous and program it to take the shortest route to the airport,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(18:20.320)</span>
+  </div>
+  <div class="dialogue-en">it&#39;s not going to take the diagonal and mow down people and trees and fences because that&#39;s the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(18:24.560)</span>
+  </div>
+  <div class="dialogue-en">shortest route. That&#39;s not what we mean by the shortest route when we program it. And that&#39;s just</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:29.120)</span>
+  </div>
+  <div class="dialogue-en">what an intelligence system is by definition. It takes into account multiple constraints.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(18:36.000)</span>
+  </div>
+  <div class="dialogue-en">The same is true, in fact, even more true of so called general intelligence. That is,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(18:41.280)</span>
+  </div>
+  <div class="dialogue-en">if it&#39;s genuinely intelligent, it&#39;s not going to pursue some goal singlemindedly, omitting every</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(18:48.080)</span>
+  </div>
+  <div class="dialogue-en">other consideration and collateral effect. That&#39;s not artificial and general intelligence. That&#39;s</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(18:54.400)</span>
+  </div>
+  <div class="dialogue-en">artificial stupidity. I agree with you, by the way, on the promise of autonomous vehicles for</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(19:01.120)</span>
+  </div>
+  <div class="dialogue-en">improving human welfare. I think it&#39;s spectacular. And I&#39;m surprised at how little press coverage</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(19:06.160)</span>
+  </div>
+  <div class="dialogue-en">notes that in the United States alone, something like 40,000 people die every year on the highways,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(19:11.680)</span>
+  </div>
+  <div class="dialogue-en">vastly more than are killed by terrorists. And we spent a trillion dollars on a war to combat</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(19:18.240)</span>
+  </div>
+  <div class="dialogue-en">deaths by terrorism, about half a dozen a year. Whereas year in, year out, 40,000 people are</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(19:24.160)</span>
+  </div>
+  <div class="dialogue-en">massacred on the highways, which could be brought down to very close to zero. So I&#39;m with you on</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(19:29.920)</span>
+  </div>
+  <div class="dialogue-en">the humanitarian benefit. Let me just mention that as a person who&#39;s building these cars,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(19:34.800)</span>
+  </div>
+  <div class="dialogue-en">it is a little bit offensive to me to say that engineers would be clueless enough not to engineer</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(19:39.360)</span>
+  </div>
+  <div class="dialogue-en">safety into systems. I often stay up at night thinking about those 40,000 people that are dying.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:45.280)</span>
+  </div>
+  <div class="dialogue-en">And everything I tried to engineer is to save those people&#39;s lives. So every new invention that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(19:50.800)</span>
+  </div>
+  <div class="dialogue-en">I&#39;m super excited about, in all the deep learning literature and CVPR conferences and NIPS, everything</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(19:59.280)</span>
+  </div>
+  <div class="dialogue-en">I&#39;m super excited about is all grounded in making it safe and help people. So I just don&#39;t see how</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(20:08.240)</span>
+  </div>
+  <div class="dialogue-en">that trajectory can all of a sudden slip into a situation where intelligence will be highly</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(20:13.280)</span>
+  </div>
+  <div class="dialogue-en">negative. You and I certainly agree on that. And I think that&#39;s only the beginning of the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(20:17.920)</span>
+  </div>
+  <div class="dialogue-en">potential humanitarian benefits of artificial intelligence. There&#39;s been enormous attention to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:24.320)</span>
+  </div>
+  <div class="dialogue-en">what are we going to do with the people whose jobs are made obsolete by artificial intelligence,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:28.720)</span>
+  </div>
+  <div class="dialogue-en">but very little attention given to the fact that the jobs that are going to be made obsolete are</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(20:32.560)</span>
+  </div>
+  <div class="dialogue-en">horrible jobs. The fact that people aren&#39;t going to be picking crops and making beds and driving</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(20:38.960)</span>
+  </div>
+  <div class="dialogue-en">trucks and mining coal, these are soul deadening jobs. And we have a whole literature sympathizing</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(20:45.520)</span>
+  </div>
+  <div class="dialogue-en">with the people stuck in these menial, mind deadening, dangerous jobs. If we can eliminate</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(20:53.040)</span>
+  </div>
+  <div class="dialogue-en">them, this is a fantastic boon to humanity. Now granted, you solve one problem and there&#39;s another</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(20:58.480)</span>
+  </div>
+  <div class="dialogue-en">one, namely, how do we get these people a decent income? But if we&#39;re smart enough to invent machines</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(21:05.840)</span>
+  </div>
+  <div class="dialogue-en">that can make beds and put away dishes and handle hospital patients, I think we&#39;re smart enough to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(21:12.400)</span>
+  </div>
+  <div class="dialogue-en">figure out how to redistribute income to apportion some of the vast economic savings to the human</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(21:19.200)</span>
+  </div>
+  <div class="dialogue-en">beings who will no longer be needed to make beds. Okay. Sam Harris says that it&#39;s obvious that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(21:26.000)</span>
+  </div>
+  <div class="dialogue-en">eventually AI will be an existential risk. He&#39;s one of the people who says it&#39;s obvious.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(21:31.760)</span>
+  </div>
+  <div class="dialogue-en">We don&#39;t know when the claim goes, but eventually it&#39;s obvious. And because we don&#39;t know when,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(21:38.640)</span>
+  </div>
+  <div class="dialogue-en">we should worry about it now. This is a very interesting argument in my eyes. So how do we</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(21:45.680)</span>
+  </div>
+  <div class="dialogue-en">think about timescale? How do we think about existential threats when we don&#39;t really, we know</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:51.120)</span>
+  </div>
+  <div class="dialogue-en">so little about the threat, unlike nuclear weapons perhaps, about this particular threat, that it</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(21:58.160)</span>
+  </div>
+  <div class="dialogue-en">could happen tomorrow, right? So, but very likely it won&#39;t. Very likely it&#39;d be a hundred years away.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:04.560)</span>
+  </div>
+  <div class="dialogue-en">So how do we ignore it? How do we talk about it? Do we worry about it? How do we think about those?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:12.480)</span>
+  </div>
+  <div class="dialogue-en">What is it?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:13.840)</span>
+  </div>
+  <div class="dialogue-en">A threat that we can imagine. It&#39;s within the limits of our imagination,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:18.560)</span>
+  </div>
+  <div class="dialogue-en">but not within our limits of understanding to accurately predict it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:24.320)</span>
+  </div>
+  <div class="dialogue-en">But what is the it that we&#39;re afraid of?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(22:26.880)</span>
+  </div>
+  <div class="dialogue-en">Sorry. AI being the existential threat.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:30.320)</span>
+  </div>
+  <div class="dialogue-en">AI. How? Like enslaving us or turning us into paperclips?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(22:35.120)</span>
+  </div>
+  <div class="dialogue-en">I think the most compelling from the Sam Harris perspective would be the paperclip situation.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(22:39.520)</span>
+  </div>
+  <div class="dialogue-en">Yeah. I mean, I just think it&#39;s totally fanciful. I mean, that is don&#39;t build a system.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(22:43.440)</span>
+  </div>
+  <div class="dialogue-en">Don&#39;t give a, don&#39;t, first of all, the code of engineering is you don&#39;t implement a system with</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(22:50.080)</span>
+  </div>
+  <div class="dialogue-en">massive control before testing it. Now, perhaps the culture of engineering will radically change.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(22:55.040)</span>
+  </div>
+  <div class="dialogue-en">Then I would worry, but I don&#39;t see any signs that engineers will suddenly do idiotic things,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(23:00.320)</span>
+  </div>
+  <div class="dialogue-en">like put a electric power plant in control of a system that they haven&#39;t tested first.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(23:07.360)</span>
+  </div>
+  <div class="dialogue-en">Or all of these scenarios, not only imagine almost a magically powered intelligence,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(23:15.600)</span>
+  </div>
+  <div class="dialogue-en">including things like cure cancer, which is probably an incoherent goal because there&#39;s</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:20.240)</span>
+  </div>
+  <div class="dialogue-en">so many different kinds of cancer or bring about world peace. I mean, how do you even specify that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(23:25.600)</span>
+  </div>
+  <div class="dialogue-en">as a goal? But the scenarios also imagine some degree of control of every molecule in the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(23:31.360)</span>
+  </div>
+  <div class="dialogue-en">universe, which not only is itself unlikely, but we would not start to connect these systems to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:39.120)</span>
+  </div>
+  <div class="dialogue-en">infrastructure without testing as we would any kind of engineering system.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(23:45.680)</span>
+  </div>
+  <div class="dialogue-en">Now, maybe some engineers will be irresponsible and we need legal and regulatory and legal</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(23:53.920)</span>
+  </div>
+  <div class="dialogue-en">responsibility implemented so that engineers don&#39;t do things that are stupid by their own standards.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:00.640)</span>
+  </div>
+  <div class="dialogue-en">But the, I&#39;ve never seen enough of a plausible scenario of existential threat to devote large</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(24:08.560)</span>
+  </div>
+  <div class="dialogue-en">amounts of brain power to, to forestall it. So you believe in the sort of the power on</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(24:14.240)</span>
+  </div>
+  <div class="dialogue-en">mass of the engineering of reason, as you argue in your latest book of Reason and Science, to sort of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(24:20.400)</span>
+  </div>
+  <div class="dialogue-en">be the very thing that guides the development of new technology so it&#39;s safe and also keeps us safe.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(24:28.000)</span>
+  </div>
+  <div class="dialogue-en">You know, granted the same culture of safety that currently is part of the engineering mindset for</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(24:34.560)</span>
+  </div>
+  <div class="dialogue-en">airplanes, for example. So yeah, I don&#39;t think that that should be thrown out the window and</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(24:40.480)</span>
+  </div>
+  <div class="dialogue-en">that untested all powerful systems should be suddenly implemented, but there&#39;s no reason to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(24:45.520)</span>
+  </div>
+  <div class="dialogue-en">think they are. And in fact, if you look at the progress of artificial intelligence, it&#39;s been,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(24:50.400)</span>
+  </div>
+  <div class="dialogue-en">you know, it&#39;s been impressive, especially in the last 10 years or so, but the idea that suddenly</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(24:54.160)</span>
+  </div>
+  <div class="dialogue-en">there&#39;ll be a step function that all of a sudden before we know it, it will be all powerful,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(25:00.080)</span>
+  </div>
+  <div class="dialogue-en">that there&#39;ll be some kind of recursive self improvement, some kind of fume is also fanciful.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(25:06.800)</span>
+  </div>
+  <div class="dialogue-en">We, certainly by the technology that we, that we&#39;re now impresses us, such as deep learning,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(25:13.200)</span>
+  </div>
+  <div class="dialogue-en">where you train something on hundreds of thousands or millions of examples,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(25:18.320)</span>
+  </div>
+  <div class="dialogue-en">they&#39;re not hundreds of thousands of problems of which curing cancer is a typical example.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:26.000)</span>
+  </div>
+  <div class="dialogue-en">And so the kind of techniques that have allowed AI to increase in the last five years are not the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(25:31.520)</span>
+  </div>
+  <div class="dialogue-en">kind that are going to lead to this fantasy of exponential sudden self improvement. I think it&#39;s</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(25:40.320)</span>
+  </div>
+  <div class="dialogue-en">kind of a magical thinking. It&#39;s not based on our understanding of how AI actually works.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(25:45.440)</span>
+  </div>
+  <div class="dialogue-en">Now give me a chance here. So you said fanciful, magical thinking. In his TED talk,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(25:51.040)</span>
+  </div>
+  <div class="dialogue-en">Sam Harris says that thinking about AI killing all human civilization is somehow fun,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:55.760)</span>
+  </div>
+  <div class="dialogue-en">intellectually. Now I have to say as a scientist engineer, I don&#39;t find it fun,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:00.400)</span>
+  </div>
+  <div class="dialogue-en">but when I&#39;m having beer with my non AI friends, there is indeed something fun and appealing about</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(26:08.560)</span>
+  </div>
+  <div class="dialogue-en">it. Like talking about an episode of Black Mirror, considering if a large meteor is headed towards</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(26:14.640)</span>
+  </div>
+  <div class="dialogue-en">Earth, we were just told a large meteor is headed towards Earth, something like this. And can you</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:20.640)</span>
+  </div>
+  <div class="dialogue-en">relate to this sense of fun? And do you understand the psychology of it?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(26:24.560)</span>
+  </div>
+  <div class="dialogue-en">Yes. Good question. I personally don&#39;t find it fun. I find it kind of actually a waste of time</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(26:32.800)</span>
+  </div>
+  <div class="dialogue-en">because there are genuine threats that we ought to be thinking about like pandemics, like cyber</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(26:39.760)</span>
+  </div>
+  <div class="dialogue-en">security vulnerabilities, like the possibility of nuclear war and certainly climate change.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(26:46.160)</span>
+  </div>
+  <div class="dialogue-en">You know, this is enough to fill many conversations. And I think Sam did put his</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(26:54.320)</span>
+  </div>
+  <div class="dialogue-en">finger on something, namely that there is a community, sometimes called the rationality</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(27:00.240)</span>
+  </div>
+  <div class="dialogue-en">community, that delights in using its brainpower to come up with scenarios that would not occur</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(27:07.280)</span>
+  </div>
+  <div class="dialogue-en">to mere mortals, to less cerebral people. So there is a kind of intellectual thrill in finding new</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(27:14.560)</span>
+  </div>
+  <div class="dialogue-en">things to worry about that no one has worried about yet. I actually think, though, that it&#39;s</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(27:19.840)</span>
+  </div>
+  <div class="dialogue-en">not only is it a kind of fun that doesn&#39;t give me particular pleasure, but I think there can be a</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(27:25.440)</span>
+  </div>
+  <div class="dialogue-en">pernicious side to it, namely that you overcome people with such dread, such fatalism, that there</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(27:32.400)</span>
+  </div>
+  <div class="dialogue-en">are so many ways to die, to annihilate our civilization, that we may as well enjoy life</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(27:39.200)</span>
+  </div>
+  <div class="dialogue-en">while we can. There&#39;s nothing we can do about it. If climate change doesn&#39;t do us in, then runaway</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(27:42.880)</span>
+  </div>
+  <div class="dialogue-en">robots will. So let&#39;s enjoy ourselves now. We&#39;ve got to prioritize. We have to look at threats that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(27:52.480)</span>
+  </div>
+  <div class="dialogue-en">are close to certainty, such as climate change, and distinguish those from ones that are merely</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(27:58.160)</span>
+  </div>
+  <div class="dialogue-en">imaginable but with infinitesimal probabilities. And we have to take into account people&#39;s worry</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(28:05.280)</span>
+  </div>
+  <div class="dialogue-en">budget. You can&#39;t worry about everything. And if you sow dread and fear and terror and fatalism,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(28:12.480)</span>
+  </div>
+  <div class="dialogue-en">it can lead to a kind of numbness. Well, these problems are overwhelming, and the engineers are</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(28:17.280)</span>
+  </div>
+  <div class="dialogue-en">just going to kill us all. So let&#39;s either destroy the entire infrastructure of science, technology,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(28:26.640)</span>
+  </div>
+  <div class="dialogue-en">or let&#39;s just enjoy life while we can. So there&#39;s a certain line of worry, which I&#39;m worried about</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(28:32.560)</span>
+  </div>
+  <div class="dialogue-en">a lot of things in engineering. There&#39;s a certain line of worry when you cross, you&#39;re allowed to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(28:36.800)</span>
+  </div>
+  <div class="dialogue-en">cross, that it becomes paralyzing fear as opposed to productive fear. And that&#39;s kind of what</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(28:44.240)</span>
+  </div>
+  <div class="dialogue-en">you&#39;re highlighting. Exactly right. And we&#39;ve seen some, we know that human effort is not</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(28:50.160)</span>
+  </div>
+  <div class="dialogue-en">well calibrated against risk in that because a basic tenet of cognitive psychology is that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(28:58.160)</span>
+  </div>
+  <div class="dialogue-en">perception of risk and hence perception of fear is driven by imaginability, not by data. And so we</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(29:05.680)</span>
+  </div>
+  <div class="dialogue-en">misallocate vast amounts of resources to avoiding terrorism, which kills on average about six</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(29:11.360)</span>
+  </div>
+  <div class="dialogue-en">Americans a year with one exception of 9 11. We invade countries, we invent entire new departments</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(29:18.640)</span>
+  </div>
+  <div class="dialogue-en">of government with massive, massive expenditure of resources and lives to defend ourselves against</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(29:25.120)</span>
+  </div>
+  <div class="dialogue-en">a trivial risk. Whereas guaranteed risks, one of them you mentioned traffic fatalities and even</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(29:34.720)</span>
+  </div>
+  <div class="dialogue-en">risks that are not here, but are plausible enough to worry about like pandemics, like nuclear war,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(29:45.920)</span>
+  </div>
+  <div class="dialogue-en">receive far too little attention. In presidential debates, there&#39;s no discussion of how to minimize</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(29:51.440)</span>
+  </div>
+  <div class="dialogue-en">the risk of nuclear war. Lots of discussion of terrorism, for example. And so I think it&#39;s</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(29:58.240)</span>
+  </div>
+  <div class="dialogue-en">essential to calibrate our budget of fear, worry, concern, planning to the actual probability of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(30:08.080)</span>
+  </div>
+  <div class="dialogue-en">harm. Yep. So let me ask this question. So speaking of imaginability, you said it&#39;s important to think</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(30:15.840)</span>
+  </div>
+  <div class="dialogue-en">about reason and one of my favorite people who likes to dip into the outskirts of reason through</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(30:23.840)</span>
+  </div>
+  <div class="dialogue-en">fascinating exploration of his imagination is Joe Rogan. Oh yes. So who has through reason used to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(30:32.000)</span>
+  </div>
+  <div class="dialogue-en">believe a lot of conspiracies and through reason has stripped away a lot of his beliefs in that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(30:37.280)</span>
+  </div>
+  <div class="dialogue-en">way. So it&#39;s fascinating actually to watch him through rationality kind of throw away the ideas</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(30:43.120)</span>
+  </div>
+  <div class="dialogue-en">of Bigfoot and 9 11. I&#39;m not sure exactly. Kim Trails. I don&#39;t know what he believes in. Yes.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(30:50.320)</span>
+  </div>
+  <div class="dialogue-en">Okay. But he no longer believed in. No, that&#39;s right. No, he&#39;s become a real force for good.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(30:55.520)</span>
+  </div>
+  <div class="dialogue-en">Yep. So you were on the Joe Rogan podcast in February and had a fascinating conversation,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:00.240)</span>
+  </div>
+  <div class="dialogue-en">but as far as I remember, didn&#39;t talk much about artificial intelligence. I will be on his podcast</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(31:05.920)</span>
+  </div>
+  <div class="dialogue-en">in a couple of weeks. Joe is very much concerned about existential threat of AI. I&#39;m not sure if</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(31:11.520)</span>
+  </div>
+  <div class="dialogue-en">you&#39;re, this is why I was hoping that you would get into that topic. And in this way,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(31:17.040)</span>
+  </div>
+  <div class="dialogue-en">he represents quite a lot of people who look at the topic of AI from 10,000 foot level.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:22.480)</span>
+  </div>
+  <div class="dialogue-en">So as an exercise of communication, you said it&#39;s important to be rational and reason</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(31:29.040)</span>
+  </div>
+  <div class="dialogue-en">about these things. Let me ask, if you were to coach me as an AI researcher about how to speak</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(31:34.080)</span>
+  </div>
+  <div class="dialogue-en">to Joe and the general public about AI, what would you advise? Well, the short answer would be to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(31:40.640)</span>
+  </div>
+  <div class="dialogue-en">read the sections that I wrote in enlightenment now about AI, but a longer reason would be I</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(31:45.200)</span>
+  </div>
+  <div class="dialogue-en">think to emphasize, and I think you&#39;re very well positioned as an engineer to remind people about</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(31:50.480)</span>
+  </div>
+  <div class="dialogue-en">the culture of engineering, that it really is safety oriented, that another discussion in</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(31:57.040)</span>
+  </div>
+  <div class="dialogue-en">enlightenment now, I plot rates of accidental death from various causes, plane crashes, car</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(32:04.560)</span>
+  </div>
+  <div class="dialogue-en">crashes, occupational accidents, even death by lightning strikes. And they all plummet because</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(32:12.640)</span>
+  </div>
+  <div class="dialogue-en">the culture of engineering is how do you squeeze out the lethal risks, death by fire, death by</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(32:18.320)</span>
+  </div>
+  <div class="dialogue-en">drowning, death by asphyxiation, all of them drastically declined because of advances in</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(32:24.320)</span>
+  </div>
+  <div class="dialogue-en">engineering that I got to say, I did not appreciate until I saw those graphs. And it is because</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(32:29.840)</span>
+  </div>
+  <div class="dialogue-en">exactly, people like you who stay up at night thinking, oh my God, is what I&#39;m inventing likely</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(32:37.520)</span>
+  </div>
+  <div class="dialogue-en">to hurt people and to deploy ingenuity to prevent that from happening. Now, I&#39;m not an engineer,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(32:43.760)</span>
+  </div>
+  <div class="dialogue-en">although I spent 22 years at MIT, so I know something about the culture of engineering.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(32:48.240)</span>
+  </div>
+  <div class="dialogue-en">My understanding is that this is the way you think if you&#39;re an engineer. And it&#39;s essential</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(32:53.680)</span>
+  </div>
+  <div class="dialogue-en">that that culture not be suddenly switched off when it comes to artificial intelligence. So,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:59.200)</span>
+  </div>
+  <div class="dialogue-en">I mean, that could be a problem, but is there any reason to think it would be switched off?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:02.560)</span>
+  </div>
+  <div class="dialogue-en">I don&#39;t think so. And one, there&#39;s not enough engineers speaking up for this</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(33:06.960)</span>
+  </div>
+  <div class="dialogue-en">way, for the excitement, for the positive view of human nature, what you&#39;re trying to create</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(33:13.440)</span>
+  </div>
+  <div class="dialogue-en">is positivity. Like everything we try to invent is trying to do good for the world.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:18.240)</span>
+  </div>
+  <div class="dialogue-en">But let me ask you about the psychology of negativity. It seems just objectively,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(33:23.600)</span>
+  </div>
+  <div class="dialogue-en">not considering the topic, it seems that being negative about the future makes you sound smarter</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(33:28.480)</span>
+  </div>
+  <div class="dialogue-en">than being positive about the future, irregardless of topic. Am I correct in this observation? And</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:34.320)</span>
+  </div>
+  <div class="dialogue-en">if so, why do you think that is? Yeah, I think there is that phenomenon that,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(33:40.080)</span>
+  </div>
+  <div class="dialogue-en">as Tom Lehrer, the satirist said, always predict the worst and you&#39;ll be hailed as a prophet.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(33:45.360)</span>
+  </div>
+  <div class="dialogue-en">It may be part of our overall negativity bias. We are as a species more attuned to the negative</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(33:52.240)</span>
+  </div>
+  <div class="dialogue-en">than the positive. We dread losses more than we enjoy gains. And that might open up a space for</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(34:02.480)</span>
+  </div>
+  <div class="dialogue-en">prophets to remind us of harms and risks and losses that we may have overlooked.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:07.680)</span>
+  </div>
+  <div class="dialogue-en">So I think there is that asymmetry. So you&#39;ve written some of my favorite books</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(34:16.080)</span>
+  </div>
+  <div class="dialogue-en">all over the place. So starting from Enlightenment Now to The Better Ages of Our Nature,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(34:21.600)</span>
+  </div>
+  <div class="dialogue-en">Blank Slate, How the Mind Works, the one about language, Language Instinct. Bill Gates,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(34:29.200)</span>
+  </div>
+  <div class="dialogue-en">big fan too, said of your most recent book that it&#39;s my new favorite book of all time.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:37.440)</span>
+  </div>
+  <div class="dialogue-en">So for you as an author, what was a book early on in your life that had a profound impact on the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(34:43.840)</span>
+  </div>
+  <div class="dialogue-en">way you saw the world? Certainly this book, Enlightenment Now, was influenced by David</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(34:49.040)</span>
+  </div>
+  <div class="dialogue-en">Deutsch&#39;s The Beginning of Infinity, a rather deep reflection on knowledge and the power of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(34:55.920)</span>
+  </div>
+  <div class="dialogue-en">knowledge to improve the human condition. And with bits of wisdom such as that problems are</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(35:02.320)</span>
+  </div>
+  <div class="dialogue-en">inevitable but problems are solvable given the right knowledge and that solutions create new</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(35:07.440)</span>
+  </div>
+  <div class="dialogue-en">problems that have to be solved in their turn. That&#39;s I think a kind of wisdom about the human</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(35:11.920)</span>
+  </div>
+  <div class="dialogue-en">condition that influenced the writing of this book. There are some books that are excellent</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:16.080)</span>
+  </div>
+  <div class="dialogue-en">but obscure, some of which I have on a page on my website. I read a book called The History of Force,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(35:22.800)</span>
+  </div>
+  <div class="dialogue-en">self published by a political scientist named James Payne on the historical decline of violence</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:27.840)</span>
+  </div>
+  <div class="dialogue-en">and that was one of the inspirations for The Better Angels of Our Nature.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:33.600)</span>
+  </div>
+  <div class="dialogue-en">What about early on? If you look back when you were maybe a teenager?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(35:38.160)</span>
+  </div>
+  <div class="dialogue-en">I loved a book called One, Two, Three, Infinity. When I was a young adult I read that book by</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(35:43.040)</span>
+  </div>
+  <div class="dialogue-en">George Gamow, the physicist, which had very accessible and humorous explanations of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(35:48.960)</span>
+  </div>
+  <div class="dialogue-en">relativity, of number theory, of dimensionality, high multiple dimensional spaces in a way that I</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(35:59.360)</span>
+  </div>
+  <div class="dialogue-en">think is still delightful 70 years after it was published. I like the Time Life Science series.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(36:06.080)</span>
+  </div>
+  <div class="dialogue-en">These are books that would arrive every month that my mother subscribed to, each one on a different</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(36:11.280)</span>
+  </div>
+  <div class="dialogue-en">topic. One would be on electricity, one would be on forests, one would be on evolution and then one</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(36:17.280)</span>
+  </div>
+  <div class="dialogue-en">was on the mind. I was just intrigued that there could be a science of mind and that book I would</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(36:24.240)</span>
+  </div>
+  <div class="dialogue-en">cite as an influence as well. Then later on... That&#39;s when you fell in love with the idea of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(36:28.480)</span>
+  </div>
+  <div class="dialogue-en">studying the mind? Was that the thing that grabbed you? It was one of the things I would say. I read</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(36:35.040)</span>
+  </div>
+  <div class="dialogue-en">as a college student the book Reflections on Language by Noam Chomsky. I spent most of his</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(36:41.360)</span>
+  </div>
+  <div class="dialogue-en">career here at MIT. Richard Dawkins, two books, The Blind Watchmaker and The Selfish Gene,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(36:47.440)</span>
+  </div>
+  <div class="dialogue-en">were enormously influential, mainly for the content but also for the writing style, the</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(36:55.040)</span>
+  </div>
+  <div class="dialogue-en">ability to explain abstract concepts in lively prose. Stephen Jay Gould&#39;s first collection,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(37:02.480)</span>
+  </div>
+  <div class="dialogue-en">Ever Since Darwin, also an excellent example of lively writing. George Miller, a psychologist that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(37:10.240)</span>
+  </div>
+  <div class="dialogue-en">most psychologists are familiar with, came up with the idea that human memory has a capacity of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(37:16.160)</span>
+  </div>
+  <div class="dialogue-en">seven plus or minus two chunks. That&#39;s probably his biggest claim to fame. But he wrote a couple</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Pinker <span class="dialogue-time">(37:20.640)</span>
+  </div>
+  <div class="dialogue-en">of books on language and communication that I read as an undergraduate. Again, beautifully written</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(37:25.840)</span>
+  </div>
+  <div class="dialogue-en">and intellectually deep. Wonderful. Stephen, thank you so much for taking the time today.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(37:31.920)</span>
+  </div>
+  <div class="dialogue-en">My pleasure. Thanks a lot, Lex.</div>
+  
+</div></div>
+<button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 373 条对话 ↓</button>
+
+    <a href="https://lexfridman.com/steven-pinker" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -867,6 +3360,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -879,6 +3424,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

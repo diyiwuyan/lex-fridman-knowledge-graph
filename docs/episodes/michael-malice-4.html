@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -642,31 +658,34 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 <div class="quote-block">
   <div class="quote-text">"So I think beauty, it means hope. I think I hate that cynical idea of like, I get, I appreciate Solzhenitsyn&#39;s broader point that a lot of times people, there&#39;s something called a deepity, where people throw words together to sound profound. And if you take it apart, like this is just complete gibberish, I don&#39;t think this is an example of that."</div>
-  
+  <div class="quote-zh">所以我认为美，就意味着希望。我想我讨厌那种愤世嫉俗的想法，我明白，我欣赏索尔仁尼琴的更广泛的观点，很多时候人们有一种叫做深度的东西，人们把单词放在一起听起来很深刻。如果你把它拆开，就像这完全是胡言乱语，我不认为这是一个例子。</div>
   <div class="quote-meta">— Michael Malice （02:18.360）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"I think beauty inspires. And more importantly, it proves to you, this is something that can actually happen on this Earth. Plato, right, the Platonic theory of forms, like this world is imperfect, but these perfect forms exist in another dimension. And that&#39;s where our concepts come from. He was an early person trying to figure out where our concepts come from, and epistemology, and so on and so forth."</div>
-  
+  <div class="quote-zh">我认为美能激发灵感。更重要的是，它向你证明，这是地球上真正可能发生的事情。柏拉图，对，柏拉图的形式论，就像这个世界是不完美的，但这些完美的形式存在于另一个维度。这就是我们的概念的来源。他是一个早期的人，试图弄清楚我们的概念和认识论等从何而来。</div>
   <div class="quote-meta">— Michael Malice （02:42.600）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"It was just words thrown out there, because with all the suffering that&#39;s in the world, what has beauty actually ever done?"</div>
-  
+  <div class="quote-zh">这只是一些言论，因为世界上有那么多苦难，美到底做了什么？</div>
   <div class="quote-meta">— Michael Malice （01:00.240）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"But when you look at beauty, it is almost impossible to maintain a sense of cynicism and hopelessness. Because if there&#39;s even one moment when some element of perfection has been actualized, if there&#39;s one moment where a beauty has been realized and captured, you can&#39;t say, well, it&#39;s never gonna happen again."</div>
-  
+  <div class="quote-zh">但当你看到美丽的时候，你几乎不可能保持一种愤世嫉俗和绝望的感觉。因为即使有一个时刻，某种完美的元素被实现了，如果有一个时刻，一种美被实现并被捕捉到，你就不能说，嗯，它永远不会再发生了。</div>
   <div class="quote-meta">— Michael Malice （01:55.280）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"That&#39;s funny because there&#39;s lots of different schools of thought, like these people versus these people, and maybe vegans versus steakhouse people. I think in terms of the sciences, and I guess you and I would be on opposite sides here, you have the astronomy people versus the zoology people."</div>
-  
+  <div class="quote-zh">这很有趣，因为有很多不同的思想流派，比如这些人与这些人，也许素食主义者与牛排馆的人。我认为就科学而言，我想你和我会站在对立的一边，天文学家与动物学家。</div>
   <div class="quote-meta">— Michael Malice （04:03.960）</div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（2966 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
@@ -674,140 +693,140 @@ a:hover { color: var(--accent); text-decoration: underline; }
     Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">Уважаемые дамы и господа! The following is a conversation with Michael Malice, his fifth time on this, the Lex Friedman podcast.</div>
-  
+  <div class="dialogue-zh">Уважаемые дамы и господа！以下是与 Michael Malice 的对话，这是他第五次参与 Lex Friedman 播客。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:09.680)</span>
   </div>
   <div class="dialogue-en">To support it, please check out our sponsors in the description.</div>
-  
+  <div class="dialogue-zh">为了支持它，请在说明中查看我们的赞助商。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:12.920)</span>
   </div>
   <div class="dialogue-en">And now, here&#39;s my New Year&#39;s Eve 2021 conversation with the one and only, Mr. Michael Malice.</div>
-  
+  <div class="dialogue-zh">现在，这是我在 2021 年除夕夜与唯一的迈克尔·马利斯先生的对话。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:22.920)</span>
   </div>
   <div class="dialogue-en">Привет, товарищ!</div>
-  
+  <div class="dialogue-zh">恭喜，恭喜！</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:24.080)</span>
   </div>
   <div class="dialogue-en">С Новым годом!</div>
-  
+  <div class="dialogue-zh">С Новым годом！</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(00:25.080)</span>
   </div>
   <div class="dialogue-en">С Новым годом!</div>
-  
+  <div class="dialogue-zh">С Новым годом！</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(00:26.760)</span>
   </div>
   <div class="dialogue-en">Dostoevsky wrote in The Idiot, my favorite of his books, through the main character, Prince Mishkin, that beauty will save the world.</div>
-  
+  <div class="dialogue-zh">陀思妥耶夫斯基在我最喜欢的书中《白痴》中通过主角米什金王子写道，美将拯救世界。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(00:36.200)</span>
   </div>
   <div class="dialogue-en">Красота спасет мир. These words, seemingly naive, and ultimately, at least to me, profound. What do they mean to you? Beauty will save the world.</div>
-  
+  <div class="dialogue-zh">Красота спасет мир。这些话，看似幼稚，最终至少对我来说是深刻的。它们对你意味着什么？美将拯救世界。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:46.640)</span>
   </div>
   <div class="dialogue-en">Naive? Really? I don&#39;t think they seem naive at all.</div>
-  
+  <div class="dialogue-zh">幼稚的？真的吗？我认为他们一点也不幼稚。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(00:50.280)</span>
   </div>
   <div class="dialogue-en">Well, Solzhenitsyn actually, for his 1970 Nobel Prize speech, talked about this line a lot, and he thought, for most of his life, that was a silly line.</div>
-  
+  <div class="dialogue-zh">事实上，索尔仁尼琴在 1970 年诺贝尔奖演讲中多次谈到这句话，他认为，在他一生的大部分时间里，这是一句愚蠢的台词。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:00.240)</span>
   </div>
   <div class="dialogue-en">It was just words thrown out there, because with all the suffering that&#39;s in the world, what has beauty actually ever done?</div>
-  
+  <div class="dialogue-zh">这只是一些言论，因为世界上有那么多苦难，美到底做了什么？</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(01:07.520)</span>
   </div>
   <div class="dialogue-en">Oh my God, I hate this so much.</div>
-  
+  <div class="dialogue-zh">天哪，我非常讨厌这个。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:09.240)</span>
   </div>
   <div class="dialogue-en">Talking trash about Solzhenitsyn.</div>
-  
+  <div class="dialogue-zh">谈论索尔仁尼琴的垃圾。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(01:11.760)</span>
   </div>
   <div class="dialogue-en">Yeah, I am.</div>
-  
+  <div class="dialogue-zh">是的，我是。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:12.440)</span>
   </div>
   <div class="dialogue-en">Okay.</div>
-  
+  <div class="dialogue-zh">好的。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:12.960)</span>
   </div>
   <div class="dialogue-en">And this perfectly sets up this theme, you know, I said, let&#39;s do this episode, start the new year on a positive note, give people hope, give people joy.</div>
-  
+  <div class="dialogue-zh">这完美地设定了这个主题，你知道，我说，让我们做这一集，以积极的方式开始新的一年，给人们希望，给人们欢乐。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(01:21.040)</span>
   </div>
   <div class="dialogue-en">You and I both have friends who are models, right? And it&#39;s a silly profession, to some extent, of course.</div>
-  
+  <div class="dialogue-zh">你和我都有模特朋友，对吧？当然，从某种程度上来说，这是一个愚蠢的职业。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(01:29.440)</span>
   </div>
   <div class="dialogue-en">You are actually a model. You are my friend.</div>
-  
+  <div class="dialogue-zh">你其实是一个模特。你是我的朋友。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice <span class="dialogue-time">(01:33.960)</span>
   </div>
   <div class="dialogue-en">Yeah, that&#39;s right. That&#39;s true. I am a model. I was trying to be subtle. But for those people who actually deserve to be models, when you look at someone who is a model, and in some of their photos, and these people look perfect, now in real life, they&#39;re not perfect, they have flaws, they&#39;ll be the first to admit it, so on and so forth.</div>
-  
+  <div class="dialogue-zh">是的，没错。这是真的。我是一名模特。我试图表现得很微妙。但对于那些真正值得成为模特的人来说，当你看到一个模特的人，在他们的一些照片中，这些人看起来很完美，但现在在现实生活中，他们并不完美，他们有缺陷，他们会是第一个承认这一点的人，等等。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:55.280)</span>
   </div>
   <div class="dialogue-en">But when you look at beauty, it is almost impossible to maintain a sense of cynicism and hopelessness. Because if there&#39;s even one moment when some element of perfection has been actualized, if there&#39;s one moment where a beauty has been realized and captured, you can&#39;t say, well, it&#39;s never gonna happen again.</div>
-  
+  <div class="dialogue-zh">但当你看到美丽的时候，你几乎不可能保持一种愤世嫉俗和绝望的感觉。因为即使有一个时刻，某种完美的元素被实现了，如果有一个时刻，一种美被实现并被捕捉到，你就不能说，嗯，它永远不会再发生了。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
@@ -21434,7 +21453,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 </div></div>
 <button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 2966 条对话 ↓</button>
 
-    <a href="https://lexfridman.com/michael-malice-4" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+    <a href="https://lexfridman.com/michael-malice-4" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -21492,6 +21511,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -21504,6 +21575,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -586,7 +600,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 <nav class="sidebar">
   <div class="sidebar-logo">
     <h1>Lex Fridman<br>知识图谱</h1>
-    <p>112 期节目 · 全文字幕</p>
+    <p>434 期节目 · 全文字幕</p>
   </div>
   
   <div class="sidebar-section">导航</div>
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -641,150 +657,4468 @@ a:hover { color: var(--accent); text-decoration: underline; }
   <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
   <p style="color:#64748b;font-size:14px">暂无语录</p>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（636 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Colin Angle <span class="dialogue-time">(00:00.000)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">The following is a conversation with Colin Angle.</div>
-  
+  <div class="dialogue-zh">以下是与科林·安格的对话。</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Colin Angle <span class="dialogue-time">(00:02.800)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02.800)</span>
   </div>
   <div class="dialogue-en">He&#39;s the CEO and co founder of iRobot,</div>
-  
+  <div class="dialogue-zh">他是 iRobot 的首席执行官兼联合创始人，</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Colin Angle <span class="dialogue-time">(00:05.840)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05.840)</span>
   </div>
   <div class="dialogue-en">a robotics company that for 29 years</div>
-  
+  <div class="dialogue-zh">一家拥有 29 年历史的机器人公司</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Colin Angle <span class="dialogue-time">(00:08.180)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08.180)</span>
   </div>
   <div class="dialogue-en">has been creating robots that operate successfully</div>
-  
+  <div class="dialogue-zh">一直在创造能够成功运行的机器人</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Colin Angle <span class="dialogue-time">(00:11.180)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:11.180)</span>
   </div>
   <div class="dialogue-en">in the real world.</div>
-  
+  <div class="dialogue-zh">在现实世界中。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Colin Angle <span class="dialogue-time">(00:12.560)</span>
   </div>
   <div class="dialogue-en">Not as a demo or on a scale of dozens,</div>
-  
+  <div class="dialogue-zh">不是作为演示或数十个规模，</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Colin Angle <span class="dialogue-time">(00:15.600)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:15.600)</span>
   </div>
   <div class="dialogue-en">but on a scale of thousands and millions.</div>
-  
+  <div class="dialogue-zh">但规模达到了数以千计的规模。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Colin Angle <span class="dialogue-time">(00:18.860)</span>
   </div>
   <div class="dialogue-en">As of this year, iRobot has sold more than</div>
-  
+  <div class="dialogue-zh">截至今年，iRobot 的销量已超过</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Colin Angle <span class="dialogue-time">(00:21.900)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:21.900)</span>
   </div>
   <div class="dialogue-en">25 million robots to consumers,</div>
-  
+  <div class="dialogue-zh">2500万个机器人给消费者，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Colin Angle <span class="dialogue-time">(00:25.700)</span>
   </div>
   <div class="dialogue-en">including the Roomba vacuum cleaning robot,</div>
-  
+  <div class="dialogue-zh">包括 Roomba 真空清洁机器人，</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Colin Angle <span class="dialogue-time">(00:28.160)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:28.160)</span>
   </div>
   <div class="dialogue-en">the Bravo floor mopping robot,</div>
-  
+  <div class="dialogue-zh">Bravo 拖地机器人，</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Colin Angle <span class="dialogue-time">(00:29.960)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:29.960)</span>
   </div>
   <div class="dialogue-en">and soon the Terra lawn mowing robot.</div>
-  
+  <div class="dialogue-zh">很快还有 Terra 割草机器人。</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Colin Angle <span class="dialogue-time">(00:33.960)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:33.960)</span>
   </div>
   <div class="dialogue-en">29 million robots successfully operating autonomously</div>
-  
+  <div class="dialogue-zh">2900万台机器人成功自主运行</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Colin Angle <span class="dialogue-time">(00:37.640)</span>
   </div>
   <div class="dialogue-en">in real people&#39;s homes,</div>
-  
+  <div class="dialogue-zh">在真实的人们家里，</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Colin Angle <span class="dialogue-time">(00:39.640)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:39.640)</span>
   </div>
   <div class="dialogue-en">to me is an incredible accomplishment</div>
-  
+  <div class="dialogue-zh">对我来说是一项令人难以置信的成就</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Colin Angle <span class="dialogue-time">(00:42.060)</span>
   </div>
   <div class="dialogue-en">of science, engineering, logistics,</div>
-  
+  <div class="dialogue-zh">科学、工程、物流、</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Colin Angle <span class="dialogue-time">(00:45.060)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:45.060)</span>
   </div>
   <div class="dialogue-en">and all kinds of general entrepreneurial innovation.</div>
-  
+  <div class="dialogue-zh">以及各类一般创业创新。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Colin Angle <span class="dialogue-time">(00:48.760)</span>
   </div>
   <div class="dialogue-en">Most robotics companies fail.</div>
-  
+  <div class="dialogue-zh">大多数机器人公司都失败了。</div>
 </div>
 <div class="dialogue-item">
-  <div class="dialogue-speaker" style="color:#818cf8">
-    Colin Angle <span class="dialogue-time">(00:51.320)</span>
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:51.320)</span>
   </div>
   <div class="dialogue-en">iRobot has survived and succeeded for 29 years.</div>
-  
+  <div class="dialogue-zh">iRobot 已经生存并取得了 29 年的成功。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Colin Angle <span class="dialogue-time">(00:56.320)</span>
   </div>
   <div class="dialogue-en">I spent all day at iRobot,</div>
+  <div class="dialogue-zh">我在 iRobot 待了一整天，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:58.860)</span>
+  </div>
+  <div class="dialogue-en">including a long tour and conversation with Colin</div>
   
 </div>
-    <a href="https://lexfridman.com/colin-angle" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(01:01.440)</span>
+  </div>
+  <div class="dialogue-en">about the history of iRobot,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:03.480)</span>
+  </div>
+  <div class="dialogue-en">and then sat down for this podcast conversation</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(01:06.740)</span>
+  </div>
+  <div class="dialogue-en">that would have been much longer</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:08.560)</span>
+  </div>
+  <div class="dialogue-en">if I didn&#39;t spend all day learning about</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:10.780)</span>
+  </div>
+  <div class="dialogue-en">and playing with the various robots</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:12.340)</span>
+  </div>
+  <div class="dialogue-en">and the company&#39;s history.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(01:13.980)</span>
+  </div>
+  <div class="dialogue-en">I&#39;ll release the video of the tour separately.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:17.520)</span>
+  </div>
+  <div class="dialogue-en">Colin, iRobot, its founding team, its current team,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:21.900)</span>
+  </div>
+  <div class="dialogue-en">and its mission has been and continues to be</div>
+  
+</div>
+<div id="dialogue-more" style="display:none">
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:24.660)</span>
+  </div>
+  <div class="dialogue-en">an inspiration to me and thousands of engineers</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(01:27.620)</span>
+  </div>
+  <div class="dialogue-en">who are working hard to create AI systems</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:30.260)</span>
+  </div>
+  <div class="dialogue-en">that help real people.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(01:33.020)</span>
+  </div>
+  <div class="dialogue-en">This is the Artificial Intelligence Podcast.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:35.660)</span>
+  </div>
+  <div class="dialogue-en">If you enjoy it, subscribe on YouTube,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(01:38.020)</span>
+  </div>
+  <div class="dialogue-en">give it five stars on iTunes,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:39.820)</span>
+  </div>
+  <div class="dialogue-en">support it on Patreon,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(01:41.300)</span>
+  </div>
+  <div class="dialogue-en">or simply connect with me on Twitter</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:43.300)</span>
+  </div>
+  <div class="dialogue-en">at Lex Friedman, spelled F R I D M A N.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:47.140)</span>
+  </div>
+  <div class="dialogue-en">And now, here&#39;s my conversation with Colin Angle.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(01:51.120)</span>
+  </div>
+  <div class="dialogue-en">In his 1942 short story, Runaround,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(01:55.200)</span>
+  </div>
+  <div class="dialogue-en">from his iRobot collection, Asimov proposed</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:00.000)</span>
+  </div>
+  <div class="dialogue-en">the three laws of robotics in order,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(02:02.880)</span>
+  </div>
+  <div class="dialogue-en">don&#39;t harm humans, obey orders, protect yourself.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:06.840)</span>
+  </div>
+  <div class="dialogue-en">So two questions.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:07.720)</span>
+  </div>
+  <div class="dialogue-en">First, does the Roomba follow these three laws?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:11.680)</span>
+  </div>
+  <div class="dialogue-en">And also, more seriously,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:14.800)</span>
+  </div>
+  <div class="dialogue-en">what role do you hope to see robots take</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:17.160)</span>
+  </div>
+  <div class="dialogue-en">in modern society and in the future world?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:21.320)</span>
+  </div>
+  <div class="dialogue-en">So the three laws are very thought provoking</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:25.760)</span>
+  </div>
+  <div class="dialogue-en">and require such a profound understanding</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(02:31.400)</span>
+  </div>
+  <div class="dialogue-en">of the world a robot lives in,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:36.280)</span>
+  </div>
+  <div class="dialogue-en">the ramifications of its action and its own sense of self</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(02:40.040)</span>
+  </div>
+  <div class="dialogue-en">that it&#39;s not a relevant bar,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:45.040)</span>
+  </div>
+  <div class="dialogue-en">at least it won&#39;t be a relevant bar for decades to come.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:50.120)</span>
+  </div>
+  <div class="dialogue-en">And so if Roomba follows the three laws,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(02:54.560)</span>
+  </div>
+  <div class="dialogue-en">and I believe it does,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(02:58.000)</span>
+  </div>
+  <div class="dialogue-en">it is designed to help humans, not hurt them,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:00.920)</span>
+  </div>
+  <div class="dialogue-en">it&#39;s designed to be inherently safe,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:03.120)</span>
+  </div>
+  <div class="dialogue-en">and we designed it to last a long time.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:07.200)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s not through any AI or intent on the robot&#39;s part.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(03:11.600)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s because following the three laws</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:14.960)</span>
+  </div>
+  <div class="dialogue-en">is aligned with being a good robot product.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:19.620)</span>
+  </div>
+  <div class="dialogue-en">So I guess it does,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:23.120)</span>
+  </div>
+  <div class="dialogue-en">but not by explicit design.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:27.240)</span>
+  </div>
+  <div class="dialogue-en">So then the bigger picture,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:28.800)</span>
+  </div>
+  <div class="dialogue-en">what role do you hope to see robotics, robots take</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:33.040)</span>
+  </div>
+  <div class="dialogue-en">in what&#39;s currently mostly a world of humans?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:37.360)</span>
+  </div>
+  <div class="dialogue-en">We need robots to help us continue</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(03:42.360)</span>
+  </div>
+  <div class="dialogue-en">to improve our standard of living.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:46.120)</span>
+  </div>
+  <div class="dialogue-en">We need robots because the average age</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(03:51.320)</span>
+  </div>
+  <div class="dialogue-en">of humanity is increasing very quickly,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:55.040)</span>
+  </div>
+  <div class="dialogue-en">and simply the number of people young enough</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(03:59.760)</span>
+  </div>
+  <div class="dialogue-en">and spry enough to care</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:01.600)</span>
+  </div>
+  <div class="dialogue-en">for the elder growing demographic is inadequate.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:08.800)</span>
+  </div>
+  <div class="dialogue-en">And so what is the role of robots?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:11.400)</span>
+  </div>
+  <div class="dialogue-en">Today, the role is to make our lives a little easier,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(04:14.880)</span>
+  </div>
+  <div class="dialogue-en">a little cleaner, maybe a little healthier.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:18.480)</span>
+  </div>
+  <div class="dialogue-en">But in time, robots are going to be the difference</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(04:22.120)</span>
+  </div>
+  <div class="dialogue-en">between real gut wrenching declines</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:25.680)</span>
+  </div>
+  <div class="dialogue-en">in our ability to live independently</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:28.080)</span>
+  </div>
+  <div class="dialogue-en">and maintain our standard of living,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:30.240)</span>
+  </div>
+  <div class="dialogue-en">and a future that is the bright one</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(04:34.880)</span>
+  </div>
+  <div class="dialogue-en">where we have more control over our lives,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:37.480)</span>
+  </div>
+  <div class="dialogue-en">can spend more of our time focused</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(04:40.560)</span>
+  </div>
+  <div class="dialogue-en">on activities we choose.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:44.560)</span>
+  </div>
+  <div class="dialogue-en">And I&#39;m so honored and excited</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(04:47.920)</span>
+  </div>
+  <div class="dialogue-en">to be playing a role in that journey.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:50.400)</span>
+  </div>
+  <div class="dialogue-en">So you&#39;ve given me a tour.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(04:51.720)</span>
+  </div>
+  <div class="dialogue-en">It showed me some of the long histories,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:53.960)</span>
+  </div>
+  <div class="dialogue-en">now 29 years that iRobot has been at it,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(04:57.120)</span>
+  </div>
+  <div class="dialogue-en">creating some incredible robots.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(04:59.200)</span>
+  </div>
+  <div class="dialogue-en">You showed me Pacbot.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(05:01.160)</span>
+  </div>
+  <div class="dialogue-en">You showed me a bunch of other stuff that led up to Roomba,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:04.480)</span>
+  </div>
+  <div class="dialogue-en">that led to Braava and Terra.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:08.640)</span>
+  </div>
+  <div class="dialogue-en">So let&#39;s skip that incredible history</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:14.080)</span>
+  </div>
+  <div class="dialogue-en">in the interest of time,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(05:15.040)</span>
+  </div>
+  <div class="dialogue-en">cause we already talked about it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:16.120)</span>
+  </div>
+  <div class="dialogue-en">I&#39;ll show this incredible footage.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(05:18.040)</span>
+  </div>
+  <div class="dialogue-en">You mentioned elderly and robotics in society.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:22.640)</span>
+  </div>
+  <div class="dialogue-en">I think the home is a fascinating place for robots to be.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:26.280)</span>
+  </div>
+  <div class="dialogue-en">So where do you see robots in the home?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:29.800)</span>
+  </div>
+  <div class="dialogue-en">Currently, I would say, once again,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(05:31.640)</span>
+  </div>
+  <div class="dialogue-en">probably most homes in the world don&#39;t have a robot.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:34.520)</span>
+  </div>
+  <div class="dialogue-en">So how do you see that changing?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:36.160)</span>
+  </div>
+  <div class="dialogue-en">What do you think is the big initial value add</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:39.840)</span>
+  </div>
+  <div class="dialogue-en">that robots can do?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:41.920)</span>
+  </div>
+  <div class="dialogue-en">So iRobot has sort of, over the years,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:44.960)</span>
+  </div>
+  <div class="dialogue-en">narrowed in on the home, the consumer&#39;s home,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(05:49.360)</span>
+  </div>
+  <div class="dialogue-en">as the place where we want to innovate</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(05:53.120)</span>
+  </div>
+  <div class="dialogue-en">and deliver tools that will help a home</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(05:59.360)</span>
+  </div>
+  <div class="dialogue-en">be a more automatically maintained place,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:04.240)</span>
+  </div>
+  <div class="dialogue-en">a healthier place, a safer place,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:06.800)</span>
+  </div>
+  <div class="dialogue-en">and perhaps even a more efficient place to be.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:11.480)</span>
+  </div>
+  <div class="dialogue-en">And today, we vacuum, we mop,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(06:15.040)</span>
+  </div>
+  <div class="dialogue-en">soon we&#39;ll be mowing your lawn.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:16.960)</span>
+  </div>
+  <div class="dialogue-en">But where things are going is,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(06:22.720)</span>
+  </div>
+  <div class="dialogue-en">when do we get to the point where the home,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:27.080)</span>
+  </div>
+  <div class="dialogue-en">not just the robots that live in your home,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:29.120)</span>
+  </div>
+  <div class="dialogue-en">but the home itself becomes part of a system</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:32.160)</span>
+  </div>
+  <div class="dialogue-en">that maintains itself and plays an active role</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(06:35.960)</span>
+  </div>
+  <div class="dialogue-en">in caring for and helping the people live in that home.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:40.760)</span>
+  </div>
+  <div class="dialogue-en">And I see everything that we&#39;re doing</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(06:43.200)</span>
+  </div>
+  <div class="dialogue-en">as steps along the path toward that future.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:46.160)</span>
+  </div>
+  <div class="dialogue-en">So what are the steps?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:47.720)</span>
+  </div>
+  <div class="dialogue-en">So if we can summarize some of the history of Roomba,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:53.280)</span>
+  </div>
+  <div class="dialogue-en">you&#39;ve mentioned, and maybe you can elaborate on it,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:55.520)</span>
+  </div>
+  <div class="dialogue-en">but you mentioned that the early days</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(06:57.240)</span>
+  </div>
+  <div class="dialogue-en">were really taking a robot from something that works</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(07:02.320)</span>
+  </div>
+  <div class="dialogue-en">either in the lab or something that works in the field</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:04.880)</span>
+  </div>
+  <div class="dialogue-en">that helps soldiers do the difficult work they do</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(07:10.200)</span>
+  </div>
+  <div class="dialogue-en">to actually be in the hands of consumers</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:12.640)</span>
+  </div>
+  <div class="dialogue-en">and tens of thousands, hundreds of thousands of robots</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(07:15.640)</span>
+  </div>
+  <div class="dialogue-en">that don&#39;t break down over how much people love them</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:18.480)</span>
+  </div>
+  <div class="dialogue-en">over months of very extensive use.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:21.440)</span>
+  </div>
+  <div class="dialogue-en">So that was the big first step.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:22.840)</span>
+  </div>
+  <div class="dialogue-en">And then the second big step was the ability</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(07:26.000)</span>
+  </div>
+  <div class="dialogue-en">to sense the environment, to build a map, to localize,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:29.920)</span>
+  </div>
+  <div class="dialogue-en">to be able to build a picture of the home</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(07:32.560)</span>
+  </div>
+  <div class="dialogue-en">that the human can then attach labels to</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:34.600)</span>
+  </div>
+  <div class="dialogue-en">in terms of giving some semantic knowledge</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(07:38.400)</span>
+  </div>
+  <div class="dialogue-en">to the robot about its environment.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:40.880)</span>
+  </div>
+  <div class="dialogue-en">Okay, so that&#39;s like a huge, two big, huge steps.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(07:46.320)</span>
+  </div>
+  <div class="dialogue-en">Maybe you can comment on them,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:47.520)</span>
+  </div>
+  <div class="dialogue-en">but also what is the next step</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:51.040)</span>
+  </div>
+  <div class="dialogue-en">of making a robot part of the home?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(07:54.720)</span>
+  </div>
+  <div class="dialogue-en">Sure, so the goal is to make a home</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(07:57.840)</span>
+  </div>
+  <div class="dialogue-en">that takes care of itself,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:01.280)</span>
+  </div>
+  <div class="dialogue-en">takes care of the people in the home,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:03.680)</span>
+  </div>
+  <div class="dialogue-en">and gives the user an experience of just living their life</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:07.840)</span>
+  </div>
+  <div class="dialogue-en">and the home is somehow doing the right thing,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(08:10.840)</span>
+  </div>
+  <div class="dialogue-en">turning on and off lights when you leave,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:14.120)</span>
+  </div>
+  <div class="dialogue-en">cleaning up the environment.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:17.240)</span>
+  </div>
+  <div class="dialogue-en">And we went from robots that were great in the lab,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:24.920)</span>
+  </div>
+  <div class="dialogue-en">but were both too expensive</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:27.200)</span>
+  </div>
+  <div class="dialogue-en">and not sufficiently capable to ever do an acceptable job</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:32.880)</span>
+  </div>
+  <div class="dialogue-en">of anything other than being a toy or a curio in your home</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(08:37.280)</span>
+  </div>
+  <div class="dialogue-en">to something that was both affordable</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:42.080)</span>
+  </div>
+  <div class="dialogue-en">and sufficiently effective to drive,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(08:45.720)</span>
+  </div>
+  <div class="dialogue-en">be above threshold and drive purchase intent.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:50.600)</span>
+  </div>
+  <div class="dialogue-en">Now we&#39;ve disrupted the entire vacuuming industry.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(08:55.440)</span>
+  </div>
+  <div class="dialogue-en">The number one selling vacuums, for example, in the US</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(08:59.760)</span>
+  </div>
+  <div class="dialogue-en">are Roombas, so not robot vacuums, but vacuums,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:02.840)</span>
+  </div>
+  <div class="dialogue-en">and that&#39;s really crazy and weird.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:05.480)</span>
+  </div>
+  <div class="dialogue-en">We need to pause that. I mean, that&#39;s incredible.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(09:08.000)</span>
+  </div>
+  <div class="dialogue-en">That&#39;s incredible that a robot</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:10.440)</span>
+  </div>
+  <div class="dialogue-en">is the number one selling thing that does something.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(09:15.480)</span>
+  </div>
+  <div class="dialogue-en">Yep. Something as essential as vacuuming.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:17.880)</span>
+  </div>
+  <div class="dialogue-en">Yep. Congratulations.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(09:20.000)</span>
+  </div>
+  <div class="dialogue-en">Thank you. It&#39;s still kind of fun to say,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:22.360)</span>
+  </div>
+  <div class="dialogue-en">but just because this was a crazy idea</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(09:26.520)</span>
+  </div>
+  <div class="dialogue-en">that just started, you know, in a room here,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:30.880)</span>
+  </div>
+  <div class="dialogue-en">we&#39;re like, do you think we can do this?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(09:33.600)</span>
+  </div>
+  <div class="dialogue-en">So, hey, let&#39;s give it a try.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:35.960)</span>
+  </div>
+  <div class="dialogue-en">But now the robots are starting to understand their environment.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:42.760)</span>
+  </div>
+  <div class="dialogue-en">And if you think about the next step,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:46.240)</span>
+  </div>
+  <div class="dialogue-en">there&#39;s two dimensions.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(09:48.640)</span>
+  </div>
+  <div class="dialogue-en">I&#39;ve been working so hard since the beginning of iRobot</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:52.960)</span>
+  </div>
+  <div class="dialogue-en">to make robots are autonomous,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(09:55.000)</span>
+  </div>
+  <div class="dialogue-en">that, you know, they&#39;re smart enough</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(09:57.560)</span>
+  </div>
+  <div class="dialogue-en">and understand their task enough,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(09:59.400)</span>
+  </div>
+  <div class="dialogue-en">they can just go do it without human involvement.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:04.080)</span>
+  </div>
+  <div class="dialogue-en">Now what I&#39;m really excited and working on</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:07.360)</span>
+  </div>
+  <div class="dialogue-en">is how do I make them less autonomous?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:10.560)</span>
+  </div>
+  <div class="dialogue-en">Meaning that the robot is supposed to be your partner,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(10:15.680)</span>
+  </div>
+  <div class="dialogue-en">not this automaton that just goes and does what a robot does.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:20.120)</span>
+  </div>
+  <div class="dialogue-en">And so that if you tell it,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(10:23.440)</span>
+  </div>
+  <div class="dialogue-en">hey, I just dropped some flour by the fridge in the kitchen,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:27.080)</span>
+  </div>
+  <div class="dialogue-en">can you deal with it?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(10:28.920)</span>
+  </div>
+  <div class="dialogue-en">Wouldn&#39;t it be awesome if the right thing just happened</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:32.720)</span>
+  </div>
+  <div class="dialogue-en">based on that utterance?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:35.200)</span>
+  </div>
+  <div class="dialogue-en">And to some extent, that&#39;s less autonomous</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:37.840)</span>
+  </div>
+  <div class="dialogue-en">because it&#39;s actually listening to you,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(10:40.080)</span>
+  </div>
+  <div class="dialogue-en">understanding the context and intent of the sentence,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:44.360)</span>
+  </div>
+  <div class="dialogue-en">mapping it against its understanding</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(10:47.360)</span>
+  </div>
+  <div class="dialogue-en">of the home it lives in and knowing what to do.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:52.640)</span>
+  </div>
+  <div class="dialogue-en">And so that&#39;s an area of research.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(10:56.320)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s an area where we&#39;re starting to roll out features.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(10:59.360)</span>
+  </div>
+  <div class="dialogue-en">You can now tell your robot to clean up the kitchen</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:02.840)</span>
+  </div>
+  <div class="dialogue-en">and it knows what the kitchen is and can do that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:05.840)</span>
+  </div>
+  <div class="dialogue-en">And that&#39;s sort of 1.0 of where we&#39;re going.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(11:10.400)</span>
+  </div>
+  <div class="dialogue-en">The other cool thing is that we&#39;re starting</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:13.000)</span>
+  </div>
+  <div class="dialogue-en">to know where stuff is.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:14.600)</span>
+  </div>
+  <div class="dialogue-en">And why is that important?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:15.960)</span>
+  </div>
+  <div class="dialogue-en">Well, robots are supposed to have arms, right?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(11:21.480)</span>
+  </div>
+  <div class="dialogue-en">Data had an arm, Rosie had an arm, Robbie the robot had an arm.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:25.200)</span>
+  </div>
+  <div class="dialogue-en">I mean, robots are, you know, they are physical things</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(11:27.680)</span>
+  </div>
+  <div class="dialogue-en">that move around in an environment</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:29.480)</span>
+  </div>
+  <div class="dialogue-en">and they&#39;re supposed to like do work.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:31.200)</span>
+  </div>
+  <div class="dialogue-en">And if you think about it,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:34.080)</span>
+  </div>
+  <div class="dialogue-en">if a robot doesn&#39;t know where anything is,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:37.200)</span>
+  </div>
+  <div class="dialogue-en">why should it have an arm?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:38.720)</span>
+  </div>
+  <div class="dialogue-en">But with this new dawn of home understanding</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(11:44.320)</span>
+  </div>
+  <div class="dialogue-en">that we&#39;re starting to go enjoy,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:47.680)</span>
+  </div>
+  <div class="dialogue-en">I know where the kitchen is.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(11:49.320)</span>
+  </div>
+  <div class="dialogue-en">I might in the future know where the refrigerator is.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:52.000)</span>
+  </div>
+  <div class="dialogue-en">I might, if I had an arm, be able to find the handle,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(11:55.240)</span>
+  </div>
+  <div class="dialogue-en">open it and even get myself a beer.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(11:58.440)</span>
+  </div>
+  <div class="dialogue-en">Obviously, that&#39;s one of the true dreams of robotics</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(12:01.880)</span>
+  </div>
+  <div class="dialogue-en">is to have robots bringing us a beer</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:03.480)</span>
+  </div>
+  <div class="dialogue-en">while we watch television.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(12:05.240)</span>
+  </div>
+  <div class="dialogue-en">But, you know, I think that that new category of tasks</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:10.960)</span>
+  </div>
+  <div class="dialogue-en">where physical manipulation, robot arms,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(12:14.200)</span>
+  </div>
+  <div class="dialogue-en">is just a potpourri of new opportunity and excitement.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:20.160)</span>
+  </div>
+  <div class="dialogue-en">And you see humans as a crucial part of that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:23.760)</span>
+  </div>
+  <div class="dialogue-en">So you kind of mentioned that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:26.240)</span>
+  </div>
+  <div class="dialogue-en">And I personally find that a really compelling idea.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(12:28.880)</span>
+  </div>
+  <div class="dialogue-en">I think full autonomy can only take us so far,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:33.920)</span>
+  </div>
+  <div class="dialogue-en">especially in the home.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:35.320)</span>
+  </div>
+  <div class="dialogue-en">So you see humans as helping the robot understand</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:38.880)</span>
+  </div>
+  <div class="dialogue-en">or give deeper meaning to the spatial information.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(12:43.560)</span>
+  </div>
+  <div class="dialogue-en">Right. It&#39;s a partnership.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:46.760)</span>
+  </div>
+  <div class="dialogue-en">The robot is supposed to operate according to descriptors</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(12:52.760)</span>
+  </div>
+  <div class="dialogue-en">that you would use to describe your own home.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(12:57.040)</span>
+  </div>
+  <div class="dialogue-en">The robot is supposed to, in lieu of better direction,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(13:02.200)</span>
+  </div>
+  <div class="dialogue-en">kind of go about its routine,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:03.920)</span>
+  </div>
+  <div class="dialogue-en">which ought to be basically right,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:07.640)</span>
+  </div>
+  <div class="dialogue-en">and lead to a home maintained in a way</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:12.800)</span>
+  </div>
+  <div class="dialogue-en">that it&#39;s learned you like,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:14.960)</span>
+  </div>
+  <div class="dialogue-en">but also be perpetually ready to take direction</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:21.560)</span>
+  </div>
+  <div class="dialogue-en">that would activate a different set of behaviors</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(13:26.360)</span>
+  </div>
+  <div class="dialogue-en">or actions to meet a current need</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:28.960)</span>
+  </div>
+  <div class="dialogue-en">to the extent it could actually perform that task.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:32.360)</span>
+  </div>
+  <div class="dialogue-en">So I got to ask you, I think this is a fundamental</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:35.400)</span>
+  </div>
+  <div class="dialogue-en">and a fascinating question,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(13:37.000)</span>
+  </div>
+  <div class="dialogue-en">because iRobot has been a successful company</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:39.800)</span>
+  </div>
+  <div class="dialogue-en">and a rare successful robotics company.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:42.360)</span>
+  </div>
+  <div class="dialogue-en">So Anki, Jibo, Mayfield Robotics with their robot curry,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:46.760)</span>
+  </div>
+  <div class="dialogue-en">SciFi Works, Rethink Robotics, these are robotics companies</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(13:50.560)</span>
+  </div>
+  <div class="dialogue-en">that were founded and run by brilliant people.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(13:54.040)</span>
+  </div>
+  <div class="dialogue-en">But all, very unfortunately, at least for us roboticists,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(13:59.680)</span>
+  </div>
+  <div class="dialogue-en">all went out of business recently.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:02.120)</span>
+  </div>
+  <div class="dialogue-en">So why do you think they didn&#39;t last longer?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:05.120)</span>
+  </div>
+  <div class="dialogue-en">Why do you think it is so hard to keep a robotics company alive?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:10.640)</span>
+  </div>
+  <div class="dialogue-en">You know, I say this only partially in jest</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(14:14.120)</span>
+  </div>
+  <div class="dialogue-en">that back in the day before Roomba,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:17.800)</span>
+  </div>
+  <div class="dialogue-en">you know, I was a high tech entrepreneur building robots.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:23.920)</span>
+  </div>
+  <div class="dialogue-en">But it wasn&#39;t until I became a vacuum cleaner salesman</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:26.400)</span>
+  </div>
+  <div class="dialogue-en">that we had any success.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(14:29.400)</span>
+  </div>
+  <div class="dialogue-en">So, I mean, the point is technology alone</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:34.200)</span>
+  </div>
+  <div class="dialogue-en">doesn&#39;t equal a successful business.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(14:37.680)</span>
+  </div>
+  <div class="dialogue-en">We need to go and find the compelling need</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:43.560)</span>
+  </div>
+  <div class="dialogue-en">where the robot that we&#39;re creating</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(14:47.600)</span>
+  </div>
+  <div class="dialogue-en">can deliver clearly more value to the end user</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:53.600)</span>
+  </div>
+  <div class="dialogue-en">than it costs.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:55.400)</span>
+  </div>
+  <div class="dialogue-en">And this is not a marginal thing</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(14:59.000)</span>
+  </div>
+  <div class="dialogue-en">where you&#39;re looking at the scale and you&#39;re like,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(15:00.400)</span>
+  </div>
+  <div class="dialogue-en">yeah, it&#39;s close.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:01.800)</span>
+  </div>
+  <div class="dialogue-en">Maybe we can hold our breath and make it work.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(15:04.360)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s clearly more value than the cost of the robot</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:11.560)</span>
+  </div>
+  <div class="dialogue-en">to bring, you know, in the store.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:13.840)</span>
+  </div>
+  <div class="dialogue-en">And I think that the challenge has been finding</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:17.440)</span>
+  </div>
+  <div class="dialogue-en">those businesses where that&#39;s true</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(15:24.760)</span>
+  </div>
+  <div class="dialogue-en">in a sustainable fashion.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:28.240)</span>
+  </div>
+  <div class="dialogue-en">You know, when you get into entertainment style things,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(15:34.600)</span>
+  </div>
+  <div class="dialogue-en">you could be the cat&#39;s meow one year,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:38.240)</span>
+  </div>
+  <div class="dialogue-en">but 85% of toys, regardless of their merit,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(15:43.360)</span>
+  </div>
+  <div class="dialogue-en">fail to make it to their second season.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:45.600)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s just super hard to do so.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:48.720)</span>
+  </div>
+  <div class="dialogue-en">And so that&#39;s just a tough business.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(15:53.840)</span>
+  </div>
+  <div class="dialogue-en">And there has been a lot of experimentation</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(15:57.760)</span>
+  </div>
+  <div class="dialogue-en">around what is the right type of social companion,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:02.680)</span>
+  </div>
+  <div class="dialogue-en">what is the right robot in the home</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(16:05.840)</span>
+  </div>
+  <div class="dialogue-en">that is doing something other than tasks people do every week</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:14.600)</span>
+  </div>
+  <div class="dialogue-en">that they&#39;d rather not do.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:17.520)</span>
+  </div>
+  <div class="dialogue-en">And I&#39;m not sure we&#39;ve got it all figured out right.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:20.920)</span>
+  </div>
+  <div class="dialogue-en">And so that you get brilliant roboticists</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(16:23.000)</span>
+  </div>
+  <div class="dialogue-en">with super interesting robots</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:25.720)</span>
+  </div>
+  <div class="dialogue-en">that ultimately don&#39;t quite have that magical user experience</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:32.880)</span>
+  </div>
+  <div class="dialogue-en">and thus that value benefit equation remains ambiguous.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:40.600)</span>
+  </div>
+  <div class="dialogue-en">So you as somebody who dreams of robots changing the world,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:45.760)</span>
+  </div>
+  <div class="dialogue-en">what&#39;s your estimate?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:48.800)</span>
+  </div>
+  <div class="dialogue-en">How big is the space of applications</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(16:53.280)</span>
+  </div>
+  <div class="dialogue-en">that fit the criteria that you just described</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(16:55.760)</span>
+  </div>
+  <div class="dialogue-en">where you can really demonstrate an obvious significant value</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:00.560)</span>
+  </div>
+  <div class="dialogue-en">over the alternative non robotic solution?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:05.720)</span>
+  </div>
+  <div class="dialogue-en">Well, I think that we&#39;re just about none of the way</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(17:10.040)</span>
+  </div>
+  <div class="dialogue-en">to achieving the potential of robotics at home.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:13.400)</span>
+  </div>
+  <div class="dialogue-en">But we have to do it in a really eyes wide open,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(17:20.440)</span>
+  </div>
+  <div class="dialogue-en">honest fashion.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:21.920)</span>
+  </div>
+  <div class="dialogue-en">And so another way to put that is the potential is infinite</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(17:25.440)</span>
+  </div>
+  <div class="dialogue-en">because we did take a few steps,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:27.080)</span>
+  </div>
+  <div class="dialogue-en">but you&#39;re saying those steps are just very initial steps.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:29.680)</span>
+  </div>
+  <div class="dialogue-en">So the Roomba is a hugely successful product,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:32.600)</span>
+  </div>
+  <div class="dialogue-en">but you&#39;re saying that&#39;s just the very, very beginning.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(17:34.280)</span>
+  </div>
+  <div class="dialogue-en">That&#39;s just the very, very beginning.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:36.560)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s the foot in the door.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:38.040)</span>
+  </div>
+  <div class="dialogue-en">And I think I was lucky that in the early days of robotics,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:45.120)</span>
+  </div>
+  <div class="dialogue-en">people would ask me, when are you going to clean my floor?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(17:48.440)</span>
+  </div>
+  <div class="dialogue-en">It was something that I grew up saying,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:53.600)</span>
+  </div>
+  <div class="dialogue-en">I got all these really good ideas,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:54.800)</span>
+  </div>
+  <div class="dialogue-en">but everyone seems to want their floor clean.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(17:58.120)</span>
+  </div>
+  <div class="dialogue-en">And so maybe we should do that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(18:02.400)</span>
+  </div>
+  <div class="dialogue-en">Yeah, your good ideas.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:03.400)</span>
+  </div>
+  <div class="dialogue-en">Earn the right to do the next thing after that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:05.840)</span>
+  </div>
+  <div class="dialogue-en">So the good ideas have to match with the desire of the people</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:10.120)</span>
+  </div>
+  <div class="dialogue-en">and then the actual cost has to like the business,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(18:13.240)</span>
+  </div>
+  <div class="dialogue-en">the financial aspect has to all match together.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:16.640)</span>
+  </div>
+  <div class="dialogue-en">Yeah, during our partnership back a number of years ago</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(18:21.240)</span>
+  </div>
+  <div class="dialogue-en">with Johnson Wax, they would explain to me</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:24.080)</span>
+  </div>
+  <div class="dialogue-en">that they would go into homes and just watch how people lived</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:32.520)</span>
+  </div>
+  <div class="dialogue-en">and try to figure out what were they doing</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:35.560)</span>
+  </div>
+  <div class="dialogue-en">that they really didn&#39;t really like to do,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:39.960)</span>
+  </div>
+  <div class="dialogue-en">but they had to do it frequently enough</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:42.440)</span>
+  </div>
+  <div class="dialogue-en">that it was top of mind and understood as a burden.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(18:51.720)</span>
+  </div>
+  <div class="dialogue-en">Hey, let&#39;s make a product or come up with a solution</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(18:55.840)</span>
+  </div>
+  <div class="dialogue-en">to make that pain point less challenging.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:02.040)</span>
+  </div>
+  <div class="dialogue-en">And sometimes we do certain burdens so often as a society</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:07.400)</span>
+  </div>
+  <div class="dialogue-en">that we actually don&#39;t even realize,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(19:09.400)</span>
+  </div>
+  <div class="dialogue-en">like it&#39;s actually hard to see that that burden</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:11.480)</span>
+  </div>
+  <div class="dialogue-en">is something that could be removed.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:13.200)</span>
+  </div>
+  <div class="dialogue-en">So it does require just going into the home and staring at,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:17.120)</span>
+  </div>
+  <div class="dialogue-en">wait, how do I actually live life?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:19.560)</span>
+  </div>
+  <div class="dialogue-en">What are the pain points?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:21.080)</span>
+  </div>
+  <div class="dialogue-en">Yeah, and getting those insights is a lot harder</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(19:26.400)</span>
+  </div>
+  <div class="dialogue-en">than it would seem it should be in retrospect.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:29.360)</span>
+  </div>
+  <div class="dialogue-en">So how hard on that point?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(19:33.120)</span>
+  </div>
+  <div class="dialogue-en">I mean, one of the big challenges of robotics</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:37.440)</span>
+  </div>
+  <div class="dialogue-en">is driving the cost down to something</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(19:42.200)</span>
+  </div>
+  <div class="dialogue-en">that consumers, people would afford.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:45.680)</span>
+  </div>
+  <div class="dialogue-en">So people would be less likely to buy a Roomba</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(19:48.840)</span>
+  </div>
+  <div class="dialogue-en">if it cost $500,000, which is probably</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:53.320)</span>
+  </div>
+  <div class="dialogue-en">sort of what a Roomba would cost several decades ago.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(19:58.040)</span>
+  </div>
+  <div class="dialogue-en">So how do you drive, which I mentioned is very difficult,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:02.200)</span>
+  </div>
+  <div class="dialogue-en">how do you drive the cost of a Roomba or a robot down</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:05.320)</span>
+  </div>
+  <div class="dialogue-en">such that people would want to buy it?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:07.920)</span>
+  </div>
+  <div class="dialogue-en">When I started building robots, the cost of the robot</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(20:11.600)</span>
+  </div>
+  <div class="dialogue-en">had a lot to do with the amount of time it took to build it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:15.480)</span>
+  </div>
+  <div class="dialogue-en">And so that we build our robots out of aluminum,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(20:18.400)</span>
+  </div>
+  <div class="dialogue-en">I would go spend my time in the machine shop</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:21.400)</span>
+  </div>
+  <div class="dialogue-en">on the milling machine, cutting out the parts and so forth.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:28.000)</span>
+  </div>
+  <div class="dialogue-en">And then when we got into the toy industry,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:29.680)</span>
+  </div>
+  <div class="dialogue-en">I realized that if we were building at scale,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(20:34.280)</span>
+  </div>
+  <div class="dialogue-en">I could determine the cost of the Roomba</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:35.920)</span>
+  </div>
+  <div class="dialogue-en">instead of adding up all the hours to mill out the parts,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:38.880)</span>
+  </div>
+  <div class="dialogue-en">but by weighing it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:42.080)</span>
+  </div>
+  <div class="dialogue-en">And that&#39;s liberating.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(20:44.200)</span>
+  </div>
+  <div class="dialogue-en">You can say, wow, the world has just</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:48.600)</span>
+  </div>
+  <div class="dialogue-en">changed as I think about construction</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(20:51.560)</span>
+  </div>
+  <div class="dialogue-en">in a different way.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(20:53.160)</span>
+  </div>
+  <div class="dialogue-en">The 3D CAD tools that are available to us today,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(20:56.920)</span>
+  </div>
+  <div class="dialogue-en">the operating at scale where I can do tooling and injection</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:02.920)</span>
+  </div>
+  <div class="dialogue-en">mold, an arbitrarily complicated part,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:07.120)</span>
+  </div>
+  <div class="dialogue-en">and the cost is going to be basically</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:09.840)</span>
+  </div>
+  <div class="dialogue-en">the weight of the plastic in that part,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(21:13.960)</span>
+  </div>
+  <div class="dialogue-en">is incredibly exciting and liberating</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:16.360)</span>
+  </div>
+  <div class="dialogue-en">and opens up all sorts of opportunities.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:18.560)</span>
+  </div>
+  <div class="dialogue-en">And for the sensing part of it, where we are today is instead</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:26.760)</span>
+  </div>
+  <div class="dialogue-en">of trying to build skin, which is really hard.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(21:30.640)</span>
+  </div>
+  <div class="dialogue-en">For a long time, I spent creating strategies and ideas</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:38.240)</span>
+  </div>
+  <div class="dialogue-en">around how could we duplicate the skin on the human body</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(21:42.720)</span>
+  </div>
+  <div class="dialogue-en">because it&#39;s such an amazing sensor.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:47.880)</span>
+  </div>
+  <div class="dialogue-en">Instead of going down that path, why don&#39;t we focus on vision?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:53.920)</span>
+  </div>
+  <div class="dialogue-en">And how many of the problems that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(21:57.280)</span>
+  </div>
+  <div class="dialogue-en">face a robot trying to do real work</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:02.880)</span>
+  </div>
+  <div class="dialogue-en">could be solved with a cheap camera and a big ass computer?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:09.680)</span>
+  </div>
+  <div class="dialogue-en">Moore&#39;s law continues to work.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(22:12.360)</span>
+  </div>
+  <div class="dialogue-en">The cell phone industry, the mobile industry</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:16.440)</span>
+  </div>
+  <div class="dialogue-en">is giving us better and better tools that can run</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(22:19.360)</span>
+  </div>
+  <div class="dialogue-en">on these embedded computers.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:21.000)</span>
+  </div>
+  <div class="dialogue-en">And I think we passed an important moment maybe</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(22:27.880)</span>
+  </div>
+  <div class="dialogue-en">two years ago where you could put machine vision</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:33.640)</span>
+  </div>
+  <div class="dialogue-en">capable processors on robots at consumer price points.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:39.520)</span>
+  </div>
+  <div class="dialogue-en">And I was waiting for it to happen.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:42.960)</span>
+  </div>
+  <div class="dialogue-en">We avoided putting lasers on our robots to do navigation</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:49.480)</span>
+  </div>
+  <div class="dialogue-en">and instead spent years researching</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(22:51.800)</span>
+  </div>
+  <div class="dialogue-en">how to do vision based navigation</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(22:54.600)</span>
+  </div>
+  <div class="dialogue-en">because you could just see where these technology</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:00.400)</span>
+  </div>
+  <div class="dialogue-en">trends were going.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:01.520)</span>
+  </div>
+  <div class="dialogue-en">And between injection molded plastic and a camera</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:06.680)</span>
+  </div>
+  <div class="dialogue-en">with a computer capable of running machine learning</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:10.800)</span>
+  </div>
+  <div class="dialogue-en">and visual object recognition, I could</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:12.920)</span>
+  </div>
+  <div class="dialogue-en">build an incredibly affordable, incredibly capable robot.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:18.640)</span>
+  </div>
+  <div class="dialogue-en">And that&#39;s going to be the future.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:21.160)</span>
+  </div>
+  <div class="dialogue-en">So on that point with a small tangent,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:23.400)</span>
+  </div>
+  <div class="dialogue-en">but I think an important one, another industry in which I</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:27.000)</span>
+  </div>
+  <div class="dialogue-en">would say the only other industry in which there</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(23:30.760)</span>
+  </div>
+  <div class="dialogue-en">is automation actually touching people&#39;s lives today</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:34.760)</span>
+  </div>
+  <div class="dialogue-en">is autonomous vehicles.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:37.560)</span>
+  </div>
+  <div class="dialogue-en">What the vision you just described</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:40.160)</span>
+  </div>
+  <div class="dialogue-en">of using computer vision and using cheap camera sensors,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(23:44.400)</span>
+  </div>
+  <div class="dialogue-en">there&#39;s a debate on that of LIDAR versus computer vision.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:48.160)</span>
+  </div>
+  <div class="dialogue-en">And the Elon Musk famously said that LIDAR</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(23:54.360)</span>
+  </div>
+  <div class="dialogue-en">is a crutch that really in the long term,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(23:58.360)</span>
+  </div>
+  <div class="dialogue-en">camera only is the right solution, which echoes some</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(24:02.000)</span>
+  </div>
+  <div class="dialogue-en">of the ideas you&#39;re expressing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:03.480)</span>
+  </div>
+  <div class="dialogue-en">Of course, the domain in terms of its safety criticality</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(24:06.760)</span>
+  </div>
+  <div class="dialogue-en">is different.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:07.600)</span>
+  </div>
+  <div class="dialogue-en">But what do you think about that approach</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:10.640)</span>
+  </div>
+  <div class="dialogue-en">in the autonomous vehicle space?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:13.360)</span>
+  </div>
+  <div class="dialogue-en">And in general, do you see a connection</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(24:15.160)</span>
+  </div>
+  <div class="dialogue-en">between the incredible real world challenges</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:18.480)</span>
+  </div>
+  <div class="dialogue-en">you have to solve in the home with Roomba?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:20.680)</span>
+  </div>
+  <div class="dialogue-en">And I saw a demonstration of some of them, corner cases</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:24.000)</span>
+  </div>
+  <div class="dialogue-en">literally, and autonomous vehicles.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:27.800)</span>
+  </div>
+  <div class="dialogue-en">So there&#39;s absolutely a tremendous overlap</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:31.600)</span>
+  </div>
+  <div class="dialogue-en">between both the problems a robot vacuum</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:36.560)</span>
+  </div>
+  <div class="dialogue-en">and an autonomous vehicle are trying to solve</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:38.560)</span>
+  </div>
+  <div class="dialogue-en">and the tools and the types of sensors</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(24:41.840)</span>
+  </div>
+  <div class="dialogue-en">that are being applied in the pursuit of the solutions.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:47.960)</span>
+  </div>
+  <div class="dialogue-en">In my world, my environment is actually</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(24:53.880)</span>
+  </div>
+  <div class="dialogue-en">much harder than the environment an automobile travels.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(24:57.320)</span>
+  </div>
+  <div class="dialogue-en">We don&#39;t have roads.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(24:58.800)</span>
+  </div>
+  <div class="dialogue-en">We have t shirts.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:01.280)</span>
+  </div>
+  <div class="dialogue-en">We have steps.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(25:02.680)</span>
+  </div>
+  <div class="dialogue-en">We have a near infinite number of patterns and colors</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:07.120)</span>
+  </div>
+  <div class="dialogue-en">and surface textures on the floor.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(25:10.160)</span>
+  </div>
+  <div class="dialogue-en">Especially from a visual perspective.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:11.960)</span>
+  </div>
+  <div class="dialogue-en">So the way the world looks is an infinitely variable.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(25:18.840)</span>
+  </div>
+  <div class="dialogue-en">On the other hand, safety is way easier on the inside.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:22.520)</span>
+  </div>
+  <div class="dialogue-en">My robots, they&#39;re not very heavy.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(25:26.480)</span>
+  </div>
+  <div class="dialogue-en">They&#39;re not very fast.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:28.280)</span>
+  </div>
+  <div class="dialogue-en">If they bump into your foot, you think it&#39;s funny.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:32.680)</span>
+  </div>
+  <div class="dialogue-en">And autonomous vehicles kind of have the inverse problem.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:39.400)</span>
+  </div>
+  <div class="dialogue-en">And so that for me saying vision is the future,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(25:45.920)</span>
+  </div>
+  <div class="dialogue-en">I can say that without reservation.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:49.440)</span>
+  </div>
+  <div class="dialogue-en">For autonomous vehicles, I think I</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(25:51.720)</span>
+  </div>
+  <div class="dialogue-en">believe what Elon&#39;s saying about the future</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(25:56.840)</span>
+  </div>
+  <div class="dialogue-en">is ultimately going to be vision.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(25:59.040)</span>
+  </div>
+  <div class="dialogue-en">Maybe if we put a cheap lighter on there as a backup sensor,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:02.000)</span>
+  </div>
+  <div class="dialogue-en">it might not be the worst idea in the world.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:03.800)</span>
+  </div>
+  <div class="dialogue-en">So the stakes are much higher.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:05.000)</span>
+  </div>
+  <div class="dialogue-en">The stakes are much higher.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(26:05.840)</span>
+  </div>
+  <div class="dialogue-en">You have to be much more careful thinking through how far away</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:09.080)</span>
+  </div>
+  <div class="dialogue-en">that future is.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(26:10.720)</span>
+  </div>
+  <div class="dialogue-en">Right.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:11.520)</span>
+  </div>
+  <div class="dialogue-en">But I think that the primary environmental understanding</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(26:17.880)</span>
+  </div>
+  <div class="dialogue-en">sensor is going to be a visual system.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:21.800)</span>
+  </div>
+  <div class="dialogue-en">Visual system.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:23.000)</span>
+  </div>
+  <div class="dialogue-en">So on that point, well, let me ask,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:25.560)</span>
+  </div>
+  <div class="dialogue-en">do you hope there&#39;s an iRobot robot in every home</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:29.440)</span>
+  </div>
+  <div class="dialogue-en">in the world one day?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:31.880)</span>
+  </div>
+  <div class="dialogue-en">I expect there to be at least one iRobot robot in every home.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(26:38.120)</span>
+  </div>
+  <div class="dialogue-en">We&#39;ve sold 25 million robots.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:41.160)</span>
+  </div>
+  <div class="dialogue-en">So we&#39;re in about 10% of US homes, which is a great start.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:47.080)</span>
+  </div>
+  <div class="dialogue-en">But I think that when we think about the numbers of things</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(26:52.240)</span>
+  </div>
+  <div class="dialogue-en">that robots can do, today I can vacuum your floor,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(26:57.520)</span>
+  </div>
+  <div class="dialogue-en">mop your floor, cut your lawn, or soon</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:00.040)</span>
+  </div>
+  <div class="dialogue-en">we&#39;ll be able to cut your lawn.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:02.880)</span>
+  </div>
+  <div class="dialogue-en">But there are more things that we could do in the home.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:06.640)</span>
+  </div>
+  <div class="dialogue-en">And I hope that we continue using the techniques I described</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(27:12.240)</span>
+  </div>
+  <div class="dialogue-en">around exploiting computer vision and low cost</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:16.240)</span>
+  </div>
+  <div class="dialogue-en">manufacturing that we&#39;ll be able to create these solutions</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(27:20.960)</span>
+  </div>
+  <div class="dialogue-en">at affordable price points.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:22.640)</span>
+  </div>
+  <div class="dialogue-en">So let me ask on that point of a robot in every home,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(27:25.600)</span>
+  </div>
+  <div class="dialogue-en">that&#39;s my dream as well.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:26.880)</span>
+  </div>
+  <div class="dialogue-en">I&#39;d love to see that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(27:29.960)</span>
+  </div>
+  <div class="dialogue-en">I think the possibilities there are indeed</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:31.880)</span>
+  </div>
+  <div class="dialogue-en">infinite positive possibilities.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:34.520)</span>
+  </div>
+  <div class="dialogue-en">But in our current culture, no thanks to science fiction</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:39.760)</span>
+  </div>
+  <div class="dialogue-en">and so on, there&#39;s a serious kind of hesitation, anxiety,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(27:45.320)</span>
+  </div>
+  <div class="dialogue-en">concern about robots, and also a concern about privacy.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:51.480)</span>
+  </div>
+  <div class="dialogue-en">And it&#39;s a fascinating question to me</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:55.040)</span>
+  </div>
+  <div class="dialogue-en">why that concern is amongst a certain group of people</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(27:59.560)</span>
+  </div>
+  <div class="dialogue-en">is as intense as it is.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:02.840)</span>
+  </div>
+  <div class="dialogue-en">So you have to think about it because it&#39;s a serious concern.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:05.480)</span>
+  </div>
+  <div class="dialogue-en">But I wonder how you address it best.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:08.000)</span>
+  </div>
+  <div class="dialogue-en">So from a perspective of vision sensors,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:09.840)</span>
+  </div>
+  <div class="dialogue-en">so robots that move about the home and sense the world,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:14.320)</span>
+  </div>
+  <div class="dialogue-en">how do you alleviate people&#39;s privacy concerns?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:19.720)</span>
+  </div>
+  <div class="dialogue-en">How do you make sure that they can</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:21.080)</span>
+  </div>
+  <div class="dialogue-en">trust iRobot and the robots that they share their home with?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:26.680)</span>
+  </div>
+  <div class="dialogue-en">I think that&#39;s a great question.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:28.200)</span>
+  </div>
+  <div class="dialogue-en">And we&#39;ve really leaned way forward on this</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:33.760)</span>
+  </div>
+  <div class="dialogue-en">because given our vision as to the role the company intends</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(28:39.440)</span>
+  </div>
+  <div class="dialogue-en">to play in the home, really for us,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:43.720)</span>
+  </div>
+  <div class="dialogue-en">make or break is can our approach</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(28:48.160)</span>
+  </div>
+  <div class="dialogue-en">be trusted to protecting the data</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:50.920)</span>
+  </div>
+  <div class="dialogue-en">and the privacy of the people who have our robots?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:53.520)</span>
+  </div>
+  <div class="dialogue-en">And so we&#39;ve gone out publicly with a privacy</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(28:57.600)</span>
+  </div>
+  <div class="dialogue-en">manifesto stating we&#39;ll never sell your data.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(29:00.360)</span>
+  </div>
+  <div class="dialogue-en">We&#39;ve adopted GDPR not just where GDPR is required,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:05.480)</span>
+  </div>
+  <div class="dialogue-en">but globally.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(29:09.120)</span>
+  </div>
+  <div class="dialogue-en">We have ensured that images don&#39;t leave the robot.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:18.000)</span>
+  </div>
+  <div class="dialogue-en">So processing data from the visual sensors</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(29:22.080)</span>
+  </div>
+  <div class="dialogue-en">happens locally on the robot.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:23.680)</span>
+  </div>
+  <div class="dialogue-en">And only semantic knowledge of the home with the consumer&#39;s</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(29:30.720)</span>
+  </div>
+  <div class="dialogue-en">consent is sent up.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:32.720)</span>
+  </div>
+  <div class="dialogue-en">We show you what we know and are trying</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(29:35.400)</span>
+  </div>
+  <div class="dialogue-en">to go use data as an enabler for the performance of the robots</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:45.000)</span>
+  </div>
+  <div class="dialogue-en">with the informed consent and understanding of the people who</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(29:50.720)</span>
+  </div>
+  <div class="dialogue-en">own those robots.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:55.720)</span>
+  </div>
+  <div class="dialogue-en">We take it very seriously.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(29:56.840)</span>
+  </div>
+  <div class="dialogue-en">And ultimately, we think that by showing a customer that</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:03.840)</span>
+  </div>
+  <div class="dialogue-en">if you let us build a semantic map of your home</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:07.320)</span>
+  </div>
+  <div class="dialogue-en">and know where the rooms are, well, then</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:09.240)</span>
+  </div>
+  <div class="dialogue-en">you can say clean the kitchen.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(30:11.720)</span>
+  </div>
+  <div class="dialogue-en">If you don&#39;t want the robot to do that, don&#39;t make the map.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:14.480)</span>
+  </div>
+  <div class="dialogue-en">It&#39;ll do its best job cleaning your home.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:16.960)</span>
+  </div>
+  <div class="dialogue-en">But it won&#39;t be able to do that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:18.720)</span>
+  </div>
+  <div class="dialogue-en">And if you ever want us to forget that we know that it&#39;s</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(30:21.120)</span>
+  </div>
+  <div class="dialogue-en">your kitchen, you can have confidence</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:24.400)</span>
+  </div>
+  <div class="dialogue-en">that we will do that for you.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:26.800)</span>
+  </div>
+  <div class="dialogue-en">So we&#39;re trying to go and be a data 2.0 perspective company</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:35.800)</span>
+  </div>
+  <div class="dialogue-en">where we treat the data that the robots have</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(30:39.200)</span>
+  </div>
+  <div class="dialogue-en">of the consumer&#39;s home as if it were the consumer&#39;s data</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:43.200)</span>
+  </div>
+  <div class="dialogue-en">and that they have rights to it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:47.360)</span>
+  </div>
+  <div class="dialogue-en">So we think by being the good guys on this front,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(30:50.880)</span>
+  </div>
+  <div class="dialogue-en">we can build the trust and thus be entrusted</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(30:55.080)</span>
+  </div>
+  <div class="dialogue-en">to enable robots to do more things that are thoughtful.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:00.160)</span>
+  </div>
+  <div class="dialogue-en">You think people&#39;s worries will diminish over time?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(31:04.760)</span>
+  </div>
+  <div class="dialogue-en">As a society, broadly speaking, do you</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:07.040)</span>
+  </div>
+  <div class="dialogue-en">think you can win over trust not just for the company,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:10.600)</span>
+  </div>
+  <div class="dialogue-en">but just the comfort that people have with AI in their home</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:14.920)</span>
+  </div>
+  <div class="dialogue-en">enriching their lives in some way?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(31:17.040)</span>
+  </div>
+  <div class="dialogue-en">I think we&#39;re in an interesting place today</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:19.560)</span>
+  </div>
+  <div class="dialogue-en">where it&#39;s less about winning them over</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:22.360)</span>
+  </div>
+  <div class="dialogue-en">and more about finding a way to talk about privacy in a way</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:26.720)</span>
+  </div>
+  <div class="dialogue-en">that more people can understand.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(31:28.880)</span>
+  </div>
+  <div class="dialogue-en">I would tell you that today, when there&#39;s a privacy breach,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:33.320)</span>
+  </div>
+  <div class="dialogue-en">people get very upset and then go to the store</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:37.000)</span>
+  </div>
+  <div class="dialogue-en">and buy the cheapest thing, paying no attention</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:39.320)</span>
+  </div>
+  <div class="dialogue-en">to whether or not the products that they&#39;re buying</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(31:42.080)</span>
+  </div>
+  <div class="dialogue-en">honor privacy standards or not.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:44.600)</span>
+  </div>
+  <div class="dialogue-en">In fact, if I put on the package of my Roomba,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(31:50.040)</span>
+  </div>
+  <div class="dialogue-en">the privacy commitments that we have,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:53.560)</span>
+  </div>
+  <div class="dialogue-en">I would sell less than I would if I did nothing at all.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(31:58.680)</span>
+  </div>
+  <div class="dialogue-en">And that needs to change.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:00.360)</span>
+  </div>
+  <div class="dialogue-en">So it&#39;s not a question about earning trust.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(32:02.880)</span>
+  </div>
+  <div class="dialogue-en">I think that&#39;s necessary but not sufficient.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:04.920)</span>
+  </div>
+  <div class="dialogue-en">We need to figure out how to have</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(32:06.520)</span>
+  </div>
+  <div class="dialogue-en">a comfortable set of what is the grade A meat</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:10.800)</span>
+  </div>
+  <div class="dialogue-en">standard applied to privacy that customers can trust</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:17.640)</span>
+  </div>
+  <div class="dialogue-en">and understand and then use in their buying decisions.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:23.040)</span>
+  </div>
+  <div class="dialogue-en">That will reward companies for good behavior</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:25.520)</span>
+  </div>
+  <div class="dialogue-en">and that will ultimately be how this moves forward.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:29.880)</span>
+  </div>
+  <div class="dialogue-en">And maybe be part of the conversation</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(32:32.640)</span>
+  </div>
+  <div class="dialogue-en">between regular people about what it means,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:34.800)</span>
+  </div>
+  <div class="dialogue-en">what privacy means.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(32:36.280)</span>
+  </div>
+  <div class="dialogue-en">If you have some standards, you can say,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:38.440)</span>
+  </div>
+  <div class="dialogue-en">you can start talking about who&#39;s following them,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(32:41.080)</span>
+  </div>
+  <div class="dialogue-en">who does not have more.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:42.640)</span>
+  </div>
+  <div class="dialogue-en">Because most people are actually quite clueless</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(32:45.440)</span>
+  </div>
+  <div class="dialogue-en">about all aspects of artificial intelligence,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:47.320)</span>
+  </div>
+  <div class="dialogue-en">the data collection, and so on.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(32:48.440)</span>
+  </div>
+  <div class="dialogue-en">It would be nice to change that for people</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:50.560)</span>
+  </div>
+  <div class="dialogue-en">to understand the good that AI can do.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:52.800)</span>
+  </div>
+  <div class="dialogue-en">And it&#39;s not some system that&#39;s trying to steal</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:56.560)</span>
+  </div>
+  <div class="dialogue-en">all the most sensitive data.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(32:58.760)</span>
+  </div>
+  <div class="dialogue-en">Do you think, do you dream of a Roomba</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:02.640)</span>
+  </div>
+  <div class="dialogue-en">with human level intelligence one day?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:05.280)</span>
+  </div>
+  <div class="dialogue-en">So you&#39;ve mentioned a very successful localization</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:10.520)</span>
+  </div>
+  <div class="dialogue-en">and mapping of the environment, being</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(33:12.160)</span>
+  </div>
+  <div class="dialogue-en">able to do some basic communication to say,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:14.680)</span>
+  </div>
+  <div class="dialogue-en">go clean the kitchen.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:16.600)</span>
+  </div>
+  <div class="dialogue-en">Do you see in your maybe more bored moments,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:22.880)</span>
+  </div>
+  <div class="dialogue-en">once you get the beer, to sit back with that beer</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:27.080)</span>
+  </div>
+  <div class="dialogue-en">and have a chat on a Friday night with a Roomba</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:30.840)</span>
+  </div>
+  <div class="dialogue-en">about how your day went?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:34.160)</span>
+  </div>
+  <div class="dialogue-en">So to your latter question, absolutely.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:38.640)</span>
+  </div>
+  <div class="dialogue-en">To your former question as to whether a Roomba</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(33:40.760)</span>
+  </div>
+  <div class="dialogue-en">can have human level intelligence, not in my lifetime.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:45.280)</span>
+  </div>
+  <div class="dialogue-en">You can have you.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(33:46.440)</span>
+  </div>
+  <div class="dialogue-en">I think you can have a great conversation,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:49.720)</span>
+  </div>
+  <div class="dialogue-en">a meaningful conversation with a Roomba</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(33:54.000)</span>
+  </div>
+  <div class="dialogue-en">without it having anything that resembles</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:56.320)</span>
+  </div>
+  <div class="dialogue-en">human level intelligence.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(33:59.200)</span>
+  </div>
+  <div class="dialogue-en">And I think that as long as you realize that conversation</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:04.000)</span>
+  </div>
+  <div class="dialogue-en">is not about the robot and making the robot feel good.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(34:08.600)</span>
+  </div>
+  <div class="dialogue-en">That conversation is about you learning interesting things</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:14.880)</span>
+  </div>
+  <div class="dialogue-en">that make you feel like the conversation that you</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(34:18.720)</span>
+  </div>
+  <div class="dialogue-en">had with the robot is a pretty awesome way</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:24.840)</span>
+  </div>
+  <div class="dialogue-en">of learning something.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:27.400)</span>
+  </div>
+  <div class="dialogue-en">And it could be about what kind of day your pet had.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:30.920)</span>
+  </div>
+  <div class="dialogue-en">It could be about how can I make my home more energy efficient.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(34:36.240)</span>
+  </div>
+  <div class="dialogue-en">It could be about if I&#39;m thinking about climbing</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:40.000)</span>
+  </div>
+  <div class="dialogue-en">Mount Everest, what should I know?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:44.440)</span>
+  </div>
+  <div class="dialogue-en">And that&#39;s a very doable thing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:48.640)</span>
+  </div>
+  <div class="dialogue-en">But if I think that that conversation</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(34:51.480)</span>
+  </div>
+  <div class="dialogue-en">I&#39;m going to have with the robot is</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:53.760)</span>
+  </div>
+  <div class="dialogue-en">I&#39;m going to be rewarded by making the robot happy,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(34:56.840)</span>
+  </div>
+  <div class="dialogue-en">well, I could just put a button on the robot</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(34:58.720)</span>
+  </div>
+  <div class="dialogue-en">that you could push and the robot would smile.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:00.600)</span>
+  </div>
+  <div class="dialogue-en">And that sort of thing.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:02.200)</span>
+  </div>
+  <div class="dialogue-en">So I think you need to think about the question</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(35:04.200)</span>
+  </div>
+  <div class="dialogue-en">in the right way.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:06.720)</span>
+  </div>
+  <div class="dialogue-en">And robots can be awesomely effective at helping people</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(35:12.680)</span>
+  </div>
+  <div class="dialogue-en">feel less isolated, learn more about the home</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:16.320)</span>
+  </div>
+  <div class="dialogue-en">that they live in, and fill some of those lonely gaps</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(35:21.960)</span>
+  </div>
+  <div class="dialogue-en">that we wish we were engaged learning</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:24.320)</span>
+  </div>
+  <div class="dialogue-en">cool stuff about our world.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(35:26.640)</span>
+  </div>
+  <div class="dialogue-en">Last question.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:28.800)</span>
+  </div>
+  <div class="dialogue-en">If you could hang out for a day with a robot</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(35:32.280)</span>
+  </div>
+  <div class="dialogue-en">from science fiction, movies, books,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:35.760)</span>
+  </div>
+  <div class="dialogue-en">and safely pick its brain for that day, who would you pick?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(35:42.080)</span>
+  </div>
+  <div class="dialogue-en">Data.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:43.320)</span>
+  </div>
+  <div class="dialogue-en">Data.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(35:43.880)</span>
+  </div>
+  <div class="dialogue-en">From Star Trek.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:45.280)</span>
+  </div>
+  <div class="dialogue-en">I think that A, data is really smart.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(35:49.600)</span>
+  </div>
+  <div class="dialogue-en">Data has been through a lot trying</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:51.440)</span>
+  </div>
+  <div class="dialogue-en">to go and save the galaxy.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:53.520)</span>
+  </div>
+  <div class="dialogue-en">And I&#39;m really interested actually in emotion</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(35:59.600)</span>
+  </div>
+  <div class="dialogue-en">and robotics.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(36:01.200)</span>
+  </div>
+  <div class="dialogue-en">And I think you&#39;d have a lot to say about that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(36:03.120)</span>
+  </div>
+  <div class="dialogue-en">Because I believe actually that emotion</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(36:08.120)</span>
+  </div>
+  <div class="dialogue-en">plays an incredibly useful role in doing reasonable things</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(36:14.280)</span>
+  </div>
+  <div class="dialogue-en">in situations where we have imperfect understanding of</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(36:16.920)</span>
+  </div>
+  <div class="dialogue-en">what&#39;s going on.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(36:18.000)</span>
+  </div>
+  <div class="dialogue-en">In social situations when there&#39;s imperfect information.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(36:20.760)</span>
+  </div>
+  <div class="dialogue-en">In social situations, also in competitive or dangerous</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(36:26.320)</span>
+  </div>
+  <div class="dialogue-en">situations that we have emotion for a reason.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(36:32.880)</span>
+  </div>
+  <div class="dialogue-en">And so that ultimately, my theory</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(36:36.320)</span>
+  </div>
+  <div class="dialogue-en">is that as robots get smarter and smarter,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(36:38.520)</span>
+  </div>
+  <div class="dialogue-en">they&#39;re actually going to get more emotional.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(36:41.400)</span>
+  </div>
+  <div class="dialogue-en">Because you can&#39;t actually survive on pure logic.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(36:49.120)</span>
+  </div>
+  <div class="dialogue-en">Because only a very tiny fraction of the situations</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(36:53.800)</span>
+  </div>
+  <div class="dialogue-en">we find ourselves in can be resolved reasonably with logic.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(36:57.320)</span>
+  </div>
+  <div class="dialogue-en">And so I think Data would have a lot to say about that.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(36:59.600)</span>
+  </div>
+  <div class="dialogue-en">And so I could find out whether he agrees.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(37:02.360)</span>
+  </div>
+  <div class="dialogue-en">If you could ask Data one question,</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(37:04.840)</span>
+  </div>
+  <div class="dialogue-en">you would get a deep, honest answer to what would you ask.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(37:08.560)</span>
+  </div>
+  <div class="dialogue-en">What&#39;s Captain Picard really like?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(37:12.520)</span>
+  </div>
+  <div class="dialogue-en">OK, I think that&#39;s the perfect way to end it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(37:14.320)</span>
+  </div>
+  <div class="dialogue-en">Colin, thank you so much for talking today.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(37:16.040)</span>
+  </div>
+  <div class="dialogue-en">I really appreciate it.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Colin Angle <span class="dialogue-time">(37:16.960)</span>
+  </div>
+  <div class="dialogue-en">My pleasure.</div>
+  
+</div></div>
+<button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 636 条对话 ↓</button>
+
+    <a href="https://lexfridman.com/colin-angle" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -842,6 +5176,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -854,6 +5240,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

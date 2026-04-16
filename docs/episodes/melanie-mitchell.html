@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -642,31 +658,34 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 <div class="quote-block">
   <div class="quote-text">"One example is that the human genome, right, so there was a lot of work on excitement about sequencing the human genome"</div>
-  
+  <div class="quote-zh">一个例子是人类基因组，对，所以有很多关于人类基因组测序的令人兴奋的工作</div>
   <div class="quote-meta">— Melanie Mitchell （1:40:54.560）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"If people actually wanted to play around with it and actually get into it and study it and maybe integrate into whether it&#39;s with deep learning or any other kind of work they&#39;re doing."</div>
-  
+  <div class="quote-zh">如果人们真的想尝试一下它，真正进入它并研究它，并且可能融入到深度学习或他们正在做的任何其他类型的工作中。</div>
   <div class="quote-meta">— Melanie Mitchell （1:50:45.560）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"And then try and build up an understanding of the whole system by looking at sort of the sum of all the elements."</div>
-  
+  <div class="quote-zh">然后尝试通过查看所有元素的总和来建立对整个系统的理解。</div>
   <div class="quote-meta">— Melanie Mitchell （1:40:06.560）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"Is it just ultimately humbling or is there a hope to somehow leverage this into a deeper understanding and even able to engineer things like intelligence?"</div>
-  
+  <div class="quote-zh">它只是最终令人谦卑，还是希望以某种方式利用它来加深理解，甚至能够设计诸如智能之类的东西？</div>
   <div class="quote-meta">— Melanie Mitchell （1:42:18.560）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"How humbling in that also kind of awe inspiring that it&#39;s that awe inspiring like part of mathematics that these credibly simple rules can produce this very beautiful, complex, hard to understand behavior."</div>
-  
+  <div class="quote-zh">令人敬畏的是，就像数学的一部分一样，这些令人信服的简单规则可以产生这种非常美丽、复杂、难以理解的行为。</div>
   <div class="quote-meta">— Melanie Mitchell （1:42:31.560）</div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（2011 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
@@ -674,140 +693,140 @@ a:hover { color: var(--accent); text-decoration: underline; }
     Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">The following is a conversation with Melanie Mitchell.</div>
-  
+  <div class="dialogue-zh">以下是与梅兰妮·米切尔的对话。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:03.180)</span>
   </div>
   <div class="dialogue-en">She&#39;s a professor of computer science</div>
-  
+  <div class="dialogue-zh">她是计算机科学教授</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:04.860)</span>
   </div>
   <div class="dialogue-en">at Portland State University</div>
-  
+  <div class="dialogue-zh">在波特兰州立大学</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:06.700)</span>
   </div>
   <div class="dialogue-en">and an external professor at Santa Fe Institute.</div>
-  
+  <div class="dialogue-zh">以及圣达菲研究所的外部教授。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:10.020)</span>
   </div>
   <div class="dialogue-en">She has worked on and written about artificial intelligence</div>
-  
+  <div class="dialogue-zh">她致力于人工智能并撰写有关人工智能的文章</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Melanie Mitchell <span class="dialogue-time">(00:12.980)</span>
   </div>
   <div class="dialogue-en">from fascinating perspectives,</div>
-  
+  <div class="dialogue-zh">从迷人的视角，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:14.940)</span>
   </div>
   <div class="dialogue-en">including adaptive complex systems, genetic algorithms,</div>
-  
+  <div class="dialogue-zh">包括自适应复杂系统、遗传算法、</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:18.500)</span>
   </div>
   <div class="dialogue-en">and the copycat cognitive architecture,</div>
-  
+  <div class="dialogue-zh">和模仿的认知架构，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:20.980)</span>
   </div>
   <div class="dialogue-en">which places the process of analogy making</div>
-  
+  <div class="dialogue-zh">这将类比的过程</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Melanie Mitchell <span class="dialogue-time">(00:23.340)</span>
   </div>
   <div class="dialogue-en">at the core of human cognition.</div>
-  
+  <div class="dialogue-zh">人类认知的核心。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:26.300)</span>
   </div>
   <div class="dialogue-en">From her doctoral work with her advisors,</div>
-  
+  <div class="dialogue-zh">从她和导师的博士研究来看，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Melanie Mitchell <span class="dialogue-time">(00:28.520)</span>
   </div>
   <div class="dialogue-en">Douglas Hofstadter and John Holland, to today,</div>
-  
+  <div class="dialogue-zh">道格拉斯·霍夫施塔特和约翰·霍兰德，直到今天，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:32.020)</span>
   </div>
   <div class="dialogue-en">she has contributed a lot of important ideas</div>
-  
+  <div class="dialogue-zh">她贡献了很多重要的想法</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Melanie Mitchell <span class="dialogue-time">(00:34.220)</span>
   </div>
   <div class="dialogue-en">to the field of AI, including her recent book,</div>
-  
+  <div class="dialogue-zh">人工智能领域，包括她最近的书，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:37.020)</span>
   </div>
   <div class="dialogue-en">simply called Artificial Intelligence,</div>
-  
+  <div class="dialogue-zh">简称为人工智能，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Melanie Mitchell <span class="dialogue-time">(00:39.960)</span>
   </div>
   <div class="dialogue-en">A Guide for Thinking Humans.</div>
-  
+  <div class="dialogue-zh">人类思考指南。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:42.820)</span>
   </div>
   <div class="dialogue-en">This is the Artificial Intelligence Podcast.</div>
-  
+  <div class="dialogue-zh">这是人工智能播客。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Melanie Mitchell <span class="dialogue-time">(00:45.900)</span>
   </div>
   <div class="dialogue-en">If you enjoy it, subscribe on YouTube,</div>
-  
+  <div class="dialogue-zh">如果您喜欢，请在 YouTube 上订阅，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:48.300)</span>
   </div>
   <div class="dialogue-en">give it five stars on Apple Podcast,</div>
-  
+  <div class="dialogue-zh">在 Apple Podcast 上给它五颗星，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Melanie Mitchell <span class="dialogue-time">(00:50.300)</span>
   </div>
   <div class="dialogue-en">support it on Patreon,</div>
-  
+  <div class="dialogue-zh">在 Patreon 上支持它，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
@@ -14749,7 +14768,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 </div></div>
 <button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 2011 条对话 ↓</button>
 
-    <a href="https://lexfridman.com/melanie-mitchell" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+    <a href="https://lexfridman.com/melanie-mitchell" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -14807,6 +14826,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -14819,6 +14890,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

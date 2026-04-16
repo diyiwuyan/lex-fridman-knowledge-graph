@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -642,31 +658,34 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 <div class="quote-block">
   <div class="quote-text">"sacrifices and big sacrifices you made, you did the wrong thing and you&#39;re evading that you betrayed your unconscious."</div>
-  
+  <div class="quote-zh">你做出了牺牲，做出了巨大的牺牲，你做了错误的事情，你正在逃避你背叛了你的无意识。</div>
   <div class="quote-meta">— Michael Malice and Yaron Brook （1:30:14.840）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"So my point is what are presented as the strongest criticism of anarchism are inevitably descriptions"</div>
-  
+  <div class="quote-zh">所以我的观点是，对无政府主义最强烈的批评不可避免地是描述</div>
   <div class="quote-meta">— Michael Malice and Yaron Brook （3:15:38.280）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"babysitter or don&#39;t have kids, which is the better approach. Here&#39;s a question. What book did Ayn Rand"</div>
-  
+  <div class="quote-zh">保姆或没有孩子，这是更好的方法。这里有一个问题。安兰德写了什么书</div>
   <div class="quote-meta">— Michael Malice and Yaron Brook （4:13:39.040）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"certain point where they call me up, they&#39;re having a problem and I&#39;ve helped them with that problem."</div>
-  
+  <div class="quote-zh">当他们打电话给我时，他们遇到了问题，我已经帮助他们解决了这个问题。</div>
   <div class="quote-meta">— Michael Malice and Yaron Brook （4:14:15.520）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"the nastier we are to one another. Individualists who are pursuing their own happiness are incredibly"</div>
-  
+  <div class="quote-zh">我们彼此之间的关系越恶劣。追求自己幸福的个人主义者是不可思议的</div>
   <div class="quote-meta">— Michael Malice and Yaron Brook （4:20:00.800）</div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（5354 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
@@ -674,140 +693,140 @@ a:hover { color: var(--accent); text-decoration: underline; }
     Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">The following is a conversation with Michael Mallis and Yaron Brook, Michael&#39;s third time</div>
-  
+  <div class="dialogue-zh">以下是迈克尔·马利斯和亚伦·布鲁克的对话，迈克尔第三次</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:05.680)</span>
   </div>
   <div class="dialogue-en">on this podcast and Yaron&#39;s second, but together for the first time.</div>
-  
+  <div class="dialogue-zh">这是 Yaron 的第二个播客，但却是第一次在一起。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:11.640)</span>
   </div>
   <div class="dialogue-en">Michael is an anarchist, political thinker, host of a podcast called You&#39;re Welcome and</div>
-  
+  <div class="dialogue-zh">迈克尔是一位无政府主义者、政治思想家、播客“不客气”的主持人，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:18.280)</span>
   </div>
   <div class="dialogue-en">author of Dear Reader, The New Right and two upcoming books Anarchist Handbook and The</div>
-  
+  <div class="dialogue-zh">《亲爱的读者》、《新右派》和两本即将出版的书籍《无政府主义者手册》和《The New Right》的作者</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:25.220)</span>
   </div>
   <div class="dialogue-en">White Pill.</div>
-  
+  <div class="dialogue-zh">白色药丸。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice and Yaron Brook <span class="dialogue-time">(00:26.680)</span>
   </div>
   <div class="dialogue-en">Yaron is an objectivist philosopher, chairman of the Ayn Rand Institute, host of The Yaron</div>
-  
+  <div class="dialogue-zh">亚龙 (Yaron) 是一位客观主义哲学家、艾因兰德研究所 (Ayn Rand Institute) 主席、The Yaron 主持人</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:33.800)</span>
   </div>
   <div class="dialogue-en">Brook Show and coauthor of The Free Market Revolution and Equal is Unfair.</div>
-  
+  <div class="dialogue-zh">布鲁克·肖 (Brook Show) 是《自由市场革命》和《平等是不公平》的合著者。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice and Yaron Brook <span class="dialogue-time">(00:41.200)</span>
   </div>
   <div class="dialogue-en">Quick mention of our sponsors, Ground News, Public Goods, Athletic Greens, Brave and Four</div>
-  
+  <div class="dialogue-zh">快速提及我们的赞助商、地面新闻、公共物品、运动绿党、勇敢者和四人组</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:48.400)</span>
   </div>
   <div class="dialogue-en">Sigmatic.</div>
-  
+  <div class="dialogue-zh">西格玛蒂克。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice and Yaron Brook <span class="dialogue-time">(00:49.560)</span>
   </div>
   <div class="dialogue-en">Check them out in the description to support this podcast.</div>
-  
+  <div class="dialogue-zh">在说明中查看它们以支持此播客。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:53.160)</span>
   </div>
   <div class="dialogue-en">As a side note, let me say that this conversation is a kind of experiment.</div>
-  
+  <div class="dialogue-zh">作为旁注，我要说的是，这次谈话是一种实验。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice and Yaron Brook <span class="dialogue-time">(00:58.380)</span>
   </div>
   <div class="dialogue-en">Both Michael and Yaron are thoughtful and passionate, united in part by an interest</div>
-  
+  <div class="dialogue-zh">迈克尔和亚伦都深思熟虑且充满热情，部分是因为兴趣而团结在一起</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice and Yaron Brook <span class="dialogue-time">(01:03.840)</span>
   </div>
   <div class="dialogue-en">in the history and philosophy of Ayn Rand, but they are also very different in style.</div>
-  
+  <div class="dialogue-zh">他们在安·兰德的历史和哲学中都有所体现，但风格上也有很大不同。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice and Yaron Brook <span class="dialogue-time">(01:09.600)</span>
   </div>
   <div class="dialogue-en">Good conversation, like good food, is often made delicious by pairing of contrasting elements.</div>
-  
+  <div class="dialogue-zh">良好的谈话就像美味的食物一样，通常通过对比元素的搭配而变得美味。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice and Yaron Brook <span class="dialogue-time">(01:16.440)</span>
   </div>
   <div class="dialogue-en">For example, someone suggested I try a peanut butter, bacon and banana sandwich, which apparently</div>
-  
+  <div class="dialogue-zh">例如，有人建议我尝试花生酱、培根和香蕉三明治，这显然</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice and Yaron Brook <span class="dialogue-time">(01:22.900)</span>
   </div>
   <div class="dialogue-en">is very good.</div>
-  
+  <div class="dialogue-zh">非常好。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice and Yaron Brook <span class="dialogue-time">(01:24.640)</span>
   </div>
   <div class="dialogue-en">Among the three of us, I don&#39;t know who&#39;s the peanut butter, who&#39;s the bacon and who&#39;s</div>
-  
+  <div class="dialogue-zh">我们三个人，我不知道谁是花生酱，谁是培根，谁是</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice and Yaron Brook <span class="dialogue-time">(01:28.240)</span>
   </div>
   <div class="dialogue-en">the banana, I&#39;m guessing it&#39;s probably me, I&#39;m the banana, but I hope the final result,</div>
-  
+  <div class="dialogue-zh">香蕉，我猜可能是我，我是香蕉，但我希望最后的结果，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:34.880)</span>
   </div>
   <div class="dialogue-en">the final dish, if you will, is equally delicious.</div>
-  
+  <div class="dialogue-zh">如果你愿意的话，最后一道菜也同样美味。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Michael Malice and Yaron Brook <span class="dialogue-time">(01:38.680)</span>
   </div>
   <div class="dialogue-en">We talk through, I think, a lot of interesting ideas, sometimes disagreeing, sometimes even</div>
-  
+  <div class="dialogue-zh">我认为我们讨论了很多有趣的想法，有时不同意，有时甚至</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
@@ -38150,7 +38169,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 </div></div>
 <button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 5354 条对话 ↓</button>
 
-    <a href="https://lexfridman.com/michael-malice-and-yaron-brook" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+    <a href="https://lexfridman.com/michael-malice-and-yaron-brook" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -38208,6 +38227,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -38220,6 +38291,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>

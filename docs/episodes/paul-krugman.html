@@ -430,6 +430,20 @@ a:hover { color: var(--accent); text-decoration: underline; }
   border-left: 2px solid #2a2a3a;
 }
 
+.trans-btn {
+  float: right;
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid #2a2a3a;
+  background: transparent;
+  color: #475569;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+.trans-btn:hover { background: #1e1e2a; color: #818cf8; border-color: #818cf8; }
+
 /* Topic page */
 .topic-header {
   padding: 28px;
@@ -627,6 +641,8 @@ a:hover { color: var(--accent); text-decoration: underline; }
 
   <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span></div>
 
+  
+
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
     <div>
       <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
@@ -642,31 +658,34 @@ a:hover { color: var(--accent); text-decoration: underline; }
   
 <div class="quote-block">
   <div class="quote-text">"States actually probably pays a price. We&#39;re harsh, we&#39;re cruel, and we actually make ourselves poorer"</div>
-  
+  <div class="quote-zh">各国实际上可能付出了代价。我们很严厉，我们很残酷，我们实际上让自己变得更穷</div>
   <div class="quote-meta">— Paul Krugman （15:40.240）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"actually lead people to get lazy? I have a pretty strong view that the evidence points to conclusions"</div>
-  
+  <div class="quote-zh">真的会让人变懒吗？我坚信证据可以得出结论</div>
   <div class="quote-meta">— Paul Krugman （09:34.720）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"of these things. And there&#39;s a lot of evidence now that lacking those basics is actually destructive,"</div>
-  
+  <div class="quote-zh">这些事情。现在有很多证据表明缺乏这些基础知识实际上是具有破坏性的，</div>
   <div class="quote-meta">— Paul Krugman （15:20.960）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"about extreme? People who have like radical views, you think they&#39;re not grounded in any kind of data,"</div>
-  
+  <div class="quote-zh">关于极端？那些拥有激进观点的人，你认为他们没有任何数据基础，</div>
   <div class="quote-meta">— Paul Krugman （41:22.000）</div>
 </div>
 <div class="quote-block">
   <div class="quote-text">"and economics, which places him in the middle of the tense, divisive, modern day political discourse."</div>
-  
+  <div class="quote-zh">和经济学，这使他处于紧张、分裂的现代政治话语之中。</div>
   <div class="quote-meta">— Paul Krugman （00:22.400）</div>
 </div>
 
-  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:32px;margin-bottom:12px">
+    <div class="section-title" style="font-size:18px;margin-bottom:0">🎙️ 完整对话（551 条）</div>
+    <button id="translate-all-btn" onclick="translateAll()" class="btn btn-primary" style="font-size:13px;padding:6px 14px">🌐 一键翻译全文</button>
+  </div>
   <div class="dialogue-box">
     
 <div class="dialogue-item">
@@ -674,140 +693,140 @@ a:hover { color: var(--accent); text-decoration: underline; }
     Lex Fridman <span class="dialogue-time">(00:00.000)</span>
   </div>
   <div class="dialogue-en">The following is a conversation with Paul Krugman, Nobel Prize winner in economics,</div>
-  
+  <div class="dialogue-zh">以下是与诺贝尔经济学奖获得者保罗·克鲁格曼的对话，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:04.880)</span>
   </div>
   <div class="dialogue-en">professor at CUNY, and columnist at the New York Times. His academic work centers around</div>
-  
+  <div class="dialogue-zh">纽约市立大学教授、《纽约时报》专栏作家。他的学术工作围绕</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:10.560)</span>
   </div>
   <div class="dialogue-en">international economics, economic geography, liquidity traps, and currency crises. But he</div>
-  
+  <div class="dialogue-zh">国际经济、经济地理、流动性陷阱和货币危机。但他</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:16.880)</span>
   </div>
   <div class="dialogue-en">also is an outspoken writer and commentator on the intersection of modern day politics</div>
-  
+  <div class="dialogue-zh">也是一位直言不讳的作家和评论家，探讨现代政治的交叉点</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:22.400)</span>
   </div>
   <div class="dialogue-en">and economics, which places him in the middle of the tense, divisive, modern day political discourse.</div>
-  
+  <div class="dialogue-zh">和经济学，这使他处于紧张、分裂的现代政治话语之中。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Paul Krugman <span class="dialogue-time">(00:30.080)</span>
   </div>
   <div class="dialogue-en">If you have clicked dislike on this video and started writing a comment of derision before</div>
-  
+  <div class="dialogue-zh">如果您在此视频上点过“不喜欢”并开始写嘲笑评论</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Paul Krugman <span class="dialogue-time">(00:34.560)</span>
   </div>
   <div class="dialogue-en">listening to the conversation, I humbly ask that you please unsubscribe from this channel</div>
-  
+  <div class="dialogue-zh">听着谈话，我恳请您退订此频道</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(00:39.840)</span>
   </div>
   <div class="dialogue-en">and from this podcast. Not because you&#39;re conservative, a libertarian, a liberal,</div>
-  
+  <div class="dialogue-zh">以及来自这个播客。不是因为你是保守派、自由主义者、自由主义者，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Paul Krugman <span class="dialogue-time">(00:44.560)</span>
   </div>
   <div class="dialogue-en">a socialist, an anarchist, but because you&#39;re not open to new ideas, at least in this case,</div>
-  
+  <div class="dialogue-zh">社会主义者、无政府主义者，但因为你不接受新想法，至少在这种情况下，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Paul Krugman <span class="dialogue-time">(00:49.680)</span>
   </div>
   <div class="dialogue-en">especially at its most difficult, from people with whom you largely disagree.</div>
-  
+  <div class="dialogue-zh">尤其是在最困难的时候，来自那些你基本上不同意的人。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Paul Krugman <span class="dialogue-time">(00:55.520)</span>
   </div>
   <div class="dialogue-en">I do my best to stay away from politics of the day because political discourse is filled</div>
-  
+  <div class="dialogue-zh">我尽力远离当今的政治，因为政治话语充满了</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Paul Krugman <span class="dialogue-time">(01:00.720)</span>
   </div>
   <div class="dialogue-en">with a degree of emotion and self assured certainty that to me is not conducive to exploring</div>
-  
+  <div class="dialogue-zh">带有一定程度的情感和自信，这对我来说不利于探索</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Paul Krugman <span class="dialogue-time">(01:07.120)</span>
   </div>
   <div class="dialogue-en">questions that nobody knows the definitive right answer to. The role of government,</div>
-  
+  <div class="dialogue-zh">没有人知道确切正确答案的问题。政府的作用，</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Paul Krugman <span class="dialogue-time">(01:13.440)</span>
   </div>
   <div class="dialogue-en">the impact of automation, the regulation of tech, the medical system, guns, war, trade,</div>
-  
+  <div class="dialogue-zh">自动化的影响、技术监管、医疗系统、枪支、战争、贸易、</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Paul Krugman <span class="dialogue-time">(01:19.840)</span>
   </div>
   <div class="dialogue-en">foreign policy, are not easy topics and have no clear answers, despite the certainty of the so</div>
-  
+  <div class="dialogue-zh">外交政策这些问题都不是简单的话题，也没有明确的答案，尽管如此</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Paul Krugman <span class="dialogue-time">(01:26.480)</span>
   </div>
   <div class="dialogue-en">called experts, the pundits, the trolls, the media personalities, and the conspiracy theorists.</div>
-  
+  <div class="dialogue-zh">被称为专家、专家、巨魔、媒体人物和阴谋论者。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Paul Krugman <span class="dialogue-time">(01:33.520)</span>
   </div>
   <div class="dialogue-en">Please listen, empathize, and allow yourself to explore ideas with curiosity and without judgment</div>
-  
+  <div class="dialogue-zh">请倾听、感同身受，并让自己带着好奇心而不带评判地探索想法</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:40.960)</span>
   </div>
   <div class="dialogue-en">and without derision. I will speak with many more economists and political thinkers, trying to stay</div>
-  
+  <div class="dialogue-zh">并且没有嘲笑。我将与更多的经济学家和政治思想家交谈，试图留下来</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
     Paul Krugman <span class="dialogue-time">(01:47.440)</span>
   </div>
   <div class="dialogue-en">away from the political battles of the day and instead look at the long arc of history</div>
-  
+  <div class="dialogue-zh">远离当今的政治斗争，而是着眼于历史的长河</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#94a3b8">
     Lex Fridman <span class="dialogue-time">(01:52.400)</span>
   </div>
   <div class="dialogue-en">and the lessons it reveals. In this, I appreciate your patience and support.</div>
-  
+  <div class="dialogue-zh">以及它所揭示的教训。在此，我感谢您的耐心和支持。</div>
 </div>
 <div class="dialogue-item">
   <div class="dialogue-speaker" style="color:#818cf8">
@@ -4529,7 +4548,7 @@ a:hover { color: var(--accent); text-decoration: underline; }
 </div></div>
 <button onclick="document.getElementById('dialogue-more').style.display='block';this.style.display='none'" class="btn btn-primary" style="margin-top:12px">展开全部 551 条对话 ↓</button>
 
-    <a href="https://lexfridman.com/paul-krugman" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+    <a href="https://lexfridman.com/paul-krugman" target="_blank" class="btn" style="margin-top:16px">查看原始文字稿 ↗</a>
   </div>
 
   <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
@@ -4587,6 +4606,58 @@ function filterByTopic(topic) {
   });
 }
 
+// ── 客户端实时翻译（Google Translate 免费接口）──────────────────
+async function translateText(text) {
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=zh-CN&dt=t&q=${encodeURIComponent(text)}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    return data[0].map(s => s[0]).join('');
+  } catch(e) {
+    return '';
+  }
+}
+
+async function translateOne(btn) {
+  const item = btn.closest('.dialogue-item');
+  const enEl = item.querySelector('.dialogue-en');
+  let zhEl = item.querySelector('.dialogue-zh');
+  if (zhEl && zhEl.textContent.trim()) { zhEl.style.display = zhEl.style.display === 'none' ? '' : 'none'; return; }
+  btn.textContent = '…';
+  btn.disabled = true;
+  const zh = await translateText(enEl.textContent);
+  if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+  zhEl.textContent = zh;
+  btn.textContent = '译';
+  btn.disabled = false;
+}
+
+async function translateAll() {
+  // 先展开所有折叠内容
+  const moreDiv = document.getElementById('dialogue-more');
+  if (moreDiv) moreDiv.style.display = 'block';
+  const expandBtn = document.querySelector('[onclick*="dialogue-more"]');
+  if (expandBtn) expandBtn.style.display = 'none';
+
+  const btn = document.getElementById('translate-all-btn');
+  const items = document.querySelectorAll('.dialogue-item');
+  btn.disabled = true;
+  let done = 0;
+  for (const item of items) {
+    let zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) { done++; continue; }
+    const enEl = item.querySelector('.dialogue-en');
+    if (!enEl) continue;
+    const zh = await translateText(enEl.textContent);
+    if (!zhEl) { zhEl = document.createElement('div'); zhEl.className = 'dialogue-zh'; item.appendChild(zhEl); }
+    zhEl.textContent = zh;
+    done++;
+    btn.textContent = `翻译中 ${done}/${items.length}…`;
+    await new Promise(r => setTimeout(r, 80)); // 限速避免被封
+  }
+  btn.textContent = `✓ 全部翻译完成 (${done} 条)`;
+}
+
 // Initialize on load
 document.addEventListener('DOMContentLoaded', function() {
   initSearch('search-input', 'ep-list', 'ep-item');
@@ -4599,6 +4670,17 @@ document.addEventListener('DOMContentLoaded', function() {
         link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
       link.classList.add('active');
     }
+  });
+
+  // 给每条对话加单条翻译按钮
+  document.querySelectorAll('.dialogue-item').forEach(item => {
+    const zhEl = item.querySelector('.dialogue-zh');
+    if (zhEl && zhEl.textContent.trim()) return; // 已有翻译，不加按钮
+    const btn = document.createElement('button');
+    btn.textContent = '译';
+    btn.className = 'trans-btn';
+    btn.onclick = () => translateOne(btn);
+    item.appendChild(btn);
   });
 });
 </script>
