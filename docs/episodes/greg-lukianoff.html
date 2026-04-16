@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Greg Lukianoff - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Greg Lukianoff</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Greg Lukianoff</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/greg-lukianoff.html" style="font-size:16px;color:#818cf8;font-weight:600">Greg Lukianoff</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">26,481 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/greg-lukianoff-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:11</span>
+  <span class="chapter-title">Cancel culture &amp; freedom of speech<span class="zh-trans"> · 取消文化和言论自由</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">16:42</span>
+  <span class="chapter-title">Left-wing vs right-wing cancel culture<span class="zh-trans"> · 左翼与右翼取消文化</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">25:27</span>
+  <span class="chapter-title">Religion<span class="zh-trans"> · 宗教</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">28:07</span>
+  <span class="chapter-title">College rankings by freedom of speech<span class="zh-trans"> · 按言论自由排名的大学排名</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">34:15</span>
+  <span class="chapter-title">Deplatforming<span class="zh-trans"> · 去平台化</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">48:50</span>
+  <span class="chapter-title">Whataboutism<span class="zh-trans"> · 又怎样主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">53:53</span>
+  <span class="chapter-title">Steelmanning<span class="zh-trans"> · 斯蒂尔曼宁</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:01:29</span>
+  <span class="chapter-title">How the left argues<span class="zh-trans"> · 左派如何争论</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:12:09</span>
+  <span class="chapter-title">Diversity, equity, and inclusion<span class="zh-trans"> · 多样性、公平性和包容性</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:24:00</span>
+  <span class="chapter-title">Why colleges lean left<span class="zh-trans"> · 为什么大学偏左</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:31:38</span>
+  <span class="chapter-title">How the right argues<span class="zh-trans"> · 右派如何争论</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:36:13</span>
+  <span class="chapter-title">Hate speech<span class="zh-trans"> · 仇恨言论</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:45:00</span>
+  <span class="chapter-title">Platforming<span class="zh-trans"> · 平台化</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:54:31</span>
+  <span class="chapter-title">Social media<span class="zh-trans"> · 社交媒体</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:15:38</span>
+  <span class="chapter-title">Depression<span class="zh-trans"> · 沮丧</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:27:09</span>
+  <span class="chapter-title">Hope<span class="zh-trans"> · 希望</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">greg</span><span class="keyword-tag">lukianoff</span><span class="keyword-tag">speech</span><span class="keyword-tag">going</span><span class="keyword-tag">don</span><span class="keyword-tag">freedom</span><span class="keyword-tag">culture</span><span class="keyword-tag">saying</span><span class="keyword-tag">professors</span><span class="keyword-tag">talk</span><span class="keyword-tag">free</span><span class="keyword-tag">cancel</span><span class="keyword-tag">book</span><span class="keyword-tag">person</span><span class="keyword-tag">fire</span><span class="keyword-tag">amendment</span><span class="keyword-tag">stuff</span><span class="keyword-tag">didn</span><span class="keyword-tag">said</span><span class="keyword-tag">law</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"And its most important tenet is that if the goal is the project of human knowledge which is to know the world as it is, you cannot know the world as it is without knowing what people really think and what people really think is an incredibly important fact to know. So every time you’re actually saying, “You can’t say that,” you’re actually depriving yourself of the knowledge of what people really think you’re causing… What Timer Kran, who’s on our board of advisors, calls preference falsification. You end up with an inaccurate picture of the world, which by the way, in a lot of cases, because there are activists who want to restrict more speech, they actually tend to think that people are more prejudiced than they might be."</div>
+  <div class="quote-zh">它最重要的宗旨是，如果人类知识的目标是了解世界的本来面目，那么如果不了解人们的真实想法，你就无法了解世界的本来面目，而人们真正的想法是一个非常重要的事实。因此，每次你实际上说“你不能这么说”时，你实际上是在剥夺自己对人们真正认为你造成了什么的了解……我们顾问委员会成员蒂默·克兰（Timer Kran）将其称为偏好伪造。你最终会得到一个不准确的世界图景，顺便说一句，在很多情况下，因为有些活动人士想要限制更多的言论，他们实际上倾向于认为人们比他们可能的更有偏见。</div>
+  <div class="quote-meta">— Greg Lukianoff （01:39:36）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think you should be able to study what people think and I think it’s important that we actually do. So I think that… Let’s take for example, QAnon. Yeah, QAnon is wrong. But where did it come from? Why did they think that? What’s the motivation? Who taught them it? Who came up with these ideas? This is important to understand history, that’s important to understand modern American politics. And so, if you put your scholar hat on and which… You should be curious about everyone, about where they’re coming from."</div>
+  <div class="quote-zh">我认为你应该能够研究人们的想法，而且我认为我们实际去做很重要。所以我认为……让我们以 QAnon 为例。是的，QAnon 错了。但它是从哪里来的呢？他们为什么这么想？动机是什么？谁教他们的？谁想出了这些想法？这对于理解历史很重要，对于理解现代美国政治也很重要。所以，如果你戴上学者的帽子……你应该对每个人感到好奇，对他们来自哪里感到好奇。</div>
+  <div class="quote-meta">— Greg Lukianoff （01:41:57）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Daryl Davis, who I’m sure you’re familiar with, part of his goal was just simply to get to know where people were coming from. And in the process, he actually deradicalized a number of Klans members when they actually realized that this Black man who had befriended them actually was compassionate, was a decent person. They realized all their pre-conceptions were wrong. So it can have a deradicalizing factor, by the way. But even when it doesn’t, it’s still really important to know what the bad people in your society think. Honestly, in some ways, for your own safety, it’s probably more important to know what the bad people in your society actually think."</div>
+  <div class="quote-zh">达里尔·戴维斯（Daryl Davis），我相信你很熟悉，他的部分目标只是简单地了解人们来自哪里。在这个过程中，他实际上使一些三K党成员去激进化，因为他们真正意识到这个与他们交朋友的黑人实际上是富有同情心的，是一个正派的人。他们意识到自己所有的先入之见都是错误的。顺便说一句，它可能具有去激进化因素。但即使事实并非如此，了解社会中坏人的想法仍然非常重要。老实说，在某些方面，为了您自己的安全，了解社会中坏人的真实想法可能更重要。</div>
+  <div class="quote-meta">— Greg Lukianoff （01:42:34）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I’m thinking a lot about that, and that’s one of the things we talk about in canceling of the American mind, is arguing towards truth. And that cancel culture is cruel, it’s merciless, it’s anti-intellectual, but it also will never get you anywhere near truth. And you are going to waste so much time destroying your opponents in something that can actually never get you to truth through the process, of course, of you never actually get directly at truth, you just chip away at falsity."</div>
+  <div class="quote-zh">我对此思考了很多，这就是我们在消除美国人思想时所谈论的事情之一，那就是为真理而争论。这种取消文化是残酷的、无情的、反智的，但它也永远不会让你接近真相。你会浪费很多时间来摧毁你的对手，而实际上你永远无法通过这个过程了解真相，当然，你永远不会真正直接了解真相，你只是削弱了虚假。</div>
+  <div class="quote-meta">— Greg Lukianoff （00:46:33）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And then you realize that the person is actually kind of suffering and having a hard time, and it gets deeper and deeper as the show goes on. And she will do these incredible speeches about, tell me what to do. Just, I know there’s experts out there, I know there’s knowledge out there, I know there’s an optimal way to live my life, so why can’t someone just tell me what to do? And it’s this wonderfully accurate, I think, aspect of human desire that, what if something could actually tell me the optimal way to go? Because I think there is a desire to give up some amount of your own freedom and discretion in order to be told to do the optimally right thing, but that path scares me to death."</div>
+  <div class="quote-zh">然后你就会意识到，这个人实际上正在经历某种痛苦和困难，而且随着节目的继续，这种痛苦会变得越来越深。她会做这些令人难以置信的演讲，告诉我该怎么做。只是，我知道那里有专家，我知道那里有知识，我知道有一种最佳的生活方式，那么为什么不能有人告诉我该怎么做呢？我认为，这正是人类欲望的一个非常准确的方面，如果有什么东西真的可以告诉我最佳的前进方式呢？因为我认为人们渴望放弃一些自己的自由和判断力，以便被告知做最正确的事情，但这条路把我吓死了。</div>
+  <div class="quote-meta">— Greg Lukianoff （02:06:19）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Greg Lukianoff <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">… if the goal is the project of human knowledge, which is to know the world as it is, you cannot know the world as it is without knowing what people really think. What people really think is an incredibly important fact to know.</div>
+  <div class="dialogue-zh">......如果目标是人类知识的项目，即了解世界的本来面目，那么如果不知道人们的真实想法，你就无法了解世界的本来面目。人们的真实想法是一个非常重要的事实。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Greg Lukianoff <span class="dialogue-time">(00:00:15)</span>
+  </div>
+  <div class="dialogue-en">Every time you’re actually saying, “You can’t say that,” you’re actually depriving yourself of the knowledge of what people really think. You’re causing what [inaudible 00:00:24], who’s on our Board of advisors calls preference falsification. You end up with an inaccurate picture of the world.</div>
+  <div class="dialogue-zh">每次你实际上说“你不能这么说”时，你实际上就剥夺了自己对人们真实想法的了解。你正在造成 [听不清 00:00:24]，我们的顾问委员会成员称之为偏好伪造。你最终会得到一个不准确的世界图景。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Greg Lukianoff <span class="dialogue-time">(00:00:29)</span>
+  </div>
+  <div class="dialogue-en">Which by the way, in a lot of cases because there are activists who want to restrict more speech, they actually tend to think that people are more prejudice than they might be. Actually, one very real practical way it makes things worse is when you censor people, it doesn’t change their opinion.</div>
+  <div class="dialogue-zh">顺便说一句，在很多情况下，因为有些活动人士想要限制更多的言论，他们实际上倾向于认为人们比他们可能的偏见更严重。事实上，一种非常实际的方式会让事情变得更糟，那就是当你审查人们时，它不会改变他们的观点。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Greg Lukianoff <span class="dialogue-time">(00:00:46)</span>
+  </div>
+  <div class="dialogue-en">It just encourages them to not share it with people who will get them in trouble. It leads them to talk to people who they already agree with and group polarization takes off.</div>
+  <div class="dialogue-zh">它只是鼓励他们不要与会给他们带来麻烦的人分享。这导致他们与他们已经同意的人交谈，群体两极分化开始出现。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:58)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Greg Lukianoff, free speech advocate, First Amendment attorney, president and CEO of FIRE, the Foundation for Individual Rights and Expression. He’s the author of Unleashing Liberty, co-author with Jonathan Haidt of Coddling of the American Mind.</div>
+  <div class="dialogue-zh">以下是与言论自由倡导者、第一修正案律师、个人权利与表达基金会 FIRE 总裁兼首席执行官格雷格·卢基安诺夫 (Greg Lukianoff) 的对话。他是《释放自由》一书的作者，与乔纳森·海特合着《溺爱美国思想》一书。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:16)</span>
+  </div>
+  <div class="dialogue-en">Co-author with Rikki Schlott of a new book coming out in October that you should definitely pre-order now called, The Canceling of the American Mind, which is a definitive accounting of the history, present, and future of cancel culture. A term used and overused in public discourse, but rarely studied and understood with the depth and rigor that Greg and Rikki do in this book, and in part in this ...</div>
+  <div class="dialogue-zh">与 Rikki Schlott 合着了一本将于 10 月出版的新书，你绝对应该预订，书名是《美国思想的取消》，这是对取消文化的历史、现在和未来的明确阐述。这个术语在公共话语中使用和过度使用，但很少像 Greg 和 Rikki 在这本书中以及在这本书中所做的那样深入和严格地研究和理解。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:45)</span>
+  </div>
+  <div class="dialogue-en">Freedom of speech is important, especially on college campuses, the very place that should serve as the battleground of ideas, including weird and controversial ones that should encourage bold risk-taking, not conformity. This is a Lex Fridman Podcast to support it. Please check out our sponsors in the description. Cancel culture &amp; freedom of speech</div>
+  <div class="dialogue-zh">言论自由很重要，尤其是在大学校园里，这里应该成为思想的战场，包括奇怪和有争议的思想，应该鼓励大胆的冒险，而不是墨守成规。这是一个 Lex Fridman 播客来支持它。请在说明中查看我们的赞助商。取消文化和言论自由</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:06)</span>
+  </div>
+  <div class="dialogue-en">Now, dear friends, here’s Greg Lukianoff. Let’s start with a big question. What is cancel culture? Now, you’ve said that you don’t like the term as it’s been quote “dragged through the mud and abused endlessly” by a whole host of controversial figures. Nevertheless, we have the term, what is it?</div>
+  <div class="dialogue-zh">现在，亲爱的朋友们，这是格雷格·卢基安诺夫。让我们从一个大问题开始。什么是取消文化？现在，你说你不喜欢这个词，因为它被一大群有争议的人物“拖入泥沼并无休止地滥用”。然而，我们有一个术语，它是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Greg Lukianoff <span class="dialogue-time">(00:02:25)</span>
+  </div>
+  <div class="dialogue-en">Cancel culture is the uptick of campaigns, especially successful campaigns starting around 2014 to get people fired, expelled, de-platformed, et cetera, for speech that would normally be protected by the First Amendment. I always say would be protected because we’re talking about circumstances in which it isn’t necessarily where the First Amendment applies.</div>
+  <div class="dialogue-zh">取消文化是运动的兴起，尤其是 2014 年左右开始的成功运动，目的是让人们因为通常受到第一修正案保护的言论而被解雇、驱逐、取消平台等。我总是说会受到保护，因为我们谈论的是第一修正案不一定适用的情况。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Greg Lukianoff <span class="dialogue-time">(00:02:48)</span>
+  </div>
+  <div class="dialogue-en">What I mean is as an analog to say things you couldn’t lose your job as a public employee for. Also, the climate of fear that’s resulted from that phenomenon, the fact that you can lose your job for having the wrong opinion. It wasn’t subtle that there was an uptick in this, particularly on campus.</div>
+  <div class="dialogue-zh">我的意思是，作为一个类比，说一些你不会因为公共雇员而失去工作的事情。此外，这种现象造成的恐惧气氛，你可能会因为持有错误的观点而失去工作。这种现象的增加并不微妙，尤其是在校园里。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Greg Lukianoff <span class="dialogue-time">(00:03:08)</span>
+  </div>
+  <div class="dialogue-en">Around 2014, John Ronson wrote a book called, So You’ve Been Publicly Shamed, it came out in 2015 already documenting this phenomena. I wrote a book called Freedom from Speech in 2014. It really was in 2017 when you started seeing this be directed at professors.</div>
+  <div class="dialogue-zh">2014 年左右，John Ronson 写了一本名为《So You&#39;ve Been Publicly Shamed》的书，该书于 2015 年出版，已经记录了这一现象。我在 2014 年写了一本名为《言论自由》的书。实际上是在 2017 年，你开始看到这本书是针对教授的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Greg Lukianoff <span class="dialogue-time">(00:03:24)</span>
+  </div>
+  <div class="dialogue-en">When it comes to the number of professors that we’ve seen be targeted and lose their jobs, I’ve been doing this for 22 years and I’ve seen nothing like it.</div>
+  <div class="dialogue-zh">说到我们看到有多少教授成为攻击目标并失去工作，我已经这样做了 22 年，但从未见过类似的情况。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:34)</span>
+  </div>
+  <div class="dialogue-en">There’s so many things I want to ask you here. One, actually just look at the organization of FIRE. Can you explain what the organization is because it’s interconnected to this whole fight and the rise of cancel culture and the fight for freedom of speech since 2014 and before?</div>
+  <div class="dialogue-zh">在这里我有很多事情想问你。一，实际上看看FIRE的组织。您能否解释一下该组织是什么，因为它与整个斗争、取消文化的兴起以及自 2014 年及之前的言论自由斗争息息相关？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Greg Lukianoff <span class="dialogue-time">(00:03:50)</span>
+  </div>
+  <div class="dialogue-en">FIRE was founded in 1999 by Harvey Silverglate. He is a famous civil liberties attorney. He’s a been on the show. He’s the person who actually found me out in my very happy life out in San Francisco, but knew I was looking for a First Amendment job. I’d gone to law school specifically to do First Amendment.</div>
+  <div class="dialogue-zh">FIRE 由 Harvey Silverglate 于 1999 年创立。他是一位著名的公民自由律师。他上过节目。他是那个真正发现我在旧金山过着幸福生活的人，但他知道我正在寻找一份符合第一修正案的工作。我去法学院专门是为了研究第一修正案。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Greg Lukianoff <span class="dialogue-time">(00:04:10)</span>
+  </div>
+  <div class="dialogue-en">He found me, which was pretty cool. His protege, Kathleen Sullivan was the dean of Stanford Law School. This remains the best compliment I ever got in my life is that she recommended me to Harvey. Since that’s the whole reason why I went to law school, I was excited to be part of this new organization.</div>
+  <div class="dialogue-zh">他找到了我，这真是太酷了。他的门生凯瑟琳·沙利文是斯坦福大学法学院院长。这仍然是我一生中得到的最好的赞美，那就是她向哈维推荐了我。因为这就是我去法学院的全部原因，所以我很高兴能成为这个新组织的一员。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Greg Lukianoff <span class="dialogue-time">(00:04:29)</span>
+  </div>
+  <div class="dialogue-en">The other co-founder of FIRE is Alan Charles Kors. He’s just an absolute genius. He is one of the leading experts in the world on the enlightenment and particularly about Voltaire. If any of your listeners do the great courses, he has a lecture on Blaise Pascal. Blaise, of course is famous for the Pascal’s wager.</div>
+  <div class="dialogue-zh">FIRE 的另一位联合创始人是 Alan Charles Kors。他绝对是个天才。他是世界上启蒙运动尤其是伏尔泰研究领域的顶尖专家之一。如果你的听众中的任何一位听过精彩的课程，他都会讲授布莱斯·帕斯卡 (Blaise Pascal) 的讲座。布莱斯当然因帕斯卡的赌注而闻名。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Greg Lukianoff <span class="dialogue-time">(00:04:51)</span>
+  </div>
+  <div class="dialogue-en">I left it just so moved and impressed and with a depth of understanding of how important this person was.</div>
+  <div class="dialogue-zh">我离开时非常感动和印象深刻，并深刻地理解了这个人的重要性。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:59)</span>
+  </div>
+  <div class="dialogue-en">That’s interesting. You mentioned to me offline connected to this that at least it runs in parallel or there’s a connection between the love of science and the love of the freedom of speech.</div>
+  <div class="dialogue-zh">那很有意思。你在线下向我提到，至少它是并行的，或者说对科学的热爱和对言论自由的热爱之间存在联系。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Greg Lukianoff <span class="dialogue-time">(00:05:10)</span>
+  </div>
+  <div class="dialogue-en">Yes.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:11)</span>
+  </div>
+  <div class="dialogue-en">Can you maybe elaborate where that connection is?</div>
+  <div class="dialogue-zh">您能否详细说明一下这种联系在哪里？</div>
+</div>
+    <a href="https://lexfridman.com/greg-lukianoff-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a>
+<a href="cenk-uygur.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cenk Uygur</div>
+  <div class="card-meta">Cenk Uygur</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

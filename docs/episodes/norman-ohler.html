@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Norman Ohler - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Norman Ohler</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Norman Ohler</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/norman-ohler.html" style="font-size:16px;color:#818cf8;font-weight:600">Norman Ohler</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">45,587 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/norman-ohler-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:09</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:31</span>
+  <span class="chapter-title">Drugs in post-WWI Germany<span class="zh-trans"> · 第一次世界大战后德国的毒品</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">13:49</span>
+  <span class="chapter-title">Nazi rise to power<span class="zh-trans"> · 纳粹上台</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">18:16</span>
+  <span class="chapter-title">Hitler’s drug use<span class="zh-trans"> · 希特勒吸毒</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">24:08</span>
+  <span class="chapter-title">Response to historian criticism<span class="zh-trans"> · 对历史学家批评的回应</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:47</span>
+  <span class="chapter-title">Pervitin<span class="zh-trans"> · 珀维丁</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">54:46</span>
+  <span class="chapter-title">Blitzkrieg and meth<span class="zh-trans"> · 闪电战和冰毒</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:13:23</span>
+  <span class="chapter-title">Erwin Rommel (Crystal Fox)<span class="zh-trans"> · 埃尔文·隆美尔（水晶狐）</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:17:34</span>
+  <span class="chapter-title">Dunkirk<span class="zh-trans"> · 敦刻尔克</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:25:37</span>
+  <span class="chapter-title">Hitler’s drug addiction<span class="zh-trans"> · 希特勒吸毒成瘾</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:41:34</span>
+  <span class="chapter-title">Methamphetamine<span class="zh-trans"> · 冰毒</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:43:29</span>
+  <span class="chapter-title">Invasion of Soviet Union<span class="zh-trans"> · 入侵苏联</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:02:26</span>
+  <span class="chapter-title">Cocaine<span class="zh-trans"> · 可卡因</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:11:21</span>
+  <span class="chapter-title">Hitler’s last days<span class="zh-trans"> · 希特勒最后的日子</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:31:20</span>
+  <span class="chapter-title">German resistance against Nazis<span class="zh-trans"> · 德国人抵抗纳粹</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:53:31</span>
+  <span class="chapter-title">Totalitarianism<span class="zh-trans"> · 极权主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:58:40</span>
+  <span class="chapter-title">Stoned Sapiens<span class="zh-trans"> · 石头般的智人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:13:52</span>
+  <span class="chapter-title">Religion<span class="zh-trans"> · 宗教</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:24:41</span>
+  <span class="chapter-title">LSD, CIA, and MKUltra<span class="zh-trans"> · LSD、CIA 和 MKUltra</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">norman</span><span class="keyword-tag">ohler</span><span class="keyword-tag">hitler</span><span class="keyword-tag">said</span><span class="keyword-tag">lsd</span><span class="keyword-tag">drug</span><span class="keyword-tag">drugs</span><span class="keyword-tag">don</span><span class="keyword-tag">didn</span><span class="keyword-tag">going</span><span class="keyword-tag">war</span><span class="keyword-tag">german</span><span class="keyword-tag">morell</span><span class="keyword-tag">berlin</span><span class="keyword-tag">germany</span><span class="keyword-tag">guy</span><span class="keyword-tag">high</span><span class="keyword-tag">interesting</span><span class="keyword-tag">book</span><span class="keyword-tag">meth</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I mean, it is that spirit that actually made us human. It is that neuroplasticity in our brain that we do not just repeat the conditioned sets that we ought to repeat. But that we actually dim down the command center in the brain and let other parts of the brain react, which is the psychedelic experience, basically. That, I think, contributes to the evolution of our species. And our species is certainly threatened by extinction. So I think if we somehow care for the human race then resistance becomes a very immediate and important topic, you know. Because you can resist, obviously. Your brain is yours. You can resist in many ways, you know, by thinking, just by thinking. That’s actually why I became a writer when I was a teenager. I was very political."</div>
+  <div class="quote-zh">我的意思是，正是这种精神真正使我们成为人类。正是我们大脑中的神经可塑性使我们不只是重复我们应该重复的条件组。但我们实际上调暗了大脑中的指挥中心，让大脑的其他部分做出反应，这基本上就是迷幻体验。我认为这有助于我们物种的进化。我们的物种肯定面临灭绝的威胁。所以我认为，如果我们以某种方式关心人类，那么抵抗就会成为一个非常直接和重要的话题，你知道。显然，因为你可以抵抗。你的大脑是你的。你可以用很多方式来抵抗，你知道，通过思考，只是通过思考。这实际上就是我十几岁时成为一名作家的原因。我非常政治化。</div>
+  <div class="quote-meta">— Norman Ohler （02:55:40）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think so. And I think that also there are archives that are not open. Let’s say the Vatican archive. Some secret archives that some very powerful structures have, structures that we might not even know now off the top of our head, which still have a huge influence. So I think that human history is quite different from what most historians write. I think that’s just one version. I think there are several versions, and I think that it goes much deeper and is much more interesting. And so, I guess, this history is a very active thing, which I also didn’t know. You know, I was writing a historical nonfiction book, and I suddenly realized that this is like a shark pool because history defines the future or is very connected."</div>
+  <div class="quote-zh">我想是的。我认为也有一些档案没有开放。比如说梵蒂冈档案馆。一些非常强大的结构拥有的一些秘密档案，我们现在可能甚至不知道的结构，它们仍然具有巨大的影响力。所以我认为人类历史与大多数历史学家所写的有很大不同。我认为这只是一个版本。我认为有几个版本，而且我认为它更深入、更有趣。所以，我想，这段历史是一个非常活跃的事情，而我也不知道。你知道，我当时正在写一本历史非小说类书籍，我突然意识到这就像一个鲨鱼池，因为历史定义了未来，或者说是紧密相连的。</div>
+  <div class="quote-meta">— Norman Ohler （00:38:07）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I really realized that there is a greater, a bigger story, and it’s somehow interesting to try to open up. Because if we live… That’s why I like to be in nature also quite a lot. You have better access. We live boxed in. Walter Benjamin called us like the boxed human beings. Like we’re living in the cities, we’re waking up, we’re doing… It’s good to be, therefore, it’s good to be outside the system. And I hope that my art can contribute to, you know, freeing the brain waves to understanding a bit more. What that is, I don’t know, but I think the process of understanding more and connecting in different ways, that is what I’m going for because I think that is the meaning of life."</div>
+  <div class="quote-zh">我真的意识到有一个更伟大、更大的故事，而且尝试敞开心扉是很有趣的。因为如果我们活着……这就是为什么我也非常喜欢身处大自然中。您有更好的访问权限。我们生活在盒子里。沃尔特·本杰明称我们为“盒子里的人”。就像我们生活在城市里一样，我们正在醒来，我们正在做……这很好，因此，游离在体制之外也很好。我希望我的艺术能够有助于释放脑电波，让人们有更多的理解。那是什么，我不知道，但我认为更多地理解并以不同的方式联系的过程，这就是我所追求的，因为我认为这就是生命的意义。</div>
+  <div class="quote-meta">— Norman Ohler （04:23:39）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Our history teacher always said, “If we don’t know where we come from, we cannot know where we go.” And that is, I think, true. That is what I’m now really interested in for my next book. I’m trying to really understand human history. And obviously, I’m not the first. There are a few, you know, alternative historians that go like… Because you have to go back in time quite a bit, and then it’s not easy to write about it, but it’s very interesting to think about. And I would love to find the truth on Atlantis, which I don’t believe in actually, and we can also talk about that. But maybe there’s an archive where we can actually see that they had this king ruling."</div>
+  <div class="quote-zh">我们的历史老师总是说：“如果我们不知道我们从哪里来，我们就不知道我们要去哪里。”我认为这是真的。这就是我现在对下一本书真正感兴趣的内容。我正在努力真正了解人类历史。显然，我不是第一个。你知道，有一些另类历史学家会这样……因为你必须回到很久以前，然后写它并不容易，但思考起来很有趣。我很想找到亚特兰蒂斯的真相，虽然我实际上并不相信这一点，但我们也可以讨论这一点。但也许有一个档案，我们实际上可以看到他们有这位国王的统治。</div>
+  <div class="quote-meta">— Norman Ohler （00:39:03）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"They miserably failed because LSD… Is not the truth drug. LSD maybe leads you closer to your own truth, because when suddenly the default mode network receives less energy and other parts of the brain think more, and the neuroplasticity of the brain is enhanced and stimulated, you might understand something about your life. You might not, you know. I mean, LSD doesn’t necessarily turn you into a more knowledgeable person. You could also focus that on your Orthodox belief system. But many people realize different things, have different ideas. So it doesn’t work as this conditioning drug. But also, the CIA then took over the LSD experiments that the U.S. military took over from the SS. So now it’s in CIA hands."</div>
+  <div class="quote-zh">他们悲惨地失败了，因为LSD……不是真正的药物。 LSD也许会让你更接近自己的真相，因为当默认模式网络突然接收到更少的能量而大脑的其他部分思考更多时，大脑的神经可塑性得到增强和刺激，你可能会了解一些关于你的生活的事情。你可能不会，你知道。我的意思是，LSD 并不一定会让你变得更有知识。您也可以将其重点放在您的东正教信仰体系上。但许多人认识不同的事情，有不同的想法。所以它不能起到这种调理药物的作用。而且，中央情报局随后接管了美国军方从党卫军手中接管的LSD实验。所以现在它在中央情报局手中。</div>
+  <div class="quote-meta">— Norman Ohler （03:44:47）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Ohler <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">Hitler invited three young tank generals to his office, and they had a plan, which was the plan to go through the Ardennes Mountains. That was the victorious idea. So it’s not the drugs, actually that idea to go through the Ardennes Mountain. If you, if you think monocausal, you would say that’s the reason. That idea was genius, and Hitler immediately understood it, because before, the plan was to...</div>
+  <div class="dialogue-zh">希特勒邀请了三位年轻的坦克将军到他的办公室，他们有一个计划，那就是穿越阿登山脉的计划。这就是胜利的想法。所以这不是毒品，实际上是穿越阿登山脉的想法。如果你认为单一因果，你会说这就是原因。这个想法太天才了，希特勒立即明白了，因为之前的计划是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Ohler <span class="dialogue-time">(00:00:39)</span>
+  </div>
+  <div class="dialogue-en">It’s stupid. But these three tank generals said, “Look, if we go with the whole army through the Ardennes Mountains,” and Hitler was like, “Eh, this is not possible. This is like a mountain range. How can the whole German army fit through this eye of a needle,” basically. And they said, “No, we can do it because everyone misunderstands what tanks can do. Tanks are not slow machines in the back tha...</div>
+  <div class="dialogue-zh">这很愚蠢。但这三位坦克将军说，“看，如果我们带着全军穿过阿登山脉，”希特勒说，“呃，这是不可能的。这就像一座山脉。整个德国军队怎么能穿过这个针眼呢？”基本上。他们说：“不，我们能做到，因为每个人都误解了坦克的功能。坦克并不是落后的慢速机器，我们可以做到这一点。”</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Ohler <span class="dialogue-time">(00:01:16)</span>
+  </div>
+  <div class="dialogue-en">We are already behind them, but it would only work if you would reach Sedan, the border city of France, within three days and three nights, and that was only possible if you don’t stop.” Suddenly, Ranke realized that his moment had come because he had the recipe for how people could stay awake for three days and three nights. Before that, he was kind of an outsider, like the freak with the drug id...</div>
+  <div class="dialogue-zh">我们已经落后了，但只有三天三夜之内到达法国边境城市色当才行，而且只有不停歇才有可能。”突然，兰克意识到他的时刻已经到来，因为他掌握了让人三天三夜不睡觉的秘诀。在此之前，他是一个局外人，就像一个拥有毒品身份的怪胎</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Ohler <span class="dialogue-time">(00:01:38)</span>
+  </div>
+  <div class="dialogue-en">…”Okay, tell us, how does it work?” And he gave lectures in front of the officers and he wrote a stimulant decree where a whole army is prescribed a drug, in this case, methamphetamine. How much should be taken, at what intervals. This became a very big thing. And then Temmler had to deliver 35 million dosages to the front lines. And then on May 10th, they took their methamphetamine and they start...</div>
+  <div class="dialogue-zh">……“好吧，告诉我们，它是如何运作的？”他在军官面前发表演讲，还写了一项兴奋剂法令，规定全军都开出一种药物，在这种情况下是甲基苯丙胺。应该服用多少，间隔多久。这成了一件非常大的事情。然后，特姆勒必须向前线运送 3500 万剂药物。然后在 5 月 10 日，他们服用了甲基苯丙胺并开始</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:09)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Norman Ohler, author of Blitzed: Drugs in the Third Reich, a book that investigates what role psychoactive drugs, particularly stimulants such as methamphetamine, played in the military history of World War II. It is a book that two legendary historians, Ian Kershaw and Antony Beevor, give very high praise to. Ian Kershaw describes it as, “Very well-researched,...</div>
+  <div class="dialogue-zh">以下是与诺曼·奥勒（Norman Ohler）的对话，他是《闪电战：第三帝国的毒品》一书的作者，这本书调查了精神活性药物，特别是甲基苯丙胺等兴奋剂，在第二次世界大战的军事历史中扮演的角色。这是两位传奇历史学家伊恩·克肖和安东尼·比沃给予高度评价的书。伊恩·克肖 (Ian Kershaw) 将其描述为：“经过深入研究，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:04)</span>
+  </div>
+  <div class="dialogue-en">And he’s now working on a new book with the possible title of Stoned Sapiens, a great title, looking at the history of human civilization through the lens of drugs. This is the Lex Fridman Podcast. To support it, please check out our sponsors in the description and consider subscribing to this channel. And now, dear friends, here’s Norman Ohler. Drugs in post-WWI Germany</div>
+  <div class="dialogue-zh">他现在正在写一本新书，书名可能是《Stoned Sapiens》，一个很棒的书名，通过毒品的视角来审视人类文明的历史。这是莱克斯·弗里德曼播客。为了支持它，请查看说明中的赞助商并考虑订阅此频道。现在，亲爱的朋友们，这是诺曼·奥勒。第一次世界大战后德国的毒品</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:31)</span>
+  </div>
+  <div class="dialogue-en">Tell me the origin story of meth, methamphetamine, and Pervitin, its brand-name drug version, in the context of Nazi Germany in the late 1930s. Let’s start there.</div>
+  <div class="dialogue-zh">告诉我在 20 世纪 30 年代末纳粹德国的背景下，冰毒、甲基苯丙胺及其品牌药物 Pervitin 的起源故事。让我们从这里开始。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Ohler <span class="dialogue-time">(00:03:43)</span>
+  </div>
+  <div class="dialogue-en">I think you’re right to ask about the context because without the context, it’s not really understandable. So what was the situation? In the ’20s, the Nazi movement basically started, and it started in Bavarian beer halls. So alcohol was the drug of choice of the early Nazi movement. The only guy that didn’t drink was Hitler. He was a teetotaler, I guess you say. So that was happening in Munich. S...</div>
+  <div class="dialogue-zh">我认为你询问上下文是正确的，因为如果没有上下文，就无法真正理解。那么当时的情况是怎样的呢？ 20世纪20年代，纳粹运动基本上开始了，而且是从巴伐利亚的啤酒馆开始的。因此酒精是早期纳粹运动的首选药物。唯一不喝酒的人是希特勒。我猜你会说，他是一个滴酒不沾的人。这就是慕尼黑发生的事情。 S</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Ohler <span class="dialogue-time">(00:04:32)</span>
+  </div>
+  <div class="dialogue-en">The Versailles Treaty had the effect that the German economy was not really able to recover after the end of World War I. The Versailles Treaty was written basically by the Western victorious powers. Germany had no say in the negotiations. And I’m certainly not a German nationalist, not even a German patriot, but even I would say that the Versailles Treaty treated Germany somewhat unfairly. I mean...</div>
+  <div class="dialogue-zh">《凡尔赛条约》的作用是，一战结束后德国经济未能真正复苏。《凡尔赛条约》基本上是西方战胜国签订的。德国在谈判中没有发言权。我当然不是德国民族主义者，甚至不是德国爱国者，但即使我也会说《凡尔赛条约》对德国有些不公平。我是说</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Ohler <span class="dialogue-time">(00:05:31)</span>
+  </div>
+  <div class="dialogue-en">So the economy really went down. Everything in Berlin was cheap, and the people were also using substances that were very cheap in huge quantities. So while in Bavaria, they were drinking alcohol, and alcohol in the brain stimulates behavior, group behavior, us against them. You can actually examine this. A neuroscientist would know exactly how this works. While in Berlin, the drugs that were used...</div>
+  <div class="dialogue-zh">所以经济确实下滑了。柏林的一切都很便宜，人们也大量使用非常便宜的物质。因此，在巴伐利亚时，他们喝酒，大脑中的酒精会刺激我们的行为，群体行为，我们反对他们。你可以实际检查一下。神经科学家会确切地知道这是如何运作的。在柏林期间使用的药物</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Ohler <span class="dialogue-time">(00:06:23)</span>
+  </div>
+  <div class="dialogue-en">People were doing whatever they wanted to do, and they were intoxicating themselves in the way they wanted to. So the population, in a way, if you just look at Munich and Berlin, was growing apart. Like, there were the alcohol people in Munich, the Nazis, and then there were these weird, diverse, LGBTQ, whatever kind of scene in Berlin, like actresses sniffing ether in the morning and then making ...</div>
+  <div class="dialogue-zh">人们在做他们想做的事，他们以他们想要的方式陶醉自己。因此，从某种程度上来说，如果你看看慕尼黑和柏林，人口数量正在增长。比如，慕尼黑有酗酒的人、纳粹分子，还有柏林那些奇怪的、多样化的、LGBTQ 的人，无论什么样的场景，比如女演员早上嗅乙醚，然后做出</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:51)</span>
+  </div>
+  <div class="dialogue-en">Could you speak to the nature of the motivation for the drug use in Berlin at the time? Was it rebellion? Was it a way to deal with the difficult economic depression? Was it just the natural thing that young people do to explore themselves, to understand the world, to develop their culture? What do we understand about drug use there?</div>
+  <div class="dialogue-zh">您能否谈谈当时柏林吸毒动机的本质？这是叛乱吗？这是应对困难的经济萧条的一种方法吗？探索自我、了解世界、发展文化是年轻人自然而然的事情吗？我们对那里的毒品使用了解多少？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Ohler <span class="dialogue-time">(00:07:14)</span>
+  </div>
+  <div class="dialogue-en">All of these factors come together. But it was the first time in modern history, in Germany at least, that there was no emperor. Before that, Kaiser Wilhelm, everything was very strict, you know? You had to… You couldn’t go crazy, you know, as a young person. You couldn’t be a young person. But now in the Weimar Republic in the ’20s, you could. No one stopped you, so people went crazy. That’s what...</div>
+  <div class="dialogue-zh">所有这些因素结合在一起。但这是现代历史上第一次没有皇帝，至少在德国是如此。在此之前，威廉皇帝，一切都非常严格，你知道吗？你必须……你知道，作为一个年轻人，你不能发疯。你不可能是一个年轻人。但现在在二十世纪二十年代的魏玛共和国，你可以。没有人阻止你，所以人们都疯了。就是这样</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Ohler <span class="dialogue-time">(00:07:54)</span>
+  </div>
+  <div class="dialogue-en">So that created a rift between the Nazis in Munich, and they always hated Berlin and what was going on in Berlin. So, for example, Goebbels, the later propaganda minister, he called the situation in Berlin the “hated asphalt reality of Berlin.” He hated that. And when the Nazis then were able to take power in 1933, one of the first things they did was to really prosecute people who were taking dru...</div>
+  <div class="dialogue-zh">因此，这在慕尼黑的纳粹分子之间造成了裂痕，他们一直讨厌柏林和柏林发生的事情。因此，例如后来的宣传部长戈培尔，他将柏林的情况称为“令人讨厌的柏林沥青现实”。他讨厌那样。当纳粹于 1933 年掌权时，他们做的第一件事就是真正起诉那些服用毒品的人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:42)</span>
+  </div>
+  <div class="dialogue-en">Can we also focus attention there, because you have a connection to this place, Berlin, and this part of the world. Can you just briefly speak to that so we can contextualize even deeper the personal aspect of this? Because you understand the music of the people, the land, its history. There’s something you can only really understand if you’ve been there and you’ve taken it in. And we’ll return to...</div>
+  <div class="dialogue-zh">我们是否也可以将注意力集中在那里，因为你与柏林这个地方以及世界的这个地区有联系。您能否简单地谈谈这一点，以便我们可以更深入地了解这件事的个人方面？因为你了解人民、土地和历史的音乐。有些东西只有当你身临其境并接受它时，你才能真正理解。我们将回到</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Ohler <span class="dialogue-time">(00:09:19)</span>
+  </div>
+  <div class="dialogue-en">I grew up in West Germany, and this was during the Cold War. And Berlin, the walled-in city, was always like a big fascination because there was a wall, there was actually a wall in the city preventing people from moving into another part. And I was from the west, fortunate enough to be from the free west, so I could travel to Berlin, and I could leave. I could look at it, and I always loved Berli...</div>
+  <div class="dialogue-zh">我在西德长大，那是在冷战时期。柏林，这座有围墙的城市，总是让人着迷，因为有一堵墙，城市里实际上有一堵墙，阻止人们搬到另一个地方。我来自西部，很幸运来自自由的西部，所以我可以去柏林，然后我可以离开。我可以看看，我一直很喜欢伯利</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Ohler <span class="dialogue-time">(00:10:04)</span>
+  </div>
+  <div class="dialogue-en">I was first living in New York. I wrote my first novel in New York, and I loved New York before Giuliani became mayor. It was… He ruined the city. Before that, it was not gentrified. Or let’s say he introduced gentrification, and gentrification is a big topic. I still lived in the ungentrified New York City for like 300 bucks a month rent, and everyone I knew was an artist.</div>
+  <div class="dialogue-zh">我首先住在纽约。我在纽约写了我的第一部小说，在朱利安尼成为市长之前我就喜欢纽约。这是……他毁了这座城市。在此之前，它还没有高档化。或者说他引入了中产阶级化，而中产阶级化是一个大话题。我仍然住在没有中产阶级的纽约市，每月租金大约 300 美元，我认识的每个人都是艺术家。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:27)</span>
+  </div>
+  <div class="dialogue-en">You loved the diversity of it?</div>
+  <div class="dialogue-zh">您喜欢它的多样性吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Ohler <span class="dialogue-time">(00:10:28)</span>
+  </div>
+  <div class="dialogue-en">Yeah, I loved it. I wrote my first novel there. I took LSD for the first time in Downtown Manhattan on a Saturday night.</div>
+  <div class="dialogue-zh">是的，我喜欢它。我在那里写了我的第一部小说。周六晚上，我在曼哈顿市中心第一次服用LSD。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:35)</span>
+  </div>
+  <div class="dialogue-en">So you’re kind of like a German Kerouac-type character, but moved a few decades forward.</div>
+  <div class="dialogue-zh">所以你有点像德国凯鲁亚克式的人物，但向前推进了几十年。</div>
+</div>
+    <a href="https://lexfridman.com/norman-ohler-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="ben-shapiro-destiny-debate.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ben Shapiro Destiny Debate</div>
+  <div class="card-meta">Ben Shapiro</div>
+</a>
+<a href="bernie-sanders.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bernie Sanders</div>
+  <div class="card-meta">Bernie Sanders</div>
+</a>
+<a href="douglas-murray-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Douglas Murray #2</div>
+  <div class="card-meta">Douglas Murray</div>
+</a>
+<a href="eric-weinstein-4.html" class="card" style="text-decoration:none">
+  <div class="card-title">Eric Weinstein: Difficult Conversations, Freedom of Speech, and Physics</div>
+  <div class="card-meta">Eric Weinstein</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Douglas Murray #2 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Douglas Murray #2</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Douglas Murray #2</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/douglas-murray.html" style="font-size:16px;color:#818cf8;font-weight:600">Douglas Murray</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">27,699 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/douglas-murray-2-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:24</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:38</span>
+  <span class="chapter-title">War in Ukraine<span class="zh-trans"> · 乌克兰战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">6:24</span>
+  <span class="chapter-title">Trump and Zelenskyy<span class="zh-trans"> · 特朗普和泽伦斯基</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">20:54</span>
+  <span class="chapter-title">Putin<span class="zh-trans"> · 普京</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">41:47</span>
+  <span class="chapter-title">Peace<span class="zh-trans"> · 和平</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">51:38</span>
+  <span class="chapter-title">Zelenskyy<span class="zh-trans"> · 泽伦斯基</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:06:17</span>
+  <span class="chapter-title">Israel-Palestine<span class="zh-trans"> · 以色列-巴勒斯坦</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:17:04</span>
+  <span class="chapter-title">Hamas<span class="zh-trans"> · 哈马斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:31:37</span>
+  <span class="chapter-title">Corruption<span class="zh-trans"> · 腐败</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:34:47</span>
+  <span class="chapter-title">Gaza<span class="zh-trans"> · 加沙</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:55:25</span>
+  <span class="chapter-title">Benjamin Netanyahu<span class="zh-trans"> · 本杰明·内塔尼亚胡</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:12:36</span>
+  <span class="chapter-title">Hate<span class="zh-trans"> · 恨</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:37:06</span>
+  <span class="chapter-title">Iran<span class="zh-trans"> · 伊朗</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:47:55</span>
+  <span class="chapter-title">Interview advice<span class="zh-trans"> · 面试建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:02:19</span>
+  <span class="chapter-title">War<span class="zh-trans"> · 战争</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">douglas</span><span class="keyword-tag">murray</span><span class="keyword-tag">war</span><span class="keyword-tag">israel</span><span class="keyword-tag">hamas</span><span class="keyword-tag">don</span><span class="keyword-tag">gaza</span><span class="keyword-tag">said</span><span class="keyword-tag">ukraine</span><span class="keyword-tag">peace</span><span class="keyword-tag">going</span><span class="keyword-tag">person</span><span class="keyword-tag">putin</span><span class="keyword-tag">says</span><span class="keyword-tag">seen</span><span class="keyword-tag">saying</span><span class="keyword-tag">got</span><span class="keyword-tag">military</span><span class="keyword-tag">doesn</span><span class="keyword-tag">hard</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"By the way, it’s an example of the frivolity of a lot of the attempts to understand what’s going on. I mean, my view is that since actually most people, in fact, everybody cannot be an expert on everything. One of the things that we always do is to seize on minor and really quite unimportant things. I mean, every site does it. Look at the way in which the American right for years talked about the Churchill bust leaving the White House Oval Office in the Obama years. I didn’t want to hear another darn thing about the Churchill bust after eight years because it was in lieu of trying to understand and actually critique Obama’s foreign policy. It was just an easy shorthand. I think it’s the same, we’re always tempted to that."</div>
+  <div class="quote-zh">顺便说一句，这是许多试图了解正在发生的事情的轻率尝试的一个例子。我的意思是，我的观点是，因为实际上大多数人，事实上，每个人都不可能成为所有事情的专家。我们经常做的事情之一就是抓住次要的、非常不重要的事情。我的意思是，每个网站都这样做。看看美国右翼多年来如何谈论奥巴马时代离开白宫椭圆形办公室的丘吉尔半身像。八年后我不想听到关于丘吉尔半身像的另一件该死的事情，因为它取代了试图理解和实际批评奥巴马的外交政策。这只是一个简单的简写。我认为这是一样的，我们总是受到这样的诱惑。</div>
+  <div class="quote-meta">— Douglas Murray （00:13:31）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"We know it happens like that from films, but too few people understand that regimes like that in Tehran operate like that on a grand scale, on the biggest of scales, and with the ultimate of brutality, and that’s how they stay empower. And one other thing on that, by the way, which is, I was reminded of this the other day, thinking about this, what I’ve just described as a sort of a problem in democracies is that we like to think everyone thinks like us, and we’d like everyone to be like us, and we believe fictions that we’re taught in films, like everyone basically wants the same things as us, and you go, you haven’t stepped outside the walls of the city if you think that."</div>
+  <div class="quote-zh">我们知道事情就像电影中那样发生，但很少有人了解像德黑兰这样的政权是这样大规模、最大规模、最残酷地运作的，而这就是他们保持权力的方式。顺便说一句，另一件事是，前几天我想起了这一点，想到这一点，我刚才描述的民主国家的一个问题是，我们喜欢认为每个人都像我们一样思考，我们希望每个人都像我们一样，我们相信电影中教给我们的虚构故事，就像每个人基本上都想要和我们一样的东西，如果你这么想，你就还没有走出城市的围墙。</div>
+  <div class="quote-meta">— Douglas Murray （02:43:49）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think that is, again, it’s something that a lot of people sitting on the other side of the screen don’t realize, is that it may satisfy them that you call a person a liar to their face, but it doesn’t do anything, and it actually reveals nothing. If somebody is a liar and they reveal themselves to be a liar, then that’s something else. But yes, I mean, I hear you, obviously you have a lot of different voices telling you what to do. It’s also difficult because one of the things that I don’t think anyone really understands is that in the end it’s just you."</div>
+  <div class="quote-zh">我认为，很多坐在屏幕另一边的人都没有意识到，当你当面称一个人为骗子时，他们可能会感到满意，但这没有任何作用，实际上也没有透露任何信息。如果某人是个骗子并且他们暴露自己是个骗子，那么那就是另一回事了。但是，是的，我的意思是，我听到你的声音，显然你有很多不同的声音告诉你该怎么做。这也很困难，因为我认为没有人真正理解的一件事是，最终只有你一个人。</div>
+  <div class="quote-meta">— Douglas Murray （02:52:47）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"People have very little understanding of things if they’re willing to say that because you’re sitting down and talking with somebody you are ergo platforming them, advancing their cause, being used, being a shill, or whatever like that. You might be actually just finding some things out, which I think is something you do expertly. And another thing that your critics wouldn’t realize is that life is long, and hopefully, God willing, we’re both around for a long time, and therefore you don’t blow everything up at the request of some twat online."</div>
+  <div class="quote-zh">如果人们愿意这么说，那么他们对事情的理解就很少，因为你坐下来与某人交谈，因此你就是在平台化他们，推进他们的事业，被利用，成为托儿，或者类似的事情。你可能实际上只是发现了一些事情，我认为这是你擅长做的事情。另一件你的批评者不会意识到的事情是，生命是漫长的，希望上帝愿意，我们都存在很长一段时间，因此你不会应网上某些傻瓜的要求而毁掉一切。</div>
+  <div class="quote-meta">— Douglas Murray （02:57:12）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I would trust most of my friends in East and Central Europe who certainly do think that. There’s a reason why the Baltic countries are the countries that are spending highest in percentage of GDP on defense. And it’s because they’re very worried. I don’t think they’re faking it. I don’t think they’re faking it for me or for anyone else. I think the Lithuanians, Latvians, Estonians and others are genuinely worried for the first time in some decades."</div>
+  <div class="quote-zh">我相信我在东欧和中欧的大多数朋友肯定也这么认为。波罗的海国家是国防支出占国内生产总值百分比最高的国家是有原因的。这是因为他们非常担心。我不认为他们在假装。我不认为他们是为了我或其他人而假装的。我认为立陶宛人、拉脱维亚人、爱沙尼亚人和其他人几十年来第一次真正感到担忧。</div>
+  <div class="quote-meta">— Douglas Murray （00:23:52）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Douglas Murray <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">… end up chanting in front of him, “Viva la Muerte. Long-lived death.” They have their counterparts today. They are the people who taunt Americans, Westerners, Israelis, and others with lines like, “We love death more than you love live.”</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:24)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Douglas Murray, author of the War in the West, the Madness of Crowds and his new book On Democracies and Death Cults. We talk about Russia and Ukraine and about Israel and Gaza. Douglas has very strong views on these topics, and he defends them brilliantly and fearlessly. As I always try to do for all topics, I will also talk to people who have different views ...</div>
+  <div class="dialogue-zh">以下是与道格拉斯·默里（Douglas Murray）的对话，他是《西方战争》、《人群的疯狂》及其新书《论民主与死亡崇拜》的作者。 We talk about Russia and Ukraine and about Israel and Gaza. Douglas has very strong views on these topics, and he defends them brilliantly and fearlessly. As I always try to do for all topics, I will also talk to people who have different views</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:34)</span>
+  </div>
+  <div class="dialogue-en">I recommend you listen to many sources who disagree with each other and tried to pick up wisdom from each. Also, I recommend you visit the places in question as Douglas has, as I have, or at least talk face-to-face with people who have spent most of their lives living there. Whether it’s Israel, Palestine, Ukraine, or Russia. Let’s try together to not be cogs in the machine of outrage, and instead...</div>
+  <div class="dialogue-zh">I recommend you listen to many sources who disagree with each other and tried to pick up wisdom from each. Also, I recommend you visit the places in question as Douglas has, as I have, or at least talk face-to-face with people who have spent most of their lives living there. Whether it’s Israel, Palestine, Ukraine, or Russia.让我们共同努力，不要成为愤怒机器上的齿轮，而是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:38)</span>
+  </div>
+  <div class="dialogue-en">What have you understood about the war in Ukraine from your visits there? Just looking at the big picture of your understanding of the invasion of February 24th, 2022, and the war in the three years since?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Douglas Murray <span class="dialogue-time">(00:02:50)</span>
+  </div>
+  <div class="dialogue-en">I mean, several things has political angles, which are forever changing. But on the human level, as you know, if you visit troops, frontline troops, you have that admiration for people defending their country, defending their homes, defending their families. Struck by the way in which that is at a remove from the sort of political noise and the media noise and much more. It’s very easy to get caug...</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:45)</span>
+  </div>
+  <div class="dialogue-en">So, the thing that struck you that’s different from the media turmoil is just the reality of war?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Douglas Murray <span class="dialogue-time">(00:03:52)</span>
+  </div>
+  <div class="dialogue-en">Yeah, of course. I mean, people who have either lived under Russian occupation from invading armies and then come back out into the world, having been liberated as in late 2022. Or the people now organized most recently there in recent weeks, who were just getting on with their job as soldiers whilst the world was talking about them.</div>
+  <div class="dialogue-zh">是的，当然。 I mean, people who have either lived under Russian occupation from invading armies and then come back out into the world, having been liberated as in late 2022. Or the people now organized most recently there in recent weeks, who were just getting on with their job as soldiers whilst the world was talking about them.</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:19)</span>
+  </div>
+  <div class="dialogue-en">When were you there early on in this escalated war of ’22?</div>
+  <div class="dialogue-zh">你什么时候参与了这场 22 年这场不断升级的战争？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Douglas Murray <span class="dialogue-time">(00:04:25)</span>
+  </div>
+  <div class="dialogue-en">Yes, first time was, I was with the Ukrainian Armed Forces when they retook Kherson, and I was back in recent weeks. And was there when the Trump-Zelensky blow up happened. In fact, I was in a Ukrainian dugout at the front lines when I was watching it.</div>
+  <div class="dialogue-zh">Yes, first time was, I was with the Ukrainian Armed Forces when they retook Kherson, and I was back in recent weeks.当特朗普和泽伦斯基爆发冲突时他也在场。 In fact, I was in a Ukrainian dugout at the front lines when I was watching it.</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:45)</span>
+  </div>
+  <div class="dialogue-en">How’s the morale? How’s the way the content of the conversations you’ve heard different from the two visits separated by, I guess, two years?</div>
+  <div class="dialogue-zh">How’s the morale?我想，您所听到的谈话内容与相隔两年的两次访问有何不同？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Douglas Murray <span class="dialogue-time">(00:04:58)</span>
+  </div>
+  <div class="dialogue-en">One level, I mean, nothing has changed much. It is not a total standoff because intermittently each side gains territory from the others. I mean, there’d been no very significant military gains by either side in the interim period.</div>
+  <div class="dialogue-zh">我的意思是，在某一层面上，一切都没有太大改变。这并不是一场彻底的对峙，因为双方都间歇性地从对方手中夺取领土。我的意思是，在过渡时期双方都没有取得非常重大的军事进展。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:18)</span>
+  </div>
+  <div class="dialogue-en">I think my experience of the soldiers, the people of Ukraine early on in the war, there’s a intense optimism about the outcomes of the war. There’s a sense that they’re going to win. And the definition of what win means was like, all the territory is going to be one back.</div>
+  <div class="dialogue-zh">我认为，根据战争初期乌克兰士兵和人民的经历，人们对战争的结果抱有强烈的乐观态度。有一种他们会赢的感觉。胜利的定义是，所有领土都将被逆转。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Douglas Murray <span class="dialogue-time">(00:05:41)</span>
+  </div>
+  <div class="dialogue-en">Yeah, I certainly on the front lines facing Crimea was became quite familiar with people who thought that the Ukrainians in late 2022 would even be able to get Crimea back. And that struck me even at the time, and I thought that that was an overreach.</div>
+  <div class="dialogue-zh">是的，我确实在面对克里米亚的前线非常熟悉那些认为乌克兰人甚至能够在 2022 年底夺回克里米亚的人。甚至在当时我就震惊了，我认为这是一种过分的行为。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:57)</span>
+  </div>
+  <div class="dialogue-en">And now, I think the people, the soldiers, at least in my experience when I visited the second time, are more exhausted. The morale, the dreams, the certainty of victory has maybe faded from the forefront of their minds.</div>
+  <div class="dialogue-zh">现在，我认为人民、士兵们，至少从我第二次访问时的经验来看，更加疲惫不堪。士气、梦想和胜利的确定性可能已经从他们的脑海中消失了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Douglas Murray <span class="dialogue-time">(00:06:21)</span>
+  </div>
+  <div class="dialogue-en">Well, three years of war will tire out anyone. Trump and Zelenskyy</div>
+  <div class="dialogue-zh">好吧，三年的战争会让任何人疲惫不堪。特朗普和泽伦斯基</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:24)</span>
+  </div>
+  <div class="dialogue-en">What did you think of the blow up between Zelensky and Trump as you’re sitting there in the dugout?</div>
+  <div class="dialogue-zh">当你坐在休息室里时，你对泽连斯基和特朗普之间的争吵有何看法？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Douglas Murray <span class="dialogue-time">(00:06:31)</span>
+  </div>
+  <div class="dialogue-en">Well, it was a very disturbing place to watch it from, perhaps anywhere would’ve been. And obviously, it was a meeting that shouldn’t have happened. It was far too early.</div>
+  <div class="dialogue-zh">嗯，从那里观看它是一个非常令人不安的地方，也许在任何地方都会如此。显然，这是一次不应该发生的会议。还太早了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:45)</span>
+  </div>
+  <div class="dialogue-en">Why do you think so? There’s not enough actual pathways to peace on the table?</div>
+  <div class="dialogue-zh">你为什么这么认为？桌面上没有足够的实际和平途径吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Douglas Murray <span class="dialogue-time">(00:06:50)</span>
+  </div>
+  <div class="dialogue-en">Well, I think the mineral deal, I mean, I love the fact that everyone’s now an expert in Eastern Ukrainian mineral deposits, but-</div>
+  <div class="dialogue-zh">好吧，我认为矿产交易，我的意思是，我喜欢这样一个事实，即每个人现在都是乌克兰东部矿藏的专家，但是-</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:57)</span>
+  </div>
+  <div class="dialogue-en">I think as I’ve learned, and we’ll talk about Israel and Palestine, I’m learning that everybody’s an expert on geopolitics and the history of war on the internet.</div>
+  <div class="dialogue-zh">我认为，据我所知，我们将讨论以色列和巴勒斯坦，我了解到每个人都是互联网上的地缘政治和战争史专家。</div>
+</div>
+    <a href="https://lexfridman.com/douglas-murray-2-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="ben-shapiro-destiny-debate.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ben Shapiro Destiny Debate</div>
+  <div class="card-meta">Ben Shapiro</div>
+</a>
+<a href="bernie-sanders.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bernie Sanders</div>
+  <div class="card-meta">Bernie Sanders</div>
+</a>
+<a href="eric-weinstein-4.html" class="card" style="text-decoration:none">
+  <div class="card-title">Eric Weinstein: Difficult Conversations, Freedom of Speech, and Physics</div>
+  <div class="card-meta">Eric Weinstein</div>
+</a>
+<a href="eric-weinstein.html" class="card" style="text-decoration:none">
+  <div class="card-title">Eric Weinstein: Revolutionary Ideas in Science, Math, and Society</div>
+  <div class="card-meta">Eric Weinstein</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

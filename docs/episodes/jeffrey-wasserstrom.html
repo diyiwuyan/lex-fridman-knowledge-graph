@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeffrey Wasserstrom - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Jeffrey Wasserstrom</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Jeffrey Wasserstrom</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/jeffrey-wasserstrom.html" style="font-size:16px;color:#818cf8;font-weight:600">Jeffrey Wasserstrom</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">27,646 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/jeffrey-wasserstrom-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:16</span>
+  <span class="chapter-title">Xi Jinping and Mao Zedong<span class="zh-trans"> · 习近平和毛泽东</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:45</span>
+  <span class="chapter-title">Confucius<span class="zh-trans"> · 孔子</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">11:15</span>
+  <span class="chapter-title">Education<span class="zh-trans"> · 教育</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">19:21</span>
+  <span class="chapter-title">Tiananmen Square<span class="zh-trans"> · 天安门</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:36</span>
+  <span class="chapter-title">Tank Man<span class="zh-trans"> · 坦克人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:36</span>
+  <span class="chapter-title">Censorship<span class="zh-trans"> · 审查制度</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:16:33</span>
+  <span class="chapter-title">Xi Jinping<span class="zh-trans"> · 习近平</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:34:41</span>
+  <span class="chapter-title">Donald Trump<span class="zh-trans"> · 唐纳德·特朗普</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:38:34</span>
+  <span class="chapter-title">Trade war<span class="zh-trans"> · 贸易战</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:51:23</span>
+  <span class="chapter-title">Taiwan<span class="zh-trans"> · 台湾</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:01:36</span>
+  <span class="chapter-title">Protests in Hong Kong<span class="zh-trans"> · 香港的抗议活动</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:33:55</span>
+  <span class="chapter-title">Mao Zedong<span class="zh-trans"> · 毛泽东</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:55:36</span>
+  <span class="chapter-title">Future of China<span class="zh-trans"> · 中国的未来</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">china</span><span class="keyword-tag">hong</span><span class="keyword-tag">kong</span><span class="keyword-tag">party</span><span class="keyword-tag">chinese</span><span class="keyword-tag">communist</span><span class="keyword-tag">jinping</span><span class="keyword-tag">mao</span><span class="keyword-tag">jeffrey</span><span class="keyword-tag">wasserstrom</span><span class="keyword-tag">going</span><span class="keyword-tag">protests</span><span class="keyword-tag">taiwan</span><span class="keyword-tag">history</span><span class="keyword-tag">said</span><span class="keyword-tag">kinds</span><span class="keyword-tag">ways</span><span class="keyword-tag">didn</span><span class="keyword-tag">talk</span><span class="keyword-tag">don</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"It’s so interesting to just speculate, and we just don’t know, because he was never able to be interviewed afterwards. But I think your emphasis on patriotism is really important, because one of the students’ main demands was, then I think it might have been the thing that would have gotten them to leave the square, would’ve been to say, “We want this to be acknowledged as a patriotic, that our goals are patriotic.” We’re not here to take China back into the Cultural Revolution. We’re here to express our love for the country if it goes in the right way. So will you admit that?”"</div>
+  <div class="quote-zh">猜测是很有趣的，但我们只是不知道，因为事后他再也无法接受采访。但我认为你对爱国主义的强调非常重要，因为学生的主要要求之一是，那么我认为这可能是让他们离开广场的原因，就是说，“我们希望这被认为是爱国的，我们的目标是爱国的。”我们来这里不是为了让中国重新陷入文化大革命。如果这个国家进展顺利，我们来这里是为了表达我们对这个国家的热爱。那么你愿意承认吗？”</div>
+  <div class="quote-meta">— Jeffrey Wasserstrom （00:35:50）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So that was a hope early on, and there were ways in which some parts of Hong Kong’s style even permeated across the border. I think it’s hard to see it now with how Hong Kong has changed, but I hesitate to, I mean, an awareness of the unpredictability of things. There’s no way to know what kind of thing there would be for Hong Kong later. I do think there are things about Hong Kong that even in the failure of the movement have had repercussions that are not all negative. I think the Hong Kong spirit, which is being kept alive in diaspora communities around the world, is really interesting. There are things that are spreading. I think Hong Kong represented a vision of a different way of being Chinese, a different notion of Chineseness. And I think that is something that exists."</div>
+  <div class="quote-zh">所以这是早期的一个希望，香港风格的某些部分甚至通过某种方式渗透到边境。我认为现在很难看到香港发生的变化，但我犹豫，我的意思是，意识到事情的不可预测性。不知道以后香港会发生什么。我确实认为，即使运动失败，香港的一些事情也产生了并不全是负面的影响。我认为在世界各地的侨民社区中保持活力的香港精神非常有趣。有些事情正在传播。我认为香港代表了一种不同的中国人方式、一种不同的中国性概念。我认为这是存在的。</div>
+  <div class="quote-meta">— Jeffrey Wasserstrom （02:59:15）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And I think there are some elements of that, that even in failure, the Hong Kong movements, the Hong Kong protests of the 2020s were a last flourishing of that. And we can see some elements of that in, we can think of Taiwan, elements of that is another China as well. I think not allowing the particular version of Chineseness that the Chinese Communist Party under Xi Jinping wants to make people think of as the essence of Chinese. China has multiple cultural strands, multiple traditions that people can tap into. And it’s something richer and more admirable, I think, than this narrowed down version."</div>
+  <div class="quote-zh">我认为其中有一些因素，即使失败了，香港运动、2020 年代的香港抗议活动也是其中最后的繁荣。我们可以看到其中的一些元素，我们可以想到台湾，其中的元素也是另一个中国。我认为，不允许习近平领导下的中国共产党想让人们将其视为中国人的本质的特定版本的中国性。中国拥有多种文化、多种传统可供人们利用。我认为，它比这个缩小版更丰富、更令人钦佩。</div>
+  <div class="quote-meta">— Jeffrey Wasserstrom （03:01:15）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So I guess maybe this is a good time to mention something that I do think about, and sometimes people will think because of censorship and that, there’s an idea of brainwashing within China, population control. And I periodically will get students from the mainland, and I have a lot of students from the mainland in my classes. I teach Chinese history, and I feel like, okay, now I’m contradicting the version of the past that’s been drumbeat into them. But I’ll still get students who are incredible free thinkers who have come through that system and it just doesn’t hold or there are limits to it. Some of them are people who just got curious by something."</div>
+  <div class="quote-zh">所以我想也许现在是时候提一下我确实想到的事情了，有时人们会因为审查制度而想到，中国境内存在洗脑、人口控制的想法。而且我会定期招收大陆的学生，我的班里有很多大陆的学生。我教中国历史，我觉得，好吧，现在我正在与他们灌输的过去版本相矛盾。但我仍然会找到一些令人难以置信的自由思想家的学生，他们经历过这个系统，但它不成立或者有限制。他们中的一些人只是对某些事物感到好奇。</div>
+  <div class="quote-meta">— Jeffrey Wasserstrom （00:57:48）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So there is a way of positioning vis-a-vis other parts of the world, that is crucial part of this, that I think, I guess I’m circling around it, but there’s a tendency in discussions of US-China relations to think about it in terms of a bilateral discussion or dispute. Even though time and again, we realize that places other than the United States are key variables in these things. So the US and China being at odds in the Mao era, what changed things dramatically for that wasn’t so much even a change in… Yes, Nixon was the one who went to China, but what made it possible for Nixon to go to China was that the Sino-Soviet split happened, that actually it was tensions between China and the Soviet Union that altered equations for the United States and China."</div>
+  <div class="quote-zh">因此，有一种相对于世界其他地区的定位方式，这是其中的关键部分，我想，我想我正在围绕它，但在讨论美中关系时有一种倾向，从双边讨论或争端的​​角度来思考它。尽管一次又一次，我们意识到美国以外的地方是这些事情的关键变量。因此，美国和中国在毛泽东时代发生了争执，使事情发生了巨大的变化，因为这甚至不是……是的，尼克松是去中国的人，但使尼克松能够去中国的是中苏分裂的发生，实际上是中苏之间的紧张关系改变了美国和中国的方程式。</div>
+  <div class="quote-meta">— Jeffrey Wasserstrom （01:42:11）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Jeffrey Wasserstrom, a historian of modern China. This is the Lex Fridman Podcast. To support it, please check out our sponsors in the description. And now, dear friends, here’s Jeffrey Wasserstrom. Xi Jinping and Mao Zedong</div>
+  <div class="dialogue-zh">以下是与现代中国历史学家杰弗里·沃瑟斯特罗姆的对话。这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是杰弗里·沃瑟斯特罗姆 (Jeffrey Wasserstrom)。习近平和毛泽东</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:17)</span>
+  </div>
+  <div class="dialogue-en">You’ve compared Xi Jinping and Mao Zedong in the past. What are the parallels between the two leaders, and where do they differ? Xi Jinping, of course, is the current leader of China for the past 12 years, and Mao Zedong was the communist leader of China from 1949 to 1976. So what are the commonalities, what are the differences?</div>
+  <div class="dialogue-zh">您过去曾比较过习近平和毛泽东。两位领导人有何相似之处，有何不同？当然，习近平是过去12年的中国现任领导人，毛泽东是1949年至1976年的中国共产党领导人。那么，两者有何共同点，有何不同？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeffrey Wasserstrom <span class="dialogue-time">(00:00:38)</span>
+  </div>
+  <div class="dialogue-en">So the biggest commonality of them is that they’re both the subject of personality cults, and that Mao was the center of a very intensely felt one from 1949 to 1976. And when he died, there was tremendous outpouring of grief, even among people who had objectively suffered enormously because of his policies. Xi Jinping is the first leader in China since him who has had a sustained personality cult ...</div>
+  <div class="dialogue-zh">因此，他们最大的共同点是，他们都是个人崇拜的对象，而从 1949 年到 1976 年，毛泽东是个人崇拜的中心人物。当他去世时，人们流露出巨大的悲痛，即使是在客观上因为他的政策而遭受巨大痛苦的人们中也是如此。习近平是继他之后第一位长期存在个人崇拜的中国领导人</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeffrey Wasserstrom <span class="dialogue-time">(00:01:32)</span>
+  </div>
+  <div class="dialogue-en">I was first in China in 1986, and you could go for days without being intensely aware of who was in charge of the party. You would know, but his face wasn’t everywhere, the newspaper wasn’t dominated with stories about him, and quotations from his words and things like that. So with Xi Jinping, you’ve had a throwback to that period in Communist Party rule, which seemed as though it might be a part...</div>
+  <div class="dialogue-zh">1986年我第一次来到中国，你可能会在那里呆上好几天，但并没有强烈地意识到谁是党的负责人。你会知道，但他的脸并不到处都是，报纸上也没有充斥着关于他的故事，以及他的话的引文之类的内容。因此，对于习近平来说，你有一种回到共产党统治时期的感觉，这似乎是其中的一部分。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeffrey Wasserstrom <span class="dialogue-time">(00:01:59)</span>
+  </div>
+  <div class="dialogue-en">So that’s a key commonality, and a key difference is that Mao really reveled in chaos, in turning things upside down in a sense that he talked about class struggle, which came out of Marxism, but he also really, his favorite work of Chinese popular fiction was the Monkey King about this legendary figure who is this Monkey King who could turn the heavens upside down. So he reveled in disorder and t...</div>
+  <div class="dialogue-zh">所以这是一个关键的共同点，而一个关键的区别是，毛泽东确实热衷于混乱，热衷于把事情搞得天翻地覆，从某种意义上说，他谈论的是阶级斗争，这源于马克思主义，但他也确实，他最喜欢的中国通俗小说作品是《孙悟空》，讲述了这个传奇人物，这个孙悟空可以把天颠倒。所以他陶醉于混乱之中，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeffrey Wasserstrom <span class="dialogue-time">(00:02:32)</span>
+  </div>
+  <div class="dialogue-en">Xi Jinping is very orderly, is very concerned with kind of stability and predictability. So you can see them as very, very different that way. And Mao also liked to stir things up like that, people on the streets clamoring. So Xi Jinping, even though he has a personality cult, it’s not manifesting itself. He doesn’t like the idea of people on the streets in anything that can’t be controlled. So th...</div>
+  <div class="dialogue-zh">习近平非常有秩序，非常注重稳定性和可预测性。所以你可以看到它们非常非常不同。毛泽东也喜欢这样闹事，街上人们叫嚷。所以说习近平虽然有个人崇拜，但是并没有表现出来。他不喜欢人们在街上做任何无法控制的事情。所以</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeffrey Wasserstrom <span class="dialogue-time">(00:03:02)</span>
+  </div>
+  <div class="dialogue-en">They’re also different, and this fits with this orderliness that Xi Jinping talks positively about Confucius and Confucian traditions in China. And Confucian traditions are based on kind of stable hierarchies for the most part, and sort of clear categories of superior and inferior, whereas Mao like things to be turned upside down. He thought of Confucianism as a feudal way of thought that it held ...</div>
+  <div class="dialogue-zh">它们也是不同的，这也符合习近平积极谈论孔子和中国儒家传统的秩序。儒家传统在很大程度上是基于某种稳定的等级制度和某种明确的上下级界限，而毛泽东喜欢把事情颠倒过来。他认为儒家思想是一种封建思想。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:45)</span>
+  </div>
+  <div class="dialogue-en">So there’s some degree, as you said, that Xi Jinping espouses the ideas of Communism and the ideas of Confucianism. So let’s go all the way back. You wrote that in order to understand the China of today, we have to study its past. So the China of today celebrates ideas of Confucius, a Chinese philosopher who lived 2,500 years ago. Can you tell me about the ideas of Confucius?</div>
+  <div class="dialogue-zh">所以，正如你所说，习近平在某种程度上拥护共产主义思想和儒家思想。那么让我们一路回去吧。您写道，为了了解今天的中国，我们必须研究它的过去。因此，今天的中国崇尚 2500 年前的中国哲学家孔子的思想。您能介绍一下孔子的思想吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeffrey Wasserstrom <span class="dialogue-time">(00:04:11)</span>
+  </div>
+  <div class="dialogue-en">First of all, we don’t know that much about the historic Confucius. He’s around the same time as figures like Socrates. And like with Socrates, we get a lot of what we know about him or think we know about him from what his followers said and things that were attributed to him and dialogues that were written afterwards. So you can have a lot of fun with these sort of Axial Age thinkers and what th...</div>
+  <div class="dialogue-zh">首先，我们对历史上的孔子了解不多。他与苏格拉底等人物大约处于同一时代。就像苏格拉底一样，我们从他的追随者所说的以及归因于他的事情以及后来写的对话中获得了很多我们对他的了解或认为我们对他的了解。所以你可以从这些轴心时代的思想家那里得到很多乐趣</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeffrey Wasserstrom <span class="dialogue-time">(00:04:39)</span>
+  </div>
+  <div class="dialogue-en">Another thing that connects these Axial Age thinkers is they were trying to kind of make a case for why they should be able to educate the next generation, the elite, and sort of had a way of promising that they had philosophical ideas that helped decide how you should run a polity. Confucius lived in a time when there were these warring kingdoms in a territory that later became China. But what he...</div>
+  <div class="dialogue-zh">连接这些轴心时代思想家的另一件事是，他们试图证明为什么他们应该能够教育下一代、精英，并以某种方式承诺他们拥有有助于决定如何管理一个政体的哲学思想。孔子生活的时代，在后来成为中国的领土上存在这些战国。但他什么</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeffrey Wasserstrom <span class="dialogue-time">(00:05:49)</span>
+  </div>
+  <div class="dialogue-en">And he had a whole series of these relationships. The husband to the wife was, again, an unequal one of the husband being superior to the wife, but him owing the wife care and her owing him deference. And he had the same notion that then the emperor to the ministers were… These were all parallels, and there were no egalitarian relationships in Confucianism.</div>
+  <div class="dialogue-zh">他拥有一系列这样的关系。丈夫对妻子来说，又是一种不平等的关系，丈夫高于妻子，但他欠妻子照顾，妻子欠他尊重。而他也有同样的想法，那就是当时的皇帝对大臣来说……这些都是平行的，儒家中没有平等的关系。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeffrey Wasserstrom <span class="dialogue-time">(00:06:14)</span>
+  </div>
+  <div class="dialogue-en">Even something that in the West we often think of as a kind of quintessentially egalitarian relationship between brothers. In the Chinese tradition of Confucianism, there was only older brother and younger brother. Brotherhood was not an egalitarian relationship. It was one where the older brother took care of the younger brother and the younger brother showed respect for the older brother.</div>
+  <div class="dialogue-zh">甚至在西方我们常常认为这是一种典型的兄弟之间的平等关系。在中国的儒家传统中，只有哥哥和弟弟。兄弟情谊并不是一种平等的关系。这是哥哥照顾弟弟，弟弟尊重哥哥的表现。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:40)</span>
+  </div>
+  <div class="dialogue-en">So stable hierarchy was at the core of everything in society. It permeated everything including politics.</div>
+  <div class="dialogue-zh">因此，稳定的等级制度是社会一切事物的核心。它渗透到一切事物中，包括政治。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeffrey Wasserstrom <span class="dialogue-time">(00:06:46)</span>
+  </div>
+  <div class="dialogue-en">Yeah. And there was even a sense that it connected the natural world to the supernatural world. So the emperor was to heaven this kind of non-personified deity like the emperor was to the minister. So all of this had these relationships. So the emperor was the son of heaven.</div>
+  <div class="dialogue-zh">是的。甚至有一种感觉，它将自然世界与超自然世界联系起来。所以皇帝之于天，就像皇帝之于大臣一样，是一种非人格化的神灵。所以所有这一切都有这些关系。所以说皇帝是天子。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeffrey Wasserstrom <span class="dialogue-time">(00:07:08)</span>
+  </div>
+  <div class="dialogue-en">And for Confucius, he said, so we should study the texts, we should study how the sages of old behaved, that society was becoming corrupted and was going away from that sort of purity of the sages when the relationships were all in order. So Confucianism was a kind of conservative or even backward looking. It wasn’t arguing for progress, it was arguing for reclaiming a pure golden age in the past....</div>
+  <div class="dialogue-zh">他说，对于孔子来说，我们应该研究文本，我们应该研究古代圣人的行为方式，社会正在变得腐败，并且正在远离圣人在人际关系良好时的那种纯洁。所以说儒家思想是一种保守甚至是落后的思想。它不是在主张进步，而是在主张夺回过去的纯粹黄金时代。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:55)</span>
+  </div>
+  <div class="dialogue-en">So that’s the interesting thing about Xi Jinping and the China of today is there is that tension of Confucianism and communism where communism, Marxism is supposed to let go of history. And Confucianism, there’s a real veneration of history that’s happening in China of today. So they’re able to wear both hats and balance it.</div>
+  <div class="dialogue-zh">因此，习近平和当今中国的有趣之处在于，儒家思想和共产主义之间存在紧张关系，而共产主义、马克思主义应该放弃历史。而儒家思想，在今天的中国正在发生着对历史的真正的崇敬。所以他们能够同时兼任并保持平衡。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeffrey Wasserstrom <span class="dialogue-time">(00:08:15)</span>
+  </div>
+  <div class="dialogue-en">Yeah. You could say that in many points in the 20th century, there was a kind of struggle between different competing political groups over which part of the Chinese past to connect with. Was it to the Confucian tradition or to the kind of rebellious Monkey King tradition, which was what Mao connected to.</div>
+  <div class="dialogue-zh">是的。可以说，在 20 世纪的很多时候，不同政治团体之间存在着某种斗争，争论着应该与中国过去的哪一部分联系起来。毛泽东所联系的是儒家传统还是孙悟空的反叛传统。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeffrey Wasserstrom <span class="dialogue-time">(00:08:38)</span>
+  </div>
+  <div class="dialogue-en">Xi Jinping and before him to some extent, Hu Jintao, we saw this a little bit, the Olympics, it was more of this kind of mix it all together view. Anything that suggested greatness in the past could be something that could be fused together. So Xi Jinping says that Mao is one of his heroes or one of the people he looks to as a model, but so is Confucius. And there’s really… they had so little in c...</div>
+  <div class="dialogue-zh">习近平和他之前的胡锦涛，我们看到了一点，奥运会，更多的是这种混合在一起的观点。任何暗示过去伟大的东西都可以融合在一起。所以习近平说，毛泽东是他的英雄之一，或者说是他崇拜的榜样之一，但孔子也是。真的……他们的c太少了</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:15)</span>
+  </div>
+  <div class="dialogue-en">Yeah. So this platonic notion of greatness, and that you could say that’s a thread that connects for Xi Jinping the great history, multi-thousand year history of China.</div>
+  <div class="dialogue-zh">是的。所以，这种柏拉图式的伟大观念，你可以说，这是一条连接习近平伟大历史、中国几千年历史的线索。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeffrey Wasserstrom <span class="dialogue-time">(00:09:30)</span>
+  </div>
+  <div class="dialogue-en">Yeah. And it involves smoothing out all kinds of internal contradictions. You had the first emperor of China jumping forward a bit in 221 BC. He is anti-scholars, he burns books, and he doesn’t venerate these kind of rituals and things. So he was very much against the things that Confucius stood for. And Mao in a sense of having to choose between Confucius and the first emperor, he said, “Well, ma...</div>
+  <div class="dialogue-zh">是的。这涉及到消除各种内部矛盾。公元前 221 年，中国第一位皇帝向前迈进了一点。他是反学者的，他烧书的，他不崇尚这种仪式和东西。所以他非常反对孔子所主张的东西。毛泽东不得不在孔子和秦始皇之间做出选择，他说：“好吧，马</div>
+</div>
+    <a href="https://lexfridman.com/jeffrey-wasserstrom-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a>
+<a href="cenk-uygur.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cenk Uygur</div>
+  <div class="card-meta">Cenk Uygur</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

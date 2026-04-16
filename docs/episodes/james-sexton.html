@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>James Sexton - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>James Sexton</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">James Sexton</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/james-sexton.html" style="font-size:16px;color:#818cf8;font-weight:600">James Sexton</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">39,194 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/james-sexton-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:34</span>
+  <span class="chapter-title">Why marriages fail<span class="zh-trans"> · 婚姻为何失败</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">24:05</span>
+  <span class="chapter-title">Sex and fetishes<span class="zh-trans"> · 性和恋物癖</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">33:22</span>
+  <span class="chapter-title">Breakups<span class="zh-trans"> · 分手</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">59:09</span>
+  <span class="chapter-title">Johnny Depp and Amber Heard<span class="zh-trans"> · 约翰尼·德普和艾梅柏·希尔德</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:19:09</span>
+  <span class="chapter-title">Complicated divorce cases<span class="zh-trans"> · 复杂的离婚案件</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:25:55</span>
+  <span class="chapter-title">Cheating with the nanny<span class="zh-trans"> · 与保姆作弊</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:28:12</span>
+  <span class="chapter-title">Relationship advice<span class="zh-trans"> · 关系建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:36:54</span>
+  <span class="chapter-title">Cost of divorce<span class="zh-trans"> · 离婚费用</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:58:45</span>
+  <span class="chapter-title">Prenups<span class="zh-trans"> · 婚前协议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:13:06</span>
+  <span class="chapter-title">Cheating<span class="zh-trans"> · 作弊</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:20:50</span>
+  <span class="chapter-title">Open marriages and threesomes<span class="zh-trans"> · 开放婚姻和三人行</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:33:38</span>
+  <span class="chapter-title">Sex and fighting<span class="zh-trans"> · 性与战斗</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:58:33</span>
+  <span class="chapter-title">Kevin Costner’s divorce<span class="zh-trans"> · 凯文·科斯特纳离婚</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:08:17</span>
+  <span class="chapter-title">Lying<span class="zh-trans"> · 说谎</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:15:45</span>
+  <span class="chapter-title">Productivity<span class="zh-trans"> · 生产率</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:23:39</span>
+  <span class="chapter-title">Jiu Jitsu<span class="zh-trans"> · 柔术</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:32:11</span>
+  <span class="chapter-title">Sex, love, and marriage<span class="zh-trans"> · 性、爱情和婚姻</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">james</span><span class="keyword-tag">sexton</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">person</span><span class="keyword-tag">got</span><span class="keyword-tag">divorce</span><span class="keyword-tag">relationship</span><span class="keyword-tag">said</span><span class="keyword-tag">lawyer</span><span class="keyword-tag">kids</span><span class="keyword-tag">partner</span><span class="keyword-tag">doing</span><span class="keyword-tag">having</span><span class="keyword-tag">didn</span><span class="keyword-tag">doesn</span><span class="keyword-tag">sex</span><span class="keyword-tag">ever</span><span class="keyword-tag">man</span><span class="keyword-tag">relationships</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"And I think that’s very hard for anyone going through a divorce to do about their own relationship. We don’t know who discovered water, but it wasn’t a fish. If you’re in it, I don’t think you see it clearly. I think as a divorce lawyer whose job is to really drill down on the facts and figure out what’s going on in this story, I have to look at both sides. So I have to think a lot about my own arguments, but I also have to think about what’s the other lawyer’s argument going to be, especially in custody cases. So I really have been forced to look at both sides for so many years, so deeply in relationships. Once you do that, you realize that the good guy, bad guy thing just doesn’t apply."</div>
+  <div class="quote-zh">我认为对于任何正在经历离婚的人来说，处理自己的关系是非常困难的。我们不知道是谁发现了水，但它不是鱼。如果你身处其中，我认为你看不清楚。我认为，作为一名离婚律师，我的工作就是真正深入研究事实并弄清楚这个故事中发生了什么，我必须兼顾双方。所以我必须仔细考虑自己的论点，但我也必须考虑其他律师的论点是什么，尤其是在监护权案件中。所以多年来我真的被迫审视双方的关系，如此深入地看待关系。一旦你这样做了，你就会意识到好人、坏人之分并不适用。</div>
+  <div class="quote-meta">— James Sexton （00:04:43）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, I mean straw man, steel man stuff. You do a lot of that, and I think all the best interviewers do. But yeah, I think it’s really, really important to think about. I have to know the other side’s case much better than my own. I have to know, what are their defenses, what are their strengths? I have to map out a strategy that keeps those in mind, and that’s hard because early in my career I would attribute to the other side and intelligence and strategy that sometimes wasn’t applicable. I’ve learned there’s the simplest explanation is the accurate one, the Occam’s Razor. I think Sexton’s would be, never attribute to strategy that which could be attributed to stupidity or laziness."</div>
+  <div class="quote-zh">是的，我的意思是稻草人，钢铁侠的东西。你做了很多这样的事情，我认为所有最好的面试官都会这样做。但是，是的，我认为思考这一点真的非常非常重要。我必须比自己更了解对方的情况。我必须知道，他们的防守是什么，他们的优势是什么？我必须制定一个牢记这些的策略，这很困难，因为在我职业生涯的早期，我会将其归因于对方以及有时不适用的智慧和策略。我了解到最简单也是最准确的解释是奥卡姆剃刀原理。我认为塞克斯顿永远不会将可能归因于愚蠢或懒惰的策略归因于策略。</div>
+  <div class="quote-meta">— James Sexton （02:41:58）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"If we brought that space and the divorce and conflict resolution space together, that psychopharmacological intervention on empathy, one’s empathy receptors or one’s connectivity, I think that could be radically transforming. It would be logistically an absolute nightmare. It would never get done from a legal standpoint, but man, I think sometimes that if… Because I think the more that you can bring people to the awareness of connection that comes from many people’s psychedelic experiences, I think they could then extrapolate that into their understanding of the conflict and disconnect they’re having with their partner."</div>
+  <div class="quote-zh">如果我们将这个空间与离婚和冲突解决空间结合在一起，对同理心、同理心受体或连接性进行心理药理学干预，我认为这可能会发生根本性的转变。从逻辑上讲，这绝对是一场噩梦。从法律的角度来看，这永远不会完成，但是伙计，我有时认为，如果……因为我认为你越能让人们意识到来自许多人的迷幻经历的联系，我认为他们就可以将其推断为他们对冲突的理解以及他们与伴侣的脱节。</div>
+  <div class="quote-meta">— James Sexton （03:41:01）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"There’s a line in Drugstore Cowboy, it was a great film where he says, “We played a game you couldn’t win to the utmost.” And I think everything, I think life is a game you can’t win, and so you play it to the utmost. To love anything is insane because you are accepting that you’re going to lose it. I am a dog person, and you get a dog and you’ve just resigned yourself to unbelievable pain because this thing is going to die in 10 years, maybe 15 if you’re lucky. And why would you open your heart to that? Because the joy is just so wonderful of it, of the ride up until it."</div>
+  <div class="quote-zh">《药店牛仔》中有一句台词，这是一部很棒的电影，他说：“我们玩了一场你无法全力获胜的游戏。”我认为一切，我认为生活是一场你无法获胜的游戏，所以你要玩到极致。爱任何东西都是疯狂的，因为你承认你会失去它。我是一个爱狗的人，当你养了一只狗，你就会忍受难以置信的痛苦，因为这只狗会在 10 年内死去，如果你幸运的话，可能是 15 年内。你为什么要敞开心扉接受这个？因为它的快乐是如此美妙，直到它的旅程是如此美妙。</div>
+  <div class="quote-meta">— James Sexton （00:21:25）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But I have to tell you, I don’t function that way. Every woman I ever had a relationship with, when I think of them, I don’t think of the ending necessarily. I try to think about the greatest hits. I try to think about the moments that were wonderful, where I loved them and they loved me, and there was joy and there was connection. And I don’t know why you choose not to. There’s that old axiom, I don’t know who said it, that if you don’t learn to find joy in the snow, you’ll have less joy in your life and precisely the same amount of snow. And I genuinely believe like, “Okay. The relationship ends. This is where it ends. We’re done now. I am making a choice as to how I will remember you.”"</div>
+  <div class="quote-zh">但我必须告诉你，我不是那样做的。每一个与我有过关系的女人，当我想到她们时，我不一定会想到结局。我试着思考最热门的作品。我试着回想那些美好的时刻，我爱他们，他们也爱我，有欢乐，有联系。我不知道你为什么选择不这样做。有一句古老的格言，我不知道是谁说的，如果你不学会在雪中寻找快乐，你的生活中就会有更少的快乐，而雪的数量却是一样的。我真诚地相信，“好吧。关系结束了。这就是结束的地方。我们现在结束了。我正在选择如何记住你。”</div>
+  <div class="quote-meta">— James Sexton （00:36:31）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Sexton <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">We have been encouraged culturally to criticize people we’re in long-term relationships with. Not new relationships. New relationships, you put the person on a pedestal, you’re allowed to just… Oh, they’re wonderful. But every trope out there in every form of popular media is the wife rolling her eyes at the husband, and the husband being like, ugh, this loathsome harpy that castrated me, as if pe...</div>
+  <div class="dialogue-zh">文化上鼓励我们批评与我们有长期关系的人。不是新的关系。在新的关系中，你将这个人推崇为高，你可以……哦，他们太棒了。但各种形式的流行媒体中的每一个比喻都是妻子对着丈夫翻白眼，而丈夫就像是，呃，这个令人厌恶的鹰身女妖阉割了我，好像</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Sexton <span class="dialogue-time">(00:00:59)</span>
+  </div>
+  <div class="dialogue-en">And when you see a couple that has that, that’s so hard to break. But I think that comes from having a steadfast, no, I don’t do that. I don’t shit talk my partner, and you don’t shit talk my partner to me. Because I think we’re just so criticized by the world, the world is so full of criticism, we criticize ourselves so harshly, that having a partner who no matter what is like, “You’ve got this. ...</div>
+  <div class="dialogue-zh">当你看到一对拥有这样的情侣时，你很难打破这种感觉。但我认为这来自于坚定，不，我不这样做。我不会乱说我的伴侣，你也不会跟我乱说我的伴侣。因为我认为我们受到了世界的批评，世界充满了批评，我们严厉地批评自己，以至于我们的伴侣无论如何都会说：“你已经得到了这个。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:54)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with James Sexton, divorce attorney and author of How to Stay in Love: A Divorce Lawyer’s Guide to Staying Together. As a trial lawyer, James, for over two decades, has negotiated and litigated a huge number of high conflict divorces. This has given him a deep understanding of how relationships fail and how they can succeed, and bigger than that, the role of love an...</div>
+  <div class="dialogue-zh">以下是与离婚律师、《如何保持爱情：离婚律师保持在一起指南》一书作者詹姆斯·塞克斯顿的对话。作为一名出庭律师，詹姆斯在二十多年的时间里，处理了大量高冲突离婚案件的谈判和诉讼。这让他深刻地理解了人际关系如何失败以及如何成功，更重要的是，爱和爱情的作用。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Sexton <span class="dialogue-time">(00:02:38)</span>
+  </div>
+  <div class="dialogue-en">That’s a great question, but it’s a question that everybody wants there to be a simple answer. They want me to say cheating or money or the internet, but the reality is… I think it’s a lot of little things. It’s disconnection. That would be my answer. The reason marriages fail is disconnection. What causes disconnection? That’s the bigger and I think more important question because like Tom Wolfe ...</div>
+  <div class="dialogue-zh">这是一个很好的问题，但每个人都希望有一个简单的答案。他们想让我说作弊、金钱或互联网，但现实是……我认为这是很多小事。这是断线。这就是我的答案。婚姻失败的原因是断绝关系。是什么原因导致断线？这是更大、我认为更重要的问题，因为就像汤姆·沃尔夫</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:36)</span>
+  </div>
+  <div class="dialogue-en">Do you think it’s possible to introspect looking backwards for every individual case where the disconnection began and how it evolved?</div>
+  <div class="dialogue-zh">您认为有可能对每一个脱节开始的个案以及它是如何演变的进行反思吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Sexton <span class="dialogue-time">(00:03:43)</span>
+  </div>
+  <div class="dialogue-en">Sure. Yeah. This is such a multi-variate equation. It’s a dance, it’s a chemistry, it’s what did you do and what did the other person do? And see, the interesting thing about being a divorce lawyer is I’m weaponizing intimacy in a courtroom. It’s full context storytelling, what I do for a living. So what I do is I take my client’s story, and I have to present it to a judge and make my client the h...</div>
+  <div class="dialogue-zh">当然。是的。这就是一个多元方程。这是一种舞蹈，这是一种化学反应，是你做了什么，别人做了什么？你看，作为一名离婚律师的有趣之处在于，我正在法庭上将亲密关系武器化。这是完整的背景故事讲述，我以此为生。所以我要做的就是把客户的故事呈现给法官，让我的客户成为最有价值的人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Sexton <span class="dialogue-time">(00:04:43)</span>
+  </div>
+  <div class="dialogue-en">And I think that’s very hard for anyone going through a divorce to do about their own relationship. We don’t know who discovered water, but it wasn’t a fish. If you’re in it, I don’t think you see it clearly. I think as a divorce lawyer whose job is to really drill down on the facts and figure out what’s going on in this story, I have to look at both sides. So I have to think a lot about my own ar...</div>
+  <div class="dialogue-zh">我认为对于任何正在经历离婚的人来说，处理自己的关系是非常困难的。我们不知道是谁发现了水，但它不是鱼。如果你身处其中，我认为你看不清楚。我认为，作为一名离婚律师，我的工作就是真正深入研究事实并弄清楚这个故事中发生了什么，我必须兼顾双方。所以我必须好好考虑一下我自己的事情</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:27)</span>
+  </div>
+  <div class="dialogue-en">I wonder if it’s the little things or a few big things that cause this connection. You’ve talked about granola and blowjobs, but those seem to be stories that you can tell to yourself like… Maybe that story should be explained or maybe not.</div>
+  <div class="dialogue-zh">我想知道是一些小事还是一些大事造成了这种联系。你谈到了格兰诺拉麦片和口交，但这些似乎是你可以告诉自己的故事，比如……也许这个故事应该解释，也许不解释。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Sexton <span class="dialogue-time">(00:05:46)</span>
+  </div>
+  <div class="dialogue-en">You don’t think granola and blowjobs is self-explanatory?</div>
+  <div class="dialogue-zh">你不认为格兰诺拉麦片和口交是不言自明的吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:48)</span>
+  </div>
+  <div class="dialogue-en">Almost. I think people can construct a good… If you ask GPT, what do they mean? I think the story that would come up is a pretty good one. But that’s a story you tell about when you first knew the disconnection has begun is when he stopped buying my favorite granola or when she stopped giving blowjobs.</div>
+  <div class="dialogue-zh">几乎。我认为人们可以构建一个好的……如果你问 GPT，它们是什么意思？我认为将会出现的故事是一个非常好的故事。但这是你讲述的一个故事，当你第一次知道断绝关系已经开始时，是当他停止购买我最喜欢的格兰诺拉麦片或当她停止给口交时。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Sexton <span class="dialogue-time">(00:06:09)</span>
+  </div>
+  <div class="dialogue-en">I would say when it’s reached a critical mass.</div>
+  <div class="dialogue-zh">我会说当它达到临界质量时。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:12)</span>
+  </div>
+  <div class="dialogue-en">Yeah, phase shift of some sort.</div>
+  <div class="dialogue-zh">是的，某种相移。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Sexton <span class="dialogue-time">(00:06:14)</span>
+  </div>
+  <div class="dialogue-en">Because I think it started before that. When she said, “Yeah, I used to give him blowjobs when we were in our early relationship, and then one day, I just was like, oh well, we don’t have as much time. I’ll wait until later, and we’ll have sex and then we both enjoy it.”</div>
+  <div class="dialogue-zh">因为我认为事情在那之前就开始了。当她说，“是的，当我们刚开始恋爱时，我常常给他口交，然后有一天，我就想，哦，好吧，我们没有那么多时间。我会等到晚些时候，我们会做爱，然后我们都喜欢它。”</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:27)</span>
+  </div>
+  <div class="dialogue-en">Blowjobs are inefficient.</div>
+  <div class="dialogue-zh">口交效率低下。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Sexton <span class="dialogue-time">(00:06:29)</span>
+  </div>
+  <div class="dialogue-en">Yeah, exactly. Correct.</div>
+  <div class="dialogue-zh">是的，完全正确。正确的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:29)</span>
+  </div>
+  <div class="dialogue-en">You batched it all together into one-</div>
+  <div class="dialogue-zh">你把它们全部合并成一个——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Sexton <span class="dialogue-time">(00:06:33)</span>
+  </div>
+  <div class="dialogue-en">So she said, “Well, exactly.” And they had kids at that point, so I think she really was like, “Hey, we’ve got a certain window, so let’s have something we both enjoy.” So I don’t think she had any negative intentions there. I think that she was working in good faith towards the betterment of the relationship, but it was having this second order effect. And so I really do think that, yeah, the blo...</div>
+  <div class="dialogue-zh">于是她说：“嗯，完全正确。”那时他们有了孩子，所以我认为她真的是这样的，“嘿，我们有一个特定的窗口，所以让我们做点我们都喜欢的事情吧。”所以我不认为她有任何负面意图。我认为她是真诚地致力于改善我们的关系，但这却产生了二阶效应。所以我确实认为，是的，那个家伙</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Sexton <span class="dialogue-time">(00:07:39)</span>
+  </div>
+  <div class="dialogue-en">And I remember thinking to myself, when do we feel someone’s love? What is it that they do? And sometimes, it’s the weirdest, silliest things that they would never know. They are the person who’s showing us that they love us and that we’re feeling their love. They would never show us. If you said, “Why does this person love you?” They wouldn’t say, “Oh, I always make sure that when the paper comes...</div>
+  <div class="dialogue-zh">我记得自己在想，我们什么时候感受到某人的爱？他们到底是做什么的？有时，这是他们永远不会知道的最奇怪、最愚蠢的事情。他们向我们表明他们爱我们并且我们感受到他们的爱。他们永远不会向我们展示。如果你说：“这个人为什么爱你？”他们不会说：“哦，我总是确保当报纸到达时</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:29)</span>
+  </div>
+  <div class="dialogue-en">Do you think it’s good to communicate that stuff?</div>
+  <div class="dialogue-zh">你认为交流这些东西好吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Sexton <span class="dialogue-time">(00:08:31)</span>
+  </div>
+  <div class="dialogue-en">Well, 100%.</div>
+  <div class="dialogue-zh">嗯，100%。</div>
+</div>
+    <a href="https://lexfridman.com/james-sexton-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="michael-malice-and-yaron-brook.html" class="card" style="text-decoration:none">
+  <div class="card-title">Michael Malice and Yaron Brook: Ayn Rand, Human Nature, and Anarchy</div>
+  <div class="card-meta">Michael Malice and Yaron Brook</div>
+</a>
+<a href="albert-bourla.html" class="card" style="text-decoration:none">
+  <div class="card-title">Albert Bourla: Pfizer CEO</div>
+  <div class="card-meta">Albert Bourla</div>
+</a>
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

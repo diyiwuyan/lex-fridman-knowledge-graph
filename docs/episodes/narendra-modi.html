@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Narendra Modi - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Narendra Modi</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Narendra Modi</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/narendra-modi.html" style="font-size:16px;color:#818cf8;font-weight:600">Narendra Modi</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">24,511 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/narendra-modi-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">In this episode…<span class="zh-trans"> · 在这一集中……</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:07</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">9:19</span>
+  <span class="chapter-title">Fasting<span class="zh-trans"> · 禁食</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">21:38</span>
+  <span class="chapter-title">Early life<span class="zh-trans"> · 早期生活</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">33:33</span>
+  <span class="chapter-title">Advice to Young People<span class="zh-trans"> · 给年轻人的建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">39:16</span>
+  <span class="chapter-title">Journey in the Himalayas<span class="zh-trans"> · 喜马拉雅山之旅</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">50:45</span>
+  <span class="chapter-title">Becoming a monk<span class="zh-trans"> · 出家为僧</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">52:33</span>
+  <span class="chapter-title">RSS and Hindu nationalism<span class="zh-trans"> · RSS 和印度教民族主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:00:17</span>
+  <span class="chapter-title">Explaining India<span class="zh-trans"> · 解释印度</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:04:27</span>
+  <span class="chapter-title">Mahatma Gandhi<span class="zh-trans"> · 圣雄甘地</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:16:23</span>
+  <span class="chapter-title">Path to peace in Ukraine<span class="zh-trans"> · 乌克兰的和平之路</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:19:37</span>
+  <span class="chapter-title">India and Pakistan<span class="zh-trans"> · 印度和巴基斯坦</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:25:16</span>
+  <span class="chapter-title">Cricket and Football<span class="zh-trans"> · 板球和足球</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:29:41</span>
+  <span class="chapter-title">Donald Trump<span class="zh-trans"> · 唐纳德·特朗普</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:40:51</span>
+  <span class="chapter-title">China and Xi Jinping<span class="zh-trans"> · 中国和习近平</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:47:56</span>
+  <span class="chapter-title">Gujarat riots in 2002<span class="zh-trans"> · 2002年古吉拉特邦骚乱</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:03:33</span>
+  <span class="chapter-title">Biggest democracy in the world<span class="zh-trans"> · 世界上最大的民主国家</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:13:48</span>
+  <span class="chapter-title">Power<span class="zh-trans"> · 力量</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:18:34</span>
+  <span class="chapter-title">Hard work<span class="zh-trans"> · 努力工作</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:21:42</span>
+  <span class="chapter-title">Srinivasa Ramanujan<span class="zh-trans"> · 斯里尼瓦萨·拉马努金</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">india</span><span class="keyword-tag">modi</span><span class="keyword-tag">narendra</span><span class="keyword-tag">don</span><span class="keyword-tag">said</span><span class="keyword-tag">peace</span><span class="keyword-tag">minister</span><span class="keyword-tag">country</span><span class="keyword-tag">must</span><span class="keyword-tag">fasting</span><span class="keyword-tag">nation</span><span class="keyword-tag">human</span><span class="keyword-tag">gujarat</span><span class="keyword-tag">prime</span><span class="keyword-tag">truly</span><span class="keyword-tag">young</span><span class="keyword-tag">instead</span><span class="keyword-tag">moment</span><span class="keyword-tag">global</span><span class="keyword-tag">became</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"You see, the more open we are to new and different sources of knowledge, the more new ideas we’ll have. I think it’s important for us to clearly understand the difference between information and knowledge. Some people mistakenly confuse information with knowledge, carrying around large amounts of information, but I don’t believe information alone equals knowledge. Knowledge is something deeper. It gradually evolves through processing, reflection and understanding. Recognizing this difference is important in how we handle both. Decision-making process"</div>
+  <div class="quote-zh">你看，我们对新的和不同的知识来源越开放，我们就会有越多的新想法。我认为清楚地理解信息和知识之间的区别对我们来说很重要。有些人错误地将信息与知识混为一谈，携带大量信息，但我不认为信息本身就等于知识。知识是更深层次的东西。它通过加工、反思和理解逐渐演变。认识到这种差异对于我们如何处理两者非常重要。决策过程</div>
+  <div class="quote-meta">— Narendra Modi （02:23:10）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"“I couldn’t become a doctor so I was miserable and I was unhappy being a teacher, but now I realize as a teacher, I can create doctors.” Connecting your life to a greater purpose brings a sense of inspiration and meaning. I have always believed that God has given everyone unique capabilities. Never lose faith in your own abilities. You should always maintain trust in your own abilities. Keep believing in yourself and trust that when the opportunity comes, you’ll perform and you’ll succeed. That confidence makes a person deliver results."</div>
+  <div class="quote-zh">“我无法成为一名医生，所以我很痛苦，当一名老师时我也不开心，但现在我意识到作为一名老师，我可以创造医生。”将你的生活与更伟大的目标联系起来会带来灵感和意义。我一直相信上帝赋予了每个人独特的能力。永远不要对自己的能力失去信心。您应该始终对自己的能力保持信任。继续相信自己，相信当机会来临时，你会表现出色并取得成功。这种信心使一个人取得成果。</div>
+  <div class="quote-meta">— Narendra Modi （02:49:44）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"In other words, the path to understanding isn’t through rejection of the world, but through complete immersion in it. Those are my early steps in seeing the world through the lens of Eastern philosophy. But many of Hesse’s books had an impact on me. I would recommend to read Demian, when you are younger, Steppenwolf, when you are older, Siddhartha throughout your life, especially in moments of crisis, and The Glass Bead Game if you want to take on Hesse’s magnum opus, that rigorously explores the ways the human mind and human civilization can engage in the pursuit of knowledge, wisdom, and meaning."</div>
+  <div class="quote-zh">In other words, the path to understanding isn’t through rejection of the world, but through complete immersion in it.这些是我通过东方哲学的视角看世界的早期步骤。但黑塞的很多书都对我产生了影响。我建议你读《德米安》，当你年轻的时候，《荒原狼》，当你年长的时候，读悉达多的一生，尤其是在危机时刻，如果你想读黑塞的巨著，我建议你读《玻璃珠游戏》，该书严格探索了人类思想和人类文明如何追求知识、智慧和意义。</div>
+  <div class="quote-meta">— Siddhartha （03:15:13）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think sports have the power to energize the entire world. The spirit of sports brings people together across different nations. That’s why I would never want to see sports being discredited. I truly believe that sports play a major role in human evolution. They’re not just games, they connect people on a deeper level. Now, coming to the question of who’s better and who’s not, when it comes to techniques in sports, I’m not an expert. Only those who specialize in the technical aspects can judge which techniques are superior and who the best players really are. But sometimes the results speak for themselves. Just a few days ago, India and Pakistan played a match. The result reveals, which is the better team. That’s how we know."</div>
+  <div class="quote-zh">我认为体育有能力为整个世界注入活力。体育精神将不同国家的人们聚集在一起。这就是为什么我永远不想看到体育运动被抹黑。我坚信体育在人类进化中发挥着重要作用。它们不仅仅是游戏，它们在更深层次上将人们联系起来。现在，说到谁更好、谁​​不好的问题，当谈到运动技术时，我不是专家。 Only those who specialize in the technical aspects can judge which techniques are superior and who the best players really are.但有时结果不言而喻。就在几天前，印度和巴基斯坦进行了一场比赛。结果显示，哪支球队更好。我们就是这样知道的。</div>
+  <div class="quote-meta">— Narendra Modi （01:25:45）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Look, regarding your first point, when you humbly said that you don’t know what you’re doing, that you’re not good at this, I disagree and personally feel you’ve put in tremendous care. You’ve done extensive research and have dived deeply into every small detail. So I think you’ve done very well, and all the efforts you’ve put in during our conversation and in all your conversations are appreciated. And rather than simply interviewing me, I feel you’re trying to deeply understand India. That’s why I strongly feel there’s genuine honesty in your sincere effort to uncover the truth. And for that sincere approach, I genuinely congratulate you."</div>
+  <div class="quote-zh">你看，关于你的第一点，当你谦虚地说你不知道自己在做什么，你不擅长这个时，我不同意，并且个人觉得你付出了极大的关心。您进行了广泛的研究，并深入研究了每一个小细节。所以我认为你做得非常好，你在我们谈话期间以及所有谈话中所付出的所有努力都受到赞赏。我觉得你不是在简单地采访我，而是试图深入了解印度。这就是为什么我强烈地感觉到你为揭露真相所做的真诚努力是真诚的。对于这种真诚的态度，我真诚地祝贺你。</div>
+  <div class="quote-meta">— Narendra Modi （01:49:07）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Narendra Modi <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">My strength lies not in my name, but in the backing of 1.4 billion Indians and thousands of years of timeless culture and heritage. So wherever I go, I carry with me the essence of thousands of years of Vedic tradition, the timeless teachings of Swami Vivekananda and the blessings, dreams, and aspirations of 1.4 billion Indians. When I shake hands with the world leader, it’s not Modi, but 1.4 bill...</div>
+  <div class="dialogue-zh">我的力量不在于我的名字，而在于14亿印度人民和数千年永恒文化和遗产的支持。因此，无论我走到哪里，我都带着数千年吠陀传统的精髓、斯瓦米·维韦卡南达永恒的教义以及 14 亿印度人的祝福、梦想和愿望。当我与世界领导人握手时，握手的不是莫迪，而是1.4法案</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Narendra Modi <span class="dialogue-time">(00:01:06)</span>
+  </div>
+  <div class="dialogue-en">We seek neither to wage war against nature, nor to foster strife among nations. We stand for peace, and wherever we can act as peacemakers, we have gladly embraced that responsibility. My early life was spent in extreme poverty, but we never really felt the burden of poverty. You see, someone who is used to wearing fine shoes will feel their absence when they don’t have them, but for us, we had ne...</div>
+  <div class="dialogue-zh">我们既不寻求对自然发动战争，也不寻求煽动国家之间的冲突。我们主张和平，只要我们能够充当和平缔造者，我们就乐意承担这一责任。我的早年生活是在极度贫困中度过的，但我们从未真正感受到贫困的负担。你看，穿惯了好鞋的人，没了鞋就会觉得缺席，但对我们来说，我们就没有鞋了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Narendra Modi <span class="dialogue-time">(00:01:56)</span>
+  </div>
+  <div class="dialogue-en">When I became Prime Minister, I especially invited Pakistan to my swearing-in ceremony so we could turn over a new leaf, yet every noble attempt at fostering peace was met with hostility and betrayal. We sincerely hope that wisdom prevails upon them and they choose the path of peace. I believe even the people of Pakistan long for peace. Look, regarding what you said about criticism and how I deal ...</div>
+  <div class="dialogue-zh">当我成为总理时，我特别邀请巴基斯坦参加我的宣誓就职仪式，以便我们能够翻开新的一页，但每一次促进和平的崇高尝试都遭到了敌意和背叛。我们真诚地希望他们能够被智慧所左右，选择和平之路。我相信巴基斯坦人民也渴望和平。听着，关于你所说的批评以及我的应对方式</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:07)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Narendra Modi, the prime Minister of India. It was one of the most moving conversations and experiences of my life. Allow me here to say a few words about it. Please skip ahead straight to our conversation, if you like. Narendra Modi’s life story is incredible. He rose from poverty to lead a nation of 1.4 billion people, the biggest democracy in the world, wher...</div>
+  <div class="dialogue-zh">以下是与印度总理纳伦德拉·莫迪的对话。这是我一生中最感人的谈话和经历之一。请允许我在这里简单说几句。如果您愿意，请直接跳到我们的对话。纳伦德拉·莫迪的人生故事令人难以置信。他摆脱贫困，领导了一个拥有 14 亿人口的国家，这是世界上最大的民主国家，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:05)</span>
+  </div>
+  <div class="dialogue-en">So now more than ever, we need great leaders, great peacemakers who build bridges, not destroy them, who may preserve the identity of their nations, but still celebrate the common humanity of all of us, all people on earth. For this and many other reasons, this conversation with Prime Minister Modi was one of the most remarkable I’ve ever had. You may hear such words and think that I’m just enamor...</div>
+  <div class="dialogue-zh">因此，现在我们比以往任何时候都更需要伟大的领导人、伟大的和平缔造者，他们架起桥梁，而不是摧毁桥梁，他们可以维护自己国家的特性，但仍然颂扬我们所有人、地球上所有人的共同人性。出于这个原因和许多其他原因，与莫迪总理的这次谈话是我经历过的最引人注目的谈话之一。你可能听到这样的话，以为我只是倾情</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:57)</span>
+  </div>
+  <div class="dialogue-en">The whole point of all the conversations I’ve had in my life, on mic and off mic, is that I try to see and explore the full complexity of every human being, the good and the bad. I believe we’re all the same in a deep fundamental sense, all capable of good, all capable of evil, all carry stories of pain and stories of hope. Whether you’re a world leader or a truck driver, a coal miner, or a farmer...</div>
+  <div class="dialogue-zh">我一生中进行的所有对话（无论是在麦克风内还是在麦克风外）的全部要点是，我试图看到并探索每个人的全部复杂性，无论是好人还是坏人。我相信，从根本上来说，我们都是一样的，都有行善的能力，都有作恶的能力，都有痛苦的故事和希望的故事。无论您是世界领袖、卡车司机、煤矿工人还是农民</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:56)</span>
+  </div>
+  <div class="dialogue-en">It was a deeply personal human interaction characterized by warmth, kindness, humor, inner and outer peace, and absolute focus on the conversation between us in the present moment as if nothing else existed. I have heard from many people that he treats everyone he meets in this empathic way, no matter where they come from or what their position is in this world. So for those and many other reasons...</div>
+  <div class="dialogue-zh">这是一种深刻的人际互动，其特点是温暖、善良、幽默、内心和外在的平静，以及绝对专注于我们之间当下的对话，就好像什么都不存在一样。我从很多人那里听说，他以这种同理心的方式对待他遇到的每一个人，无论他们来自哪里，或者他们在这个世界上的地位如何。所以出于这些和许多其他原因</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:52)</span>
+  </div>
+  <div class="dialogue-en">On YouTube, you can switch between language audio tracks by clicking the settings gear icon and clicking audio track, and then selecting the language you prefer. For fully English overdub, select English. For fully Hindi overdub select Hindi, and to listen to the original mixed language version where I speak English and Prime Minister Modi speaks Hindi, please select Hindi Latin audio track, so yo...</div>
+  <div class="dialogue-zh">在 YouTube 上，您可以通过单击设置齿轮图标并单击音轨，然后选择您喜欢的语言来切换语言音轨。对于全英语配音，请选择英语。如需完整印地语配音，请选择印地语，要收听我说英语和莫迪总理说印地语的原始混合语言版本，请选择印地语拉丁语音轨，所以哟</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:41)</span>
+  </div>
+  <div class="dialogue-en">I promise that we will continue to work very hard to break down the barriers that language creates, and try to make these conversations as accessible as possible to everyone in the world. Anyway, let me pause one more time to say a big thank you. What a wild ride this life has been. It’s an honor for me to be on it with all of you. I love you all. This is the Lex Fridman podcast, and now, dear fri...</div>
+  <div class="dialogue-zh">我保证，我们将继续努力打破语言造成的障碍，并努力让世界上的每个人都能尽可能地进行这些对话。不管怎样，让我再暂停一下，向你们表示深深的感谢。这一生是多么疯狂啊。我很荣幸能和大家一起参与其中。我爱你们。这是 Lex Fridman 播客，现在，亲爱的朋友</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:19)</span>
+  </div>
+  <div class="dialogue-en">So, I should also say I’m fasting right now. It’s been almost two days, 45 hours, so just water, no food in honor of this conversation, just to get in the right mindset, get into the spiritual level. I’ve read that you often fast for many days. Can you explain why you fast, and where does your mind go when you fast?</div>
+  <div class="dialogue-zh">所以，我也应该说我现在正在禁食。已经过去了将近两天，45 个小时，所以为了纪念这次谈话，只喝了水，没有吃任何食物，只是为了进入正确的心态，进入精神层面。我听说你经常禁食很多天。您能解释一下为什么要禁食吗？禁食时您的思绪会去哪里？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Narendra Modi <span class="dialogue-time">(00:09:42)</span>
+  </div>
+  <div class="dialogue-en">First of all, I’m truly pleasantly surprised and honored that you’re fasting, all the more because it feels like you’re fasting as a tribute of respect for me. So, I express my deepest gratitude to you for doing this. In India, our religious traditions are actually a way of life. Our Supreme Court once gave a brilliant interpretation of Hinduism. They have stated that Hinduism is not about rituals...</div>
+  <div class="dialogue-zh">首先，我真的对你的禁食感到惊喜和荣幸，更重要的是，因为感觉你禁食是为了表达对我的尊重。因此，我对你们这样做表示最深切的感谢。在印度，我们的宗教传统实际上是一种生活方式。我们的最高法院曾经对印度教做出过精彩的解释。他们声称印度教与仪式无关</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Narendra Modi <span class="dialogue-time">(00:11:28)</span>
+  </div>
+  <div class="dialogue-en">If I put it in simple terms, or explain it to the viewers who are unfamiliar with India, it is a powerful tool to bring both the inner and outer self into balance. It shapes life in profound ways when you fast. You may have noticed, as you said, you’ve been fasting on water for two days. Every single one of your senses, especially smell, touch and taste, becomes highly sensitive. You may even noti...</div>
+  <div class="dialogue-zh">如果我简单地说，或者向不熟悉印度的观众解释一下，它是一个使内在和外在自我平衡的强大工具。当你禁食时，它会以深刻的方式塑造你的生活。正如您所说，您可能已经注意到，您已经禁水两天了。你的每一种感官，尤其是嗅觉、触觉和味觉，都会变得高度敏感。你甚至可能会注意到</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Narendra Modi <span class="dialogue-time">(00:14:07)</span>
+  </div>
+  <div class="dialogue-en">Before actually beginning the fast. I make sure to drink a lot of water, as much as possible. So, you could say that this detoxification process helps prepare my body in the best possible way. And once I begin fasting, for me, it’s an act of devotion. For me, fasting is a form of self-discipline. For me personally, even while I go about doing my daily activities during a fast, my mind remains deep...</div>
+  <div class="dialogue-zh">在真正开始禁食之前。我确保尽可能多地喝水。所以，你可以说这个排毒过程帮助我的身体以最好的方式做好准备。一旦我开始禁食，对我来说，这就是一种奉献的行为。对我来说，禁食是一种自律。就我个人而言，即使我在禁食期间进行日常活动，我的思想仍然很深刻</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Narendra Modi <span class="dialogue-time">(00:15:10)</span>
+  </div>
+  <div class="dialogue-en">During my school days, there was a movement inspired by Mahatma Gandhi’s vision, his vision of cow protection. The government had not enacted any laws at the time. At the time, people across the country observed a one-day fast by gathering in public places in silent protests. We were just kids, probably had just finished primary school. Something inside me said, “I should be part of this,” and tha...</div>
+  <div class="dialogue-zh">在我上学的时候，有一场运动受到圣雄甘地的愿景——他保护奶牛的愿景——的启发。当时政府尚未颁布任何法律。当时，全国各地的人们在公共场所聚集进行无声抗议，以庆祝一日斋戒。我们还只是孩子，可能刚刚读完小学。我内心深处的某个声音说：“我应该成为其中的一部分”</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Narendra Modi <span class="dialogue-time">(00:16:04)</span>
+  </div>
+  <div class="dialogue-en">So, I became convinced that fasting is a science far beyond just skipping meals. It is something far greater than that. Then gradually, I refined my body and mind through various experiments. Over time, it became a long and disciplined journey for me, and one thing is certain. Fasting never slows me down. I work just as much as usual. Sometimes I even work more. And another fascinating thing I’ve ...</div>
+  <div class="dialogue-zh">因此，我开始相信，禁食是一门科学，远远超出了不吃饭的范畴。它的意义远大于此。后来我通过各种实验逐渐完善了自己的身心。随着时间的推移，这对我来说变成了一次漫长而有纪律的旅程，有一点是肯定的。禁食永远不会让我放慢脚步。我和平常一样工作。有时我什至工作更多。还有一件让我着迷的事情</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:16:58)</span>
+  </div>
+  <div class="dialogue-en">So you still do meetings with world leaders, you still manage the affairs of India. You still carry out your role as a leader on the world stage, all fasted, and sometimes nine days?</div>
+  <div class="dialogue-zh">所以你仍然与世界领导人会面，你仍然管理印度的事务。您仍然在世界舞台上履行领导者的职责，全程禁食，有时甚至九天？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Narendra Modi <span class="dialogue-time">(00:17:14)</span>
+  </div>
+  <div class="dialogue-en">Well, this practice has a long historical context. I hope it may be interesting for those listening. There is an ancient tradition in India called Chaturmas. During the monsoon season, we know that the digestion tends to slow down, and so in this season, many people in India follow the practice of eating only a single meal within 24 hours. For me, this starts around mid-June and goes on until afte...</div>
+  <div class="dialogue-zh">其实这个做法是有很长的历史背景的。我希望听众会感兴趣。印度有一个古老的传统，叫做Chaturmas。在季风季节，我们知道消化速度会变慢，因此在这个季节，许多印度人遵循24小时内只吃一顿饭的做法。对我来说，这大约从六月中旬开始，一直持续到六月中旬之后</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Narendra Modi <span class="dialogue-time">(00:18:17)</span>
+  </div>
+  <div class="dialogue-en">During this time, I completely abstain from food and only drink hot water. Although drinking hot water has always been a part of my daily routine, my past lifestyle was such that I naturally developed this habit over time. Then in March or April, another Navratri occurs called Chaitra Navratri. This year, it will likely begin around March 31st. During this nine-day fast, I eat only one specific fr...</div>
+  <div class="dialogue-zh">这段时间我完全禁食，只喝热水。虽然喝热水一直是我日常生活的一部分，但我过去的生活方式使得我随着时间的推移自然而然地养成了这个习惯。然后在三月或四月，另一个九夜节发生，称为 Chaitra Navratri。今年，可能会在 3 月 31 日左右开始。在这九天的禁食期间，我只吃一种特定的食物</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:19:25)</span>
+  </div>
+  <div class="dialogue-en">Has there been times when you met with a world leader and completely fasted, and maybe what do they think about that? What do they think about your ability to do that kind of thing? And you’re right, I should mention that from even my two days, my ability to be present, my ability to sense everything, sharply focus on this experience is elevated. But yes, is there stories with a world leader that ...</div>
+  <div class="dialogue-zh">是否有过你会见世界领导人并完全禁食的时候，也许他们对此有何看法？他们对你做这种事的能力有何看法？你是对的，我应该提到，从我的两天开始，我的临场能力、我感知一切的能力、对这种体验的敏锐关注都得到了提升。但是，是的，有没有关于一位世界领导人的故事</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Narendra Modi <span class="dialogue-time">(00:19:55)</span>
+  </div>
+  <div class="dialogue-en">Well, most of the time I don’t even let people know about it. It’s my personal matter, so I never publicized it, but people gradually started finding out. It became known only after I became Chief Minister and Prime Minister. Otherwise, it was purely personal. But now that it’s out in the open, I don’t mind sharing. If someone asks, I tell them so it might be useful to them, because it’s not my pe...</div>
+  <div class="dialogue-zh">好吧，大多数时候我什至不让人们知道这件事。这是我个人的事情，所以我从来没有公开过，但是人们逐渐开始知道。这是我成为首席部长和总理后才为人所知的。否则，这纯粹是个人的。但现在它已经公开了，我不介意分享。如果有人问，我会告诉他们，这样这可能对他们有用，因为这不是我的作品</div>
+</div>
+    <a href="https://lexfridman.com/narendra-modi-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="ben-shapiro-destiny-debate.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ben Shapiro Destiny Debate</div>
+  <div class="card-meta">Ben Shapiro</div>
+</a>
+<a href="bernie-sanders.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bernie Sanders</div>
+  <div class="card-meta">Bernie Sanders</div>
+</a>
+<a href="bishop-robert-barron.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bishop Robert Barron: Christianity and the Catholic Church</div>
+  <div class="card-meta">Bishop Robert Barron</div>
+</a>
+<a href="book-1984-george-orwell.html" class="card" style="text-decoration:none">
+  <div class="card-title">Book 1984 George Orwell</div>
+  <div class="card-meta">Book 1984 George Orwell</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

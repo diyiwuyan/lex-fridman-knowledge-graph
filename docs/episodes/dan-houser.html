@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dan Houser - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Dan Houser</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Dan Houser</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/dan-houser.html" style="font-size:16px;color:#818cf8;font-weight:600">Dan Houser</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">32,743 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/dan-houser-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#14b8a622;color:#14b8a6;border:1px solid #14b8a644;font-size:13px;padding:4px 12px">游戏与虚拟世界</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:17</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:03</span>
+  <span class="chapter-title">Greatest films of all time<span class="zh-trans"> · 有史以来最伟大的电影</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">15:16</span>
+  <span class="chapter-title">Making video games<span class="zh-trans"> · 制作视频游戏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">18:07</span>
+  <span class="chapter-title">GTA 3<span class="zh-trans"> · 侠盗猎车手3</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">21:26</span>
+  <span class="chapter-title">Open world video games<span class="zh-trans"> · 开放世界视频游戏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">24:13</span>
+  <span class="chapter-title">Character creation<span class="zh-trans"> · 角色创作</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">27:40</span>
+  <span class="chapter-title">Superintelligent AI in A Better Paradise<span class="zh-trans"> · 超级智能人工智能共创美好天堂</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">36:52</span>
+  <span class="chapter-title">Can LLMs write video games?<span class="zh-trans"> · LLM 可以编写视频游戏吗？</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">41:12</span>
+  <span class="chapter-title">Creating GTA 4 and GTA 5<span class="zh-trans"> · 创建 GTA 4 和 GTA 5</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">52:47</span>
+  <span class="chapter-title">Hard work and Rockstar’s culture of excellence<span class="zh-trans"> · 努力工作和 Rockstar 的卓越文化</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">56:27</span>
+  <span class="chapter-title">GTA 6<span class="zh-trans"> · 侠盗猎车手6</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:13:17</span>
+  <span class="chapter-title">Red Dead Redemption 2<span class="zh-trans"> · 荒野大镖客：救赎 2</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:53:10</span>
+  <span class="chapter-title">DLCs for GTA and Red Dead Redemption<span class="zh-trans"> · GTA 和 Red Dead Redemption 的 DLC</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:59:29</span>
+  <span class="chapter-title">Leaving Rockstar Games<span class="zh-trans"> · 离开 Rockstar Games</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:08:53</span>
+  <span class="chapter-title">Greatest game of all time<span class="zh-trans"> · 有史以来最伟大的游戏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:13:41</span>
+  <span class="chapter-title">Life lessons from father<span class="zh-trans"> · 父亲的人生教训</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:15:59</span>
+  <span class="chapter-title">Mortality<span class="zh-trans"> · 死亡</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:33:18</span>
+  <span class="chapter-title">Advice for young people<span class="zh-trans"> · 给年轻人的建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:39:20</span>
+  <span class="chapter-title">Future of video games<span class="zh-trans"> · 视频游戏的未来</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">dan</span><span class="keyword-tag">houser</span><span class="keyword-tag">game</span><span class="keyword-tag">games</span><span class="keyword-tag">going</span><span class="keyword-tag">got</span><span class="keyword-tag">video</span><span class="keyword-tag">character</span><span class="keyword-tag">gta</span><span class="keyword-tag">red</span><span class="keyword-tag">dead</span><span class="keyword-tag">don</span><span class="keyword-tag">stuff</span><span class="keyword-tag">felt</span><span class="keyword-tag">interesting</span><span class="keyword-tag">story</span><span class="keyword-tag">didn</span><span class="keyword-tag">doing</span><span class="keyword-tag">better</span><span class="keyword-tag">fun</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Yes. I mean, I think there are two processes. I think the power and money corrupted him in the end as well, but I also think that there’s something fundamentally anti-human about people who want to build utopias or paradises or heavens, because what they’re saying is, “I like humans apart from the bad bits.” And I mean, I’m trying to be a pluralist who likes all kinds of people. And I think there’s a side where people are just hideous perfectionists, want to get rid of the rough and the nasty and the ugly and the dirty. And that’s a huge side of us. So I worry about those people. I find them, you know, it’s a different kind of sociopathic behavior."</div>
+  <div class="quote-zh">是的。我的意思是，我认为有两个过程。我认为权力和金钱最终也腐蚀了他，但我也认为那些想要建造乌托邦、天堂或天堂的人本质上是反人类的，因为他们所说的是，“我喜欢人类，除了不好的部分。”我的意思是，我正在努力成为一个喜欢各种各样的人的多元化主义者。我认为在另一方面，人们只是可怕的完美主义者，想要摆脱粗糙、肮脏、丑陋和肮脏。这是我们巨大的一面。所以我担心那些人。我发现他们，你知道，这是一种不同的反社会行为。</div>
+  <div class="quote-meta">— Dan Houser （00:32:40）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think story’s very important and very powerful, and when you combine the two successfully, you get the best of both worlds. But there is a tension always there. I think in a game like GTA IV, which I worked on and loved and I thought the story was great, but we got criticized because people felt there was almost too much story, and that meant you cared too much about Nico, and he wasn’t as effective an avatar in the open world. I think we probably got closest to reconciling them as perfectly as they can be done in Red Dead II, or when playing as Trevor in GTA V if you wanted to be crazy. I think those were when it really worked, the character, absolute freedom, because also you didn’t want… In any game, you don’t really want to compel the player."</div>
+  <div class="quote-zh">我认为故事非常重要，也非常强大，当你成功地将两者结合起来时，你就会两全其美。但紧张气氛始终存在。我想在像《GTA IV》这样的游戏中，我参与并喜欢它，我认为这个故事很棒，但我们受到了批评，因为人们觉得故事太多了，这意味着你太关心尼科了，而他在开放世界中的化身并不那么有效。我认为我们可能已经最接近于在 Red Dead II 中完美地协调它们，或者如果你想疯狂的话，在 GTA V 中扮演 Trevor 时也可以做到。我认为那些才是它真正发挥作用的时候，角色，绝对的自由，因为你也不想……在任何游戏中，你真的不想强迫玩家。</div>
+  <div class="quote-meta">— Dan Houser （00:23:04）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"How are they not like me? You know? And then slowly, what is it like to feel like a human being, you know? And then in most of these games, how much of a psychopath are they? How much of a sociopath are they? And what are their good qualities? What is going to give them humanity alongside that? What are they, what for them, apart from money, is worth dying for? And then you start to build it out from these kind of fundamental sides. And suddenly you go, “Okay, actually, I can start to feel…” And then how do they speak? You know, because fundamentally, it doesn’t really matter what’s going on in their head; they haven’t actually got one, but what they say is what’s going to make you realize who they are. Superintelligent AI in A Better Paradise"</div>
+  <div class="quote-zh">他们怎么不像我呢？你知道？然后慢慢地，感觉像一个人是什么感觉，你知道吗？那么在大多数这些游戏中，他们到底有多神经病呢？他们有多反社会？他们有哪些优秀品质？除此之外，什么会给他们人性呢？他们是什么，除了金钱之外，还有什么值得他们去死？然后你开始从这些基本方面构建它。突然你会说，“好吧，实际上，我开始感觉到……”然后他们怎么说话？你知道，因为从根本上来说，他们脑子里想的是什么并不重要；重要的是他们的想法。他们实际上没有一个，但他们所说的会让你意识到他们是谁。超级智能人工智能共创美好天堂</div>
+  <div class="quote-meta">— Dan Houser （00:26:52）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think they’ve possibly already done that in some ways. And certainly, as a business proposition, they’ve already done that. But I think that’s not… You know, as a way of telling stories, I think they’re better at telling certain kinds of stories, and films are better at other kinds of stories. You know, I think, I think if you want a long, discursive adventure, a video game is better. If you want a short, tight experience, a film is better. We always felt games were the coming medium. And so, spent 20 years saying, “Games are the future. Games are the future.” And, you know, being sneered at, then being laughed at, then having people nod their heads, and then it kind of happening. So I would…"</div>
+  <div class="quote-zh">我认为他们可能已经在某些方面做到了这一点。当然，作为一项商业主张，他们已经这样做了。但我认为这不是……你知道，作为一种讲故事的方式，我认为他们更擅长讲述某些类型的故事，而电影更擅长讲述其他类型的故事。你知道，我认为，如果你想要一场漫长的、散漫的冒险，电子游戏会更好。如果你想要短暂而紧凑的体验，电影会更好。我们一直认为游戏是即将到来的媒介。因此，花了 20 年的时间说：“游戏就是未来。游戏就是未来。”而且，你知道，被嘲笑，然后被嘲笑，然后人们点头，然后就发生了这种情况。所以我会……</div>
+  <div class="quote-meta">— Dan Houser （01:12:21）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Based on my fairly limited understanding of how language models work, if you’ve… They’re not going to, they’re not going to replace good ideas. They can’t really come up with good new ideas. What they can do is do low-level stuff. So I think it’s going to be harder for people to start out in some of these spaces. If you’re not a very good concept artist, you’re in a lot of trouble. If you have original ideas, I think you’re fine. But I think… I also think that they’ve done the sort of first 90% of the work to sound human, 95% possibly in some areas. The last 5% is going to end up being about 95% of the work."</div>
+  
+  <div class="quote-meta">— Dan Houser （00:38:22）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">You said that Red Dead Redemption 2, in your opinion, is the best thing you’ve ever done. I think there’s a strong case to be made that it’s the greatest game of all time. What are the elements that make that game truly great, do you think?</div>
+  <div class="dialogue-zh">您说过《荒野大镖客：救赎 2》在您看来是您做过的最好的事情。我认为有充分的理由证明这是有史以来最伟大的游戏。您认为是什么元素让这款游戏真正出色？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dan Houser <span class="dialogue-time">(00:00:12)</span>
+  </div>
+  <div class="dialogue-en">People searching for meaning within, amongst the violence. I think the West and all of the themes around the West really lend themselves to that. And then the gunplay was fantastic, and the horses were incredible. I think we got to spend, a smaller group of us, working on it from day one, coming up with some weird, wacky ideas that we got to embed in the game. And I think it was helpful that we go...</div>
+  <div class="dialogue-zh">人们在暴力中寻找内在的意义。我认为西方以及围绕西方的所有主题确实适合这一点。然后枪战非常精彩，马匹也令人难以置信。我认为我们必须花费一小部分人从第一天起就开始研究它，提出一些我们必须嵌入到游戏中的奇怪的想法。我认为我们去是有帮助的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:38)</span>
+  </div>
+  <div class="dialogue-en">You lock yourself in a room and get anchovies and onion pizza and Diet Cokes?</div>
+  <div class="dialogue-zh">你把自己锁在一个房间里，然后买凤尾鱼、洋葱披萨和健怡可乐？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dan Houser <span class="dialogue-time">(00:00:43)</span>
+  </div>
+  <div class="dialogue-en">Yes.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:43)</span>
+  </div>
+  <div class="dialogue-en">Is this accurate information?</div>
+  <div class="dialogue-zh">这是准确的信息吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dan Houser <span class="dialogue-time">(00:00:44)</span>
+  </div>
+  <div class="dialogue-en">Very accurate.</div>
+  <div class="dialogue-zh">非常准确。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:45)</span>
+  </div>
+  <div class="dialogue-en">Why do you think there was so much excitement about GTA IV, GTA V, and now GTA VI?</div>
+  <div class="dialogue-zh">您认为为什么《侠盗猎车手 IV》、《侠盗猎车手 V》和现在的《侠盗猎车手 VI》如此令人兴奋？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dan Houser <span class="dialogue-time">(00:00:50)</span>
+  </div>
+  <div class="dialogue-en">I think we did a really good job of constantly innovating. The games always felt different. People have very strong feelings, “I like this one.” “I didn’t like that one as much,” because they are pretty different. So you would, there would be simultaneously where you know what’s going to happen. It’s Grand Theft Auto, you know it’s going to be a game about being a criminal, but the way it’s going ...</div>
+  <div class="dialogue-zh">我认为我们在不断创新方面做得非常好。游戏总是给人不同的感觉。人们有非常强烈的感觉，“我喜欢这个”。 “我不太喜欢那个，”因为它们非常不同。所以你会同时知道会发生什么。这是《侠盗猎车手》，你知道这将是一款关于成为罪犯的游戏，但它的发展方式</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:08)</span>
+  </div>
+  <div class="dialogue-en">The number one question from the internet. It is so ridiculous, but I must ask. Have you seen Gavin?</div>
+  <div class="dialogue-zh">来自互联网的第一个问题。这真是太荒谬了，但我必须问。你见过加文吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:17)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Dan Houser, a legendary video game creator, co-founder of Rockstar Games, and the creative force behind Grand Theft Auto and Red Dead Redemption series, which includes some of the best-selling games of all time and some of the greatest games of all time. Both Red Dead Redemption 1 and 2 have some of the deepest, most complex, and heart-wrenching characters and ...</div>
+  <div class="dialogue-zh">以下是与传奇视频游戏创作者、Rockstar Games 联合创始人 Dan Houser 的对话，他也是 Grand Theft Auto 和 Red Dead Redemption 系列背后的创意力量，其中包括一些有史以来最畅销的游戏和一些有史以来最伟大的游戏。 《荒野大镖客：救赎 1》和《荒野大镖客 2》都拥有一些最深刻、最复杂、最令人心碎的角色，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:01)</span>
+  </div>
+  <div class="dialogue-en">That includes A Better Paradise, which is a dystopian near-future world with a super intelligent AI, American Caper, which is an insanely chaotic, violent, dark, satirical world, and Absurdiverse, which is a comedic action-adventure world. I’m excited to explore all three of these. I have spent hundreds of hours in worlds that Dan has helped create, so this conversation was an incredible honor for...</div>
+  <div class="dialogue-zh">其中包括《美好天堂》，这是一个拥有超级智能人工智能的反乌托邦近未来世界；《美国惊魂》，这是一个疯狂混乱、暴力、黑暗、讽刺的世界；以及《荒诞派》，这是一个喜剧动作冒险世界。我很高兴探索这三个方面。我在丹帮助创造的世界里度过了数百个小时，所以这次谈话对我来说是一种难以置信的荣誉</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:58)</span>
+  </div>
+  <div class="dialogue-en">And now, dear friends, here’s Dan Houser. Greatest films of all time</div>
+  <div class="dialogue-zh">现在，亲爱的朋友们，这是丹·豪瑟。有史以来最伟大的电影</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:03)</span>
+  </div>
+  <div class="dialogue-en">You’ve helped create some of the most incredible characters, stories, and open worlds in video game history. But when you grew up in the late ’70s and ’80s, open-world video games wasn’t a thing. So you’ve credited literature and film as early inspiration. So let’s talk about film first, if we can.</div>
+  <div class="dialogue-zh">您帮助创造了电子游戏历史上一些最令人难以置信的角色、故事和开放世界。但当你在 70 年代末和 80 年代长大时，开放世界电子游戏还不算什么。所以你认为文学和电影是早期的灵感来源。如果可以的话，让我们先谈谈电影。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dan Houser <span class="dialogue-time">(00:03:23)</span>
+  </div>
+  <div class="dialogue-en">Sure.</div>
+  <div class="dialogue-zh">当然。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:24)</span>
+  </div>
+  <div class="dialogue-en">What to you are some of the candidates for the greatest films of all time, maybe films that were highly influential on you? I mean, Godfather.</div>
+  <div class="dialogue-zh">对你来说，有史以来最伟大的电影的候选者，也许是对你影响很大的电影？我是说，教父。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dan Houser <span class="dialogue-time">(00:03:32)</span>
+  </div>
+  <div class="dialogue-en">Well, I think for me, probably Godfather II more than Godfather I, but I love both of them. But I love the divided story in Godfather II. And as a migrant, I used to live in Soho, I love the bits in Little Italy, and I love the sections in Sicily. So I think… And the Ellis Island bit is just one of the best shots in all of cinema. When you see little Vito turning up in Ellis Island and you get tha...</div>
+  <div class="dialogue-zh">好吧，我想对我来说，可能《教父 II》比《教父 I》更胜一筹，但我爱他们两个。但我喜欢《教父2》中分裂的故事。作为一名移民，我曾经住在苏荷区，我喜欢小意大利的那些地方，也喜欢西西里岛的那些地方。所以我认为……埃利斯岛的片段只是所有电影中最好的镜头之一。当你看到小维托出现在埃利斯岛时，你就会明白</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:04)</span>
+  </div>
+  <div class="dialogue-en">How much of the greatness of Godfather do you think is the writing? How much is the cinematography and how much is the acting? You got De Niro, you got young Pacino.</div>
+  <div class="dialogue-zh">你认为《教父》的伟大之处有多少是在于写作？摄影多少钱，表演多少钱？你有德尼罗，你有年轻的帕西诺。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dan Houser <span class="dialogue-time">(00:04:14)</span>
+  </div>
+  <div class="dialogue-en">Well, Coppola started as a screenwriter, so I think he wrote, at least co-wrote the script. So it’s almost like the writing and directing almost become the same thing. But it’s one of those films, both of them are those films, which I was thinking about this idea of a perfect film where everything’s good, where the acting’s seminal, where the writing’s seminal, where the music is seminal, where th...</div>
+  <div class="dialogue-zh">好吧，科波拉最初是一名编剧，所以我认为他写了，至少是共同写了剧本。所以写作和导演几乎变成了同一件事。 But it’s one of those films, both of them are those films, which I was thinking about this idea of a perfect film where everything’s good, where the acting’s seminal, where the writing’s seminal, where the music is seminal, where th</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:43)</span>
+  </div>
+  <div class="dialogue-en">What about the pacing? It is a bit slow. You have, you have movies like 2001 Space Odyssey, slow.</div>
+  <div class="dialogue-zh">节奏怎么样？有点慢。你有，你有像《2001太空漫游》这样的电影，速度很慢。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dan Houser <span class="dialogue-time">(00:04:49)</span>
+  </div>
+  <div class="dialogue-en">Yes.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+    <a href="https://lexfridman.com/dan-houser-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-huberman-4.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman #4</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="bishop-robert-barron.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bishop Robert Barron: Christianity and the Catholic Church</div>
+  <div class="card-meta">Bishop Robert Barron</div>
+</a>
+<a href="book-1984-george-orwell.html" class="card" style="text-decoration:none">
+  <div class="card-title">Book 1984 George Orwell</div>
+  <div class="card-meta">Book 1984 George Orwell</div>
+</a>
+<a href="brian-muraresku.html" class="card" style="text-decoration:none">
+  <div class="card-title">Brian Muraresku: The Secret History of Psychedelics</div>
+  <div class="card-meta">Brian Muraresku</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

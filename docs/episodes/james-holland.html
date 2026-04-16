@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>James Holland - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>James Holland</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">James Holland</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/james-holland.html" style="font-size:16px;color:#818cf8;font-weight:600">James Holland</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">36,257 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/james-holland-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#f9731622;color:#f97316;border:1px solid #f9731644;font-size:13px;padding:4px 12px">体育与武术</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:26</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:13</span>
+  <span class="chapter-title">World War II<span class="zh-trans"> · 第二次世界大战</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">11:11</span>
+  <span class="chapter-title">Lebensraum and Hitler ideology<span class="zh-trans"> · 生存空间和希特勒意识形态</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">18:23</span>
+  <span class="chapter-title">Operation Barbarossa<span class="zh-trans"> · 巴巴罗萨行动</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">34:36</span>
+  <span class="chapter-title">Hitler vs Europe<span class="zh-trans"> · 希特勒与欧洲</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">56:22</span>
+  <span class="chapter-title">Joseph Goebbels<span class="zh-trans"> · 约瑟夫·戈培尔</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:06:17</span>
+  <span class="chapter-title">Hitler before WW2<span class="zh-trans"> · 二战前的希特勒</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:11:12</span>
+  <span class="chapter-title">Hitler vs Chamberlain<span class="zh-trans"> · 希特勒与张伯伦</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:33:18</span>
+  <span class="chapter-title">Invasion of Poland<span class="zh-trans"> · 入侵波兰</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:37:55</span>
+  <span class="chapter-title">Molotov–Ribbentrop Pact<span class="zh-trans"> · 莫洛托夫-里宾特洛甫条约</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:45:56</span>
+  <span class="chapter-title">Winston Churchill<span class="zh-trans"> · 温斯顿·丘吉尔</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:09:56</span>
+  <span class="chapter-title">Most powerful military in WW2<span class="zh-trans"> · 二战中最强大的军事力量</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:32:18</span>
+  <span class="chapter-title">Tanks<span class="zh-trans"> · 坦克</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:42:17</span>
+  <span class="chapter-title">Battle of Stalingrad<span class="zh-trans"> · 斯大林格勒战役</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:55:09</span>
+  <span class="chapter-title">Concentration camps<span class="zh-trans"> · 集中营</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:04:40</span>
+  <span class="chapter-title">Battle of Normandy<span class="zh-trans"> · 诺曼底战役</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:18:32</span>
+  <span class="chapter-title">Lessons from WW2<span class="zh-trans"> · 二战的教训</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">going</span><span class="keyword-tag">james</span><span class="keyword-tag">holland</span><span class="keyword-tag">war</span><span class="keyword-tag">got</span><span class="keyword-tag">hitler</span><span class="keyword-tag">britain</span><span class="keyword-tag">don</span><span class="keyword-tag">germany</span><span class="keyword-tag">france</span><span class="keyword-tag">air</span><span class="keyword-tag">army</span><span class="keyword-tag">german</span><span class="keyword-tag">soviet</span><span class="keyword-tag">union</span><span class="keyword-tag">germans</span><span class="keyword-tag">doesn</span><span class="keyword-tag">doing</span><span class="keyword-tag">battle</span><span class="keyword-tag">british</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"They still do. If you just repeat, repeat, repeat over and over again, people will believe it. If you are a diehard Trump supporter, you want to believe that, you’ll believe everything he says. If you are a diehard Bernie Sanders man, you’re from the left. You’ll believe everything he says because it’s reinforcing what you already want to believe."</div>
+  <div class="quote-zh">他们仍然这样做。如果你只是重复、重复、一遍又一遍地重复，人们就会相信。如果你是特朗普的铁杆支持者，你愿意相信这一点，你就会相信他所说的一切。如果你是伯尼·桑德斯的顽固分子，那么你就是左派。你会相信他所说的一切，因为这强化了你已经想相信的事情。</div>
+  <div class="quote-meta">— James Holland （00:47:07）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And I think that’s something that’s so fascinating. I think, instinctively, I’m quite slapdash, I think. So I think I would’ve bought it literally. I don’t think it would have ended well for me. I’m just a bit careless."</div>
+  <div class="quote-zh">我认为这是非常令人着迷的事情。我认为，本能地，我觉得我很草率。所以我想我真的会买它。我认为这对我来说不会有好的结局。我只是有点粗心而已。</div>
+  <div class="quote-meta">— James Holland （00:09:10）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, I do agree with that. I think oversimplification of anything is a mistake. Life is nuanced. The past is nuanced. It’s okay to be proud about certain things, and it’s okay to be disgusted by other things. That’s absolutely fine. We have a complicated relationship with our past. It doesn’t need to be black and white, and life is not a straight line. And of course, the Allies made plenty of mistakes in World War II. Overall, I think they made the right calls. And I think one of the things that’s really interesting is I think that the Allies, for the most part, use their resources much more judiciously and sensibly than the Axis powers do. And good, because that means they prevail."</div>
+  <div class="quote-zh">嗯，我确实同意这一点。我认为任何事情过于简单化都是错误的。生活是微妙的。过去是微妙的。对某些事情感到自豪是可以的，对其他事情感到厌恶也是可以的。那绝对没问题。我们与过去有着复杂的关系。它不需要非黑即白，生活也不是一条直线。当然，盟军在第二次世界大战中犯了很多错误。总的来说，我认为他们做出了正确的决定。我认为真正有趣的事情之一是我认为同盟国在很大程度上比轴心国更明智地使用他们的资源。这很好，因为这意味着他们获胜了。</div>
+  <div class="quote-meta">— James Holland （02:05:42）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And I just think, where there’s war, there is always incredible human drama. And I think for most people, and certainly the true, in my case, you get drawn to the human drama of it. It’s that thought that, “Gosh, if I’d been 20 years old, how would I have dealt with it? Would I have been in the Army? Would I have been in the Air Force? Would I have been on a Royal Navy destroyer? Or how would I have coped with it? And how would I have dealt with that separation?”"</div>
+  <div class="quote-zh">我只是认为，哪里有战争，哪里就总会上演令人难以置信的人类戏剧。我认为对于大多数人来说，当然是真实的，就我而言，你会被其中的人性戏剧所吸引。就是这样的想法，“天哪，如果我是 20 岁，我会如何处理这一切？我会在陆军吗？我会在空军吗？我会在皇家海军驱逐舰上吗？或者我会如何应对它？我会如何处理这种分离？”</div>
+  <div class="quote-meta">— James Holland （00:02:44）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And the whole ideology is to crush this. Part of the way the Nazis think, the way Hitler thinks is there is a them, and there’s us. We are the whites, Northern European Aryans, we should be the master race. We’ve been threatened by a global Jewish Bolshevik plot. We’ve been stabbed in the back in 1918, at the end of the first World War. We need to have to overcome, this is an existential battle for future survival. It’s a terrible task that has befallen our generation, but we have to do this, we have to overcome this or else we have no future. We will be crushed. It’s absolutely cut and dry."</div>
+  <div class="quote-zh">整个意识形态就是要粉碎这一点。纳粹的部分思考方式，希特勒的思考方式是，有他们，也有我们。我们是白人，北欧雅利安人，我们应该是优等民族。我们受到全球犹太布尔什维克阴谋的威胁。 1918 年，第一次世界大战结束时，我们在背后被捅了一刀。我们需要克服，这是一场关乎未来生存的生存之战。这是我们这一代人面临的一项可怕的任务，但我们必须这样做，我们必须克服这个问题，否则我们就没有未来。我们会被压垮的。这绝对是切好的和干燥的。</div>
+  <div class="quote-meta">— James Holland （00:11:44）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Holland <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">And you see that manifest itself on D-Day, where you’ve got 6,939 vessels, of which there are 1,213 warships, 4,127 assault craft, 12,500 aircraft. 155,000 men landed, and dropped from the air, in a 24-hour period. It is phenomenal. It is absolutely phenomenal.</div>
+  <div class="dialogue-zh">你会在诺曼底登陆日看到这一点，那里有 6,939 艘舰艇，其中有 1,213 艘军舰、4,127 艘攻击艇和 12,500 架飞机。 24 小时内有 155,000 名士兵从空中着陆和空投。这是惊人的。这绝对是非凡的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:27)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with James Holland, a historian specializing in World War II, who has written a lot of amazing books on the subject, especially covering the Western front, often providing fascinating details at multiple levels of analysis, including strategic, operational, tactical, technological, and of course the human side, the personal accounts from the war.</div>
+  <div class="dialogue-zh">以下是与詹姆斯·霍兰德（James Holland）的对话，詹姆斯·霍兰德是一位专门研究二战的历史学家，他在这一主题上写了很多令人惊叹的书籍，尤其是有关西方战线的书籍，经常提供多个分析层面的引人入胜的细节，包括战略、作战、战术、技术，当然还有人性方面，以及战争的个人记录。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:51)</span>
+  </div>
+  <div class="dialogue-en">He also co-hosts a great podcast on World War II, called We Have Ways of Making You Talk. This is the Lex Fridman podcast. To support it, please check out our sponsors in the description, or at lex fridman.com/sponsors. And now, dear friends, here’s James Holland. World War II</div>
+  <div class="dialogue-zh">他还共同主持了一个关于二战的精彩播客，名为“我们有办法让你说话”。这是莱克斯·弗里德曼播客。如需支持，请在说明中查看我们的赞助商，或访问 lex fridman.com/sponsors。现在，亲爱的朋友们，这是詹姆斯·霍兰德。第二次世界大战</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:13)</span>
+  </div>
+  <div class="dialogue-en">In Volume One of the War in the West, your book series on World War II, you write, “The Second World War witnessed the deaths of more than 60 million people, from over 60 different countries. Entire cities were laid waste, national borders were redrawn, and many millions more people found themselves displaced. Over the past couple of decades, many of those living in the Middle East, or parts of Af...</div>
+  <div class="dialogue-zh">在您关于第二次世界大战的系列丛书《西方战争》第一卷中，您写道：“第二次世界大战见证了来自 60 多个不同国家的超过 6000 万人死亡。整个城市被夷为平地，国界被重新划定，还有数百万人发现自己流离失所。在过去的几十年里，许多人生活在中东或非洲部分地区。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:11)</span>
+  </div>
+  <div class="dialogue-en">So what to you makes World War II the biggest catastrophe in human drama in modern history, and maybe from a historian perspective, the most fascinating subject to study?</div>
+  <div class="dialogue-zh">那么，您认为是什么让第二次世界大战成为现代历史上人类戏剧中最大的灾难，也许从历史学家的角度来看，它是最令人着迷的研究课题呢？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Holland <span class="dialogue-time">(00:02:22)</span>
+  </div>
+  <div class="dialogue-en">The thing about World War II is, it really is truly global. It’s fought in deserts, it’s fought in the Arctic, it’s fought across oceans, it’s fought in the air, it’s in jungle, it’s in the hills, it is on the beaches, it’s also on the Russian steppe, and it’s also in Ukraine. So it’s that global nature of it.</div>
+  <div class="dialogue-zh">第二次世界大战的问题是，它确实是全球性的。它在沙漠中作战，在北极作战，在大洋彼岸作战，在空中作战，在丛林中作战，在山上作战，在海滩上作战，也在俄罗斯草原上作战，也在乌克兰作战。这就是它的全球性。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Holland <span class="dialogue-time">(00:02:44)</span>
+  </div>
+  <div class="dialogue-en">And I just think, where there’s war, there is always incredible human drama. And I think for most people, and certainly the true, in my case, you get drawn to the human drama of it. It’s that thought that, “Gosh, if I’d been 20 years old, how would I have dealt with it? Would I have been in the Army? Would I have been in the Air Force? Would I have been on a Royal Navy destroyer? Or how would I ha...</div>
+  <div class="dialogue-zh">我只是认为，哪里有战争，哪里就总会上演令人难以置信的人类戏剧。我认为对于大多数人来说，当然是真实的，就我而言，你会被其中的人性戏剧所吸引。就是这样的想法，“天哪，如果我是 20 岁，我会如何处理这一切？我会在陆军吗？我会在空军吗？我会在皇家海军驱逐舰上吗？或者我会如何</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Holland <span class="dialogue-time">(00:03:08)</span>
+  </div>
+  <div class="dialogue-en">I mean, I’ve interviewed people who were away for four years. I remember talking to a tank man from Liverpool in England called Sam Bradshaw, and he went away for four years. And when he came home, he’d been twice wounded, he’d been very badly wounded in North Africa, and then, he was shot in the neck in Italy, eventually got home.</div>
+  <div class="dialogue-zh">我的意思是，我采访过离开四年的人。我记得和一位来自英国利物浦的坦克手萨姆·布拉德肖（Sam Bradshaw）交谈过，他离开了四年。当他回家时，他已经两次受伤，在北非他受了很重的伤，然后，他在意大利颈部中弹，最终回到了家。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Holland <span class="dialogue-time">(00:03:27)</span>
+  </div>
+  <div class="dialogue-en">And when he came home, his mother had turned gray. His little baby sister, who had been 13 when he left, was now a young woman. His old school had been destroyed by Luftwaffe bombs. He didn’t recognize the place. And do you know what he did? He joined up again, went back out of Europe, and was one of the first people in Belsen, so …</div>
+  <div class="dialogue-zh">当他回到家时，他的母亲已经头发花白了。他离开时，他的小妹妹才 13 岁，现在已经是一位年轻女子了。他原来的学校被德国空军的炸弹摧毁了。他不认识这个地方。你知道他做了什么吗？他再次加入，离开欧洲，成为贝尔森的第一批人之一，所以……</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:49)</span>
+  </div>
+  <div class="dialogue-en">What was his justification for that, for joining right back?</div>
+  <div class="dialogue-zh">他加入右后卫的理由是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Holland <span class="dialogue-time">(00:03:52)</span>
+  </div>
+  <div class="dialogue-en">He just felt completely disconnected to home. He felt that the Gulf of time, his experiences had separated him from all the normalities of life, and he felt that the normalities of the life that he had known, before he’d gone away to war, had just been severed, in a really kind of cruel way, that he didn’t really feel he was able to confront at that particular point.</div>
+  <div class="dialogue-zh">他只是觉得与家完全脱节了。他觉得时间的深渊，他的经历把他与生活的所有常态分开，他觉得在他去参战之前，他所熟悉的生活的常态刚刚以一种非常残酷的方式被切断，他真的觉得在那个特定的时刻他无法面对。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Holland <span class="dialogue-time">(00:04:14)</span>
+  </div>
+  <div class="dialogue-en">But he decided to rejoin, couldn’t go back to the Third Royal Tank Regiment, so he went back to a different unit. It went from, kind of the Italian campaign, to the European theater. Didn’t see so much action at the end, but a lot of British troops, if you were in a certain division at a certain time, you know, ended up passing very close to Belsen, and you suddenly realize, “Okay, this was the ri...</div>
+  <div class="dialogue-zh">但他决定重新加入，无法回到皇家坦克第三团，所以他又回到了另一个部队。它从意大利战役转移到了欧洲战场。最后没有看到那么多行动，但是很多英国军队，如果你在某个时间在某个师，你知道，最后经过贝尔森非常近的地方，你突然意识到，“好吧，这就是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Holland <span class="dialogue-time">(00:04:55)</span>
+  </div>
+  <div class="dialogue-en">And I’ve always sort of, I think a lot about Sam. I mean, he’s no longer with us, but he was one of the first people that I interviewed, and I interviewed him at great length. And I know you like a long interview, Lex, and I totally, totally get that. Because when you have a long interview, you really start getting to the nuts and bolts of it.</div>
+  <div class="dialogue-zh">我总是想很多关于萨姆的事情。我的意思是，他已经不在我们身边了，但他是我最早采访的人之一，而且我对他进行了很长的采访。我知道你喜欢长时间的采访，莱克斯，我完全、完全明白。因为当你进行长时间的采访时，你才真正开始了解它的具体细节。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Holland <span class="dialogue-time">(00:05:14)</span>
+  </div>
+  <div class="dialogue-en">One of the frustrations, for me, when I’m looking at oral histories of Second World War vets is usually, they’re kind of, they’re put on YouTube, or they’re put on a museum website. They’re 30 minutes, an hour, if you’re lucky, and you’re just scratching the surface. You never really get to know it, and you feel that they’re just repeating kind of stuff they’ve read in books themselves after the w...</div>
+  <div class="dialogue-zh">对我来说，当我查看二战老兵的口述历史时，令人沮丧的事情之一通常是，它们被放在 YouTube 上，或者被放在博物馆网站上。时间是 30 分钟，如果你幸运的话，你只是触及了表面。你永远不会真正了解它，你会觉得他们只是在重复他们自己在书本上读过的东西。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Holland <span class="dialogue-time">(00:05:36)</span>
+  </div>
+  <div class="dialogue-en">I always leave, kind of feeling frustrated that I haven’t had a chance to kind of grill them on the kind of stuff that I would grill them on, if I was put in front of them.</div>
+  <div class="dialogue-zh">我总是离开，感到有点沮丧，因为我没有机会用我会烤的东西来烤它们，如果我放在他们面前的话。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:44)</span>
+  </div>
+  <div class="dialogue-en">So tank man. What was maybe the most epic, the most intense, or the most interesting story that he told you?</div>
+  <div class="dialogue-zh">所以坦克人。他给你讲过的最史诗般、最激烈或最有趣的故事是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Holland <span class="dialogue-time">(00:05:53)</span>
+  </div>
+  <div class="dialogue-en">Well, I do remember him telling me, funny enough, it’s not really about the conflict. I remember him telling me about the importance of letters, and there was this guy who, literally every few weeks, the post would arrive intermittently. There was no kind of regular post, so it was supposed to be regular, but it didn’t come around regularly. So you might suddenly, suddenly get a flurry of five, al...</div>
+  <div class="dialogue-zh">好吧，我确实记得他告诉我，这很有趣，这并不是真正的冲突。我记得他告诉我信件的重要性，而且有一个人，几乎每隔几周，就会断断续续地收到邮件。没有那种定期的帖子，所以它应该是定期的，但它并没有定期出现。所以你可能会突然突然得到五颗星</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Holland <span class="dialogue-time">(00:06:18)</span>
+  </div>
+  <div class="dialogue-en">But he said there was this guy in his tank, a member of a different tank troop. He was a good friend of his in the same squadron. You had British half squadrons for their armor, which is,Americans would have a company.</div>
+  <div class="dialogue-zh">但他说他的坦克里有一个人，是另一个坦克部队的成员。他是他在同一个中队的好朋友。英国有半个中队的装甲部队，也就是说，美国人有一个连。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:32)</span>
+  </div>
+  <div class="dialogue-en">I should say that in your book, one of the wonderful things you do is you use the correct term in the language for the particular army involved, whether it’s the German or the British or the American.</div>
+  <div class="dialogue-zh">我应该说，在你的书中，你所做的一件美妙的事情就是你在语言中为所涉及的特定军队使用了正确的术语，无论是德国、英国还是美国。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    James Holland <span class="dialogue-time">(00:06:42)</span>
+  </div>
+  <div class="dialogue-en">Well, that’s not to be pretentious. That’s really just because you’re dealing with so many numbers, and different units, and it can go over your head, and you can get sort of consumed by the detail, if you’re not careful. And as a reader, it can be very unsatisfying, because you just can’t keep pace with everything.</div>
+  <div class="dialogue-zh">好吧，这并不是自命不凡。这实际上只是因为你要处理如此多的数字和不同的单位，如果你不小心的话，它可能会超出你的头脑，你可能会被细节所消耗。作为一名读者，这可能会非常令人不满意，因为你无法跟上一切的步伐。</div>
+</div>
+    <a href="https://lexfridman.com/james-holland-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="craig-jones-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Craig Jones #2</div>
+  <div class="card-meta">Craig Jones</div>
+</a>
+<a href="ryan-hall-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ryan Hall: Solving Martial Arts from First Principles</div>
+  <div class="card-meta">Ryan Hall</div>
+</a>
+<a href="ryan-hall.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ryan Hall: Martial Arts and the Philosophy of Violence, Power, and Grace</div>
+  <div class="card-meta">Ryan Hall</div>
+</a>
+<a href="ai-sota-2026.html" class="card" style="text-decoration:none">
+  <div class="card-title">AI SOTA 2026</div>
+  <div class="card-meta">Sebastian Raschka</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

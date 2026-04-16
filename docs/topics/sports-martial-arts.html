@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>体育与武术 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link ">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link active">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">主题</a> <span>›</span>
+    <span>体育与武术</span>
+  </div>
+
+  <div class="topic-header" style="background:linear-gradient(135deg,#f9731622,#f9731611);border:1px solid #f9731644">
+    <h1 style="color:#f97316">体育与武术</h1>
+    <p>共 27 期节目涉及此主题</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🎙️ 相关节目</div>
+      <div class="ep-list">
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/ai-sota-2026.html">AI SOTA 2026</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Sebastian Raschka</div>
+    <div class="ep-topics"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/ai-sota-2026.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/ben-askren.html">Ben Askren: Wrestling and MMA</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Ben Askren</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/ben-askren.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/botez-sisters.html">Botez Sisters: Chess, Streaming, and Fame</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Botez Sisters</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/botez-sisters.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/craig-jones-2.html">Craig Jones #2</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Craig Jones</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/craig-jones-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/dan-gable.html">Dan Gable: Olympic Wrestling, Mental Toughness &amp; the Making of Champions</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Dan Gable</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/dan-gable.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/dana-white.html">Dana White</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Dana White</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/dana-white.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/deepseek-dylan-patel-nathan-lambert.html">Deepseek Dylan Patel Nathan Lambert</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Nathan Lambert</div>
+    <div class="ep-topics"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/deepseek-dylan-patel-nathan-lambert.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/devon-larratt.html">Devon Larratt: Arm Wrestling</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Devon Larratt</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/devon-larratt.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/georges-st-pierre-john-danaher-gordon-ryan.html">Georges St-Pierre, John Danaher &amp; Gordon Ryan: The Greatest of All Time</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Georges St-Pierre, John Danaher &amp; Gordon Ryan</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/georges-st-pierre-john-danaher-gordon-ryan.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/georges-st-pierre.html">Georges St-Pierre: The Science of Fighting</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Georges St-Pierre</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/georges-st-pierre.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/ian-goodfellow.html">Ian Goodfellow: Generative Adversarial Networks (GANs)</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Ian Goodfellow</div>
+    <div class="ep-topics"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144">AI 与机器学习</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/ian-goodfellow.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/james-holland.html">James Holland</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">James Holland</div>
+    <div class="ep-topics"><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644">历史与文明</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/james-holland.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jimmy-pedro.html">Jimmy Pedro: Judo and the Forging of Champions</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jimmy Pedro</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jimmy-pedro.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/joe-rogan.html">Joe Rogan: Conversations, Ideas, Love, Freedom &amp; The Joe Rogan Experience</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Joe Rogan</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/joe-rogan.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/john-clarke.html">John Clarke: The Art of Fighting and the Pursuit of Excellence</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">John Clarke</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/john-clarke.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/john-danaher.html">John Danaher: The Path to Mastery in Jiu Jitsu, Grappling, Judo, and MMA</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">John Danaher</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/john-danaher.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/josh-barnett.html">Josh Barnett: Philosophy of Violence, Power, and the Martial Arts</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Josh Barnett</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/josh-barnett.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/magnus-carlsen.html">Magnus Carlsen: Greatest Chess Player of All Time</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Magnus Carlsen</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/magnus-carlsen.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/neil-adams.html">Neil Adams</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Neil Adams</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/neil-adams.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/robert-rodriguez.html">Robert Rodriguez</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Robert Rodriguez</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/robert-rodriguez.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/ryan-hall-2.html">Ryan Hall: Solving Martial Arts from First Principles</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Ryan Hall</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/ryan-hall-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/ryan-hall.html">Ryan Hall: Martial Arts and the Philosophy of Violence, Power, and Grace</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Ryan Hall</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/ryan-hall.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/teddy-atlas.html">Teddy Atlas</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Teddy Atlas</div>
+    <div class="ep-topics"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/teddy-atlas.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/tom-brands.html">Tom Brands: Iowa Wrestling</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Tom Brands</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/tom-brands.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/travis-stevens.html">Travis Stevens: Judo, Olympics, and Mental Toughness</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Travis Stevens</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/travis-stevens.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/unknown.html">Unknown</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Unknown</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/unknown.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/zach-bitter.html">Zach Bitter: Ultramarathon Running</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Zach Bitter</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/zach-bitter.html" class="btn">阅读 →</a>
+  </div>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">doing</span><span class="keyword-tag">got</span><span class="keyword-tag">said</span><span class="keyword-tag">better</span><span class="keyword-tag">didn</span><span class="keyword-tag">guy</span><span class="keyword-tag">hard</span><span class="keyword-tag">put</span><span class="keyword-tag">best</span><span class="keyword-tag">person</span><span class="keyword-tag">training</span><span class="keyword-tag">human</span><span class="keyword-tag">fight</span><span class="keyword-tag">talk</span><span class="keyword-tag">doesn</span><span class="keyword-tag">able</span><span class="keyword-tag">match</span><span class="keyword-tag">interesting</span></div>
+      
+      <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:24px">💬 精彩语录</div>
+<div class="quote-block">
+  <div class="quote-text">"I think we will. I’m definitely a worrier both about AI and non-AI things, but humans do tend to find a way. I think that’s what humans are built for—to have community and find a way to figure out problems. And that’s what has gotten us to this point. I think the AI opportunity and related technologies is really big. I think that there are big social and political problems to help everybody understand that. I think that’s what we’re staring at a lot of right now; the world is a scary place, and AI is a very uncertain thing. And it takes a lot of work that is not necessarily building things. It’s like telling people and understanding people, things that the people building AI are historically not motivated or wanting to do."</div>
+  <div class="quote-meta">— Nathan Lambert</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And I think that’s the thing that’s probably more worrisome is human-machine amalgamations. This enables an individual human to have more impact on the world and that impact can be both positive and negative. Generally, humans have positive impacts on the world, at least societally, but it’s possible for individual humans to have such negative impacts. And AGI, at least as I think the labs define it, which is not a runaway sentient thing, but rather just something that can do a lot of tasks really efficiently amplifies the capabilities of someone causing extreme damage. But for the most part, I think it’ll be used for profit-seeking motives, which will increase the abundance and supply of things and therefore reduce suffering, right? That’s the goal."</div>
+  <div class="quote-meta">— Dylan Patel</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But if you think of big industries like pharmaceuticals, law, or finance, I do think they at some point will hire people from other frontier labs to build their in-house models on their proprietary data, which will be another unlock with pre-training that is currently not there. Because even if you wanted to, you can’t get that data—you can’t get access to clinical trials most of the time and these types of things. So I do think scaling in that sense might still be pretty much alive if you look at domain-specific applications, because right now we are just looking at general-purpose LLMs like ChatGPT, Anthropic, and so forth. They are just general purpose. They’re not even scratching the surface of what an LLM can do if it is really specifically trained and designed for a specific task."</div>
+  <div class="quote-meta">— Sebastian Raschka</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And the model also self-corrects, and that was, I think, the aha moment in the DeepSeek R1 paper. They called it the ‘aha moment’ because the model itself recognized it made a mistake and then said, “Ah, I did something wrong, let me try again.” I think that’s just so cool that this falls out of just giving it the correct answer and having it figure out how to do it—that it kind of does, in a sense, what a human would do. Although LLMs don’t think like humans, it’s a kind of interesting coincidence. And the nice side effect is it’s great for us humans to see these steps. It builds trust, and we can learn or double-check things."</div>
+  <div class="quote-meta">— Sebastian Raschka</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But I do think there’s certainly an aspect where the GPU trajectory was all planned. But on the other end, it’s also a lot of lucky coincidences or good intuition. Like the investment into, let’s say, biophysical simulations. I mean, I think it started with video games and then it just happened to be good at linear algebra because video games require a lot of linear algebra. And then you have the biophysical simulations. But still, I don’t think the master plan was AI. I think it just happened to be Alex Krizhevsky. So someone took these GPUs and said, “Hey, let’s try to train a neural network on that.” It happened to work really well and… …I think it only happened because you could purchase those GPUs."</div>
+  <div class="quote-meta">— Sebastian Raschka</div>
+</div>
+    </div>
+  </div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

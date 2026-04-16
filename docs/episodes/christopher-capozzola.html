@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Christopher Capozzola: World War I, Ideology, Propaganda, and Politics - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Christopher Capozzola: World War I, Ideology, Prop</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Christopher Capozzola: World War I, Ideology, Propaganda, and Politics</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/christopher-capozzola.html" style="font-size:16px;color:#818cf8;font-weight:600">Christopher Capozzola</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">19,902 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/christopher-capozzola" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <p style="color:#64748b;font-size:14px">暂无章节信息</p>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">war</span><span class="keyword-tag">don</span><span class="keyword-tag">history</span><span class="keyword-tag">states</span><span class="keyword-tag">american</span><span class="keyword-tag">united</span><span class="keyword-tag">ways</span><span class="keyword-tag">military</span><span class="keyword-tag">leaders</span><span class="keyword-tag">human</span><span class="keyword-tag">elections</span><span class="keyword-tag">conflict</span><span class="keyword-tag">germany</span><span class="keyword-tag">election</span><span class="keyword-tag">country</span><span class="keyword-tag">hitler</span><span class="keyword-tag">story</span><span class="keyword-tag">going</span><span class="keyword-tag">historian</span><span class="keyword-tag">media</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I think the American election system is fundamentally sound and reliable. And I think that the evidence"</div>
+  <div class="quote-zh">我认为美国的选举制度从根本上来说是健全、可靠的。我认为证据</div>
+  <div class="quote-meta">— Christopher Capozzola （1:25:34.760）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"diplomacy later, because diplomacy is failing now. That turns out not to be the case. Diplomacy fails,"</div>
+  <div class="quote-zh">稍后再进行外交，因为现在外交正在失败。事实证明并非如此。外交失败，</div>
+  <div class="quote-meta">— Christopher Capozzola （07:43.840）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"in many ways, modern war creates modern humanitarianism, and we can see that in the neutrality period."</div>
+  <div class="quote-zh">在很多方面，现代战争创造了现代人道主义，我们可以在中立时期看到这一点。</div>
+  <div class="quote-meta">— Christopher Capozzola （48:06.160）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"world and who will control the resources in Africa and Asia. And so by the time you get to the summer"</div>
+  <div class="quote-zh">世界以及谁将控制非洲和亚洲的资源。所以当你到了夏天的时候</div>
+  <div class="quote-meta">— Christopher Capozzola （01:50.160）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"of want to have a quick sort of lightning strike in some ways against France to kind of bring the war"</div>
+  <div class="quote-zh">想要以某种方式对法国进行快速闪电袭击以引发战争</div>
+  <div class="quote-meta">— Christopher Capozzola （08:28.240）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(00:00.000)</span>
+  </div>
+  <div class="dialogue-en">The lesson I would want everyone to take from the story of the First World War is that</div>
+  <div class="dialogue-zh">我希望每个人从第一次世界大战的故事中吸取的教训是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(00:10.640)</span>
+  </div>
+  <div class="dialogue-en">human life is not cheap. That all of the warring powers thought that just by throwing</div>
+  <div class="dialogue-zh">人命并不便宜。所有交战国都认为只要投掷</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(00:19.200)</span>
+  </div>
+  <div class="dialogue-en">more men and more material at the front, they would solve their political problems with military</div>
+  <div class="dialogue-zh">前线有更多的人和更多的物资，他们会用军事来解决政治问题</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(00:25.840)</span>
+  </div>
+  <div class="dialogue-en">force. And at the end of the day in 1918, one side did win that, but it didn&#39;t actually solve</div>
+  <div class="dialogue-zh">力量。 1918 年最终，一方确实赢得了胜利，但问题并没有真正解决</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(00:33.520)</span>
+  </div>
+  <div class="dialogue-en">any of those political problems. You said that World War I gave birth to the surveillance state</div>
+  <div class="dialogue-zh">任何这些政治问题。你说第一次世界大战催生了监视国家</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(00:37.920)</span>
+  </div>
+  <div class="dialogue-en">in the US. Can you explain? The following is a conversation with Christopher Capozzola,</div>
+  <div class="dialogue-zh">在美国。你能解释一下吗？以下是与克里斯托弗·卡波佐拉的对话，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(00:46.000)</span>
+  </div>
+  <div class="dialogue-en">a historian at MIT specializing in the history of politics and war in modern American history,</div>
+  <div class="dialogue-zh">麻省理工学院的历史学家，专门研究美国现代历史中的政治史和战争史，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(00:52.960)</span>
+  </div>
+  <div class="dialogue-en">especially about the role of World War I in defining the trajectory of the United States</div>
+  <div class="dialogue-zh">特别是关于第一次世界大战在定义美国发展轨迹方面的作用</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(00:57.840)</span>
+  </div>
+  <div class="dialogue-en">and our human civilization in the 20th and 21st centuries. This is the Lux Friedman podcast. To</div>
+  <div class="dialogue-zh">以及我们20世纪和21世纪的人类文明。这是勒克斯·弗里德曼的播客。到</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(01:04.800)</span>
+  </div>
+  <div class="dialogue-en">support it, please check out our sponsors in the description. And now, dear friends,</div>
+  <div class="dialogue-zh">支持它，请查看说明中的赞助商。现在，亲爱的朋友们，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(01:09.280)</span>
+  </div>
+  <div class="dialogue-en">here&#39;s Christopher Capozzola. Let&#39;s start with a big and difficult question. How did World War I</div>
+  <div class="dialogue-zh">请听克里斯托弗·卡波佐拉的报道。让我们从一个大而困难的问题开始。第一次世界大战是怎样发生的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(01:15.520)</span>
+  </div>
+  <div class="dialogue-en">start? On the one hand, World War I started because of a series of events in the summer of 1914,</div>
+  <div class="dialogue-zh">开始？一方面，第一次世界大战因1914年夏天的一系列事件而爆发，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(01:22.720)</span>
+  </div>
+  <div class="dialogue-en">and that brought the major powers of Europe into conflict with one another. But I actually think</div>
+  <div class="dialogue-zh">这导致了欧洲主要国家之间的冲突。但我其实觉得</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(01:28.640)</span>
+  </div>
+  <div class="dialogue-en">it&#39;s more useful to say that World War I started at least a generation earlier when rising powers,</div>
+  <div class="dialogue-zh">更有用的说法是，第一次世界大战至少早一代人开始，当时新兴大国，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(01:37.200)</span>
+  </div>
+  <div class="dialogue-en">particularly Germany, started devoting more and more of their resources toward military affairs</div>
+  <div class="dialogue-zh">特别是德国，开始将越来越多的资源投入军事事务</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(01:43.200)</span>
+  </div>
+  <div class="dialogue-en">and naval affairs. This sets off an arms race in Europe. It sets off a rivalry over the colonial</div>
+  <div class="dialogue-zh">和海军事务。这引发了欧洲的军备竞赛。它引发了对殖民地的竞争</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(01:50.160)</span>
+  </div>
+  <div class="dialogue-en">world and who will control the resources in Africa and Asia. And so by the time you get to the summer</div>
+  <div class="dialogue-zh">世界以及谁将控制非洲和亚洲的资源。所以当你到了夏天的时候</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(01:56.320)</span>
+  </div>
+  <div class="dialogue-en">of 1914, and in a lot of ways I say the war has already begun, and this is just the match that</div>
+  <div class="dialogue-zh">1914 年，从很多方面来说，我说战争已经开始，而这正是这场比赛</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(02:02.000)</span>
+  </div>
+  <div class="dialogue-en">lights the flame. So the capacity for war was brewing within like the leaders and within the</div>
+  <div class="dialogue-zh">点燃火焰。因此，战争的能力正在像领导人和政府内部酝酿。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Christopher Capozzola <span class="dialogue-time">(02:08.240)</span>
+  </div>
+  <div class="dialogue-en">populace. They started accepting sort of slowly through the culture propagated this idea that</div>
+  <div class="dialogue-zh">民众。他们开始慢慢地接受通过文化传播的这种想法</div>
+</div>
+    <a href="https://lexfridman.com/christopher-capozzola" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a>
+<a href="cenk-uygur.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cenk Uygur</div>
+  <div class="card-meta">Cenk Uygur</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

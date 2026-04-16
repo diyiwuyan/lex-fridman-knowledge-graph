@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Volodymyr Zelenskyy - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Volodymyr Zelenskyy</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Volodymyr Zelenskyy</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/volodymyr-zelenskyy.html" style="font-size:16px;color:#818cf8;font-weight:600">Volodymyr Zelenskyy</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">26,715 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/volodymyr-zelenskyy-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:29</span>
+  <span class="chapter-title">Introductory words from Lex<span class="zh-trans"> · Lex 的介绍性文字</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">13:55</span>
+  <span class="chapter-title">Language<span class="zh-trans"> · 语言</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">23:44</span>
+  <span class="chapter-title">World War II<span class="zh-trans"> · 第二次世界大战</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:32</span>
+  <span class="chapter-title">Invasion on Feb 24, 2022<span class="zh-trans"> · 2022 年 2 月 24 日入侵</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">47:07</span>
+  <span class="chapter-title">Negotiating Peace<span class="zh-trans"> · 和平谈判</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:07:24</span>
+  <span class="chapter-title">NATO and security guarantees<span class="zh-trans"> · 北约和安全保证</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:20:17</span>
+  <span class="chapter-title">Sitting down with Putin and Trump<span class="zh-trans"> · 与普京和特朗普坐在一起</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:39:47</span>
+  <span class="chapter-title">Compromise and leverage<span class="zh-trans"> · 妥协与杠杆</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:45:15</span>
+  <span class="chapter-title">Putin and Russia<span class="zh-trans"> · 普京与俄罗斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:55:07</span>
+  <span class="chapter-title">Donald Trump<span class="zh-trans"> · 唐纳德·特朗普</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:05:39</span>
+  <span class="chapter-title">Martial Law and Elections<span class="zh-trans"> · 戒严法和选举</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:17:58</span>
+  <span class="chapter-title">Corruption<span class="zh-trans"> · 腐败</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:26:44</span>
+  <span class="chapter-title">Elon Musk<span class="zh-trans"> · 埃隆·马斯克</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:30:47</span>
+  <span class="chapter-title">Trump Inauguration on Jan 20<span class="zh-trans"> · 特朗普1月20日就职典礼</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:33:55</span>
+  <span class="chapter-title">Power dynamics in Ukraine<span class="zh-trans"> · 乌克兰的权力动态</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:37:27</span>
+  <span class="chapter-title">Future of Ukraine<span class="zh-trans"> · 乌克兰的未来</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:42:09</span>
+  <span class="chapter-title">Choice of language<span class="zh-trans"> · 语言选择</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:51:39</span>
+  <span class="chapter-title">Podcast prep and research process<span class="zh-trans"> · 播客准备和研究过程</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:00:04</span>
+  <span class="chapter-title">Travel and setup<span class="zh-trans"> · 旅行和设置</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">zelenskyy</span><span class="keyword-tag">war</span><span class="keyword-tag">volodymyr</span><span class="keyword-tag">ukraine</span><span class="keyword-tag">russian</span><span class="keyword-tag">putin</span><span class="keyword-tag">president</span><span class="keyword-tag">trump</span><span class="keyword-tag">important</span><span class="keyword-tag">don</span><span class="keyword-tag">language</span><span class="keyword-tag">security</span><span class="keyword-tag">nato</span><span class="keyword-tag">states</span><span class="keyword-tag">united</span><span class="keyword-tag">said</span><span class="keyword-tag">europe</span><span class="keyword-tag">russia</span><span class="keyword-tag">guarantees</span><span class="keyword-tag">money</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Yeah. So this is very good. And we also have our Diia. This is the name for all of these services. So I think that is the most important. This is, again, this is not only convenient, that will cancel any possibilities for future corruption because you don’t have any personal connections with people in the government or elsewhere. So you are just on your phone or any other device. That’s it. And I think we are doing very well. We are the best in Europe. All of Europe recognizes it. Some countries of the African Union asked us to provide this, the same service and we will do it after the war immediately. And I think that we can bring money to Ukraine from this. And I think what we also need, we need a tax reform. I think it will be very important for the businesses to return."</div>
+  <div class="quote-zh">是的。所以这非常好。我们还有我们的 Diia。这是所有这些服务的名称。所以我认为这是最重要的。再说一次，这不仅方便，而且会消除未来腐败的任何可能性，因为你与政府或其他地方的人没有任何个人联系。所以您只需使用手机或任何其他设备即可。就是这样。我认为我们做得很好。我们是欧洲最好的。全欧洲都承认这一点。非洲联盟的一些国家要求我们提供同样的服务，我们将在战后立即提供。我认为我们可以由此为乌克兰带来资金。我认为我们还需要的是税收改革。我认为企业的回归非常重要。</div>
+  <div class="quote-meta">— Volodymyr Zelenskyy （02:37:47）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yes, so it’s a very, very, very important and sensitive moment. The message is that we are not one nation. We are not the same country. We’re different countries. Yes, different countries, and I think what is most important is what we’re talking about, not how we’re speaking about it. This is what I think. You are a smart guy, so you have a lot of experience in dialogue of this kind. That’s why I think you will understand me. Yeah. Anyway, I think it is far better for Donald Trump to hear my English, not my Russian."</div>
+  <div class="quote-zh">是的，所以这是一个非常非常重要和敏感​​的时刻。传达的信息是我们不是一个国家。我们不是同一个国家。我们是不同的国家。是的，不同的国家，我认为最重要的是我们在谈论什么，而不是我们如何谈论它。我是这么想的。你是个聪明人，所以你在这类对话方面有很多经验。这就是为什么我认为你会理解我的。是的。不管怎样，我认为唐纳德·特朗普听我的英语比听我的俄语要好得多。</div>
+  <div class="quote-meta">— Volodymyr Zelenskyy （00:18:38）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"First of all, they have to understand the idea of Putin’s war. It is very important for him. I consider this process. I think it is very important for him not to give Ukraine independence. To prevent Ukraine from developing as an independent country for him, influence. Influence on Ukraine cannot be lost. And four, for him, it is like… I think for him, this is such a goal in this last mile and certainly for him, the last mile and of his political life. And I think that this is the goal for him. The second story, I do not want to talk about these banalities that he wants to return all the territories of the Soviet Union influence over them. He does this little by little."</div>
+  <div class="quote-zh">首先，他们必须了解普京战争的理念。这对他来说非常重要。我考虑这个过程。我认为不让乌克兰独立对他来说非常重要。为了阻止乌克兰发展成为一个独立国家，对他来说影响力很大。对乌克兰的影响力不能丧失。第四，对他来说，这就像……我认为对他来说，这是最后一英里的目标，当然对他来说，这是他政治生活的最后一英里。我认为这就是他的目标。第二个故事，我不想谈论这些陈词滥调，他想归还苏联对他们的所有领土的影响力。他一点一点地这样做。</div>
+  <div class="quote-meta">— Volodymyr Zelenskyy （01:59:13）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Do you honestly think anyone could steal weapons by the truckload when we ourselves don’t have enough on the front lines and yet we have to provide proof to defend ourselves? Because when there’s an abundance of such misinformation, distrust starts to grow. And you’re right, people listen to various media outlets, see this and lose faith in you. In the end, you lose trust and with it you lose support. Therefore, believe me, we are fighting more against disinformation than against particular cases, although I still emphasize once again at the everyday level, such things are still important. We catch these people and we fight them."</div>
+  <div class="quote-zh">你真的认为当我们自己在前线没有足够的武器而我们却必须提供证据来保卫自己时，有人可以偷走一卡车的武器吗？因为当此类错误信息大量存在时，不信任就会开始增长。你是对的，人们听各种媒体报道，看到这一点并对你失去信心。最终，你失去了信任，也失去了支持。因此，相信我，我们更多地是在打击虚假信息，而不是针对特定案件，尽管我仍然在日常层面再次强调，这些事情仍然很重要。我们抓住这些人并与他们战斗。</div>
+  <div class="quote-meta">— Volodymyr Zelenskyy （00:01:34）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, firstly, the war actually started earlier. It started here in Ukraine. Kyiv was bombed as you quoted, but the war had already begun before that. And I think I perceived it as a start of the full-scale invasion. Well, I think it’s hard to understand why nobody wants to listen, look at and analyze history. War, the rise of fascism and Nazism, the emergence of Hitler, Goebbels, and their entire team at the time, this wasn’t just about one party or even one country. It was essentially a wave. A wave of hatred, a wave of one race, one race above the rest."</div>
+  <div class="quote-zh">嗯，首先，战争实际上开始得更早。它始于乌克兰。正如您引用的那样，基辅遭到轰炸，但战争在此之前就已经开始了。我想我认为这是全面入侵的开始。嗯，我认为很难理解为什么没有人愿意倾听、观察和分析历史。战争，法西斯主义和纳粹主义的崛起，希特勒、戈培尔以及他们当时的整个团队的出现，这不仅仅是一个政党甚至一个国家的问题。这本质上是一波浪潮。仇恨的浪潮，一个种族的浪潮，一个高于其他种族的浪潮。</div>
+  <div class="quote-meta">— Volodymyr Zelenskyy （00:30:05）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">I hope the Kyiv Airport will open soon then it will be easier to fly in.</div>
+  <div class="dialogue-zh">我希望基辅机场尽快开放，这样乘飞机会更方便。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Volodymyr Zelenskyy <span class="dialogue-time">(00:00:05)</span>
+  </div>
+  <div class="dialogue-en">Yes. I think that the war will end and President Trump may be the first leader to travel here by airplane. I think it would be symbolic by airplane.</div>
+  <div class="dialogue-zh">是的。我认为战争将会结束，特朗普总统可能是第一个乘飞机来这里的领导人。我认为飞机是具有象征意义的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:16)</span>
+  </div>
+  <div class="dialogue-en">Again, January 25th around that date, right. Flying in, meeting the Air Force One.</div>
+  <div class="dialogue-zh">还是那一天，1 月 25 日左右，对吧。飞来，与空军一号会面。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Volodymyr Zelenskyy <span class="dialogue-time">(00:00:21)</span>
+  </div>
+  <div class="dialogue-en">That would be cool.</div>
+  <div class="dialogue-zh">那会很酷。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:23)</span>
+  </div>
+  <div class="dialogue-en">There is a perception of corruption. People like Donald Trump and Elon Musk really care about fighting corruption. What can you say to them to gain their trust that the money is going towards this fight for freedom, towards the war effort?</div>
+  <div class="dialogue-zh">有一种腐败的感觉。像唐纳德·特朗普和埃隆·马斯克这样的人非常关心打击腐败。你能对他们说些什么来赢得他们的信任，让他们相信这些钱将用于这场争取自由的斗争，用于战争的努力？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Volodymyr Zelenskyy <span class="dialogue-time">(00:00:41)</span>
+  </div>
+  <div class="dialogue-en">In most of cases, we did not receive money, we received weapons. And where we saw risks that something could be happening with weapons, we cracked down hard on everyone. And believe me, this is not only about Ukraine. Everywhere along the supply chain, there are some or other people and companies who want to make money, they try to make money on the war. We did not profit from the war. If we caugh...</div>
+  <div class="dialogue-zh">在大多数情况下，我们没有收到钱，而是收到了武器。当我们看到武器可能发生问题的风险时，我们就会严厉打击所有人。相信我，这不仅仅与乌克兰有关。供应链上到处都有一些人和公司想要赚钱，他们试图通过战争赚钱。我们没有从战争中获利。如果我们抓住</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Volodymyr Zelenskyy <span class="dialogue-time">(00:01:34)</span>
+  </div>
+  <div class="dialogue-en">Do you honestly think anyone could steal weapons by the truckload when we ourselves don’t have enough on the front lines and yet we have to provide proof to defend ourselves? Because when there’s an abundance of such misinformation, distrust starts to grow. And you’re right, people listen to various media outlets, see this and lose faith in you. In the end, you lose trust and with it you lose supp...</div>
+  <div class="dialogue-zh">你真的认为当我们自己在前线没有足够的武器而我们却必须提供证据来保卫自己时，有人可以偷走一卡车的武器吗？因为当此类错误信息大量存在时，不信任就会开始增长。你是对的，人们听各种媒体报道，看到这一点并对你失去信心。最终，你失去了信任，也就失去了支持</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Volodymyr Zelenskyy <span class="dialogue-time">(00:02:22)</span>
+  </div>
+  <div class="dialogue-en">… as if Putin wants to sit down and talk, but Ukraine does not. This is not true.</div>
+  <div class="dialogue-zh">……就好像普京想坐下来谈谈，但乌克兰不想。这不是真的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:31)</span>
+  </div>
+  <div class="dialogue-en">I think that yes, he is in fact ready to talk.</div>
+  <div class="dialogue-zh">我认为是的，他实际上已经准备好说话了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Volodymyr Zelenskyy <span class="dialogue-time">(00:02:35)</span>
+  </div>
+  <div class="dialogue-en">Did you talk to him?</div>
+  <div class="dialogue-zh">你跟他说话了吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:36)</span>
+  </div>
+  <div class="dialogue-en">On the phone or what?</div>
+  <div class="dialogue-zh">打电话还是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Volodymyr Zelenskyy <span class="dialogue-time">(00:02:37)</span>
+  </div>
+  <div class="dialogue-en">How do you normally talk to him?</div>
+  <div class="dialogue-zh">你平时怎么跟他说话？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:39)</span>
+  </div>
+  <div class="dialogue-en">I don’t know. Normally by the sea, the same as with you. He invites you to the sea with me, just the three of us.</div>
+  <div class="dialogue-zh">我不知道。通常在海边，和你一样。他邀请你和我一起去海边，只有我们三个人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Volodymyr Zelenskyy <span class="dialogue-time">(00:02:45)</span>
+  </div>
+  <div class="dialogue-en">No, no. One of us may drown.</div>
+  <div class="dialogue-zh">不，不。我们中的一个人可能会被淹死。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:48)</span>
+  </div>
+  <div class="dialogue-en">Who? Are you good at swimming?</div>
+  <div class="dialogue-zh">WHO？你擅长游泳吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Volodymyr Zelenskyy <span class="dialogue-time">(00:02:49)</span>
+  </div>
+  <div class="dialogue-en">Yes, I’m a good swimmer.</div>
+  <div class="dialogue-zh">是的，我是一个很好的游泳运动员。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:50)</span>
+  </div>
+  <div class="dialogue-en">You’re a good swimmer. Well, if you think that the President of a country is completely crazy, it is really hard to come to an agreement with him. You have to look at him as a serious person who loves his country and loves the people in his country, and he conducts, yes, destructive military actions-</div>
+  <div class="dialogue-zh">你是一个很好的游泳运动员。好吧，如果你认为一个国家的总统完全疯了，那真的很难与他达成一致。你必须把他视为一个认真的人，热爱他的国家，热爱他的国家的人民，他进行了，是的，破坏性的军事行动——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Volodymyr Zelenskyy <span class="dialogue-time">(00:03:10)</span>
+  </div>
+  <div class="dialogue-en">Who are you talking about now? Who loves his country?</div>
+  <div class="dialogue-zh">你现在在说谁？谁爱他的国家？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:12)</span>
+  </div>
+  <div class="dialogue-en">Putin. Do you think he doesn’t love his country?</div>
+  <div class="dialogue-zh">普京。你认为他不爱他的国家吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Volodymyr Zelenskyy <span class="dialogue-time">(00:03:16)</span>
+  </div>
+  <div class="dialogue-en">No. What is his country? He happened to consider Ukraine, his country. What is his country?</div>
+  <div class="dialogue-zh">不，他是哪个国家的？他碰巧将乌克兰视为他的国家。他的国家是什么？</div>
+</div>
+    <a href="https://lexfridman.com/volodymyr-zelenskyy-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a>
+<a href="cenk-uygur.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cenk Uygur</div>
+  <div class="card-meta">Cenk Uygur</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

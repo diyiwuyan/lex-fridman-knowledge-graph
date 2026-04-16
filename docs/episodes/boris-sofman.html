@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boris Sofman: Waymo, Cozmo, Self-Driving Cars, and the Future of Robotics - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Boris Sofman: Waymo, Cozmo, Self-Driving Cars, and</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Boris Sofman: Waymo, Cozmo, Self-Driving Cars, and the Future of Robotics</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/boris-sofman.html" style="font-size:16px;color:#818cf8;font-weight:600">Boris Sofman</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">34,606 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/boris-sofman" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <p style="color:#64748b;font-size:14px">暂无章节信息</p>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">human</span><span class="keyword-tag">going</span><span class="keyword-tag">robotics</span><span class="keyword-tag">don</span><span class="keyword-tag">waymo</span><span class="keyword-tag">cosmo</span><span class="keyword-tag">driving</span><span class="keyword-tag">character</span><span class="keyword-tag">interesting</span><span class="keyword-tag">autonomous</span><span class="keyword-tag">robot</span><span class="keyword-tag">space</span><span class="keyword-tag">hard</span><span class="keyword-tag">trucking</span><span class="keyword-tag">challenges</span><span class="keyword-tag">forth</span><span class="keyword-tag">truck</span><span class="keyword-tag">obviously</span><span class="keyword-tag">incredible</span><span class="keyword-tag">company</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"That&#39;s true. And it&#39;s interesting because it is very intentional to go really far away from human form when you think about a character like Cosmo or like WALLY where you can completely rethink the constraints you put on that character,"</div>
+  <div class="quote-zh">这是真的。这很有趣，因为当你想到像科斯莫或沃利这样的角色时，你可以完全重新思考你对该角色施加的限制，这是非常有意远离人类形态的，</div>
+  <div class="quote-meta">— Boris Sofman （03:16.000）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So and the interesting thing about Waymo is because there&#39;s the passenger vehicle, the human, the transportation of humans and transportation of goods, you could see over time, they may kind of meld together more because you&#39;ll probably have like zero occupancy vehicles moving around."</div>
+  <div class="quote-zh">因此，Waymo 的有趣之处在于，因为有客运车辆、人员、人员运输和货物运输，随着时间的推移，您可能会看到，它们可能会更多地融合在一起，因为您可能会有零载客车辆在四处移动。</div>
+  <div class="quote-meta">— Boris Sofman （1:32:40.000）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So there&#39;s perception, there&#39;s planning, there&#39;s human robot interaction. To me, what&#39;s fascinating about what Tesla is doing is in this march towards level four, because it&#39;s in the hands of so many humans, you get to see video, you get to see humans."</div>
+  <div class="quote-zh">所以有感知、有计划、有人机交互。对我来说，特斯拉正在做的事情的迷人之处在于迈向第四级，因为它掌握在如此多的人类手中，你可以看到视频，你可以看到人类。</div>
+  <div class="quote-meta">— Boris Sofman （2:12:32.000）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And what it takes to have a robot that interacts with other humans in the world. And that&#39;s like, to me, one of the most interesting problems humans have ever undertaken because you&#39;re in trying to create an intelligent agent that operates in a human world."</div>
+  <div class="quote-zh">以及如何才能拥有一个能够与世界上其他人类互动的机器人。对我来说，这就像人类有史以来最有趣的问题之一，因为你正在尝试创建一个在人类世界中运行的智能代理。</div>
+  <div class="quote-meta">— Boris Sofman （2:13:35.000）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And so it was kind of interesting where you realize how many levels there are on the spectrum from human to kind of potentials in AI and robotics to futures."</div>
+  <div class="quote-zh">所以这很有趣，你会意识到从人类到人工智能和机器人技术到未来的潜力，有多少个层次。</div>
+  <div class="quote-meta">— Boris Sofman （01:53.000）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(00:00.000)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Boris Sofman, who is the senior director of engineering and head of trucking at Waymo, the autonomous vehicle company, formerly the Google self driving car project.</div>
+  <div class="dialogue-zh">以下是与自动驾驶汽车公司 Waymo（前身为谷歌自动驾驶汽车项目）的高级工程总监兼卡车运输主管鲍里斯·索夫曼 (Boris Sofman) 的对话。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(00:12.000)</span>
+  </div>
+  <div class="dialogue-en">Before that, Boris was the co founder and CEO of Anki, a robotics company that created Cosmo, which, in my opinion, is one of the most incredible social robots ever built.</div>
+  <div class="dialogue-zh">在此之前，鲍里斯是 Anki 机器人公司的联合创始人兼首席执行官，该公司创建了 Cosmo，在我看来，Cosmo 是有史以来最令人难以置信的社交机器人之一。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(00:24.000)</span>
+  </div>
+  <div class="dialogue-en">It&#39;s a toy robot, but one with an emotional intelligence that creates a fun and engaging human robot interaction. It was truly sad for me to see Anki shut down when he did.</div>
+  <div class="dialogue-zh">它是一个玩具机器人，但具有情商，可以创造有趣且引人入胜的人类机器人互动。看到 Anki 被关闭，我真的很难过。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(00:36.000)</span>
+  </div>
+  <div class="dialogue-en">I had high hopes for those little robots. We talk about this story and the future of autonomous trucks, vehicles, and robotics in general.</div>
+  <div class="dialogue-zh">我对那些小机器人寄予厚望。我们谈论这个故事以及自动卡车、车辆和机器人技术的未来。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(00:46.000)</span>
+  </div>
+  <div class="dialogue-en">I spoke with Steve Viselli recently on episode 237 about the human side of trucking. This episode looks more at the robotics side.</div>
+  <div class="dialogue-zh">我最近在第 237 集中与 Steve Viselli 讨论了卡车运输人性化的一面。本集更多地关注机器人方面。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(00:56.000)</span>
+  </div>
+  <div class="dialogue-en">This is the Lex Friedman podcast. To support it, please check out our sponsors in the description. And now here&#39;s my conversation with Boris Sofman.</div>
+  <div class="dialogue-zh">这是莱克斯·弗里德曼的播客。为了支持它，请在说明中查看我们的赞助商。现在这是我与鲍里斯·索夫曼的对话。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(01:07.000)</span>
+  </div>
+  <div class="dialogue-en">Who is your favorite robot in science fiction, books or movies?</div>
+  <div class="dialogue-zh">您最喜欢科幻小说、书籍或电影中的机器人是谁？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(01:12.000)</span>
+  </div>
+  <div class="dialogue-en">I like WALLY and R2D2 where they were able to convey such an incredible degree of intent, emotion, and kind of character attachment without having any language whatsoever.</div>
+  <div class="dialogue-zh">我喜欢《WALLY》和《R2D2》，它们能够在没有任何语言的情况下传达如此令人难以置信的意图、情感和角色依恋。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(01:25.000)</span>
+  </div>
+  <div class="dialogue-en">And just purely through the richness of emotional interaction. So those are fantastic. And then the Terminator series just like really, pretty wide range, right?</div>
+  <div class="dialogue-zh">纯粹是通过丰富的情感互动。所以这些都太棒了。然后《终结者》系列真的非常广泛，对吧？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(01:36.000)</span>
+  </div>
+  <div class="dialogue-en">But I kind of love this dynamic. We have this incredible Terminator itself that Arnold played.</div>
+  <div class="dialogue-zh">但我有点喜欢这种动态。我们有阿诺德扮演的这个令人难以置信的终结者本身。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(01:42.000)</span>
+  </div>
+  <div class="dialogue-en">And then he was kind of like the inferior previous generation version that was totally outmatched in terms of specs by the new one, but still kind of held his own.</div>
+  <div class="dialogue-zh">然后他有点像劣质的上一代版本，在规格方面完全被新版本超越，但仍然保持着自己的风格。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(01:53.000)</span>
+  </div>
+  <div class="dialogue-en">And so it was kind of interesting where you realize how many levels there are on the spectrum from human to kind of potentials in AI and robotics to futures.</div>
+  <div class="dialogue-zh">所以这很有趣，你会意识到从人类到人工智能和机器人技术到未来的潜力，有多少个层次。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(02:03.000)</span>
+  </div>
+  <div class="dialogue-en">So yeah, that movie really, as much as it was like kind of a direct world in a way, was actually quite fascinating, gets the imagination going.</div>
+  <div class="dialogue-zh">所以，是的，那部电影确实，在某种程度上就像是一个直接的世界，实际上非常迷人，激发了想象力。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(02:11.000)</span>
+  </div>
+  <div class="dialogue-en">Well, from an engineer perspective, both the movies you mentioned, WALLY and Terminator, the first one is probably achievable, you know, humanoid robot.</div>
+  <div class="dialogue-zh">好吧，从工程师的角度来看，你提到的两部电影，《沃利》和《终结者》，第一部可能是可以实现的，你知道，人形机器人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(02:21.000)</span>
+  </div>
+  <div class="dialogue-en">Maybe not with like the realism in terms of skin and so on, but that humanoid form, we have that humanoid form. It seems like a compelling form.</div>
+  <div class="dialogue-zh">也许不是像皮肤等方面的现实主义那样，而是那种人形形态，我们有那种人形形态。这似乎是一种引人注目的形式。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(02:30.000)</span>
+  </div>
+  <div class="dialogue-en">Maybe the challenge is that it&#39;s super expensive to build, but you can imagine, maybe not a machine of war, but you can imagine Terminator type robots walking around.</div>
+  <div class="dialogue-zh">也许挑战在于它的建造成本非常高，但你可以想象，也许不是战争机器，但你可以想象终结者类型的机器人四处走动。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(02:40.000)</span>
+  </div>
+  <div class="dialogue-en">And then the same obviously with WALLY, you&#39;ve basically, so for people who don&#39;t know, you created the company Anki that created a small robot with a big personality called Cosmo that just does exactly what WALLY does,</div>
+  <div class="dialogue-zh">然后显然与 WALLY 一样，你基本上，所以对于那些不知道的人，你创建了 Anki 公司，该公司创建了一个具有大个性的小机器人，名为 Cosmo，它的功能与 WALLY 的功能完全相同，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(02:53.000)</span>
+  </div>
+  <div class="dialogue-en">which is somehow with very few basic visual tools is able to communicate a depth of emotion. And that&#39;s fascinating.</div>
+  <div class="dialogue-zh">在某种程度上，很少有基本的视觉工具就能够传达深度的情感。这很有趣。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(03:02.000)</span>
+  </div>
+  <div class="dialogue-en">But then again, the humanoid form is super compelling. So like Cosmo is very distant from a humanoid form.</div>
+  <div class="dialogue-zh">但话又说回来，人形形态非常引人注目。所以像科斯莫这样的人形形态与人形形态相差甚远。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Boris Sofman <span class="dialogue-time">(03:11.000)</span>
+  </div>
+  <div class="dialogue-en">And then the Terminator has a humanoid form and you can imagine both of those actually being in our society.</div>
+  <div class="dialogue-zh">然后终结者有一个人形形态，你可以想象这两者实际上都存在于我们的社会中。</div>
+</div>
+    <a href="https://lexfridman.com/boris-sofman" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="aravind-srinivas.html" class="card" style="text-decoration:none">
+  <div class="card-title">Aravind Srinivas</div>
+  <div class="card-meta">Aravind Srinivas</div>
+</a>
+<a href="ayanna-howard.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ayanna Howard: Human-Robot Interaction and Ethics of Safety-Critical Systems</div>
+  <div class="card-meta">Ayanna Howard</div>
+</a>
+<a href="colin-angle.html" class="card" style="text-decoration:none">
+  <div class="card-title">Colin Angle: iRobot</div>
+  <div class="card-meta">Colin Angle</div>
+</a>
+<a href="dhh-david-heinemeier-hansson.html" class="card" style="text-decoration:none">
+  <div class="card-title">DHH David Heinemeier Hansson</div>
+  <div class="card-meta">Dhh David Heinemeier Hansson</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

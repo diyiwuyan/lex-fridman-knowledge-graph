@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rick Beato - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Rick Beato</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Rick Beato</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/rick-beato.html" style="font-size:16px;color:#818cf8;font-weight:600">Rick Beato</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">28,027 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/rick-beato-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:44</span>
+  <span class="chapter-title">Guitar solos<span class="zh-trans"> · 吉他独奏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:43</span>
+  <span class="chapter-title">Gypsy jazz and Django Reinhardt<span class="zh-trans"> · 吉普赛爵士乐和姜戈·莱因哈特</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">6:14</span>
+  <span class="chapter-title">Bebop jazz<span class="zh-trans"> · 波普爵士乐</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">10:27</span>
+  <span class="chapter-title">Perfect pitch vs relative pitch<span class="zh-trans"> · 完美音高与相对音高</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">15:04</span>
+  <span class="chapter-title">Learning to play guitar<span class="zh-trans"> · 学习弹吉他</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">38:34</span>
+  <span class="chapter-title">Miles Davis<span class="zh-trans"> · 迈尔斯·戴维斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">44:01</span>
+  <span class="chapter-title">Bass guitar<span class="zh-trans"> · 低音吉他</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">45:08</span>
+  <span class="chapter-title">Greatest guitar solos of all time<span class="zh-trans"> · 有史以来最伟大的吉他独奏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:14:23</span>
+  <span class="chapter-title">27 Club<span class="zh-trans"> · 27俱乐部</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:19:04</span>
+  <span class="chapter-title">Elton John<span class="zh-trans"> · 艾尔顿约翰</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:22:18</span>
+  <span class="chapter-title">Metallica<span class="zh-trans"> · 金属乐队</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:26:48</span>
+  <span class="chapter-title">Tom Waits<span class="zh-trans"> · 汤姆·威茨</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:32:39</span>
+  <span class="chapter-title">Greatest rock stars<span class="zh-trans"> · 最伟大的摇滚明星</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:36:02</span>
+  <span class="chapter-title">Beethoven<span class="zh-trans"> · 贝多芬</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:42:37</span>
+  <span class="chapter-title">Bach<span class="zh-trans"> · 巴赫</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:45:27</span>
+  <span class="chapter-title">AI in music<span class="zh-trans"> · 音乐中的人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:59:18</span>
+  <span class="chapter-title">Sabrina Carpenter<span class="zh-trans"> · 萨布丽娜·卡彭特</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:02:49</span>
+  <span class="chapter-title">YouTube copyright strikes<span class="zh-trans"> · YouTube 版权罢工</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:08:26</span>
+  <span class="chapter-title">Spotify<span class="zh-trans"> · Spotify</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">rick</span><span class="keyword-tag">beato</span><span class="keyword-tag">music</span><span class="keyword-tag">don</span><span class="keyword-tag">song</span><span class="keyword-tag">guitar</span><span class="keyword-tag">said</span><span class="keyword-tag">songs</span><span class="keyword-tag">stuff</span><span class="keyword-tag">playing</span><span class="keyword-tag">played</span><span class="keyword-tag">video</span><span class="keyword-tag">solo</span><span class="keyword-tag">dylan</span><span class="keyword-tag">jazz</span><span class="keyword-tag">note</span><span class="keyword-tag">listening</span><span class="keyword-tag">chord</span><span class="keyword-tag">pitch</span><span class="keyword-tag">greatest</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Yeah, but my first instrument was the cello in third grade. And then I switched to the bass in sixth grade. And my, I majored, my undergrad degree is in classical bass. So I always think of myself as a bass player first. And I always think the bass is the most important instrument because-"</div>
+  <div class="quote-zh">是的，但我的第一件乐器是三年级时的大提琴。然后我在六年级时改学贝斯。我的本科专业是古典贝斯。所以我总是首先认为自己是一名贝斯手。我一直认为贝斯是最重要的乐器，因为-</div>
+  <div class="quote-meta">— Rick Beato （00:44:26）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think the role of the musician is that in actually… If they use AI to assist them in coming up with ideas, they could as a creation tool. Then the musician… Like, some of the stuff is just not high quality sonically. So, the musician goes in and redoes stuff and changes things and adds parts, and then they actually do music production, and maybe they re-sing the parts, and they change the stuff. And then it’s just basically like an idea generator, and I think that that’s a great use of AI, is for that."</div>
+  <div class="quote-zh">我认为音乐家的角色实际上是……如果他们使用人工智能来帮助他们提出想法，他们可以作为一种创作工具。然后音乐家……就像，有些东西在声音上质量不高。因此，音乐家会重做一些东西，改变一些东西，添加一些部分，然后他们实际上进行音乐制作，也许他们重新演唱这些部分，然后他们改变一些东西。然后它基本上就像一个想法生成器，我认为这是人工智能的一个很好的用途，就是为了这个。</div>
+  <div class="quote-meta">— Rick Beato （01:52:21）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And I realized at first it was, like, anything Guns N’ Roses, which is still the case, Guns N’ Roses, AC/DC, I mean, many bands, Fleetwood Mac, Led Zeppelin, and then, and then something happened. There was a guy on the skateboard on TikTok that had the Ocean Spray thing and he was listening to- … Dreams by Fleetwood Mac. And that blew up and became a number one song again. And the labels then realized—I mean, I’d made many videos about why this is wrong, and it should be fair use and everything. Well, because of that, the labels were like, “Ooh, maybe we should rethink this.” And then they just started demonetizing videos."</div>
+  <div class="quote-zh">我一开始意识到，就像任何枪炮玫瑰乐队一样，现在仍然如此，枪炮玫瑰乐队、AC/DC，我的意思是，很多乐队，弗利特伍德麦克乐队、齐柏林飞艇乐队，然后，然后发生了一些事情。 TikTok 上的滑板上有一个人有 Ocean Spray 的东西，他正在听……Fleetwood Mac 的 Dreams。这首歌一炮而红，再次成为冠军歌曲。然后唱片公司意识到——我的意思是，我制作了很多视频来解释为什么这是错误的，而且它应该是合理使用和一切。好吧，正因为如此，标签就像是，“哦，也许我们应该重新考虑这个。”然后他们就开始取消视频的货币化。</div>
+  <div class="quote-meta">— Rick Beato （02:04:31）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"… music that was very technical. And I just heard it and just was like, “Oh, yeah, okay, cool.” And not realizing that it was developing my ear, because I really, bebop is one of the hardest to improvise in that style, in that language of bebop. It’s very difficult to do. And hearing it as a kid is one of the things that I think enables you, just like languages, enables you to learn it as opposed to somebody that’s never been exposed to it and tries to learn it as a teenager. So I think it’s very similar to learning languages, which kinda is like my theory on perfect pitch, that every child is born with perfect pitch. And they start to lose the ability around nine months-"</div>
+  <div class="quote-zh">……技术性很强的音乐。我只是听到了，然后就想，“哦，是的，好吧，酷。”我没有意识到它正在培养我的耳朵，因为我真的，波普音乐是那种风格、那种波普语言中最难即兴创作的音乐之一。这很难做到。我认为小时候听到它是让你能够学习它的因素之一，就像语言一样，它能让你学习它，而不是那些从未接触过它并在青少年时期尝试学习它的人。所以我认为这与学习语言非常相似，这有点像我的完美音高理论，每个孩子生来就有完美音高。他们在九个月左右开始失去这种能力-</div>
+  <div class="quote-meta">— Rick Beato （00:08:11）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Because PA systems were so bad back then- … and the Beatles … People screamed so loudly that the Beatles thought, “Okay. We don’t, we don’t need … We can’t tour anymore ’cause we can’t even hear ourselves, so we’re just gonna be a studio band.” And maybe because of … We have all these great late Beatles records, they’re from 1966 on, just because they had bad PA systems. And they had no monitors. You know, they’re in Shea Stadium."</div>
+  <div class="quote-zh">因为当时的扩音系统太糟糕了……还有披头士乐队……人们尖叫得如此之大，以至于披头士乐队想，“好吧。我们不需要，我们不需要……我们不能再巡演了，因为我们甚至听不到自己的声音，所以我们只能成为一支录音室乐队。”也许是因为……我们拥有所有这些伟大的甲壳虫乐队晚期唱片，它们是从 1966 年开始的，只是因为他们的 PA 系统很糟糕。他们没有显示器。你知道，他们在谢伊体育场。</div>
+  <div class="quote-meta">— Rick Beato （01:10:59）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Rick Beato, legendary music educator, interviewer, producer, songwriter, and a true multi-instrument musician, playing guitar, bass, cello, and piano. Rick, with his incredible YouTube channel, celebrates great musicians and musical ideas, and helps millions of people, including me, fall in love with great music all over again. This is Lex Fridman Podcast. To s...</div>
+  <div class="dialogue-zh">以下是与传奇音乐教育家、采访者、制作人、词曲作者、真正的多乐器音乐家 Rick Beato 的对话，他演奏吉他、贝斯、大提琴和钢琴。 Rick 通过他令人难以置信的 YouTube 频道颂扬伟大的音乐家和音乐创意，并帮助包括我在内的数百万人重新爱上伟大的音乐。这是莱克斯·弗里德曼播客。至</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:49)</span>
+  </div>
+  <div class="dialogue-en">I heard somewhere that one of the things that made you fall in love with music was listening to guitar solos, some epic guitar solos. What’s an early guitar solo that you remember you connected to spiritually , musically, where you’re like, “Wow, there’s magic in this”?</div>
+  <div class="dialogue-zh">我在某个地方听说，让你爱上音乐的原因之一就是听吉他独奏，一些史诗般的吉他独奏。你记得哪一首早期的吉他独奏让你在精神上、音乐上与你产生了联系，让你觉得“哇，这有魔力”？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Beato <span class="dialogue-time">(00:01:07)</span>
+  </div>
+  <div class="dialogue-en">Well, the first solo that I learned was Hey Joe. It was actually a good beginner song, you know, when I first started playing the guitar, because it has pretty simple chords, right? So it’s like E, C, G, D, A. And I learned the solo, and I figured out this, like, I’ll say it’s this pentatonic scale, E minor pentatonic scale though. I didn’t know that’s what it was called, but learned this thing, a...</div>
+  <div class="dialogue-zh">嗯，我学的第一个独奏是《Hey Joe》。这实际上是一首很好的初学者歌曲，你知道，当我第一次开始弹吉他时，因为它有非常简单的和弦，对吧？所以就像E、C、G、D、A。我学了独奏，我想出了这个，就像，我会说这是这个五声音阶，不过是E小调五声音阶。我不知道它叫什么，但学会了这个东西，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Beato <span class="dialogue-time">(00:01:42)</span>
+  </div>
+  <div class="dialogue-en">And then I got so obsessed with it, and I showed my younger brother John, who started playing guitar right at the same time I did. So I was 14, he was 11. And I would play rhythm for him for five minutes while he would solo over Hey Joe. And then as soon as I’d start soloing, he’d throw the guitar down, then we’d get in a fight. And so my mom eventually was like, “What is going on here?” And I was...</div>
+  <div class="dialogue-zh">然后我就对它着迷了，我给我弟弟约翰看了，他和我同时开始弹吉他。当时我 14 岁，他 11 岁。我会为他演奏五分钟节奏，而他则独奏《Hey Joe》。然后我一开始独奏，他就会把吉他扔掉，然后我们就会吵架。所以我妈妈最终问：“这里发生了什么事？”而我当时</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:17)</span>
+  </div>
+  <div class="dialogue-en">That’s awesome.</div>
+  <div class="dialogue-zh">太棒了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Beato <span class="dialogue-time">(00:02:17)</span>
+  </div>
+  <div class="dialogue-en">… I was like, “Okay, it’s like E, C, G, D, A.” And so my mom would literally play rhythm for 20 minutes while I’d play.</div>
+  <div class="dialogue-zh">……我当时想，“好吧，就像 E、C、G、D、A。”所以当我演奏时，我妈妈会演奏 20 分钟的节奏。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:25)</span>
+  </div>
+  <div class="dialogue-en">Hashtag parenting.</div>
+  <div class="dialogue-zh">标签育儿。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Beato <span class="dialogue-time">(00:02:27)</span>
+  </div>
+  <div class="dialogue-en">That’s amazing. When I look back on it now, my mom’s been gone for 10 years now. When I look back on it, it’s like, “My God, my parents were so cool.”</div>
+  <div class="dialogue-zh">太棒了。现在回想起来，妈妈已经离开我十年了。当我回想起来时，我感觉，“天哪，我的父母太酷了。”</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:36)</span>
+  </div>
+  <div class="dialogue-en">We should mention that Hey Joe, and Hendrix in general, is kind of known for the rhythm not being simple rhythm, just the chords that you mentioned. It’s what you do with those chords. It’s almost improvisation, the rhythm side.</div>
+  <div class="dialogue-zh">我们应该提到的是，Hey Joe 和 Hendrix 总体上以节奏而闻名，不是简单的节奏，只是你提到的和弦。这就是你对这些和弦所做的事情。这几乎是即兴创作，节奏方面。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Beato <span class="dialogue-time">(00:02:47)</span>
+  </div>
+  <div class="dialogue-en">He did all those really cool chord fragment riffs and things like that, that’s just part of his… That’s the Hendrix style.</div>
+  <div class="dialogue-zh">他做了所有那些非常酷的和弦片段即兴演奏和类似的事情，这只是他的一部分……这就是亨德里克斯风格。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:54)</span>
+  </div>
+  <div class="dialogue-en">What do you think? I mean, many people put Hendrix as the greatest guitarist of all time. What do you think is part of that?</div>
+  <div class="dialogue-zh">你怎么认为？我的意思是，很多人认为亨德里克斯是有史以来最伟大的吉他手。您认为其中包括什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Beato <span class="dialogue-time">(00:03:00)</span>
+  </div>
+  <div class="dialogue-en">You know, I make lists.</div>
+  <div class="dialogue-zh">你知道，我列了清单。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:02)</span>
+  </div>
+  <div class="dialogue-en">You do. If you somehow don’t know who Rick Beato is, go on YouTube right now and watch your excellent interviews with musicians, watch your breakdown analysis of different songs, and watch your top 20 lists, where you’re very opinionated, sometimes very openly critical about certain kinds of songs. It’s fun. Opinions are fun.</div>
+  <div class="dialogue-zh">你做。如果您不知何故不知道 Rick Beato 是谁，请立即访问 YouTube，观看您对音乐家的精彩采访，观看您对不同歌曲的详细分析，并观看您的前 20 名列表，其中您非常固执己见，有时对某些类型的歌曲非常公开批评。这很有趣。意见很有趣。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Beato <span class="dialogue-time">(00:03:27)</span>
+  </div>
+  <div class="dialogue-en">But they do change, Lex, from day to day.</div>
+  <div class="dialogue-zh">但莱克斯，它们确实每天都在变化。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:30)</span>
+  </div>
+  <div class="dialogue-en">Yeah, exactly.</div>
+  <div class="dialogue-zh">是的，完全正确。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Beato <span class="dialogue-time">(00:03:31)</span>
+  </div>
+  <div class="dialogue-en">You know, like I… But when, anytime I do a list, if I do 20, I like to do 20 because that gives me some leeway to throw in. I have to throw in something that is so weird that people, you know… Something that a lot of people won’t know, just to have it on there, so I can at least introduce a person. You know, I’ll put somebody like Allan Holdsworth, who’s a famous fusion guitar player. I’ll throw i...</div>
+  <div class="dialogue-zh">你知道，就像我一样……但是，每当我列一个清单时，如果我列了 20 个，我喜欢列 20 个，因为这给了我一些投入的余地。我必须加入一些奇怪的东西，人们知道……很多人不知道的东西，只是把它列在那里，这样我至少可以介绍一个人。你知道，我会选择像艾伦·霍尔兹沃斯（Allan Holdsworth）这样的人，他是一位著名的融合吉他手。我会扔我</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:05)</span>
+  </div>
+  <div class="dialogue-en">Yeah, a lot of variety. But Hendrix… Did you show up here today, Rick, try to tell me that Hendrix is not up there? I just am getting that vibe right now.</div>
+  <div class="dialogue-zh">是的，种类很多。但是亨德里克斯……你今天出现在这里了吗，瑞克，试着告诉我亨德里克斯不在那里吗？我现在才感受到那种氛围。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Beato <span class="dialogue-time">(00:04:16)</span>
+  </div>
+  <div class="dialogue-en">No, I’m not. But I don’t want to say greatest, you know… You can say, well, there are people that inspired Jimi Hendrix. Charlie Christian, older guitar players. Charlie Christian and Django Reinhardt were the first two really big, and probably Andrés Segovia—those were three of the giants of the 20th century, as far as guitar influences for most of the players that were to follow. Gypsy jazz and ...</div>
+  <div class="dialogue-zh">不，我不是。但我不想说最伟大，你知道……你可以说，好吧，有些人启发了吉米·亨德里克斯。查理·克里斯蒂安（Charlie Christian），老吉他手。查理·克里斯蒂安（Charlie Christian）和姜戈·莱因哈特（Django Reinhardt）是前两位真正伟大的人，也许还有安德烈斯·塞戈维亚（Andrés Segovia）——就对大多数后来的吉他演奏家的影响而言，他们是 20 世纪的三位巨人。吉普赛爵士乐和</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:43)</span>
+  </div>
+  <div class="dialogue-en">So here, going to Perplexity, Django Reinhardt was, of course, a jazz guitarist and composer, active mainly in France, and is widely regarded as one of the greatest guitarists in jazz history.</div>
+  <div class="dialogue-zh">所以，来到 Perplexity，姜戈·莱因哈特 (Django Reinhardt) 当然是一位爵士吉他手和作曲家，主要活跃在法国，被广泛认为是爵士乐历史上最伟大的吉他手之一。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Beato <span class="dialogue-time">(00:04:54)</span>
+  </div>
+  <div class="dialogue-en">So, Django was… Well, there’s a huge movement right now, Gypsy Jazz Movement, as they call it- … that is kind of built around this style of music that he played back in the early 20th century. One of the things about Django is that he was in a fire, and he had two of his third and fourth finger, so his ring finger and pinky were essentially melted together. He had no use of them. Although he could...</div>
+  <div class="dialogue-zh">所以，姜戈……嗯，现在有一场巨大的运动，吉普赛爵士乐运动，他们称之为——……这是围绕他在 20 世纪初演奏的这种音乐风格而建立的。关于姜戈的一件事是，他在火中，他有两个无名指和无名指，所以他的无名指和小指基本上融化在一起了。他没有用它们。虽然他可以</div>
+</div>
+    <a href="https://lexfridman.com/rick-beato-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-huberman-4.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman #4</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="graham-hancock.html" class="card" style="text-decoration:none">
+  <div class="card-title">Graham Hancock</div>
+  <div class="card-meta">Graham Hancock</div>
+</a>
+<a href="grimes.html" class="card" style="text-decoration:none">
+  <div class="card-title">Grimes: Music, AI, and the Future of Humanity</div>
+  <div class="card-meta">Grimes</div>
+</a>
+<a href="julia-shaw.html" class="card" style="text-decoration:none">
+  <div class="card-title">Julia Shaw</div>
+  <div class="card-meta">Julia Shaw</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

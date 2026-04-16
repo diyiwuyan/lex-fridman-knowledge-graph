@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Deepseek Dylan Patel Nathan Lambert - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Deepseek Dylan Patel Nathan Lambert</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Deepseek Dylan Patel Nathan Lambert</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/nathan-lambert.html" style="font-size:16px;color:#818cf8;font-weight:600">Nathan Lambert</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">58,507 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/deepseek-dylan-patel-nathan-lambert-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#f9731622;color:#f97316;border:1px solid #f9731644;font-size:13px;padding:4px 12px">体育与武术</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">3:33</span>
+  <span class="chapter-title">DeepSeek-R1 and DeepSeek-V3<span class="zh-trans"> · DeepSeek-R1 和 DeepSeek-V3</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">25:07</span>
+  <span class="chapter-title">Low cost of training<span class="zh-trans"> · 培训成本低</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">51:25</span>
+  <span class="chapter-title">DeepSeek compute cluster<span class="zh-trans"> · DeepSeek 计算集群</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">58:57</span>
+  <span class="chapter-title">Export controls on GPUs to China<span class="zh-trans"> · 对中国 GPU 的出口管制</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:09:16</span>
+  <span class="chapter-title">AGI timeline<span class="zh-trans"> · 通用人工智能时间表</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:18:41</span>
+  <span class="chapter-title">China’s manufacturing capacity<span class="zh-trans"> · 中国的制造能力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:26:36</span>
+  <span class="chapter-title">Cold war with China<span class="zh-trans"> · 与中国冷战</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:31:05</span>
+  <span class="chapter-title">TSMC and Taiwan<span class="zh-trans"> · 台积电和台湾</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:54:44</span>
+  <span class="chapter-title">Best GPUs for AI<span class="zh-trans"> · 最适合人工智能的 GPU</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:09:36</span>
+  <span class="chapter-title">Why DeepSeek is so cheap<span class="zh-trans"> · 为什么 DeepSeek 这么便宜</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:22:55</span>
+  <span class="chapter-title">Espionage<span class="zh-trans"> · 间谍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:31:57</span>
+  <span class="chapter-title">Censorship<span class="zh-trans"> · 审查制度</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:44:52</span>
+  <span class="chapter-title">Andrej Karpathy and magic of RL<span class="zh-trans"> · Andrej Karpathy 和 RL 的魔力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:55:23</span>
+  <span class="chapter-title">OpenAI o3-mini vs DeepSeek r1<span class="zh-trans"> · OpenAI o3-mini 与 DeepSeek r1</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:14:31</span>
+  <span class="chapter-title">NVIDIA<span class="zh-trans"> · 英伟达</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:18:58</span>
+  <span class="chapter-title">GPU smuggling<span class="zh-trans"> · GPU走私</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:25:36</span>
+  <span class="chapter-title">DeepSeek training on OpenAI data<span class="zh-trans"> · 基于 OpenAI 数据的 DeepSeek 训练</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:36:04</span>
+  <span class="chapter-title">AI megaclusters<span class="zh-trans"> · 人工智能巨型集群</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:11:26</span>
+  <span class="chapter-title">Who wins the race to AGI?<span class="zh-trans"> · 谁赢得了 AGI 竞赛？</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:21:39</span>
+  <span class="chapter-title">AI agents<span class="zh-trans"> · 人工智能代理</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">model</span><span class="keyword-tag">dylan</span><span class="keyword-tag">patel</span><span class="keyword-tag">nathan</span><span class="keyword-tag">lambert</span><span class="keyword-tag">going</span><span class="keyword-tag">training</span><span class="keyword-tag">models</span><span class="keyword-tag">data</span><span class="keyword-tag">deepseek</span><span class="keyword-tag">don</span><span class="keyword-tag">gpus</span><span class="keyword-tag">openai</span><span class="keyword-tag">china</span><span class="keyword-tag">companies</span><span class="keyword-tag">reasoning</span><span class="keyword-tag">money</span><span class="keyword-tag">chips</span><span class="keyword-tag">stuff</span><span class="keyword-tag">doing</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"And I think that’s the thing that’s probably more worrisome is human-machine amalgamations. This enables an individual human to have more impact on the world and that impact can be both positive and negative. Generally, humans have positive impacts on the world, at least societally, but it’s possible for individual humans to have such negative impacts. And AGI, at least as I think the labs define it, which is not a runaway sentient thing, but rather just something that can do a lot of tasks really efficiently amplifies the capabilities of someone causing extreme damage. But for the most part, I think it’ll be used for profit-seeking motives, which will increase the abundance and supply of things and therefore reduce suffering, right? That’s the goal."</div>
+  <div class="quote-zh">我认为更令人担忧的是人机融合。这使得个人能够对世界产生更大的影响，这种影响可以是积极的，也可以是消极的。一般来说，人类对世界（至少对社会）有积极影响，但个人也有可能产生这种负面影响。而 AGI，至少正如我认为实验室所定义的那样，这不是一个失控的有知觉的东西，而只是一种可以完成很多任务的东西，真正有效地增强了造成极端伤害的人的能力。但在大多数情况下，我认为它将被用于追求利润的动机，这将增加事物的丰富性和供应，从而减少痛苦，对吗？这就是目标。</div>
+  <div class="quote-meta">— Dylan Patel （05:04:27）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think it’s good to recap AlphaGo and AlphaZero because it plays nicely with these analogies between imitation learning and learning from scratch. So AlphaGo, the beginning of the process was learning from humans, where they started the first… This is the first expert-level Go player or chess player in DeepMind series of models, where they had some human data. And then, why it is called AlphaZero, is that there was zero human data in the loop, and that changed to AlphaZero made a model that was dramatically more powerful for DeepMind. So this remove of the human prior, the human inductive bias, makes the final system far more powerful. This we mentioned bitter lesson hours ago, and this is all aligned with this."</div>
+  <div class="quote-zh">我认为回顾一下 AlphaGo 和 AlphaZero 是件好事，因为它很好地诠释了模仿学习和从头开始学习之间的类比。所以AlphaGo，这个过程的开始是向人类学习，他们开始了第一个……这是DeepMind系列模型中第一个专家级的围棋棋手或国际象棋棋手，他们有一些人类数据。然后，为什么它被称为 AlphaZero，是因为循环中的人类数据为零，而更改为 AlphaZero 则创建了一个对于 DeepMind 来说更加强大的模型。因此，消除人类先验、人类归纳偏差，使得最终系统更加强大。这是我们几个小时前提到的惨痛教训，而这一切都与此一致。</div>
+  <div class="quote-meta">— Nathan Lambert （02:46:54）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think humans will definitely be around in a 1000 years, I think. There’s ways that very bad things could happen. There’ll be way fewer humans, but humans are very good at surviving. There’s been a lot of things that that is true. I don’t think necessarily we’re good at long-term credit assignment of risk, but when the risk becomes immediate, we tend to figure things out."</div>
+  <div class="quote-zh">我认为人类肯定会在 1000 年后出现。有一些方法可能会发生非常糟糕的事情。人类将会少得多，但人类非常擅长生存。有很多事情都是真的。我认为我们不一定擅长长期信用风险分配，但当风险迫在眉睫时，我们倾向于解决问题。</div>
+  <div class="quote-meta">— Nathan Lambert （05:02:28）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Now recently we, at our research, we cut Nvidia’s production for H20 for this year down drastically. They were going to make another two million of those this year, but they just canceled all the orders a couple of weeks ago. In our view that’s because we think that they think they’re going to get restricted, because why would they cancel all these orders for H20? Because they shipped a million of them last year, they had orders in for a couple million this year, and just gone right. For H20, B20, a successor to H20, and now they’re all gone."</div>
+  <div class="quote-zh">最近，我们在研究中大幅削减了 Nvidia 今年 H20 的产量。今年他们原本打算再生产 200 万个，但几周前他们取消了所有订单。在我们看来，这是因为我们认为他们认为自己会受到限制，因为他们为什么要取消所有这些 H20 订单呢？因为他们去年出货了 100 万台，所以今年他们的订单量达到了几百万台，而且进展顺利。对于H20，B20，H20的后继者，现在都消失了。</div>
+  <div class="quote-meta">— Dylan Patel （01:57:10）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So there’s two things. It’s, one, to be able to serve this on the memory level. Google has magic with their TPU stack where they can serve really long contexts. And then there’s also many decisions along the way to actually make long context performance work that supplies the data. There’s subtle changes to these computations in attention and it changes the architecture. But serving long context is extremely memory constrained, especially when you’re making a lot of predictions. I actually don’t know why input and output tokens are more expensive, but I think essentially output tokens, you have to do more computation because you have to sample from the model."</div>
+  <div class="quote-zh">所以有两件事。第一，能够在内存级别上提供服务。谷歌的 TPU 堆栈具有魔力，可以为很长的上下文提供服务。然后，在此过程中还需要做出许多决策，以真正使提供数据的长上下文性能发挥作用。这些注意力计算发生了微妙的变化，它改变了架构。但是，提供长上下文会极大地限制内存，尤其是当您做出大量预测时。我实际上不知道为什么输入和输出令牌更昂贵，但我认为本质上输出令牌，你必须做更多的计算，因为你必须从模型中采样。</div>
+  <div class="quote-meta">— Nathan Lambert （02:03:12）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Dylan Patel and Nathan Lambert. Dylan runs SemiAnalysis, a well-respected research and analysis company that specializes in semiconductors, GPUs, CPUs, and AI hardware in general. Nathan is a research scientist at the Allen Institute for AI and is the author of the amazing blog on AI called Interconnects. They are both highly respected, read and listened to by ...</div>
+  <div class="dialogue-zh">以下是与迪伦·帕特尔和内森·兰伯特的对话。 Dylan 经营 SemiAnalysis，这是一家备受尊敬的研究和分析公司，专门从事半导体、GPU、CPU 和人工智能硬件的研究。 Nathan 是艾伦人工智能研究所的研究科学家，也是令人惊叹的人工智能博客 Interconnects 的作者。它们都受到人们的高度尊重、阅读和聆听</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:08)</span>
+  </div>
+  <div class="dialogue-en">While it does get super technical, we try to make sure that it’s still accessible to folks outside of the AI field by defining terms, stating important concepts explicitly, spelling out acronyms, and in general, always moving across the several layers of abstraction and levels of detail. There is a lot of hype in the media about what AI is and isn’t. The purpose of this podcast in part is to cut t...</div>
+  <div class="dialogue-zh">虽然它确实变得非常技术性，但我们试图通过定义术语、明确说明重要概念、拼出首字母缩略词以及通常始终跨越多个抽象层和细节层次来确保人工智能领域之外的人们仍然可以理解它。媒体对人工智能是什么和不是什么进行了很多炒作。这个播客的部分目的是为了减少</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:29)</span>
+  </div>
+  <div class="dialogue-en">By the way, I got a chance to play with o3-mini and anecdotal vibe check wise, I felt that o3-mini, specifically o3-mini high is better than R1. Still for me personally, I find that Claude Sonnet 3.5 is the best model for programming except for tricky cases where I will use o1 Pro to brainstorm. Either way, many more better AI models will come including reasoning models both from American and Chin...</div>
+  <div class="dialogue-zh">顺便说一句，我有机会玩o3-mini，从轶事氛围检查来看，我觉得o3-mini，特别是o3-mini high比R1更好。仍然对我个人来说，我发现 Claude Sonnet 3.5 是最好的编程模型，除了棘手的情况，我会使用 o1 Pro 进行头脑风暴。不管怎样，更多更好的人工智能模型将会出现，包括来自美国和中国的推理模型</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:33)</span>
+  </div>
+  <div class="dialogue-en">A lot of people are curious to understand China’s DeepSeek AI models, so let’s lay it out. Nathan, can you describe what DeepSeek-V3 and DeepSeek-R1 are, how they work, how they’re trained? Let’s look at the big picture and then we’ll zoom in on the details.</div>
+  <div class="dialogue-zh">很多人很好奇了解中国的DeepSeek AI模型，我们来介绍一下。 Nathan，您能描述一下 DeepSeek-V3 和 DeepSeek-R1 是什么、它们如何工作、如何训练吗？让我们先看一下大局，然后再放大细节。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:03:50)</span>
+  </div>
+  <div class="dialogue-en">DeepSeek-V3 is a new mixture of experts, transformer language model from DeepSeek who is based in China. They have some new specifics in the model that we’ll get into. Largely this is a open weight model and it’s a instruction model like what you would use in ChatGPT. They also released what is called the base model, which is before these techniques of post-training. Most people use instruction mo...</div>
+  <div class="dialogue-zh">DeepSeek-V3是来自中国DeepSeek的专家、Transformer语言模型的新混合体。他们在我们将要讨论的模型中提供了一些新的细节。很大程度上，这是一个开放权重模型，它是一个指令模型，就像您在 ChatGPT 中使用的模型一样。他们还发布了所谓的基础模型，这是在这些后训练技术之前的。大多数人使用指令模式</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:04:38)</span>
+  </div>
+  <div class="dialogue-en">This reasoning model has a lot of overlapping training steps to DeepSeek-V3, and it’s confusing that you have a base model called V3 that you do something to to get a chat model and then you do some different things to get a reasoning model. I think a lot of the AI industry is going through this challenge of communications right now where OpenAI makes fun of their own naming schemes. They have GPT...</div>
+  <div class="dialogue-zh">这个推理模型与 DeepSeek-V3 有很多重叠的训练步骤，令人困惑的是，你有一个名为 V3 的基本模型，你对其进行一些操作以获得聊天模型，然后你做一些不同的操作来获得推理模型。我认为许多人工智能行业现在正在经历这种通信挑战，OpenAI 取笑他们自己的命名方案。他们有GPT</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:14)</span>
+  </div>
+  <div class="dialogue-en">There’s so many places we can go here, but maybe let’s go to open weights first. What does it mean for a model to be open weights and what are the different flavors of open source in general?</div>
+  <div class="dialogue-zh">我们可以去的地方有很多，但也许我们先去自由重量吧。对于一个模型来说，开放权重意味着什么？一般来说，开源有哪些不同的风格？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:05:24)</span>
+  </div>
+  <div class="dialogue-en">This discussion has been going on for a long time in AI. It became more important since ChatGPT or more focal since ChatGPT at the end of 2022. Open weights is the accepted term for when model weights of a language model are available on the internet for people to download. Those weights can have different licenses, which is effectively the terms by which you can use the model. There are licenses ...</div>
+  <div class="dialogue-zh">这种讨论在人工智能领域已经持续了很长时间。自 ChatGPT 以来，它变得更加重要，或者自 2022 年底 ChatGPT 以来，它变得更加焦点。开放权重是公认的术语，表示语言模型的模型权重可以在互联网上供人们下载。这些权重可以有不同的许可证，这实际上是您可以使用该模型的条款。有许可证</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:06:17)</span>
+  </div>
+  <div class="dialogue-en">There’s still a lot of debate on the definition and soul of open source AI. Open source software has a rich history on freedom to modify, freedom to take on your own, freedom for many restrictions on how you would use the software and what that means for AI is still being defined. For what I do, I work at the Allen Institute for AI, we’re a nonprofit, we want to make AI open for everybody and we t...</div>
+  <div class="dialogue-zh">关于开源人工智能的定义和灵魂仍然存在很多争论。开源软件在自由修改、自行承担的自由、对如何使用软件的许多限制的自由方面有着丰富的历史，而这对人工智能意味着什么仍在定义中。对于我所做的工作，我在艾伦人工智能研究所工作，我们是一家非营利组织，我们希望让人工智能向所有人开放，我们</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:07:09)</span>
+  </div>
+  <div class="dialogue-en">And then a lot of the training code is the determinant on how long it takes to train and how fast your experimentation is. Without fully open source models where you have access to this data, it is hard to know… Or it’s harder to replicate. We’ll get into cost numbers for DeepSeek-V3 on mostly GPU hours and how much you could pay to rent those yourselves. But without the data, the replication cost...</div>
+  <div class="dialogue-zh">然后，很多训练代码决定了训练需要多长时间以及实验的速度。如果没有完全开源的模型来访问这些数据，就很难知道……或者更难复制。我们将了解 DeepSeek-V3 主要在 GPU 时间上的成本数据，以及您可以自己租用这些设备的费用。但如果没有数据，复制成本</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:37)</span>
+  </div>
+  <div class="dialogue-en">We should also say that this is probably one of the more open models out of the frontier models.</div>
+  <div class="dialogue-zh">我们还应该说，这可能是前沿模型中较为开放的模型之一。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:07:43)</span>
+  </div>
+  <div class="dialogue-en">Yes.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:45)</span>
+  </div>
+  <div class="dialogue-en">In this full spectrum where probably the fullest open source, like you said, open code, open data, open weights, this is not open code, this is probably not open data and this is open weights and the licensing is MIT license or it’s… There’s some nuance in the different models, but it’s towards the free… In terms of the open source movement, these are the good guys.</div>
+  <div class="dialogue-zh">在这个全方位的领域中，可能是最全面的开源，就像你说的，开放代码，开放数据，开放权重，这不是开放代码，这可能不是开放数据，这是开放权重，许可是麻省理工学院的许可证，或者是……不同的模型存在一些细微差别，但它是朝着免费的……就开源运动而言，这些都是好人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:08:13)</span>
+  </div>
+  <div class="dialogue-en">Yeah. DeepSeek is doing fantastic work for disseminating understanding of AI. Their papers are extremely detailed in what they do and for other teams around the world, they’re very actionable in terms of improving your own training techniques. And we’ll talk about licenses more, the DeepSeek-R1 model has a very permissive license. It’s called the MIT license. That effectively means there’s no down...</div>
+  <div class="dialogue-zh">是的。 DeepSeek 在传播对人工智能的理解方面做了出色的工作。他们的论文非常详细地介绍了他们所做的事情，对于世界各地的其他团队来说，他们在提高自己的训练技术方面非常具有可操作性。我们将更多地讨论许可证，DeepSeek-R1 模型具有非常宽松的许可证。这就是所谓的麻省理工学院许可证。这实际上意味着没有下降</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:08:47)</span>
+  </div>
+  <div class="dialogue-en">And this is all fantastic. I think the closest peer is something like Llama where you have the weights and you have a technical report. And the technical report is very good for Llama. One of the most read PDFs of the year last year is the Llama 3 paper, but in some ways it’s slightly less actionable. It has less details on the training specifics. I think less plots and so on. And the Llama 3 lice...</div>
+  <div class="dialogue-zh">这一切都太棒了。我认为最接近的同行是像 Llama 这样的东西，你有重量并且有技术报告。 Llama 的技术报告非常好。去年阅读量最大的 PDF 之一是 Llama 3 论文，但在某些方面它的可操作性稍差。它对培训细节的细节较少。我觉得情节少点等等。还有美洲驼 3 虱子</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:22)</span>
+  </div>
+  <div class="dialogue-en">It should be stated that one of the implications that DeepSeek, it puts pressure on Llama and everybody else on OpenAI to push towards open source. And that’s the other side of open source is that you mentioned is how much is published in detail about it, so how open are you with the insights behind the code? How good is the technical reports? Are there hand wavy or is there actual details in ther...</div>
+  <div class="dialogue-zh">应该指出的是，DeepSeek 的影响之一是，它向 Llama 和 OpenAI 上的其他所有人施加压力，要求他们推动开源。这就是开源的另一面，你提到的是有多少关于它的详细信息发布了，那么你对代码背后的见解有多开放？技术报告有多好？是否有手部波浪形或其中是否有实际细节</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:09:52)</span>
+  </div>
+  <div class="dialogue-en">Especially in the DeepSeek-V3, which is their pre-training paper. They were very clear that they are doing interventions on the technical stack that go at many different levels. For example, on their to get highly efficient training, they’re making modifications at or below the CUDA layer for NVIDIA chips. I have never worked there myself and there are a few people in the world that do that very w...</div>
+  <div class="dialogue-zh">特别是在 DeepSeek-V3 中，这是他们的预训练论文。他们非常清楚，他们正在对许多不同层面的技术堆栈进行干预。例如，为了获得高效的训练，他们正在 NVIDIA 芯片的 CUDA 层或以下进行修改。我自己从未在那里工作过，世界上有几个人做得非常好</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:25)</span>
+  </div>
+  <div class="dialogue-en">To help people understand the other implication of open weights, just there’s a topic we’ll return to often here. There’s a fear that China, the nation might have interest in stealing American data, violating privacy of American citizens. What can we say about open weights to help us understand what the weights are able to do in terms of stealing people’s data?</div>
+  <div class="dialogue-zh">为了帮助人们理解开放权重的其他含义，我们将在这里经常讨论一个主题。人们担心中国可能有兴趣窃取美国数据，侵犯美国公民的隐私。关于开放权重，我们能说些什么来帮助我们了解权重在窃取人们的数据方面能够做什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:10:55)</span>
+  </div>
+  <div class="dialogue-en">These weights that you can download from Hugging Face or other platforms are very big matrices of numbers. You can download them to a computer in your own house that has no internet and you can run this model and you’re totally in control of your data. That is something that is different than how a lot of language model usage is actually done today, which is mostly through APIs where you send your...</div>
+  <div class="dialogue-zh">您可以从 Hugging Face 或其他平台下载的这些权重是非常大的数字矩阵。您可以将它们下载到您自己家里没有互联网的计算机上，然后您可以运行该模型，并且完全控制您的数据。这与当今许多语言模型的实际使用方式有所不同，后者主要是通过 API 发送您的信息</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:11:37)</span>
+  </div>
+  <div class="dialogue-en">It’s not the model that steals your data, it’s whoever is hosting the model, which could be China if you’re using the DeepSeek app or it could be Perplexity. You’re trusting them with your data or OpenAI, you’re trusting them with your data. And some of these are American companies, some these are Chinese companies, but the model itself is not doing the stealing, it’s the host. All right, so back ...</div>
+  <div class="dialogue-zh">窃取您数据的不是模型，而是托管模型的人，如果您使用 DeepSeek 应用程序，则可能是中国，也可能是 Perplexity。您信任他们的数据或 OpenAI，您信任他们的数据。其中一些是美国公司，一些是中国公司，但模型本身并不是在偷窃，而是主机。好吧，那么回来吧</div>
+</div>
+    <a href="https://lexfridman.com/deepseek-dylan-patel-nathan-lambert-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="ai-sota-2026.html" class="card" style="text-decoration:none">
+  <div class="card-title">AI SOTA 2026</div>
+  <div class="card-meta">Sebastian Raschka</div>
+</a>
+<a href="brendan-eich.html" class="card" style="text-decoration:none">
+  <div class="card-title">Brendan Eich: JavaScript, Firefox, Mozilla, and Brave</div>
+  <div class="card-meta">Brendan Eich</div>
+</a>
+<a href="chris-urmson.html" class="card" style="text-decoration:none">
+  <div class="card-title">Chris Urmson: Self-Driving Cars at Aurora, Google, CMU, and DARPA</div>
+  <div class="card-meta">Chris Urmson</div>
+</a>
+<a href="george-hotz.html" class="card" style="text-decoration:none">
+  <div class="card-title">George Hotz: Comma.ai, OpenPilot, and Autonomous Vehicles</div>
+  <div class="card-meta">George Hotz</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

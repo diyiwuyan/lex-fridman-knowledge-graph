@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theprimeagen - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Theprimeagen</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Theprimeagen</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/theprimeagen.html" style="font-size:16px;color:#818cf8;font-weight:600">Theprimeagen</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">63,678 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/theprimeagen-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#a855f722;color:#a855f7;border:1px solid #a855f744;font-size:13px;padding:4px 12px">数学</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:42</span>
+  <span class="chapter-title">Love for programming<span class="zh-trans"> · 对编程的热爱</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">10:15</span>
+  <span class="chapter-title">Hardest part of programming<span class="zh-trans"> · 编程中最难的部分</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">12:31</span>
+  <span class="chapter-title">Types of programming<span class="zh-trans"> · 编程类型</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">20:08</span>
+  <span class="chapter-title">Life story<span class="zh-trans"> · 人生故事</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:12</span>
+  <span class="chapter-title">Hardship<span class="zh-trans"> · 困难</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">31:44</span>
+  <span class="chapter-title">High school<span class="zh-trans"> · 中学</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">37:30</span>
+  <span class="chapter-title">Porn addiction<span class="zh-trans"> · 色情成瘾</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">47:16</span>
+  <span class="chapter-title">God<span class="zh-trans"> · 上帝</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:02:59</span>
+  <span class="chapter-title">Perseverance<span class="zh-trans"> · 毅力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:12:55</span>
+  <span class="chapter-title">Netflix<span class="zh-trans"> · Netflix</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:25:23</span>
+  <span class="chapter-title">Groovy<span class="zh-trans"> · 格罗维</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:30:27</span>
+  <span class="chapter-title">Printf() debugging<span class="zh-trans"> · Printf() 调试</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:36:49</span>
+  <span class="chapter-title">Falcor<span class="zh-trans"> · 法尔科</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:46:19</span>
+  <span class="chapter-title">Breaking production<span class="zh-trans"> · 打破生产</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:49:04</span>
+  <span class="chapter-title">Pieter Levels<span class="zh-trans"> · 彼得·莱弗斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:53:34</span>
+  <span class="chapter-title">Netflix, Twitch, and YouTube infrastructure<span class="zh-trans"> · Netflix、Twitch 和 YouTube 基础设施</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:05:36</span>
+  <span class="chapter-title">ThePrimeagen origin story<span class="zh-trans"> · ThePrimeagen 起源故事</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:20:52</span>
+  <span class="chapter-title">Learning programming languages<span class="zh-trans"> · 学习编程语言</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:29:55</span>
+  <span class="chapter-title">Best programming languages in 2025<span class="zh-trans"> · 2025 年最佳编程语言</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">theprimeagen</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">programming</span><span class="keyword-tag">code</span><span class="keyword-tag">stuff</span><span class="keyword-tag">able</span><span class="keyword-tag">doing</span><span class="keyword-tag">better</span><span class="keyword-tag">got</span><span class="keyword-tag">language</span><span class="keyword-tag">said</span><span class="keyword-tag">sure</span><span class="keyword-tag">whole</span><span class="keyword-tag">hard</span><span class="keyword-tag">didn</span><span class="keyword-tag">fun</span><span class="keyword-tag">netflix</span><span class="keyword-tag">youtube</span><span class="keyword-tag">skill</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Host of Lex Fridman Podcast. Research Scientist at MIT, working on human-AI interaction, robotics, and machine learning. View all posts by Lex Fridman →"</div>
+  <div class="quote-zh">莱克斯·弗里德曼播客的主持人。麻省理工学院的研究科学家，致力于人机交互、机器人和机器学习。查看莱克斯·弗里德曼发表的所有帖子 →</div>
+  <div class="quote-meta">— About Lex Fridman </div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Michael Paulson, better known online as ThePrimeagen. He is a programmer who has entertained and inspired millions of people to have fun building stuff with software, whether you’re a newbie or a seasoned developer who has been battling it out in the software engineering trenches for decades. In short, ThePrimeagen is a legendary programmer and a great human be...</div>
+  <div class="dialogue-zh">以下是与迈克尔·保尔森 (Michael Paulson) 的对话，迈克尔·保尔森在网上更为人所知的名字是 ThePrimeagen。他是一位程序员，他娱乐并激励了数百万人享受用软件构建东西的乐趣，无论您是新手还是在软件工程战壕中奋战了数十年的经验丰富的开发人员。简而言之，ThePrimeagen 是一位传奇的程序员，也是一位伟大的人类</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:42)</span>
+  </div>
+  <div class="dialogue-en">What do you love most about programming? What brings you joy when you program? ThePrimeagen</div>
+  <div class="dialogue-zh">编程中你最喜欢什么？编程时什么给你带来快乐？普里梅根</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:46)</span>
+  </div>
+  <div class="dialogue-en">I can tell you the first time that I ever felt love in programming, or felt that joy or that excitement-</div>
+  <div class="dialogue-zh">我可以告诉你，我第一次在编程中感受到了爱，或者感受到了那种快乐或兴奋——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:51)</span>
+  </div>
+  <div class="dialogue-en">Sure. ThePrimeagen</div>
+  <div class="dialogue-zh">当然。普里梅根</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:52)</span>
+  </div>
+  <div class="dialogue-en">Which was in college. It was the second class, data structures, and the teacher that was teaching Ray Babcock, he was talking about linked lists. Now you have to learn Java at Montana State University when I went, and so he’s off there explaining this whole linked list thing and all that, and then he shows code. And in the code it’s abstract class node or whatever it was, I can’t remember what it ...</div>
+  <div class="dialogue-zh">那是在大学里。这是第二节课，数据结构，老师正在教Ray Babcock，他正在讲链表。现在，当我去蒙大拿州立大学时，你必须学习 Java，所以他在那里解释了整个链表的事情以及所有这些，然后他展示了代码。在代码中它是抽象类节点或其他什么，我不记得它是什么</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:47)</span>
+  </div>
+  <div class="dialogue-en">And I just remember being just so blown away, because up until that point, everything was just, “All right, I have a list of 10 items. I have a list of 20 items.” Right? It was very rigid and small, and the things I built were really small and trivial, and all of a sudden I felt like I could build anything in that one moment. And it was so amazing. I just remember sitting in class for, I don’t eve...</div>
+  <div class="dialogue-zh">我只记得当时我非常震惊，因为在那之前，一切都只是，“好吧，我有一个包含 10 项的清单。我有一个包含 20 项的清单。”正确的？它非常僵化和小，我建造的东西真的又小又琐碎，突然间我觉得我可以在那一刻建造任何东西。真是太神奇了。我只记得坐在课堂上，我什至不记得</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:41)</span>
+  </div>
+  <div class="dialogue-en">Yeah, let’s wax philosophical about a linked list. It is pretty profound. For people who don’t know, a node in a linked list doesn’t know anything about the world it’s in. It only knows about the thing it’s linked to, its neighbor. Maybe that’s symbolic. It’s a metaphor for all of us humans. There’s billions of us on this planet and we only know about our local little network. ThePrimeagen</div>
+  <div class="dialogue-zh">是的，让我们对链表进行哲学思考。这是相当深刻的。对于不知道的人来说，链表中的节点对它所在的世界一无所知。它只知道它链接到的东西，即它的邻居。也许这是象征性的。这是我们所有人的隐喻。这个星球上有数十亿人，但我们只了解我们当地的小网络。普里梅根</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:04)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:05)</span>
+  </div>
+  <div class="dialogue-en">And it’s kind of beautiful. And you realize in that little simple data structure, you can construct arbitrarily large systems, and they’re like roots that go through memory. And then of course, that’s where you get all the programming languages that allow you to dump junk into memory and have memory leaks, and therefore create infinite pain as you try to figure out where that unfreed memory is. Fo...</div>
+  <div class="dialogue-zh">这很漂亮。你意识到，在这个简单的小数据结构中，你可以构建任意大的系统，它们就像穿过内存的根。当然，这就是你获得所有允许你将垃圾转储到内存中并存在内存泄漏的编程语言的地方，因此当你试图找出未释放的内存在哪里时会产生无限的痛苦。佛</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:49)</span>
+  </div>
+  <div class="dialogue-en">What was the thing? What was one that taught you? Because I think we all… You probably did factorial, where you just do a quick factorial of it. It just doesn’t hit home. What was the thing that made it hit home?</div>
+  <div class="dialogue-zh">到底是怎么回事？那个人教了你什么？因为我认为我们都……你可能做了阶乘，你只需对其进行快速阶乘。它只是没有击中要害。是什么让它击中要害？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:01)</span>
+  </div>
+  <div class="dialogue-en">I don’t remember the first. ThePrimeagen</div>
+  <div class="dialogue-zh">我不记得第一个了。普里梅根</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:05)</span>
+  </div>
+  <div class="dialogue-en">I remember my first. How do you not remember your first? It was magic.</div>
+  <div class="dialogue-zh">我记得我的第一次。你怎么不记得你的第一次？这太神奇了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:08)</span>
+  </div>
+  <div class="dialogue-en">I’ve had so many that it just… ThePrimeagen</div>
+  <div class="dialogue-zh">我已经喝了太多了，以至于……ThePrimeagen</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:11)</span>
+  </div>
+  <div class="dialogue-en">I mean, you are a Lisp guy. You’re probably pretty used to the recursion.</div>
+  <div class="dialogue-zh">我的意思是，你是一个 Lisp 人。您可能非常习惯递归。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:14)</span>
+  </div>
+  <div class="dialogue-en">Yeah, all I remember is just surrounded by sea of parentheses. I mean that’s really, probably, when I… In high school, I think it was either Java or C++. Wow, how do I not remember that? It must have been C++. And then college, the generic bullshit software engineering classes were Java, but then the renegades, the cool kids, were all using Lisp. That’s when you’re doing the AI, the quote-unquote ...</div>
+  <div class="dialogue-zh">是的，我所记得的只是被括号海洋包围。我的意思是，这真的很可能是当我……在高中时，我认为要么是 Java，要么是 C++。哇，我怎么不记得了？一定是C++。然后到了大学，通用的废话软件工程课程是 Java，但后来的叛逆者、酷孩子都在使用 Lisp。那就是当你做人工智能的时候，引用-反引用</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:19)</span>
+  </div>
+  <div class="dialogue-en">I built that, you know, all kinds of programming languages. That’s less about programming languages and more about the system you create. And that just filled me with infinite joy, having… Now similar to the linked list situation, creating a system where each individual cell only knows about its neighbors and operates in very simple rules. But when you take that system as a whole and allow it to e...</div>
+  <div class="dialogue-zh">我构建了各种编程语言。这与编程语言无关，更多与您创建的系统有关。这让我充满了无限的喜悦，拥有……现在类似于链表情况，创建了一个系统，其中每个单独的细胞只知道其邻居并按照非常简单的规则运行。但是当你把这个系统作为一个整体并允许它发挥作用时</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:11)</span>
+  </div>
+  <div class="dialogue-en">Oh man. Well, first off, mine was in Java, so my first was a little bit more rigid, kind of, you know, a corporate experience.</div>
+  <div class="dialogue-zh">噢，伙计。嗯，首先，我的是 Java，所以我的第一个有点严格，你知道，是一种公司体验。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:20)</span>
+  </div>
+  <div class="dialogue-en">Yeah. Cold, meaningless… ThePrimeagen</div>
+  <div class="dialogue-zh">是的。冰冷、毫无意义……ThePrimeagen</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:23)</span>
+  </div>
+  <div class="dialogue-en">But… yeah. I was in a lab, everyone was using CentOS at that… or Cent OS or however you say. I always called it CentOS, the fresh maker.</div>
+  <div class="dialogue-zh">但是……是的。我当时在一个实验室，每个人都在使用 CentOS……或者 Cent OS，或者不管你怎么说。我一直称它为 CentOS，新鲜制造者。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:29)</span>
+  </div>
+  <div class="dialogue-en">Yeah. ThePrimeagen</div>
+  <div class="dialogue-zh">是的。普里梅根</div>
+</div>
+    <a href="https://lexfridman.com/theprimeagen-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="jo-boaler.html" class="card" style="text-decoration:none">
+  <div class="card-title">Jo Boaler: How to Learn Math</div>
+  <div class="card-meta">Jo Boaler</div>
+</a>
+<a href="silvio-micali.html" class="card" style="text-decoration:none">
+  <div class="card-title">Silvio Micali: Cryptocurrency, Blockchain, Algorand, Bitcoin, and Ethereum</div>
+  <div class="card-meta">Silvio Micali</div>
+</a>
+<a href="andrew-huberman-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Sleep, Dreams, Creativity &amp; the Limits of the Human Mind</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="andrew-huberman-3.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Focus, Stress, Relationships, and Friendship</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

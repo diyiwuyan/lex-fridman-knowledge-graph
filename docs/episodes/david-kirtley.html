@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>David Kirtley - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>David Kirtley</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">David Kirtley</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/david-kirtley.html" style="font-size:16px;color:#818cf8;font-weight:600">David Kirtley</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">27,828 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/david-kirtley-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#8b5cf622;color:#8b5cf6;border:1px solid #8b5cf644;font-size:13px;padding:4px 12px">物理与宇宙学</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:14</span>
+  <span class="chapter-title">Nuclear fission vs fusion<span class="zh-trans"> · 核裂变与聚变</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">13:14</span>
+  <span class="chapter-title">Physics of E=mc^2<span class="zh-trans"> · 物理 E=mc^2</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">18:28</span>
+  <span class="chapter-title">Is nuclear fusion safe?<span class="zh-trans"> · 核聚变安全吗？</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">23:50</span>
+  <span class="chapter-title">Chernobyl<span class="zh-trans"> · 切尔诺贝利</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:17</span>
+  <span class="chapter-title">Geopolitics<span class="zh-trans"> · 地缘政治</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">32:12</span>
+  <span class="chapter-title">Extreme scenarios<span class="zh-trans"> · 极端场景</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">39:07</span>
+  <span class="chapter-title">How nuclear fusion works<span class="zh-trans"> · 核聚变如何进行</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:11:59</span>
+  <span class="chapter-title">Extreme temperatures<span class="zh-trans"> · 极端温度</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:17:00</span>
+  <span class="chapter-title">Fusion control and simulation<span class="zh-trans"> · 融合控制与仿真</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:28:54</span>
+  <span class="chapter-title">Electricity from fusion<span class="zh-trans"> · 聚变产生的电力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:02:59</span>
+  <span class="chapter-title">First fusion power plant in 2028<span class="zh-trans"> · 2028年第一座聚变发电厂</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:09:52</span>
+  <span class="chapter-title">Energy needs of GPU clusters<span class="zh-trans"> · GPU集群的能源需求</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:20:16</span>
+  <span class="chapter-title">Kardashev scale<span class="zh-trans"> · 卡尔达肖夫量表</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:28:12</span>
+  <span class="chapter-title">Fermi Paradox<span class="zh-trans"> · 费米悖论</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">fusion</span><span class="keyword-tag">david</span><span class="keyword-tag">kirtley</span><span class="keyword-tag">magnetic</span><span class="keyword-tag">field</span><span class="keyword-tag">energy</span><span class="keyword-tag">nuclear</span><span class="keyword-tag">electricity</span><span class="keyword-tag">systems</span><span class="keyword-tag">particles</span><span class="keyword-tag">fuel</span><span class="keyword-tag">going</span><span class="keyword-tag">plasma</span><span class="keyword-tag">electrical</span><span class="keyword-tag">high</span><span class="keyword-tag">together</span><span class="keyword-tag">current</span><span class="keyword-tag">fission</span><span class="keyword-tag">don</span><span class="keyword-tag">hard</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"But the old one, the oldest of them that had been on site for long periods, and maybe too long, I think some experts have looked at this in the past was where some of the problems actually happened. And so, I look to that less as a failure of the engineering of the power plants, and more of the humans around those systems. That we should be operating these plants as designed, and then I believe they’re safe. And that gets to some of the atomic weapons questions that I think are the other part around nuclear reactors and fission reactors that are concerning for me."</div>
+  <div class="quote-zh">但是旧的，其中最古老的，已经在现场很长时间了，也许太久了，我认为一些专家过去已经研究过这个问题，这就是一些问题实际发生的地方。因此，我认为这不是发电厂工程的失败，而是这些系统周围人类的失败。我们应该按照设计运行这些工厂，然后我相信它们是安全的。这涉及到一些原子武器问题，我认为这些问题是我关心的核反应堆和裂变反应堆的另一部分。</div>
+  <div class="quote-meta">— David Kirtley （00:24:48）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Fusion power plants can’t be used to make nuclear weapons. Fundamentally, the processes in fusion aren’t the same processes that happen in nuclear bombs and nuclear weapons. And so it’s actually one reason I started in fusion, and most of our team thinks about the mission of fusion, of delivering clean, safe electricity, is it also can’t be used to make weapons. And I think that’s a little bit of a distinction from traditional nuclear fission reactors, is that while I totally believe as a nuclear engineer we can build power plants now that are safe, that aren’t going to have reactions. They use a fuel, uranium and plutonium, that can be used to make nuclear weapons."</div>
+  <div class="quote-zh">聚变发电厂不能用于制造核武器。从根本上说，聚变过程与核弹和核武器中发生的过程不同。所以这实际上是我开始聚变的原因之一，我们团队的大多数人都在思考聚变的使命，即提供清洁、安全的电力，它是否也不能用来制造武器。我认为这与传统核裂变反应堆有一点区别，虽然我完全相信作为一名核工程师，我们现在可以建造安全的、不会发生反应的发电厂。他们使用可用于制造核武器的燃料铀和钚。</div>
+  <div class="quote-meta">— David Kirtley （00:25:53）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"To understand that, we can actually go back in history a little bit and think about the evolution of some of these approaches to fusion. From our perspective, we look at the technology that we use as built on physics experiments that were very successful in the 1950s. In those systems, the earliest pioneers of fusion said, “I know, we understand the physics. We have to take these gases, heat them to 100 million degrees, and then confine them, push them together so that fusion happens.” So, what is the best way to do that? Some of the earliest programs, we call them theta pinch. And what those programs were, were a linear topology, because we knew how to build these magnets."</div>
+  <div class="quote-zh">为了理解这一点，我们实际上可以回顾一下历史，思考其中一些融合方法的演变。从我们的角度来看，我们所使用的技术是建立在 20 世纪 50 年代非常成功的物理实验基础上的。在这些系统中，最早的聚变先驱说：“我知道，我们了解物理学。我们必须将这些气体加热到一亿度，然后限制它们，将它们推到一起，以便发生聚变。”那么，最好的方法是什么？一些最早的程序，我们称之为“theta捏”。这些程序是线性拓扑，因为我们知道如何构建这些磁铁。</div>
+  <div class="quote-meta">— David Kirtley （00:48:25）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But other things will happen. You don’t want to touch that high velocity particle with any kind of material, because it will collide with that material, damage that material, and usually blow off some chunks of that material. So we don’t do that. We keep those charged particles in a magnetic field. So they just bounce around and they don’t ever touch anything. And that’s really important. And so it’s less thinking about it from the way we normally think about hot and cold, and more thinking about it from a velocity point of view."</div>
+  <div class="quote-zh">但还会发生其他事情。您不想让高速粒子接触任何类型的材料，因为它会与该材料碰撞，损坏该材料，并且通常会吹掉该材料的一些块。所以我们不这样做。我们将这些带电粒子保持在磁场中。所以他们只是弹来弹去，从来不碰任何东西。这真的很重要。因此，它不再像我们通常思考热和冷的方式来思考它，而是更多地从速度的角度来思考它。</div>
+  <div class="quote-meta">— David Kirtley （01:14:54）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But if, as some research says, that there’s 100 million to a billion years of fusion fuel on the Earth, we have room to go, and that’s at today’s use. So 100 times today’s use, we still have tons of fuel. Let’s go do it. And what does that unlock? What does it unlock to have power 100 times the output that we actually do here on Earth right now? And I think that’s pretty transformational. Do we have those huge AI data centers? Do we have brains that can now think at rapid speeds and now innovate? I think that’s a pretty powerful future."</div>
+  <div class="quote-zh">但如果像一些研究所说的那样，地球上有 1 亿到 10 亿年的聚变燃料，那么我们还有空间，而且这就是今天的使用量。所以今天使用 100 次，我们仍然有大量燃料。我们去做吧。这能解锁什么？拥有比我们现在在地球上实际输出功率 100 倍的功率，它能解锁什么？我认为这是非常具有变革性的。我们有那些巨大的人工智能数据中心吗？我们的大脑现在可以快速思考并创新吗？我认为这是一个非常强大的未来。</div>
+  <div class="quote-meta">— David Kirtley （02:21:14）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with David Kirtley, a nuclear engineer, expert on nuclear fusion, and the CEO of Helion Energy, a company working on building nuclear fusion reactors and have made incredible progress in a short period of time that make it seem possible, like we could actually get there as a civilization. This is exciting because nuclear fusion, if achieved commercially, will solve ...</div>
+  <div class="dialogue-zh">以下是与核工程师、核聚变专家、Helion Energy 首席执行官 David Kirtley 的对话，Helion Energy 是一家致力于建造核聚变反应堆的公司，并在短时间内取得了令人难以置信的进展，这让这一切看起来成为可能，就像我们作为一个文明实际上可以实现这一目标一样。这是令人兴奋的，因为核聚变如果实现商业化，将解决</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:51)</span>
+  </div>
+  <div class="dialogue-en">Just in case you’re not familiar, let me clarify the difference between nuclear fusion and nuclear fission. By the way, I believe according to the excellent Sample Size subreddit post by pmgoodbeer on this, the preferred pronunciation of the latter in the U.S. is nuclear fission, like vision. And in the U.K. and other countries is nuclear fission, like mission. I prefer the nuclear fission pronunc...</div>
+  <div class="dialogue-zh">为了防止您不熟悉，让我澄清一下核聚变和核裂变之间的区别。顺便说一句，我相信根据 pmgoodbeer 的优秀样本大小 subreddit 帖子，后者在美国的首选发音是核裂变，就像视觉一样。在英国和其他国家，核裂变就像任务一样。我更喜欢核裂变的发音</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:50)</span>
+  </div>
+  <div class="dialogue-en">If something goes wrong, the reactor simply stops. And there are no carbon emissions. On a more technical side, Helion uses a different approach to fusion than has traditionally been done. Most fusion efforts have used tokamaks, which are these giant donut-shaped magnetic containment chambers. Helion uses pulsed magnetoinertial fusion. David gets into the super technical physics and engineering de...</div>
+  <div class="dialogue-zh">如果出现问题，反应堆就会停止运行。而且没有碳排放。在技​​术方面，Helion 使用了与传统方法不同的聚变方法。大多数聚变工作都使用托卡马克，这是一种巨大的甜甜圈形状的磁密封室。 Helion 使用脉冲磁惯性聚变。大卫进入超级技术物理和工程领域</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:38)</span>
+  </div>
+  <div class="dialogue-en">If someone is able to solve commercial fusion, we would enter a new era of energy abundance that fundamentally changes what’s possible for us humans. I’m excited for the future, and I’m excited for super technical physics podcast episodes. This is the Lex Fridman podcast. To support it, please check out our sponsors in the description where you can also find links to contact me, ask questions, giv...</div>
+  <div class="dialogue-zh">如果有人能够解决商业聚变问题，我们将进入一个能源丰富的新时代，从根本上改变我们人类的可能性。我对未来感到兴奋，我对超级技术物理播客节目感到兴奋。这是莱克斯·弗里德曼播客。为了支持它，请在描述中查看我们的赞助商，您还可以在其中找到联系我、提出问题、给予帮助的链接</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:14)</span>
+  </div>
+  <div class="dialogue-en">Let’s start with the big picture. What is nuclear fusion, and maybe what is nuclear fission? Let’s lay out the basics.</div>
+  <div class="dialogue-zh">让我们从大局开始。什么是核聚变，也许什么是核裂变？让我们列出基础知识。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    David Kirtley <span class="dialogue-time">(00:03:22)</span>
+  </div>
+  <div class="dialogue-en">So fusion is what powers the universe. Fusion is what happens in stars, and it’s where the vast amount of energy that we even use today here on Earth comes from the process of fusion. It also is what powers plants. And those plants become oil, and those become fossil fuels that then power the rest of human civilization for the last 100 years. So fusion really underpins a lot of what has enabled us...</div>
+  <div class="dialogue-zh">所以聚变是宇宙的动力。聚变是恒星中发生的事情，我们今天在地球上使用的大量能量也来自聚变过程。它也是植物的动力来源。这些植物变成了石油，又变成了化石燃料，为人类文明的其他部分提供了过去 100 年的动力。所以融合确实支撑了我们的许多成就</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    David Kirtley <span class="dialogue-time">(00:04:14)</span>
+  </div>
+  <div class="dialogue-en">In that process, as you combine atomic nuclei and form heavier nuclei, those nuclei are slightly lighter than the sum of the parts. And that comes from a lot of the details of quantum mechanics and how those fundamental particles combine and interact. We also talk about the strong nuclear force that holds the atomic nuclei together as one of the fundamental forces involved in fusion. But that mass...</div>
+  <div class="dialogue-zh">在此过程中，当您结合原子核并形成较重的原子核时，这些原子核比各部分的总和稍轻。这来自量子力学的许多细节以及这些基本粒子如何结合和相互作用。我们还讨论将原子核结合在一起的强核力，这是聚变所涉及的基本力之一。但那个质量</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    David Kirtley <span class="dialogue-time">(00:04:55)</span>
+  </div>
+  <div class="dialogue-en">But that’s the fundamental process in fusion as you’re bringing those lightweight atomic nuclei, those isotopes, together. Fission is the exact opposite, where you’re taking the heaviest elements in the universe, uranium, plutonium, things that are so heavy and have so many internal protons and neutrons and electrons, that they’re barely held together at all. They’re fundamentally unstable or radi...</div>
+  <div class="dialogue-zh">但这是聚变的基本过程，因为你将这些轻质原子核、那些同位素聚集在一起。裂变则恰恰相反，你使用的是宇宙中最重的元素，铀、钚，这些元素非常重，内部有如此多的质子、中子和电子，以至于它们几乎无法结合在一起。它们从根本上来说不稳定或辐射</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    David Kirtley <span class="dialogue-time">(00:05:40)</span>
+  </div>
+  <div class="dialogue-en">But if you add up all of those pieces, they also have slightly less mass than the initial one did, the initial uranium or plutonium. And in that process, again, E=mc², a tremendous amount of energy is released. There’s a very famous curve in atomic physics, fusion or fission, looking at the periodic table. Going from the lightest elements, hydrogen, to the heaviest elements, those uranium, plutoni...</div>
+  <div class="dialogue-zh">但如果你把所有这些碎片加起来，它们的质量也比最初的铀或钚稍小。在这个过程中，E=mc²，再次释放出大量的能量。原子物理学、聚变或裂变中有一条非常著名的曲线，看看元素周期表。从最轻的元素氢到最重的元素铀、冥王星</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    David Kirtley <span class="dialogue-time">(00:06:30)</span>
+  </div>
+  <div class="dialogue-en">But when it burns and does fusion, those hydrogens combine into heliums, and later stage stars can then burn those heliums and they can fuse those together to form even heavier elements and carbons. And those carbons can fuse together and form heavier elements. And that whole stellar process is something that inspires us at Helion to think about what are fusion fuels, not just the simplest ones, b...</div>
+  <div class="dialogue-zh">但当它燃烧并发生聚变时，这些氢会结合成氦，后期恒星可以燃烧这些氦，并将它们融合在一起形成更重的元素和碳。这些碳可以融合在一起并形成更重的元素。整个恒星过程激励我们 Helion 思考什么是聚变燃料，而不仅仅是最简单的燃料，b</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:59)</span>
+  </div>
+  <div class="dialogue-en">Okay, so there’s a million things I want to say. So first, maybe zooming out to the biggest possible picture, if you look across hundreds of millions, billions of years, and all the, in my opinion, alien civilizations that are out there, they’re going to be powered likely by fusion. So our advanced intelligent civilization is powered by fusion in that the sun is our power plant. Then the other thi...</div>
+  <div class="dialogue-zh">好吧，我有一百万件事想说。因此，首先，也许缩小到尽可能大的图景，如果你纵观数亿年、数十亿年，以及我认为存在的所有外星文明，它们很可能会通过核聚变提供动力。因此，我们先进的智能文明是由聚变提供动力的，因为太阳是我们的发电厂。然后另一个这个</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    David Kirtley <span class="dialogue-time">(00:07:30)</span>
+  </div>
+  <div class="dialogue-en">E=mc² is a fundamental relationship that a patent clerk, Einstein, discovered and unlocked an entire new realm of physics and engineering and has shown us atomic physics, what happens inside the nucleus, and unlocked our understanding of the universe and paved the way for many of the physics advancements that came after, that we think about mass as these particles. But in reality also, at the same...</div>
+  <div class="dialogue-zh">E=mc² 是一个基本关系，专利员爱因斯坦发现并开启了一个全新的物理和工程学领域，并向我们展示了原子物理学、原子核内部发生的事情，解锁了我们对宇宙的理解，并为后来的许多物理进步铺平了道路，我们将质量视为这些粒子。但事实上，同时</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    David Kirtley <span class="dialogue-time">(00:08:19)</span>
+  </div>
+  <div class="dialogue-en">But also in chemistry and in chemical bonds, in those chemical bonds, there is a change in mass. When you take a hydrogen and an oxygen and you burn them and you combine them into water, there’s a change in mass. Now, that change per atom and per molecule is actually so small that it’s extremely hard to measure, but it’s still there, and that’s the energy that is released, and you can quantify tha...</div>
+  <div class="dialogue-zh">但在化学和化学键中，在这些化学键中，质量也会发生变化。当你燃烧氢和氧并将它们结合成水时，质量会发生变化。现在，每个原子和每个分子的变化实际上非常小，以至于很难测量，但它仍然存在，这就是释放的能量，你可以量化它</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:53)</span>
+  </div>
+  <div class="dialogue-en">Can you also just speak to the different fuels that you mentioned, both on the fusion and the- …fission side? So uranium, plutonium for the fission, and then hydrogen isotopes for the fusion?</div>
+  <div class="dialogue-zh">您能否谈谈您提到的聚变和……裂变方面的不同燃料？那么铀、钚用于裂变，然后氢同位素用于聚变？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    David Kirtley <span class="dialogue-time">(00:08:58)</span>
+  </div>
+  <div class="dialogue-en">So for fission, uranium and plutonium, we don’t make those nuclei. Those, for humanity, have been made in the primordial universe through supernovae and the Big Bang and the initial formation of the universe where matter was created. And so we dig those up. We dig up uranium and plutonium out of the ground. And in fact, most plutonium we make from uranium, and we can talk about how to enrich urani...</div>
+  <div class="dialogue-zh">因此，对于裂变、铀和钚，我们不制造这些原子核。对于人类来说，这些是在原始宇宙中通过超新星和大爆炸以及物质诞生的宇宙的最初形成而形成的。所以我们把它们挖掘出来。我们从地下挖出铀和钚。事实上，我们大多数钚都是由铀制成的，我们可以讨论如何浓缩铀</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:58)</span>
+  </div>
+  <div class="dialogue-en">So the basic fuel for fission is already in the ground, and then the basic fuel for fusion is everywhere?</div>
+  <div class="dialogue-zh">那么裂变的基本燃料已经在地下了，那么聚变的基本燃料无处不在？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    David Kirtley <span class="dialogue-time">(00:08:58)</span>
+  </div>
+  <div class="dialogue-en">Is everywhere, and we particularly use a type of hydrogen called deuterium, which is a heavier isotope of hydrogen. Hydrogen is typically one proton and one electron, atomic mass of one. Deuterium has an atomic mass of two, which is a proton, which is a charged particle, and it has a neutron in its nucleus, which is an uncharged particle. And so that’s deuterium as the fuel. Now, deuterium is also...</div>
+  <div class="dialogue-zh">无处不在，我们特别使用一种称为氘的氢，它是氢的较重同位素。氢通常由一个质子和一个电子组成，原子质量为一。氘的原子质量为二，它是一个质子，它是带电粒子，它的原子核中有一个中子，它是不带电粒子。这就是氘作为燃料。现在，氘也</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    David Kirtley <span class="dialogue-time">(00:08:58)</span>
+  </div>
+  <div class="dialogue-en">It’s everywhere. And safe and clean and one of those fundamental particles that was born in the cosmos, and we estimate that in seawater here on Earth, we have, if we powered all of humanity on fusion at our current use of electricity, somewhere between 100 million years and a billion years of fuel in hydrogen and deuterium here on Earth.</div>
+  <div class="dialogue-zh">它无处不在。安全、清洁，是宇宙中诞生的基本粒子之一，我们估计，在地球的海水中，如果我们以目前的电力使用聚变为全人类提供动力，地球上的氢和氘燃料大约需要 1 亿年到 10 亿年。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:58)</span>
+  </div>
+  <div class="dialogue-en">And how is that stored mostly?</div>
+  <div class="dialogue-zh">主要是如何存储的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    David Kirtley <span class="dialogue-time">(00:08:58)</span>
+  </div>
+  <div class="dialogue-en">And mostly that’s just in water. Mostly that it’s a mix of what we call heavy water, where you have normal water that you’re used to and you learn in school is H₂O, where there are two hydrogens and an oxygen in a molecule. And deuterium, or heavy water, is D₂O, two deuteriums and an oxygen. In reality, it’s actually an interesting mix where you have some HDO, so a mix of hydrogen and deuterium. Y...</div>
+  <div class="dialogue-zh">而且大部分都在水中。大多数情况下，它是我们所说的重水的混合物，你习惯了普通的水，你在学校学到的是 H2O，其中一个分子中有两个氢和一个氧。氘或重水是 D2O，由两个氘和一个氧组成。事实上，它实际上是一种有趣的混合物，其中有一些 HDO，即氢和氘的混合物。是</div>
+</div>
+    <a href="https://lexfridman.com/david-kirtley-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="jeffrey-shainline.html" class="card" style="text-decoration:none">
+  <div class="card-title">Jeffrey Shainline: Neuromorphic Computing and Optoelectronic Intelligence</div>
+  <div class="card-meta">Jeffrey Shainline</div>
+</a>
+<a href="lee-cronin-3.html" class="card" style="text-decoration:none">
+  <div class="card-title">Lee Cronin #3</div>
+  <div class="card-meta">Lee Cronin</div>
+</a>
+<a href="lee-cronin.html" class="card" style="text-decoration:none">
+  <div class="card-title">Lee Cronin: Origin of Life, Aliens, Complexity, and Consciousness</div>
+  <div class="card-meta">Lee Cronin</div>
+</a>
+<a href="lisa-randall.html" class="card" style="text-decoration:none">
+  <div class="card-title">Lisa Randall</div>
+  <div class="card-meta">Lisa Randall</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

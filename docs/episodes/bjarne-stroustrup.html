@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bjarne Stroustrup: C++ - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Bjarne Stroustrup: C++</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Bjarne Stroustrup: C++</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/bjarne-stroustrup.html" style="font-size:16px;color:#818cf8;font-weight:600">Bjarne Stroustrup</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">9,764 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/bjarne-stroustrup" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <p style="color:#64748b;font-size:14px">暂无章节信息</p>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">code</span><span class="keyword-tag">language</span><span class="keyword-tag">programming</span><span class="keyword-tag">don</span><span class="keyword-tag">rules</span><span class="keyword-tag">type</span><span class="keyword-tag">languages</span><span class="keyword-tag">going</span><span class="keyword-tag">better</span><span class="keyword-tag">abstraction</span><span class="keyword-tag">stuff</span><span class="keyword-tag">systems</span><span class="keyword-tag">types</span><span class="keyword-tag">didn</span><span class="keyword-tag">features</span><span class="keyword-tag">said</span><span class="keyword-tag">design</span><span class="keyword-tag">machine</span><span class="keyword-tag">couldn</span><span class="keyword-tag">got</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"problem, explained possible solutions. It was not a complete design. A group in University of Indiana,"</div>
+  <div class="quote-zh">问题，解释了可能的解决方案。这不是一个完整的设计。印第安纳大学的一个研究小组，</div>
+  <div class="quote-meta">— Bjarne Stroustrup （1:15:47.840）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"basically otherwise we&#39;ll do it ourselves. And we know you can do it better. So through a combination"</div>
+  <div class="quote-zh">基本上否则我们就自己做。我们知道您可以做得更好。所以通过组合</div>
+  <div class="quote-meta">— Bjarne Stroustrup （1:19:51.120）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"relatively slow. And so he shows in real time how he writes Pong starting with fairly straightforward"</div>
+  <div class="quote-zh">相对较慢。所以他实时展示了他如何从相当简单的开始编写 Pong</div>
+  <div class="quote-meta">— Bjarne Stroustrup （20:46.400）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"looking for. I&#39;ll be looking for some tricks that correlate with bugs and elsewhere. And I have tried"</div>
+  <div class="quote-zh">寻找。我将寻找一些与错误和其他地方相关的技巧。我已经尝试过</div>
+  <div class="quote-meta">— Bjarne Stroustrup （33:03.360）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"when you see it. And I&#39;m not sure you can describe it in words, except vaguely through guidelines and"</div>
+  <div class="quote-zh">当你看到它时。我不确定你能用语言描述它，除非通过指导方针和</div>
+  <div class="quote-meta">— Bjarne Stroustrup （36:12.240）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:11:49.200)</span>
+  </div>
+  <div class="dialogue-en">time predicates. Do you have the properties I need? So it specifies the requirements of the code</div>
+  <div class="dialogue-zh">时间谓词。你们有我需要的房产吗？所以它指定了代码的要求</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:11:56.320)</span>
+  </div>
+  <div class="dialogue-en">on the parameters that it gets. It&#39;s very similar to types actually. But operating in the space of</div>
+  <div class="dialogue-zh">关于它获得的参数。它实际上与类型非常相似。但在空间中操作</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:12:05.280)</span>
+  </div>
+  <div class="dialogue-en">concepts. Concepts. The word concept was used by Alex Stefanov, who is sort of the father of generic</div>
+  <div class="dialogue-zh">概念。概念。概念这个词是由亚历克斯·斯特凡诺夫（Alex Stefanov）使用的，他可以说是泛型之父</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:12:15.200)</span>
+  </div>
+  <div class="dialogue-en">programming in the context of C++. There&#39;s other places that use that word, but the way we call</div>
+  <div class="dialogue-zh">在 C++ 环境中进行编程。还有其他地方使用这个词，但我们调用的方式</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:12:23.520)</span>
+  </div>
+  <div class="dialogue-en">it generic programming is Alex&#39;s. And he called them concepts because he said they are the sort</div>
+  <div class="dialogue-zh">通用编程是 Alex 的。他称它们为概念，因为他说它们是那种</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:12:29.040)</span>
+  </div>
+  <div class="dialogue-en">of the fundamental concepts of an area. So they should be called concepts. And we&#39;ve had</div>
+  <div class="dialogue-zh">区域的基本概念。所以它们应该被称为概念。而我们已经有过</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:12:34.720)</span>
+  </div>
+  <div class="dialogue-en">concepts all the time. If you look at the KNR book about C, C has arithmetic types and it has</div>
+  <div class="dialogue-zh">一直以来的概念。如果你看一下关于 C 的 KNR 书，C 有算术类型，并且有</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:12:45.760)</span>
+  </div>
+  <div class="dialogue-en">integral types. It says so in the book. And then it lists what they are and they have certain</div>
+  <div class="dialogue-zh">整数类型。书上是这么说的。然后它列出了它们是什么以及它们有一定的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:12:52.480)</span>
+  </div>
+  <div class="dialogue-en">properties. The difference today is that we can actually write a concept that will ask a type,</div>
+  <div class="dialogue-zh">特性。今天的不同之处在于，我们实际上可以编写一个会询问类型的概念，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:12:59.200)</span>
+  </div>
+  <div class="dialogue-en">are you an integral type? Do you have the properties necessary to be an integral type?</div>
+  <div class="dialogue-zh">你是积分型吗？您是否具有成为整型所需的属性？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:13:05.200)</span>
+  </div>
+  <div class="dialogue-en">Do you have plus, minus, divide and such? So maybe the story of concepts, because I thought</div>
+  <div class="dialogue-zh">有加、减、除之类的吗？所以也许是概念的故事，因为我认为</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:13:15.200)</span>
+  </div>
+  <div class="dialogue-en">it might be part of C++11. C O X or whatever it was at the time. What was the, why didn&#39;t it,</div>
+  <div class="dialogue-zh">它可能是 C++11 的一部分。 C O X 或当时的任何东西。那是什么，为什么没有，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:13:25.680)</span>
+  </div>
+  <div class="dialogue-en">what, like what we&#39;ll, we&#39;ll talk a little bit about this fascinating process of standards,</div>
+  <div class="dialogue-zh">就像我们将要讨论的那样，我们将讨论一下这个令人着迷的标准过程，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:13:30.560)</span>
+  </div>
+  <div class="dialogue-en">because I think it&#39;s really interesting for people. It&#39;s interesting for me,</div>
+  <div class="dialogue-zh">因为我认为这对人们来说真的很有趣。这对我来说很有趣，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:13:34.000)</span>
+  </div>
+  <div class="dialogue-en">but why did it take so long? What shapes did the idea of concepts take?</div>
+  <div class="dialogue-zh">但为什么花了这么长时间？概念的想法采取了什么形式？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:13:41.760)</span>
+  </div>
+  <div class="dialogue-en">What were the challenges? Back in 87 or thereabouts. 1987?</div>
+  <div class="dialogue-zh">面临哪些挑战？回到87年左右。 1987 年？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:13:49.120)</span>
+  </div>
+  <div class="dialogue-en">Well, 1987 or thereabouts when I was designing templates, obviously I wanted to express the</div>
+  <div class="dialogue-zh">嗯，1987 年左右，当我设计模板时，显然我想表达</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:13:54.960)</span>
+  </div>
+  <div class="dialogue-en">notion of what is required by a template of its arguments. And so I looked at this and basically</div>
+  <div class="dialogue-zh">其参数模板所需内容的概念。所以我看了这个基本上</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:14:03.920)</span>
+  </div>
+  <div class="dialogue-en">for templates, I wanted three properties. I wanted to be very flexible. It had to be able to express</div>
+  <div class="dialogue-zh">对于模板，我想要三个属性。我想要变得非常灵活。它必须能够表达</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bjarne Stroustrup <span class="dialogue-time">(1:14:14.000)</span>
+  </div>
+  <div class="dialogue-en">things I couldn&#39;t imagine because I know I can&#39;t imagine everything. And I&#39;ve been suffering from</div>
+  <div class="dialogue-zh">我无法想象的事情，因为我知道我无法想象一切。而我一直在承受着</div>
+</div>
+    <a href="https://lexfridman.com/bjarne-stroustrup" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="brian-kernighan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Brian Kernighan: UNIX, C, AWK, AMPL, and Go Programming</div>
+  <div class="card-meta">Brian Kernighan</div>
+</a>
+<a href="charles-isbell.html" class="card" style="text-decoration:none">
+  <div class="card-title">Charles Isbell: Computing, Interactive AI, and Race in America</div>
+  <div class="card-meta">Charles Isbell</div>
+</a>
+<a href="david-silver.html" class="card" style="text-decoration:none">
+  <div class="card-title">David Silver: AlphaGo, AlphaZero, and Deep Reinforcement Learning</div>
+  <div class="card-meta">David Silver</div>
+</a>
+<a href="jack-dorsey.html" class="card" style="text-decoration:none">
+  <div class="card-title">Jack Dorsey: Square, Cryptocurrency, and Artificial Intelligence</div>
+  <div class="card-meta">Jack Dorsey</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

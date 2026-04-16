@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jimmy Wales - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Jimmy Wales</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Jimmy Wales</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/jimmy-wales.html" style="font-size:16px;color:#818cf8;font-weight:600">Jimmy Wales</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">33,987 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/jimmy-wales-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:47</span>
+  <span class="chapter-title">Origin story of Wikipedia<span class="zh-trans"> · 维基百科的起源故事</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">6:51</span>
+  <span class="chapter-title">Design of Wikipedia<span class="zh-trans"> · 维基百科的设计</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">13:44</span>
+  <span class="chapter-title">Number of articles on Wikipedia<span class="zh-trans"> · 维基百科上的文章数量</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">19:55</span>
+  <span class="chapter-title">Wikipedia pages for living persons<span class="zh-trans"> · 活着的人的维基百科页面</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:48</span>
+  <span class="chapter-title">ChatGPT<span class="zh-trans"> · 聊天GPT</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">54:19</span>
+  <span class="chapter-title">Wikipedia’s political bias<span class="zh-trans"> · 维基百科的政治偏见</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:00:23</span>
+  <span class="chapter-title">Conspiracy theories<span class="zh-trans"> · 阴谋论</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:13:28</span>
+  <span class="chapter-title">Facebook<span class="zh-trans"> · Facebook</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:21:46</span>
+  <span class="chapter-title">Twitter<span class="zh-trans"> · 叽叽喳喳</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:42:22</span>
+  <span class="chapter-title">Building Wikipedia<span class="zh-trans"> · 建立维基百科</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:56:55</span>
+  <span class="chapter-title">Wikipedia funding<span class="zh-trans"> · 维基百科资助</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:08:15</span>
+  <span class="chapter-title">ChatGPT vs Wikipedia<span class="zh-trans"> · ChatGPT 与维基百科</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:12:56</span>
+  <span class="chapter-title">Larry Sanger<span class="zh-trans"> · 拉里·桑格</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:18:28</span>
+  <span class="chapter-title">Twitter files<span class="zh-trans"> · 推特文件</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:21:20</span>
+  <span class="chapter-title">Government and censorship<span class="zh-trans"> · 政府和审查制度</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:35:44</span>
+  <span class="chapter-title">Adolf Hitler’s Wikipedia page<span class="zh-trans"> · 阿道夫·希特勒的维基百科页面</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:47:26</span>
+  <span class="chapter-title">Future of Wikipedia<span class="zh-trans"> · 维基百科的未来</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:59:29</span>
+  <span class="chapter-title">Advice for young people<span class="zh-trans"> · 给年轻人的建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:06:50</span>
+  <span class="chapter-title">Meaning of life<span class="zh-trans"> · 生命的意义</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">wikipedia</span><span class="keyword-tag">jimmy</span><span class="keyword-tag">wales</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">interesting</span><span class="keyword-tag">got</span><span class="keyword-tag">article</span><span class="keyword-tag">said</span><span class="keyword-tag">community</span><span class="keyword-tag">important</span><span class="keyword-tag">page</span><span class="keyword-tag">hard</span><span class="keyword-tag">human</span><span class="keyword-tag">thought</span><span class="keyword-tag">saying</span><span class="keyword-tag">doesn</span><span class="keyword-tag">twitter</span><span class="keyword-tag">talk</span><span class="keyword-tag">put</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Yeah. I think there’s no external answer to that. I think it’s internal. I think we decide what meaning we will have in our lives and what we’re going to do with ourselves. If we’re talking about 1,000 years, millions of years, Yuri Milner wrote a book. He’s a big internet investor guy. He wrote a book advocating quite strongly for humans exploring the universe, and getting off the planet. And he funds projects to using lasers to send little cameras, and interesting stuff. And he talks a lot in the book about meaning. His view is that the purpose of the human species is to broadly survive and get off the planet."</div>
+  <div class="quote-zh">是的。我认为对此没有外部答案。我认为这是内部的。我认为我们决定我们的生活有何意义以及我们要对自己做什么。如果我们谈论的是一千年，几百万年，尤里·米尔纳写了一本书。他是一位大互联网投资者。他写了一本书，强烈主张人类探索宇宙并离开地球。他还资助了使用激光发送小型相机和有趣的东西的项目。他在书中谈到了很多关于意义的内容。他的观点是，人类的目的是广泛生存并离开地球。</div>
+  <div class="quote-meta">— Jimmy Wales （03:07:37）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So just as an example in this area is Mark Wahlberg, Marky Mark is what I always think of him as, because that was his first sort of famous name, who I wouldn’t think should be listed as in the category, American criminal. Even though he did, he was convicted of quite a bad crime when he was a young person, but we don’t think of him as a criminal. Should the entry talk about that? Yeah, it’s actually an important part of his life story that he had a very rough youth and he could have gone down a really dark path and he turned his life around. That’s actually interesting. So categories are tricky."</div>
+  <div class="quote-zh">马克·沃尔伯格（Mark Wahlberg）就是这个领域的一个例子，我一直认为他是马基·马克（Marky Mark），因为这是他第一个出名的名字，我认为他不应该被列为美国罪犯类别。尽管他确实这么做了，但他年轻时曾犯下相当严重的罪行，但我们并不认为他是罪犯。该条目应该谈论这一点吗？是的，这实际上是他人生故事的重要组成部分，他有一个非常坎坷的青年时代，他本可以走上一条非常黑暗的道路，但他扭转了自己的生活。这实际上很有趣。所以类别很棘手。</div>
+  <div class="quote-meta">— Jimmy Wales （00:52:45）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"… is, I think they’re working really hard on it. I think that’s really important. And that actually… So if you ask me to step back and be like very business-like about our business model and where’s it going to go for us, and are we going to lose half our donations because everybody’s just going to stop coming to Wikipedia and go to ChatGPT? Well, grounding will help a lot because frankly, most questions people have, if they provide proper links, we’re going to be at the top of that, just like we are in Google. So we’re still going to get tons of recognition and tons of traffic just from… Even if it’s just the moral properness of saying, “Here’s my source.” So I think we’re going to be all right in that."</div>
+  <div class="quote-zh">......是的，我认为他们正在努力工作。我认为这非常重要。事实上……所以，如果你让我退后一步，以非常务实的方式谈论我们的商业模式，它对我们来说将走向何方，我们是否会因为每个人都不再访问维基百科而转向 ChatGPT 而失去一半的捐款？嗯，接地气会有很大帮助，因为坦率地说，人们提出的大多数问题，如果他们提供正确的链接，我们将位于最上面，就像我们在谷歌一样。因此，我们仍然会从……获得大量的认可和大量的流量，即使这只是说“这是我的来源”的道德正当性。所以我认为我们会没事的。</div>
+  <div class="quote-meta">— Jimmy Wales （02:12:00）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But I think it’s really interesting to think about. And reading his little book, it’s quite a short little book. Reading his book, it did make me think about, “Wow, this is big. This is not what you think about in your day-to-day life. Where is the human species going to be in 10 million years?” And it does make you sort of turn back to Earth and say, “Gee, let’s not destroy the planet. We’re stuck here for at least a while, and therefore we should really think about sustainability.” I mean, one million year sustainability."</div>
+  <div class="quote-zh">但我认为思考起来真的很有趣。读他的小书，这是一本相当短的小书。读他的书，确实让我想到，“哇，这可真大。这不是你在日常生活中思考的问题。一千万年后，人类将会在哪里？”它确实让你回到地球并说：“哎呀，我们不要毁灭地球。我们至少被困在这里一段时间了，因此我们应该真正考虑可持续性。”我的意思是，一百万年的可持续性。</div>
+  <div class="quote-meta">— Jimmy Wales （03:08:57）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And we don’t have all the answers. We have nothing close to the answers. I’m actually excited about AI in this regard, while also bracketing, yeah, I understand there’s also risks and people are terrified of AI. But I actually think it is quite interesting this moment in time that we may have in the next 50 years to really, really solve some really long-term human problems, for example, in health. The progress that’s being made in cancer treatment, because we are able to at scale model molecules, and genetics, and things like this, it gets huge. It’s really exciting. So, if we can hang on for a little while, and certain problems that seem completely intractable today, like climate change may end up being actually not that hard."</div>
+  <div class="quote-zh">我们没有所有的答案。我们没有任何接近答案的东西。在这方面，我实际上对人工智能感到兴奋，同时也括起来，是的，我知道这也存在风险，人们害怕人工智能。但实际上我认为现在这个时刻非常有趣，我们可能会在未来 50 年内真正真正解决一些真正长期的人类问题，例如健康问题。癌症治疗正在取得巨大进展，因为我们能够对分子、遗传学和类似的东西进行大规模建模。这真的很令人兴奋。因此，如果我们能坚持一段时间，某些今天看来完全棘手的问题，比如气候变化，最终可能实际上并不那么困难。</div>
+  <div class="quote-meta">— Jimmy Wales （03:09:37）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jimmy Wales <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">We’ve never bowed down to government pressure anywhere in the world, and we never will. We understand that we’re hardcore, and actually, there is a bit of nuance about how different companies respond to this, but our response has always been just to say no. If they threaten to block, well, knock yourself out. You’re going to lose Wikipedia.</div>
+  <div class="dialogue-zh">我们从未屈服于世界任何地方的政府压力，而且永远不会。我们知道我们是铁杆，实际上，不同公司对此的反应有一些细微差别，但我们的反应一直只是说“不”。如果他们威胁要阻止，那么，把自己打晕吧。你将会失去维基百科。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:21)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Jimmy Wales, co-founder of Wikipedia, one of, if not the most impactful websites ever, expanding the collective knowledge, intelligence, and wisdom of human civilization. This is Lex Fridman podcast. To support it, please check out our sponsors in the description. Now, dear friends, here’s Jimmy Wales. Origin story of Wikipedia</div>
+  <div class="dialogue-zh">以下是与维基百科联合创始人吉米·威尔士的对话，维基百科即使不是有史以来最具影响力的网站之一，也扩展了人类文明的集体知识、智力和智慧。这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是吉米·威尔士。维基百科的起源故事</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:47)</span>
+  </div>
+  <div class="dialogue-en">Let’s start at the beginning. What is the origin story of Wikipedia?</div>
+  <div class="dialogue-zh">让我们从头开始。维基百科的起源故事是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jimmy Wales <span class="dialogue-time">(00:00:51)</span>
+  </div>
+  <div class="dialogue-en">The origin story of Wikipedia, well, so I was watching the growth of the free software movement, open-source software, and seeing programmers coming together to collaborate in new ways, sharing code, doing that under free license, which is really interesting because it empowers an ability to work together. That’s really hard to do if the code is still proprietary, because then if I chip in and hel...</div>
+  <div class="dialogue-zh">维基百科的起源故事，嗯，所以我正在关注自由软件运动、开源软件的发展，并看到程序员聚集在一起以新的方式进行协作，共享代码，在免费许可下这样做，这非常有趣，因为它赋予了合作的能力。如果代码仍然是专有的，那真的很难做到，因为如果我参与并帮助</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jimmy Wales <span class="dialogue-time">(00:01:38)</span>
+  </div>
+  <div class="dialogue-en">The first thing that I thought of was an encyclopedia and thought, “Oh, that seems obvious that an encyclopedia, you can collaborate on it.” There’s a few reasons why. One, we all pretty much know what an encyclopedia entry on say, the Eiffel Tower should be like. You should see a picture, a few pictures, maybe, history, location, something about the architect, et cetera, et cetera. So we have a s...</div>
+  <div class="dialogue-zh">我首先想到的是一本百科全书，然后想，“哦，这似乎很明显，一本百科全书，你可以合作制作它。”有几个原因。第一，我们几乎都知道百科全书上的条目，埃菲尔铁塔应该是什么样子。你应该看到一张图片，几张图片，也许是历史、地点、关于建筑师的一些东西，等等。所以我们有一个</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jimmy Wales <span class="dialogue-time">(00:02:18)</span>
+  </div>
+  <div class="dialogue-en">With Nupedia, we had this idea that in order to be respected, we had to be even more academic than a traditional encyclopedia because a bunch of volunteers on the internet getting it right out of an encyclopedia, you could be made fun of if it’s just every random person. So we had implemented this seven-stage review process to get anything published, and two things came of that. So one thing, one ...</div>
+  <div class="dialogue-zh">对于 Nupedia，我们的想法是，为了受到尊重，我们必须比传统百科全书更具学术性，因为一群志愿者在互联网上直接从百科全书中获取内容，如果只是随机的一个人，你可能会被嘲笑。因此，我们实施了这个七阶段审查流程来发布任何内容，结果有两件事。所以一件事，一件事</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jimmy Wales <span class="dialogue-time">(00:03:07)</span>
+  </div>
+  <div class="dialogue-en">I was frustrated, “Why is this taking so long? Why is it so hard?” So I thought, “Okay.” I saw that Robert Merton had won a Nobel Prize in economics for his work on option pricing theory. When I was in academia, that’s what I worked on was option pricing theory, had a published paper. So I’d worked through all of his academic papers, and I knew his work quite well. I thought, “Oh, I’ll write a sho...</div>
+  <div class="dialogue-zh">我很沮丧，“为什么要花这么长时间？为什么这么难？”所以我想：“好吧。”我看到罗伯特·默顿因其在期权定价理论方面的工作而获得了诺贝尔经济学奖。当我在学术界时，我研究的是期权定价理论，发表了一篇论文。所以我读完了他所有的学术论文，并且非常了解他的工作。我想，“哦，我会写一篇文章</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:59)</span>
+  </div>
+  <div class="dialogue-en">A little bit of the bad part of grad school.</div>
+  <div class="dialogue-zh">研究生院的一些不好的部分。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jimmy Wales <span class="dialogue-time">(00:04:01)</span>
+  </div>
+  <div class="dialogue-en">Yeah, yeah, the bad part of grad school. So I was like, “Oh, this isn’t intellectually fun, this is like the bad part of grad school. It’s intimidating, and there’s a lot of potential embarrassment if I screw something up and so forth.” So that was when I realized, “Okay, look, this is never going to work. This is not something that people are really going to want to do.” So Jeremy Rosenfeld, one ...</div>
+  <div class="dialogue-zh">是的，是的，研究生院的糟糕部分。所以我想，“哦，这在智力上并不有趣，这就像研究生院的糟糕部分。这很令人生畏，如果我搞砸了一些事情，可能会有很多潜在的尴尬等等。”所以就在那时我意识到，“好吧，听着，这永远不会起作用。这不是人们真正想做的事情。”杰里米·罗森菲尔德，一位</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jimmy Wales <span class="dialogue-time">(00:04:45)</span>
+  </div>
+  <div class="dialogue-en">We were concerned that, “Oh, maybe these academics are going to really hate this idea, and we shouldn’t just convert the project immediately. We should launch this as a side project, the idea of here’s a Wiki where we can start playing around.” But actually, we got more work done in two weeks than we had in almost two years because people were able to just jump on and start doing stuff, and it was...</div>
+  <div class="dialogue-zh">我们担心，“哦，也许这些学者真的会讨厌这个想法，我们不应该立即转换该项目。我们应该将其作为一个副项目启动，这是一个我们可以开始尝试的 Wiki 的想法。”但实际上，我们在两周内完成的工作比近两年完成的工作还要多，因为人们能够立即开始做事情，而且这是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jimmy Wales <span class="dialogue-time">(00:05:20)</span>
+  </div>
+  <div class="dialogue-en">Actually, a funny story was several years later, I just happened to be online and I saw when, I think his name is Robert Aumann, won the Nobel Prize in economics. We didn’t have an entry on him at all, which was surprising, but it wasn’t that surprising. This was still early days. So I got to be the first person to type Robert Aumann, won Nobel Prize in economics and hit Save, which again, wasn’t ...</div>
+  <div class="dialogue-zh">其实，一个有趣的故事是几年后，我偶然在网上看到的，我想他的名字叫罗伯特·奥曼，获得了诺贝尔经济学奖。我们根本没有关于他的记录，这很令人惊讶，但也并不那么令人惊讶。这还处于早期阶段。因此，我成为第一个输入 Robert Aumann、获得诺贝尔经济学奖并点击“保存”的人，但这又不是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:03)</span>
+  </div>
+  <div class="dialogue-en">Well, what is it that made that so accessible, so fun, so natural to just add something?</div>
+  <div class="dialogue-zh">那么，是什么让添加一些东西变得如此容易、如此有趣、如此自然呢？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jimmy Wales <span class="dialogue-time">(00:06:09)</span>
+  </div>
+  <div class="dialogue-en">Well, I think, especially in the early days, and this, by the way, has gotten much harder because there are fewer topics that are just greenfield available. But you could say, “Oh, well, I know a little bit about this, and I can get it started.” But then it is fun to come back then and see other people have added and improved and so on and so forth. That idea of collaborating where people can, muc...</div>
+  <div class="dialogue-zh">嗯，我认为，尤其是在早期，顺便说一句，这变得更加困难，因为可用的主题越来越少。但你可以说，“哦，好吧，我对此有所了解，我可以开始使用。”但回来看到其他人已经添加和改进等等是很有趣的。在人们可以合作的地方进行合作的想法，muc</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:51)</span>
+  </div>
+  <div class="dialogue-en">How much debate was there over the interface, over the details of how to make that, seamless and frictionless?</div>
+  <div class="dialogue-zh">关于界面、关于如何实现无缝且无摩擦的细节，存在多少争论？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jimmy Wales <span class="dialogue-time">(00:06:57)</span>
+  </div>
+  <div class="dialogue-en">Yeah, not as much as there probably should have been, in a way. During that two years of the failure of Nupedia where very little work got done, what was actually productive was, there was a huge long discussion; email discussion, very clever people talking about things like neutrality, talking about what is an encyclopedia, but also talking about more technical ideas. Back then, XML was all the r...</div>
+  <div class="dialogue-zh">是的，在某种程度上，没有应有的那么多。在 Nupedia 失败的两年里，几乎没有完成什么工作，但真正富有成效的是，进行了一次大规模的长时间讨论；电子邮件讨论，非常聪明的人谈论中立性之类的事情，谈论什么是百科全书，但也谈论更多的技术想法。那时，XML 是最重要的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:47)</span>
+  </div>
+  <div class="dialogue-en">So that is a reality today where it’s-</div>
+  <div class="dialogue-zh">这就是今天的现实——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jimmy Wales <span class="dialogue-time">(00:07:48)</span>
+  </div>
+  <div class="dialogue-en">Yeah-</div>
+  <div class="dialogue-zh">是的-</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:49)</span>
+  </div>
+  <div class="dialogue-en">… there’s some-</div>
+  <div class="dialogue-zh">……有一些——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jimmy Wales <span class="dialogue-time">(00:07:50)</span>
+  </div>
+  <div class="dialogue-en">Yeah, so Wikidata-</div>
+  <div class="dialogue-zh">是的，所以维基数据-</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:50)</span>
+  </div>
+  <div class="dialogue-en">… universal variables? Wikidata.</div>
+  <div class="dialogue-zh">...通用变量？维基数据。</div>
+</div>
+    <a href="https://lexfridman.com/jimmy-wales-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="chris-lattner-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Chris Lattner: The Future of Computing and Programming Languages</div>
+  <div class="card-meta">Chris Lattner</div>
+</a>
+<a href="cristos-goodrow.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cristos Goodrow: YouTube Algorithm</div>
+  <div class="card-meta">Cristos Goodrow</div>
+</a>
+<a href="dan-kokotov.html" class="card" style="text-decoration:none">
+  <div class="card-title">Dan Kokotov: Speech Recognition with AI and Humans</div>
+  <div class="card-meta">Dan Kokotov</div>
+</a>
+<a href="dmitri-dolgov.html" class="card" style="text-decoration:none">
+  <div class="card-title">Dmitri Dolgov: Waymo and the Future of Self-Driving Cars</div>
+  <div class="card-meta">Dmitri Dolgov</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

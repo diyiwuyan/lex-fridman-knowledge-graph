@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roman Yampolskiy - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Roman Yampolskiy</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Roman Yampolskiy</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/roman-yampolskiy.html" style="font-size:16px;color:#818cf8;font-weight:600">Roman Yampolskiy</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">22,197 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/roman-yampolskiy-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:20</span>
+  <span class="chapter-title">Existential risk of AGI<span class="zh-trans"> · AGI 的存在风险</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">8:32</span>
+  <span class="chapter-title">Ikigai risk<span class="zh-trans"> · 生命贝风险</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">16:44</span>
+  <span class="chapter-title">Suffering risk<span class="zh-trans"> · 遭受风险</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">20:19</span>
+  <span class="chapter-title">Timeline to AGI<span class="zh-trans"> · AGI 时间表</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">24:51</span>
+  <span class="chapter-title">AGI turing test<span class="zh-trans"> · AGI图灵测试</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:14</span>
+  <span class="chapter-title">Yann LeCun and open source AI<span class="zh-trans"> · Yann LeCun 和开源人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">43:06</span>
+  <span class="chapter-title">AI control<span class="zh-trans"> · 人工智能控制</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">45:33</span>
+  <span class="chapter-title">Social engineering<span class="zh-trans"> · 社会工程</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">48:06</span>
+  <span class="chapter-title">Fearmongering<span class="zh-trans"> · 危言耸听</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">57:57</span>
+  <span class="chapter-title">AI deception<span class="zh-trans"> · 人工智能欺骗</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:04:30</span>
+  <span class="chapter-title">Verification<span class="zh-trans"> · 确认</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:11:29</span>
+  <span class="chapter-title">Self-improving AI<span class="zh-trans"> · 自我完善的人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:23:42</span>
+  <span class="chapter-title">Pausing AI development<span class="zh-trans"> · 暂停人工智能开发</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:29:59</span>
+  <span class="chapter-title">AI Safety<span class="zh-trans"> · 人工智能安全</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:39:43</span>
+  <span class="chapter-title">Current AI<span class="zh-trans"> · 当前人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:45:05</span>
+  <span class="chapter-title">Simulation<span class="zh-trans"> · 模拟</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:52:24</span>
+  <span class="chapter-title">Aliens<span class="zh-trans"> · 外星人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:53:57</span>
+  <span class="chapter-title">Human mind<span class="zh-trans"> · 人的心灵</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:00:17</span>
+  <span class="chapter-title">Neuralink<span class="zh-trans"> · 神经链接</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">roman</span><span class="keyword-tag">yampolskiy</span><span class="keyword-tag">humans</span><span class="keyword-tag">don</span><span class="keyword-tag">systems</span><span class="keyword-tag">human</span><span class="keyword-tag">possible</span><span class="keyword-tag">control</span><span class="keyword-tag">safety</span><span class="keyword-tag">agi</span><span class="keyword-tag">intelligence</span><span class="keyword-tag">test</span><span class="keyword-tag">capabilities</span><span class="keyword-tag">going</span><span class="keyword-tag">self</span><span class="keyword-tag">super</span><span class="keyword-tag">risk</span><span class="keyword-tag">doing</span><span class="keyword-tag">software</span><span class="keyword-tag">capable</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Correct. I don’t think developers know everything about what they are creating. They have lots of great knowledge, we’re making progress on explaining parts of a network. We can understand, “Okay, this note get excited, then this input is presented, this cluster of notes.” But we’re nowhere near close to understanding the full picture, and I think it’s impossible. You need to be able to survey an explanation. The size of those models prevents a single human from absorbing all this information, even if provided by the system. So either we’re getting model as an explanation for what’s happening and that’s not comprehensible to us or we’re getting compressed explanation, [inaudible 00:59:01] compression, where here, “Top 10 reasons you got fired.” It’s something, but it’s not a full picture."</div>
+  <div class="quote-zh">正确的。我认为开发人员并不了解他们所创造的一切。他们拥有丰富的知识，我们在解释网络的各个部分方面正在取得进展。我们可以理解，“好吧，这个音符变得兴奋，然后呈现这个输入，这组音符。”但我们距离了解全貌还差得很远，而且我认为这是不可能的。您需要能够调查解释。这些模型的大小使得一个人无法吸收所有这些信息，即使是由系统提供的。因此，要么我们得到模型作为正在发生的事情的解释，而这对我们来说是无法理解的，要么我们得到压缩的解释，[听不清00:59:01]压缩，这里是“你被解雇的十大原因”。这是一些东西，但它不是全貌。</div>
+  <div class="quote-meta">— Roman Yampolskiy （00:58:18）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"They can certainly be more creative. They can understand human biology better understand, understand our molecular structure, genome. Again, a lot of times torture ends, then individual dies. That limit can be removed as well."</div>
+  <div class="quote-zh">他们当然可以更有创造力。他们可以更好地了解人类生物学、了解我们的分子结构、基因组。同样，很多时候酷刑结束，然后个人死亡。该限制也可以被删除。</div>
+  <div class="quote-meta">— Roman Yampolskiy （00:19:11）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Human level is general in the domain of expertise of humans. We know how to do human things. I don’t speak dog language. I should be able to pick it up if I’m a general intelligence. It’s an inferior animal. I should be able to learn that skill, but I can’t. A general intelligence, truly universal general intelligence, should be able to do things like that humans cannot do."</div>
+  <div class="quote-zh">人类的水平在人类的专业领域是通用的。我们知道如何做人类的事情。我不会说狗语。如果我是一般智力的话我应该能够接受。这是一种低等动物。我应该能够学会这项技能，但我不能。通用智能，真正的通用通用智能，应该能够做人类做不到的事情。</div>
+  <div class="quote-meta">— Roman Yampolskiy （00:22:39）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So then I think about it, I usually think human with a paper and a pencil, not human with internet and another AI helping."</div>
+  <div class="quote-zh">所以我想了一下，我通常认为人类有一张纸和一支铅笔，而不是有互联网和另一个人工智能帮助的人类。</div>
+  <div class="quote-meta">— Roman Yampolskiy （00:23:59）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, some people think that if they’re that smart, they’re always good. They really do believe that. It just benevolence from intelligence. So they’ll always want what’s best for us. Some people think that they will be able to detect problem behaviors and correct them at the time when we get there. I don’t think it’s a good idea. I am strongly against it, but yeah, there are quite a few people who in general are so optimistic about this technology, it could do no wrong. They want it developed as soon as possible, as capable as possible."</div>
+  <div class="quote-zh">嗯，有些人认为，如果他们那么聪明，他们总是好的。他们确实相信这一点。只不过是出于智慧的仁慈而已。所以他们总是想要对我们最好的。有些人认为，当我们到达那里时，他们将能够发现问题行为并纠正它们。我认为这不是一个好主意。我强烈反对它，但是，是的，有相当多的人总体上对这项技术非常乐观，它不会做错。他们希望它尽快开发出来，能力尽可能强。</div>
+  <div class="quote-meta">— Roman Yampolskiy （00:28:44）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Roman Yampolskiy <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">If we create general superintelligences, I don’t see a good outcome long-term for humanity. So there is X-risk, existential risk, everyone’s dead. There is S-risk, suffering risks, where everyone wishes they were dead. We have also idea for I-risk, ikigai risks, where we lost our meaning. The systems can be more creative. They can do all the jobs. It’s not obvious what you have to contribute to a ...</div>
+  <div class="dialogue-zh">如果我们创造通用超级智能，我认为从长远来看不会给人类带来好的结果。所以存在X风险，存在风险，每个人都死了。有S风险，即痛苦风险，每个人都希望自己死掉。我们也有 I-risk、ikigai 风险的想法，但我们在这些风险中失去了意义。该系统可以更具创造性。他们可以完成所有的工作。你必须为这个项目做出什么贡献并不明显</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:54)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Roman Yampolskiy, an AI safety and security researcher and author of a new book titled AI: Unexplainable, Unpredictable, Uncontrollable. He argues that there’s almost 100% chance that AGI will eventually destroy human civilization. As an aside, let me say that I’ll have many often technical conversations on the topic of AI, often with engineers building the sta...</div>
+  <div class="dialogue-zh">以下是与人工智能安全研究员、新书《人工智能：不可解释、不可预测、不可控制》的作者 Roman Yampolskiy 的对话。他认为，AGI 最终有几乎 100% 的可能毁灭人类文明。顺便说一句，我会进行很多关于人工智能主题的技术对话，通常是与构建团队的工程师进行对话。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:46)</span>
+  </div>
+  <div class="dialogue-en">I’m personally excited for the future and believe it will be a good one in part because of the amazing technological innovation we humans create, but we must absolutely not do so with blinders on ignoring the possible risks, including existential risks of those technologies. That’s what this conversation is about. This is the Lex Fridman podcast. To support it, please check out our sponsors in the...</div>
+  <div class="dialogue-zh">我个人对未来感到兴奋，并相信这将是一个美好的未来，部分原因是我们人类创造了令人惊叹的技术创新，但我们绝对不能盲目地忽视可能的风险，包括这些技术的生存风险。这就是这次谈话的内容。这是莱克斯·弗里德曼播客。为了支持它，请查看我们的赞助商</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:20)</span>
+  </div>
+  <div class="dialogue-en">What to you is the probability that super intelligent AI will destroy all human civilization?</div>
+  <div class="dialogue-zh">你认为超级智能人工智能毁灭所有人类文明的可能性有多大？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Roman Yampolskiy <span class="dialogue-time">(00:02:26)</span>
+  </div>
+  <div class="dialogue-en">What’s the timeframe?</div>
+  <div class="dialogue-zh">时间表是怎样的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:27)</span>
+  </div>
+  <div class="dialogue-en">Let’s say a hundred years, in the next hundred years.</div>
+  <div class="dialogue-zh">假设一百年，未来一百年。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Roman Yampolskiy <span class="dialogue-time">(00:02:30)</span>
+  </div>
+  <div class="dialogue-en">So the problem of controlling AGI or superintelligence in my opinion, is like a problem of creating a perpetual safety machine. By analogy with perpetual motion machine, it’s impossible. Yeah, we may succeed and do good job with GPT-5, six, seven, but they just keep improving, learning, eventually self-modifying, interacting with the environment, interacting with malevolent actors. The difference ...</div>
+  <div class="dialogue-zh">因此，在我看来，控制 AGI 或超级智能的问题就像创建一个永久安全机器的问题。类比永动机，这是不可能的。是的，我们可能会成功并在 GPT-5、六、七方面做得很好，但它们只是不断改进、学习、最终自我修改、与环境交互、与恶意行为者交互。区别</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:38)</span>
+  </div>
+  <div class="dialogue-en">So there is an incremental improvement of systems leading up to AGI. To you, it doesn’t matter if we can keep those safe. There’s going to be one level of system at which you cannot possibly control it.</div>
+  <div class="dialogue-zh">因此，系统的逐步改进导致了 AGI。对你来说，我们是否能保证它们的安全并不重要。系统的某个级别将是你无法控制的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Roman Yampolskiy <span class="dialogue-time">(00:03:57)</span>
+  </div>
+  <div class="dialogue-en">I don’t think we so far have made any system safe at the level of capability they display. They already have made mistakes. We had accidents. They’ve been jail broken. I don’t think there is a single large language model today, which no one was successful at making do something developers didn’t intend it to do.</div>
+  <div class="dialogue-zh">我认为到目前为止，我们还没有使任何系统达到其所展示的能力水平的安全性。他们已经犯了错误。我们发生过事故。他们已经越狱了。我认为当今没有一个大型语言模型能够成功地完成开发人员不希望它做的事情。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:21)</span>
+  </div>
+  <div class="dialogue-en">There’s a difference between getting it to do something unintended, getting it to do something that’s painful, costly, destructive, and something that’s destructive to the level of hurting billions of people or hundreds of millions of people, billions of people, or the entirety of human civilization. That’s a big leap.</div>
+  <div class="dialogue-zh">让它做一些意想不到的事情，让它做一些痛苦的、代价高昂的、破坏性的事情，以及伤害数十亿人或数亿人、数十亿人或整个人类文明的破坏性事情，这之间是有区别的。这是一个很大的飞跃。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Roman Yampolskiy <span class="dialogue-time">(00:04:39)</span>
+  </div>
+  <div class="dialogue-en">Exactly, but the systems we have today have capability of causing X amount of damage. So when we fail, that’s all we get. If we develop systems capable of impacting all of humanity, all of universe, the damage is proportionate.</div>
+  <div class="dialogue-zh">确实如此，但我们今天拥有的系统有能力造成 X 数量的损害。所以当我们失败时，这就是我们得到的一切。如果我们开发出能够影响全人类、全宇宙的系统，那么造成的损害是成比例的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:55)</span>
+  </div>
+  <div class="dialogue-en">What to you are the possible ways that such mass murder of humans can happen?</div>
+  <div class="dialogue-zh">您认为这种大规模屠杀人类的可能方式是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Roman Yampolskiy <span class="dialogue-time">(00:05:03)</span>
+  </div>
+  <div class="dialogue-en">It’s always a wonderful question. So one of the chapters in my new book is about unpredictability. I argue that we cannot predict what a smarter system will do. So you’re really not asking me how superintelligence will kill everyone. You’re asking me how I would do it. I think it’s not that interesting. I can tell you about the standard nanotech, synthetic, bio, nuclear. Superintelligence will com...</div>
+  <div class="dialogue-zh">这总是一个很好的问题。所以我的新书中有一章是关于不可预测性的。我认为我们无法预测更智能的系统会做什么。所以你真的不是在问我超级智能将如何杀死所有人。你问我该怎么做。我认为这没那么有趣。我可以告诉你标准的纳米技术、合成技术、生物技术、核技术。超级智能将来临</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:36)</span>
+  </div>
+  <div class="dialogue-en">So there is an unlimited level of creativity in terms of how humans could be killed, but we could still investigate possible ways of doing it. Not how to do it, but at the end, what is the methodology that does it. Shutting off the power and then humans start killing each other maybe, because the resources are really constrained. Then there’s the actual use of weapons like nuclear weapons or devel...</div>
+  <div class="dialogue-zh">因此，就如何杀死人类而言，创造力是无限的，但我们仍然可以研究可能的方法。不是如何去做，而是最后，做这件事的方法论是什么。切断电源，然后人类可能会开始互相残杀，因为资源确实有限。然后是核武器或开发武器等武器的实际使用</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Roman Yampolskiy <span class="dialogue-time">(00:06:21)</span>
+  </div>
+  <div class="dialogue-en">They’re limited by how imaginative we are. If you are that much smarter, that much more creative, you’re capable of thinking across multiple domains, do novel research in physics and biology, you may not be limited by those tools. If squirrels were planning to kill humans, they would have a set of possible ways of doing it, but they would never consider things we can come up.</div>
+  <div class="dialogue-zh">它们受到我们想象力的限制。如果你更聪明，更有创造力，你能够跨多个领域思考，在物理和生物学领域进行新颖的研究，你可能不会受到这些工具的限制。如果松鼠打算杀死人类，它们会有一套可能的方法，但它们永远不会考虑我们能想到的事情。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:42)</span>
+  </div>
+  <div class="dialogue-en">So are you thinking about mass murder and destruction of human civilization or are you thinking of with squirrels, you put them in a zoo and they don’t really know they’re in a zoo? If we just look at the entire set of undesirable trajectories, majority of them are not going to be death. Most of them are going to be just things like brave new world where the squirrels are fed dopamine and they’re ...</div>
+  <div class="dialogue-zh">那么你是在考虑大规模谋杀和对人类文明的破坏，还是在考虑松鼠，你把它们放在动物园里，而它们并不真正知道自己在动物园里？如果我们只看整套不良轨迹，大多数都不会死亡。其中大多数都会像《美丽新世界》那样，松鼠被喂食多巴胺，它们会</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Roman Yampolskiy <span class="dialogue-time">(00:07:45)</span>
+  </div>
+  <div class="dialogue-en">I think about a lot of things. So that is X-risk, existential risk, everyone’s dead. There is S-risk, suffering risks, where everyone wishes they were dead. We have also idea for I-risk, ikigai risks, where we lost our meaning. The systems can be more creative. They can do all the jobs. It’s not obvious what you have to contribute to a world where superintelligence exists. Of course, you can have ...</div>
+  <div class="dialogue-zh">我想了很多事情。这就是 X 风险，存在风险，每个人都死了。有S风险，即痛苦风险，每个人都希望自己死掉。我们也有 I-risk、ikigai 风险的想法，但我们在这些风险中失去了意义。该系统可以更具创造性。他们可以完成所有的工作。你必须为超级智能存在的世界做出什么贡献并不明显。当然，你可以有</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:33)</span>
+  </div>
+  <div class="dialogue-en">I would love to dig into each of those X-risk, S-risk, and I-risk. So can you linger on I-risk? What is that?</div>
+  <div class="dialogue-zh">我很乐意深入研究 X 风险、S 风险和 I 风险。那么你能在“I-risk”上徘徊吗？那是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Roman Yampolskiy <span class="dialogue-time">(00:08:42)</span>
+  </div>
+  <div class="dialogue-en">So Japanese concept of ikigai, you find something which allows you to make money. You are good at it and the society says we need it. So you have this awesome job. You are podcaster gives you a lot of meaning. You have a good life. I assume you’re happy. That’s what we want more people to find, to have. For many intellectuals, it is their occupation, which gives them a lot of meaning. I’m a resear...</div>
+  <div class="dialogue-zh">所以日本的ikigai概念是，你找到能让你赚钱的东西。你很擅长，社会说我们需要它。所以你有这份很棒的工作。你是播客给了你很多意义。你生活得很好。我想你很高兴。这就是我们希望更多的人发现、拥有的东西。对于很多知识分子来说，这是他们的职业，这赋予了他们很多意义。我是一名研究员</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:56)</span>
+  </div>
+  <div class="dialogue-en">In that world, can’t humans do what humans currently do with chess, play each other, have tournaments, even though AI systems are far superior this time in chess? So we just create artificial games, or for us they’re real. Like the Olympics and we do all kinds of different competitions and have fun. Maximize the fun and let the AI focus on the productivity.</div>
+  <div class="dialogue-zh">在那个世界里，人类就不能像人类目前在国际象棋中所做的那样，互相对弈，举办锦标赛，尽管人工智能系统这次在国际象棋方面远远优于人类？所以我们只是创造人造游戏，或者对我们来说它们是真实的。就像奥运会一样，我们参加各种不同的比赛并且玩得很开心。最大化乐趣，让AI专注于生产力。</div>
+</div>
+    <a href="https://lexfridman.com/roman-yampolskiy-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="bjarne-stroustrup.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bjarne Stroustrup: C++</div>
+  <div class="card-meta">Bjarne Stroustrup</div>
+</a>
+<a href="brian-kernighan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Brian Kernighan: UNIX, C, AWK, AMPL, and Go Programming</div>
+  <div class="card-meta">Brian Kernighan</div>
+</a>
+<a href="charles-isbell.html" class="card" style="text-decoration:none">
+  <div class="card-title">Charles Isbell: Computing, Interactive AI, and Race in America</div>
+  <div class="card-meta">Charles Isbell</div>
+</a>
+<a href="david-silver.html" class="card" style="text-decoration:none">
+  <div class="card-title">David Silver: AlphaGo, AlphaZero, and Deep Reinforcement Learning</div>
+  <div class="card-meta">David Silver</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

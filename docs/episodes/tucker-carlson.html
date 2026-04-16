@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tucker Carlson - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Tucker Carlson</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Tucker Carlson</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/tucker-carlson.html" style="font-size:16px;color:#818cf8;font-weight:600">Tucker Carlson</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">34,940 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/tucker-carlson-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:53</span>
+  <span class="chapter-title">Putin<span class="zh-trans"> · 普京</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">20:07</span>
+  <span class="chapter-title">Navalny<span class="zh-trans"> · 纳瓦尔尼</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">41:20</span>
+  <span class="chapter-title">Moscow<span class="zh-trans"> · 莫斯科</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:00:48</span>
+  <span class="chapter-title">Freedom of speech<span class="zh-trans"> · 言论自由</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:07:03</span>
+  <span class="chapter-title">Jon Stewart<span class="zh-trans"> · 乔恩·斯图尔特</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:19:48</span>
+  <span class="chapter-title">Ending the War in Ukraine<span class="zh-trans"> · 结束乌克兰战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:29:15</span>
+  <span class="chapter-title">Nazis<span class="zh-trans"> · 纳粹分子</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:37:42</span>
+  <span class="chapter-title">Putin’s health<span class="zh-trans"> · 普京的健康状况</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:48:47</span>
+  <span class="chapter-title">Hitler<span class="zh-trans"> · 希特勒</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:58:12</span>
+  <span class="chapter-title">Nuclear war<span class="zh-trans"> · 核战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:16:31</span>
+  <span class="chapter-title">Trump<span class="zh-trans"> · 王牌</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:33:27</span>
+  <span class="chapter-title">Israel-Palestine<span class="zh-trans"> · 以色列-巴勒斯坦</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:39:37</span>
+  <span class="chapter-title">Xi Jinping<span class="zh-trans"> · 习近平</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:53:34</span>
+  <span class="chapter-title">Advice for young people<span class="zh-trans"> · 给年轻人的建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:58:53</span>
+  <span class="chapter-title">Hope for the future<span class="zh-trans"> · 对未来的希望</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">tucker</span><span class="keyword-tag">carlson</span><span class="keyword-tag">don</span><span class="keyword-tag">said</span><span class="keyword-tag">putin</span><span class="keyword-tag">country</span><span class="keyword-tag">war</span><span class="keyword-tag">didn</span><span class="keyword-tag">true</span><span class="keyword-tag">going</span><span class="keyword-tag">saying</span><span class="keyword-tag">thought</span><span class="keyword-tag">russia</span><span class="keyword-tag">ukraine</span><span class="keyword-tag">person</span><span class="keyword-tag">course</span><span class="keyword-tag">doesn</span><span class="keyword-tag">government</span><span class="keyword-tag">united</span><span class="keyword-tag">states</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Here’s my point. The idea that a whole group of people is just evil because of their blood, I just don’t believe that. I think it’s immoral to think that, and I can just tell you my own experience after eight days there. I think it’s a really interesting culture, Slavic culture, which is shared by the way, by Russian and Ukraine, of course, they’re first cousins at the most distant. I found them really smart and interesting and informed. I didn’t understand a lot of what they were saying. I don’t understand the way their minds work because I’m American, but it wasn’t a thin culture, it’s a thick culture and I admire that. I wish I could go to Ukraine. I would go tomorrow. Freedom of speech"</div>
+  <div class="quote-zh">这是我的观点。认为一群人只是因为他们的血统而邪恶的想法，我只是不相信。我认为这种想法是不道德的，我只能告诉你我在那里呆了八天后的亲身经历。我认为这是一种非常有趣的文化，斯拉夫文化，顺便说一句，俄罗斯和乌克兰也有这种文化，当然，他们是远亲。我发现他们非常聪明、有趣且见多识广。他们说的很多东西我都听不懂。我不明白他们的思维方式，因为我是美国人，但这不是一种薄弱的文化，而是一种厚重的文化，我钦佩这一点。我希望我能去乌克兰。我明天就去。言论自由</div>
+  <div class="quote-meta">— Tucker Carlson （01:00:08）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So I would like to see a settlement where, look, the thing that Russia wants and I think probably has a right to is not to have NATO missiles on its border. I don’t know why we would do that. I don’t know what we get out of it. I just don’t even understand it. I don’t understand the purpose of NATO. I don’t think NATO is good for the United States. I think it’s an attack on our sovereignty. I would pull out of NATO immediately if I were the U.S. president, because I don’t think it helps the U.S. I know a lot of people are getting their bread buttered by NATO. But anyway, that’s my view as an American."</div>
+  <div class="quote-zh">因此，我希望看到一项解决方案，俄罗斯想要并且我认为可能有权这样做的就是不要在其边境部署北约导弹。我不知道我们为什么要这么做。我不知道我们能从中得到什么。我只是不明白。我不明白北约的目的。我认为北约对美国没有好处。我认为这是对我们主权的攻击。如果我是美国总统，我会立即退出北约，因为我认为这对美国没有帮助。我知道很多人靠北约谋生。但无论如何，这是我作为美国人的观点。</div>
+  <div class="quote-meta">— Tucker Carlson （01:21:08）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"No. Well, I’m sympathetic to some of his ideas, but not of course sending mail bombs to people because I like people and I don’t believe in violence at all. But I think the problem with technology, one of the problems with technology is the way that people approach it in a very kind of mindless heedless way. I think it’s important, this idea that it’s inexorable and we can’t control it, and if we don’t do it, someone else will. There’s some truth in that, but it’s not the whole story. We do have free will and we are creating these things intentionally, and I think it’s incumbent on us, it’s a requirement, of a moral requirement of us that we ask, is this a net gain or a net loss? What, to the extent we can foresee them, will the effects be, et cetera, et cetera?"</div>
+  <div class="quote-zh">不，嗯，我同情他的一些想法，但当然不会向人们发送邮件炸弹，因为我喜欢人们，而且我根本不相信暴力。但我认为技术的问题，技术的问题之一是人们以一种非常盲目、不留心的方式对待它。我认为这很重要，这种想法是不可避免的，我们无法控制它，如果我们不这样做，其他人就会这样做。这话有一定道理，但这并不是故事的全部。我们确实有自由意志，我们有意创造这些东西，我认为这是我们义不容辞的责任，这是我们的道德要求，我们要问，这是净收益还是净损失？在我们可以预见的范围内，会产生什么影响等等？</div>
+  <div class="quote-meta">— Tucker Carlson （03:02:00）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And I said to him, “I think most Americans believe that because NBC News and CNN and all the news channels, all of them tell them that because it’s framed exclusively in moral terms, and it’s Churchill versus Hitler. And of course, Churchill’s going to prevail in the end.” And it’s just so dishonest that it doesn’t even matter what I want to happen or what I think ought to happen, that’s a distortion of what is happening. And if I have any job at all, which I sort of don’t actually at this point, but if I do have a job, it’s to just try to be honest, and that’s a lie."</div>
+  <div class="quote-zh">我对他说：“我认为大多数美国人都相信这一点，因为 NBC 新闻和 CNN 以及所有新闻频道都告诉他们这一点，因为这完全是从道德角度出发的，这是丘吉尔与希特勒的对决。当然，丘吉尔最终会获胜。”它是如此不诚实，以至于我想要发生什么或我认为应该发生什么都不重要，这是对正在发生的事情的扭曲。如果我有什么工作的话，虽然目前我还没有工作，但如果我确实有工作，那也是为了诚实，而这是一个谎言。</div>
+  <div class="quote-meta">— Tucker Carlson （00:12:52）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Oh, you mean if I also said that? Well, yeah, of course I think that. I guess part of it is that because I have such a low opinion of the commentariat in the United States and the news organizations, which really do just work for the US government, I really see them as I did Izvestia and Pravda in the 80s. They’re just organs of the government and I think they’re contemptible and I think the people who work there are contemptible. I say that as someone who knows them really well, personally. I think they’re disgusting. I’m a little bit cut off kind of from what people are saying about me because I’m not interested. But-"</div>
+  <div class="quote-zh">哦，你是说如果我也这么说的话？嗯，是的，我当然这么认为。我想部分原因是因为我对美国的评论家和新闻机构的评价很低，因为它们实际上只为美国政府工作，所以我真的像80年代对待《消息报》和《真理报》一样看待它们。他们只是政府机构，我认为他们是可鄙的，我认为在那里工作的人是可鄙的。我是作为一个非常了解他们的人这么说的。我觉得他们很恶心。我与人们对我的评价有点隔绝，因为我不感兴趣。但-</div>
+  <div class="quote-meta">— Tucker Carlson （01:01:26）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tucker Carlson <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">… he said very specifically, “Depending on the questions you ask Putin, you could be arrested or not.” And I said, “Listen to what you’re saying. You’re saying the US government has control over my questions and they’ll arrest me if I ask the wrong question. How are we better than Putin if that’s true?” Killing Navalny during the Munich Security Conference in the middle of a debate over $60 billio...</div>
+  <div class="dialogue-zh">……他非常具体地说，“根据你问普京的问题，你可能会被逮捕，也可能不会被逮捕。”我说：“听听你在说什么。你是说美国政府可以控制我的问题，如果我问错问题，他们就会逮捕我。如果这是真的，我们比普京好在哪里？”在慕尼黑安全会议期间就 600 亿美元问题进行辩论时刺杀纳瓦尔尼</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:39)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Tucker Carlson, a highly influential and often controversial political commentator. When he was a Fox, Time Magazine called him the most powerful conservative in America. After Fox. He has continued to host big, impactful interviews and shows on X, on the Tucker Carlson podcast, and on tuckercarlson.com. I recommend subscribing, even if you disagree with his vi...</div>
+  <div class="dialogue-zh">以下是与塔克·卡尔森（Tucker Carlson）的对话，塔克·卡尔森是一位极具影响力且经常引起争议的政治评论家。当他还是福克斯党成员时，《时代》杂志称他为美国最有权势的保守派。继福克斯之后。他继续在 X、Tucker Carlson 播客和 tuckercarlson.com 上主持大型、有影响力的采访和节目。我建议订阅，即使您不同意他的观点</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:32)</span>
+  </div>
+  <div class="dialogue-en">For people who think I shouldn’t do the conversation with Tucker or generally think that there are certain people I should never talk to, I’m sorry, but I disagree. I will talk to everyone, as long as they’re willing to talk genuinely in long form for 2, 3, 4 or more hours. I’ll talk to Putin and to Zelensky, to Trump and to Biden, to Tucker and to John Stewart, AOC, Obama, and many more people wi...</div>
+  <div class="dialogue-zh">对于那些认为我不应该与塔克交谈或普遍认为我不应该与某些人交谈的人，我很抱歉，但我不同意。我会和每个人交谈，只要他们愿意真诚地进行长篇大论，持续2、3、4或更长的时间。我将与普京、泽伦斯基、特朗普、拜登、塔克、约翰·斯图尔特、AOC、奥巴马以及更多的人交谈。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:40)</span>
+  </div>
+  <div class="dialogue-en">And I trust the intelligence of you, the listener, to make up your own mind to see through the bullshit, to the degree there’s bullshit and to see to the heart of the person. Sometimes I fail at this, but I’ll continue working my ass off to improve. All that said, I find that this no tough questions criticism often happens when the guest is a person the listener simply hates and wants to see them ...</div>
+  <div class="dialogue-zh">我相信作为听众的你的智慧，能够下定决心看穿这些废话，看清废话的程度，并看清对方的内心。有时我会失败，但我会继续努力改进。话虽如此，我发现当客人是听众只是讨厌并想见他们的人时，这种不难的问题批评经常发生</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Putin <span class="dialogue-time">(00:03:53)</span>
+  </div>
+  <div class="dialogue-en">What was your first impression when you met Vladimir Putin for the interview?</div>
+  <div class="dialogue-zh">当您在采访中见到弗拉基米尔·普京时，您的第一印象是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tucker Carlson <span class="dialogue-time">(00:03:58)</span>
+  </div>
+  <div class="dialogue-en">I thought he seemed nervous, and I was very surprised by that. And I thought he seemed like someone who’d overthought it a little bit, who had a plan, and I don’t think that’s the right way to go into any interview. My strong sense, having done a lot of them for a long time, is that it’s better to know what you think, to say as much as you can honestly, so you don’t get confused by your own lies, ...</div>
+  <div class="dialogue-zh">我觉得他看起来很紧张，对此我感到非常惊讶。我认为他似乎是一个想得太多了，有计划的人，我认为这不是接受任何采访的正确方式。长期以来，我做过很多这样的事情，我强烈的感觉是，最好知道你的想法，尽可能诚实地说出，这样你就不会被自己的谎言所困惑，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:39)</span>
+  </div>
+  <div class="dialogue-en">But he was also probably prepared to give you a full lesson in history as he did.</div>
+  <div class="dialogue-zh">但他也可能像他一样准备给你上一堂完整的历史课。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tucker Carlson <span class="dialogue-time">(00:04:46)</span>
+  </div>
+  <div class="dialogue-en">Well, I was totally shocked by that and very annoyed because I thought he was filibustering. I mean, I asked him as I usually do the most obvious dumbest question ever, which is, “Why’d you do this?” And he had said in a speech that I think is worth reading. I don’t speak Russian, so I haven’t heard it in the original, but he had said at the moment of the beginning of the war, he had given this ad...</div>
+  <div class="dialogue-zh">嗯，我对此感到非常震惊并且非常恼火，因为我认为他是在阻挠。我的意思是，我问他，就像我通常会问的最明显最愚蠢的问题一样，那就是，“你为什么这么做？”他在一次演讲中说过，我认为值得一读。我不会说俄语，所以我没有在原著中听到过，但他说在战争开始的那一刻，他给了这个广告</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tucker Carlson <span class="dialogue-time">(00:05:39)</span>
+  </div>
+  <div class="dialogue-en">And so I alluded to that in my question and rather than answering it, he went off on this long from my perspective, kind of tiresome, sort of greatest hits of Russian history. And the implication I thought was, “Well, Ukraine is ours, or Eastern Ukraine is ours already.” And I thought he was doing that to avoid answering the question. So the last thing you want when you’re interviewing someone is ...</div>
+  <div class="dialogue-zh">所以我在我的问题中提到了这一点，但他没有回答这个问题，而是从我的角度来看了这么长的一段话，有点令人厌烦，有点像俄罗斯历史上最伟大的作品。我想这句话的含义是，“好吧，乌克兰是我们的，或者乌克兰东部已经是我们的了。”我认为他这样做是为了避免回答这个问题。所以当你面试某人时你最不想要的就是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tucker Carlson <span class="dialogue-time">(00:06:20)</span>
+  </div>
+  <div class="dialogue-en">I want to know who this guy is. I think a western audience, a global audience, has a right to know more about the guy, and so just let him talk. Because I don’t feel like my reputation’s on the line. People have already drawn conclusions about me, I suppose to the extent they have. I’m not interested really in those conclusions anyway, so just let him talk. And so I calmed down and just let him ta...</div>
+  <div class="dialogue-zh">我想知道这个人是谁。我认为西方观众、全球观众有权更多地了解这个人，所以就让他谈谈吧。因为我不觉得我的声誉受到威胁。我想人们已经对我下了结论了。反正我对这些结论并不感兴趣，所以就让他说吧。于是我冷静下来，让他做</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:52)</span>
+  </div>
+  <div class="dialogue-en">Well, you said he was nervous. Were you nervous? Were you afraid? This is Vladimir Putin.</div>
+  <div class="dialogue-zh">嗯，你说他紧张。你紧张吗？你害怕吗？这是弗拉基米尔·普京。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tucker Carlson <span class="dialogue-time">(00:06:57)</span>
+  </div>
+  <div class="dialogue-en">I wasn’t afraid at all, and I wasn’t nervous at all.</div>
+  <div class="dialogue-zh">我一点也不害怕，一点也不紧张。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:01)</span>
+  </div>
+  <div class="dialogue-en">Did you drink tea beforehand?</div>
+  <div class="dialogue-zh">你事先喝过茶吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tucker Carlson <span class="dialogue-time">(00:07:02)</span>
+  </div>
+  <div class="dialogue-en">No. I did my normal regimen of nicotine pouches and coffee. No, I’m not a tea drinker. I try not to eat all the sweets they put in front of us, which is… That is my weakness, is eating crap. But you eat a lot of sugar as you know before an interview, and it does dull you. So I successfully resisted that. But no, I wasn’t nervous. I wasn’t nervous the whole time I was there. Why would I be? I’m 54,...</div>
+  <div class="dialogue-zh">不，我按照正常的方式服用尼古丁袋和咖啡。不，我不是一个爱喝茶的人。我尽量不吃他们摆在我们面前的所有糖果，这就是……这是我的弱点，就是吃垃圾。但正如你所知，在面试前你会吃很多糖，这会让你变得迟钝。所以我成功的抵制了。但不，我并不紧张。我在那里的整个过程中并不紧张。为什么我会这样？我54岁了，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tucker Carlson <span class="dialogue-time">(00:07:52)</span>
+  </div>
+  <div class="dialogue-en">We were in Molotov’s old office. So for me, I was just blown away by that. I thought I knew a lot about Russia. It turns out I knew a lot about the Soviet period, the 1937 purge trials, the famine in Ukraine. I knew a fair amount about that, but I really knew nothing about contemporary Russia, less than I thought I did, it turned out. But yeah, I was just blown away by where we were, and that’s ki...</div>
+  <div class="dialogue-zh">我们在莫洛托夫的旧办公室。所以对我来说，我对此感到震惊。我以为我对俄罗​​斯了解很多。事实证明，我对苏联时期、1937 年的清洗审判、乌克兰的饥荒了解很多。我对此了解相当多，但我对当代俄罗斯真的一无所知，事实证明，比我想象的要少。但是，是的，我对我们所处的位置感到震惊，那就是 ki</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:38)</span>
+  </div>
+  <div class="dialogue-en">Not afraid of dying?</div>
+  <div class="dialogue-zh">不怕死吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tucker Carlson <span class="dialogue-time">(00:08:39)</span>
+  </div>
+  <div class="dialogue-en">Not really, no. I mean, again, it’s an age and stage in life thing. I mean, I have four children, so there were times when they were little where I was terrified of dying because if I died, it would have huge consequences. But no, I mean, at this point, I don’t want to die. I’m really enjoying my life. But I’ve been with the same girl for 40 years, and I have four children who I’m extremely close ...</div>
+  <div class="dialogue-zh">不完全是，不。我的意思是，这又是一个年龄和人生阶段的问题。我的意思是，我有四个孩子，所以有时当他们还小的时候，我害怕死亡，因为如果我死了，会产生巨大的后果。但不，我的意思是，在这一点上，我不想死。我真的很享受我的生活。但我已经和同一个女孩在一起 40 年了，而且我有四个孩子，我们关系非常亲密</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:16)</span>
+  </div>
+  <div class="dialogue-en">What was the goal? Just linger on that. What was the goal for the interview? How were you thinking about it? What would success be like in your head leading into it?</div>
+  <div class="dialogue-zh">目标是什么？就这样徘徊吧。面试的目标是什么？你是怎么想的？在你的脑海中，成功会是什么样子？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tucker Carlson <span class="dialogue-time">(00:09:22)</span>
+  </div>
+  <div class="dialogue-en">To bring more information, to the public.</div>
+  <div class="dialogue-zh">为公众带来更多信息。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:22)</span>
+  </div>
+  <div class="dialogue-en">Disinformation.</div>
+  <div class="dialogue-zh">虚假信息。</div>
+</div>
+    <a href="https://lexfridman.com/tucker-carlson-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a>
+<a href="cenk-uygur.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cenk Uygur</div>
+  <div class="card-meta">Cenk Uygur</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

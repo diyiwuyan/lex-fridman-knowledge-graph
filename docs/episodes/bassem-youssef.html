@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bassem Youssef - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Bassem Youssef</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Bassem Youssef</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/bassem-youssef.html" style="font-size:16px;color:#818cf8;font-weight:600">Bassem Youssef</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">28,890 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/bassem-youssef-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:21</span>
+  <span class="chapter-title">Oct 7<span class="zh-trans"> · 10 月 7 日</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">31:49</span>
+  <span class="chapter-title">Two-state solution<span class="zh-trans"> · 两国解决方案</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">47:28</span>
+  <span class="chapter-title">Holocaust<span class="zh-trans"> · 大屠杀</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">55:15</span>
+  <span class="chapter-title">1948<span class="zh-trans"> · 1948年</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:04:07</span>
+  <span class="chapter-title">Egypt<span class="zh-trans"> · 埃及</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:18:29</span>
+  <span class="chapter-title">Jon Stewart<span class="zh-trans"> · 乔恩·斯图尔特</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:20:42</span>
+  <span class="chapter-title">Going viral during the Arab Spring<span class="zh-trans"> · 在“阿拉伯之春”期间走红</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:44:45</span>
+  <span class="chapter-title">Arabic vs English<span class="zh-trans"> · 阿拉伯语与英语</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:57:08</span>
+  <span class="chapter-title">Sam Harris and Jihad<span class="zh-trans"> · 萨姆·哈里斯和圣战</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:02:16</span>
+  <span class="chapter-title">Religion<span class="zh-trans"> · 宗教</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:21:28</span>
+  <span class="chapter-title">TikTok<span class="zh-trans"> · 抖音</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:26:00</span>
+  <span class="chapter-title">Joe Rogan<span class="zh-trans"> · 乔·罗根</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:27:58</span>
+  <span class="chapter-title">Joe Biden<span class="zh-trans"> · 乔·拜登</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:32:23</span>
+  <span class="chapter-title">Putin<span class="zh-trans"> · 普京</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:34:11</span>
+  <span class="chapter-title">War<span class="zh-trans"> · 战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:39:07</span>
+  <span class="chapter-title">Hope<span class="zh-trans"> · 希望</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">bassem</span><span class="keyword-tag">youssef</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">israel</span><span class="keyword-tag">said</span><span class="keyword-tag">didn</span><span class="keyword-tag">went</span><span class="keyword-tag">egypt</span><span class="keyword-tag">doing</span><span class="keyword-tag">talk</span><span class="keyword-tag">happened</span><span class="keyword-tag">jews</span><span class="keyword-tag">arab</span><span class="keyword-tag">called</span><span class="keyword-tag">course</span><span class="keyword-tag">muslim</span><span class="keyword-tag">came</span><span class="keyword-tag">states</span><span class="keyword-tag">war</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"If there was no religion, humans would have invented religion, because think about it. Think of the early humanity. You’re a caveman or whatever, and then you see your family members killed and then you say, “What? I’m going to be the sheep or the gazelle that just ends and perish? I am more important.” I think with the development of consciousness, humans thought that they are much more precious and important than the other animals because they have now intelligence. So my life will not end like that. My death will be even more important. There’s consequences for that. There’s consequences for what I do."</div>
+  <div class="quote-zh">如果没有宗教，人类就会发明宗教，因为想想看。想想早期人类。你是一个穴居人或其他什么人，然后你看到你的家人被杀，然后你说，“什么？我会成为刚刚结束并灭亡的绵羊或瞪羚？我更重要。”我认为随着意识的发展，人类认为自己比其他动物更加珍贵和重要，因为他们现在有了智慧。所以我的人生不会就这样结束。我的死将更加重要。这是有后果的。我所做的事是有后果的。</div>
+  <div class="quote-meta">— Bassem Youssef （02:02:22）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So I still think that the timing sucks and everything. But then I went and I did a video explaining exactly what I’m telling you, because I didn’t want to be famous for the wrong reasons, because that would be unfair. Because already people were… and I was having interviews. “Can you come about to Superman?” I was like, ” Guys, that’s it. I’m not going to talk about it, because this is a non-issue.” And when I talked to James on the phone, I felt how sincere he was. So I didn’t want someone, because of me will, have that kind of attack, because I know what it means to be on the other side of that kind of attack. It’s terrible. And it ruins your life and it ruins your day. And nobody deserves to be doing that. And I don’t want to be the reason for someone else to go through that pain."</div>
+  <div class="quote-zh">所以我仍然认为时机很糟糕。但后来我做了一个视频，准确地解释了我告诉你的内容，因为我不想因为错误的原因而出名，因为那是不公平的。因为人们已经……而我正在接受采访。 “你能来找超人吗？”我当时想，“伙计们，就是这样。我不会谈论它，因为这不是问题。”当我和詹姆斯通电话时，我感觉到他是多么真诚。所以我不想让某人受到这种攻击，因为我会受到这种攻击，因为我知道站在这种攻击的另一边意味着什么。太可怕了。它毁了你的生活，毁了你的一天。没有人值得这样做。我不想成为别人经历这种痛苦的原因。</div>
+  <div class="quote-meta">— Bassem Youssef （02:10:42）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"The university declaration of right, one of the co-authors, his name is Stephane Hessel. He’s a Jew. He’s a survivor of the Holocaust. And what happened to him, he died, by the way a couple of years ago, but before he died, he was canceled by so many people and he was called anti-Semitic because he joined the BDS movement and he spoke about truth Palestine, that is the author of the Universal Declaration of Human Rights that we value so much. And we think that that would define our humanity. But then we go in and we are shocked. It’s like maybe we were sold something. Maybe that was false advertisement."</div>
+  <div class="quote-zh">该大学权利宣言的共同作者之一，他的名字是Stephane Hessel。他是犹太人。他是大屠杀的幸存者。他发生了什么事，顺便说一句，他几年前就死了，但在他死之前，他被很多人取消了，他被称为反犹太主义者，因为他加入了 BDS 运动，他谈到了巴勒斯坦的真相，他是我们非常重视的《世界人权宣言》的作者。我们认为这将定义我们的人性。但当我们进去后，我们感到震惊。就好像我们被卖掉了一样东西。也许那是虚假广告。</div>
+  <div class="quote-meta">— Bassem Youssef （00:59:55）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And I understand the connection of how sensitive it is when you speak about Israel and all of the ready-made accusations. But as an Arab, as a Muslim, I don’t react the same when you talk about Saudi Arabia, or Iran, or Egypt or any of them, it’s like, “Hey, you want to dis some of these countries, I’ll do that with you because I have strong opinions about what happened and I already been expressing them.” But that’s why, and there’s a lot of Jewish people who come to my show and they understand that. They understand the separation, but that kind of a grouping of blackmailing people and saying, and not saying what they have in their mind, it is that one of the things that kind of pushed me to go on the show."</div>
+  <div class="quote-zh">我理解当你谈论以色列和所有现成的指控时它是多么敏感。但作为一名阿拉伯人、一名穆斯林，当你谈论沙特阿拉伯、伊朗、埃及或其中任何一个国家时，我不会有同样的反应，就像是，“嘿，你想消灭其中一些国家，我会和你一起这样做，因为我对所发生的事情有强烈的看法，而且我已经表达了它们。”但这就是原因，有很多犹太人来看我的节目，他们明白这一点。他们理解这种分离，但那种一群勒索者并说，而不是说出他们的想法，这就是推动我参加演出的原因之一。</div>
+  <div class="quote-meta">— Bassem Youssef （00:06:57）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Both. Because there are lies, which is usually in the media, but there was the total disregard of humanity. You talk a lot on your show about human suffering, and I felt that here the human suffering was not equal. I felt that’s why I came up with this like, “What’s the exchange rate today? What’s the exchange rate today?” Of course, it’s terrible to see anybody die, but I feel that like, isn’t our life not worth anything?"</div>
+  <div class="quote-zh">两个都。因为媒体上通常都有谎言，但完全无视人性。你在节目中谈论了很多关于人类苦难的话题，我觉得这里人类的苦难是不平等的。我觉得这就是为什么我想出这样的话：“今天的汇率是多少？今天的汇率是多少？”当然，看到有人死去是很可怕的，但我觉得，我们的生命难道不值钱吗？</div>
+  <div class="quote-meta">— Bassem Youssef （00:07:46）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bassem Youssef <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">If I hate you, that’s great, but if I have a story to support that hate, that’s even better.</div>
+  <div class="dialogue-zh">如果我恨你，那很好，但如果我有一个故事来支持这种仇恨，那就更好了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:04)</span>
+  </div>
+  <div class="dialogue-en">One of your favorite words, “Jihad.”</div>
+  <div class="dialogue-zh">你最喜欢的词之一是“圣战”。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bassem Youssef <span class="dialogue-time">(00:00:09)</span>
+  </div>
+  <div class="dialogue-en">That’s my favorite hobbies. It doesn’t matter now, who do you vote into power; they will not listen to you, they would listen to the people who paid them to be there. When the military came in, people were walking to me, pointing their fingers like, “Don’t speak about [inaudible 00:00:24], don’t speak about the army. We love you now, but don’t you…” They would, like that. So I called John Stewart,...</div>
+  <div class="dialogue-zh">这是我最喜欢的爱好。现在，你投票给谁掌权已经不重要了；他们不会听你的，他们会听那些付钱让他们在那里的人的。当军队进来时，人们向我走来，用手指着我，“不要谈论[听不清00:00:24]，不要谈论军队。我们现在爱你，但你不是……”他们会这样的。所以我打电话给约翰·斯图尔特，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:43)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Bassem Youssef, a legendary Egyptian-American comedian, the so-called John Stewart of the Middle East, who fearlessly satirized those in power even when his job and life were on the line. Bassem is a beautiful human being. It was truly a pleasure for me to get to know him and to have this fun, fascinating, and challenging conversation. This is the Lex Fridman p...</div>
+  <div class="dialogue-zh">以下是与埃及裔美国传奇喜剧演员巴塞姆·优素福（Bassem Youssef）的对话，他被称为中东的约翰·斯图尔特（John Stewart），即使工作和生命危在旦夕，他也无所畏惧地讽刺当权者。巴塞姆是一个美丽的人。我真的很高兴认识他并进行这次有趣、迷人且具有挑战性的谈话。这是 Lex Fridman p</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:21)</span>
+  </div>
+  <div class="dialogue-en">Your wife is half Palestinian, and I’ve heard you say that you’ve been trying to kill her, but she keeps using the kids as human shields. So have you considered negotiating a ceasefire?</div>
+  <div class="dialogue-zh">你的妻子有一半巴勒斯坦血统，我听你说你一直想杀了她，但她一直用孩子们作为人盾。那么你有没有考虑过停火谈判？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bassem Youssef <span class="dialogue-time">(00:01:31)</span>
+  </div>
+  <div class="dialogue-en">Well, the thing is, every day, every minute of the day in a married life is a negotiation. Everything can blow up into a full-scale war. Starting from a simple sentence like, “Good morning, what should we do with the kids today? What should we do with that piece of furniture?” Any sentence can lead you to heaven or to hell in the same time.</div>
+  <div class="dialogue-zh">嗯，事实是，婚姻生活中的每一天、每一分钟都是一场谈判。一切都可能爆发为全面战争。从一个简单的句子开始，比如“早上好，今天我们应该如何处理孩子们？我们应该如何处理那件家具？”任何一句话都可以带你同时进入天堂或地狱。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:54)</span>
+  </div>
+  <div class="dialogue-en">So, you do negotiate with terrorists.</div>
+  <div class="dialogue-zh">所以，你确实与恐怖分子谈判。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bassem Youssef <span class="dialogue-time">(00:01:56)</span>
+  </div>
+  <div class="dialogue-en">Oh yeah. Yeah, 100%. You must. Yeah. And for her, I’m her terrorist too. So it’s equal.</div>
+  <div class="dialogue-zh">哦，是的。是的，100%。你必须。是的。对她来说，我也是她的恐怖分子。所以是平等的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:01)</span>
+  </div>
+  <div class="dialogue-en">Terrorists on both sides. On a more serious note, when you found out about the attacks of October 7th, what went through your mind?</div>
+  <div class="dialogue-zh">双方都有恐怖分子。更严肃地说，当您发现 10 月 7 日的袭击事件时，您想到了什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bassem Youssef <span class="dialogue-time">(00:02:08)</span>
+  </div>
+  <div class="dialogue-en">If I’m allowed to use a curse word, I was like-</div>
+  <div class="dialogue-zh">如果允许我使用咒骂的话，我会想——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:11)</span>
+  </div>
+  <div class="dialogue-en">As many as possible.</div>
+  <div class="dialogue-zh">尽可能多。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bassem Youssef <span class="dialogue-time">(00:02:12)</span>
+  </div>
+  <div class="dialogue-en">I was like, “Oh shit.” Part of my stand-up comedy is I describe a situation where I was in a restaurant with producers and there was a bombing two blocks away in Chelsea, New York in 2016. And of course, this is the like, “Damn, what’s going to happen to us now?” And there’s two different reactions, the white reaction, which is like, “Oh my God, I hope nobody is hurt. This is terrible. I hope ever...</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bassem Youssef <span class="dialogue-time">(00:03:12)</span>
+  </div>
+  <div class="dialogue-en">And then I started kind of looking in the news a little bit, and then I started seeing people coming on the shows and saying things that I know as an Arab, as a Muslim, as someone from that region, that it’s not true. But I didn’t know what to say, how to say it. So by the third time when they asked me, I said, “Fine, put me on.” And I went there, it was [inaudible 00:03:36], figuratively speaking...</div>
+  <div class="dialogue-zh">然后我开始看一些新闻，然后我开始看到人们出现在节目中并说我作为阿拉伯人、穆斯林、来自该地区的人所知道的事情，这不是真的。但我不知道该说什么，怎么说。所以当他们第三次问我时，我说：“好吧，让我穿上。”我去了那里，比喻地说，那是[听不清 00:03:36]</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:20)</span>
+  </div>
+  <div class="dialogue-en">You blacked out?</div>
+  <div class="dialogue-zh">你黑化了？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bassem Youssef <span class="dialogue-time">(00:04:21)</span>
+  </div>
+  <div class="dialogue-en">I blacked out. I blacked out. And a lot of people ask me, “Was that a bit when the earpiece kept falling?” It’s like, “No, it was really falling off and it disconnected and I had to save it because I cannot see them, I can just hear them and I could expecting at any time, “Okay, Bessem, thank you.”” I was fighting for every second, to say words, to put stuff in there.</div>
+  <div class="dialogue-zh">我眼前一黑。我眼前一黑。很多人问我，“是不是耳机一直掉下来的时候就有点了？”就好像，“不，它真的掉下来了，断了，我必须把它救起来，因为我看不到它们，我只能听到它们，我随时都可以期待，‘好吧，贝塞姆，谢谢你。’”我每一秒都在争取，说句话，把东西放进去。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:45)</span>
+  </div>
+  <div class="dialogue-en">For people who don’t know, this is your conversation, interview with Piers Morgan and you couldn’t see.</div>
+  <div class="dialogue-zh">对于那些不知道的人来说，这是你对皮尔斯·摩根的采访，你是看不到的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bassem Youssef <span class="dialogue-time">(00:04:51)</span>
+  </div>
+  <div class="dialogue-en">I couldn’t see. I was just like, the lens of the camera and-</div>
+  <div class="dialogue-zh">我看不到。我就像，相机的镜头和-</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:54)</span>
+  </div>
+  <div class="dialogue-en">It was like a surreal dream or nightmare.</div>
+  <div class="dialogue-zh">这就像一个超现实的梦或噩梦。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bassem Youssef <span class="dialogue-time">(00:04:56)</span>
+  </div>
+  <div class="dialogue-en">Yeah. “Hello, Bessem.” It was like, “Hello, Bessem,” I was like, “Hi.”</div>
+  <div class="dialogue-zh">是的。 “你好，贝塞姆。”就像，“你好，贝塞姆”，我就像，“嗨。”</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:59)</span>
+  </div>
+  <div class="dialogue-en">And it could end at any moment, your career and everything.</div>
+  <div class="dialogue-zh">它随时可能结束，你的职业生涯和一切。</div>
+</div>
+    <a href="https://lexfridman.com/bassem-youssef-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="cenk-uygur.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cenk Uygur</div>
+  <div class="card-meta">Cenk Uygur</div>
+</a>
+<a href="chris-blattman.html" class="card" style="text-decoration:none">
+  <div class="card-title">Chris Blattman: War and Violence</div>
+  <div class="card-meta">Chris Blattman</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

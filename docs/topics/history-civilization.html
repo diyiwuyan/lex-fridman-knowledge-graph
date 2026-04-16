@@ -1,0 +1,2308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历史与文明 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link ">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link active">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">主题</a> <span>›</span>
+    <span>历史与文明</span>
+  </div>
+
+  <div class="topic-header" style="background:linear-gradient(135deg,#d9770622,#d9770611);border:1px solid #d9770644">
+    <h1 style="color:#d97706">历史与文明</h1>
+    <p>共 160 期节目涉及此主题</p>
+  </div>
+
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:24px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🎙️ 相关节目</div>
+      <div class="ep-list">
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/adam-frank.html">Adam Frank</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Adam Frank</div>
+    <div class="ep-topics"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/adam-frank.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/alex-gladstein.html">Alex Gladstein: Bitcoin, Authoritarianism, and Human Rights</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Alex Gladstein</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/alex-gladstein.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/anca-dragan.html">Anca Dragan: Human-Robot Interaction and Reward Engineering</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Anca Dragan</div>
+    <div class="ep-topics"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144">AI 与机器学习</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/anca-dragan.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/andrew-bustamante.html">Andrew Bustamante: CIA Spy</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Andrew Bustamante</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/andrew-bustamante.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/andrew-callaghan.html">Andrew Callaghan</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Andrew Callaghan</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/andrew-callaghan.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/andrew-huberman-4.html">Andrew Huberman #4</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Andrew Huberman</div>
+    <div class="ep-topics"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/andrew-huberman-4.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/ann-druyan.html">Ann Druyan: Cosmos, Carl Sagan, Voyager, and the Beauty of Science</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Ann Druyan</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/ann-druyan.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/annie-jacobsen.html">Annie Jacobsen</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Annie Jacobsen</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/annie-jacobsen.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/anthony-pompliano.html">Anthony Pompliano: Bitcoin</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Anthony Pompliano</div>
+    <div class="ep-topics"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/anthony-pompliano.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/ariel-ekblaw.html">Ariel Ekblaw: Space Colonization and Self-Assembling Space Megastructures</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Ariel Ekblaw</div>
+    <div class="ep-topics"><span class="tag" style="background:#06b6d422;color:#06b6d4;border:1px solid #06b6d444">太空与探索</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/ariel-ekblaw.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/avi-loeb.html">Avi Loeb: Aliens, Black Holes, and the Mystery of the Oumuamua</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Avi Loeb</div>
+    <div class="ep-topics"><span class="tag" style="background:#8b5cf622;color:#8b5cf6;border:1px solid #8b5cf644">物理与宇宙学</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/avi-loeb.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/bassem-youssef.html">Bassem Youssef</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Bassem Youssef</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/bassem-youssef.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/ben-shapiro-destiny-debate.html">Ben Shapiro Destiny Debate</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Ben Shapiro</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/ben-shapiro-destiny-debate.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/benjamin-netanyahu.html">Benjamin Netanyahu</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Benjamin Netanyahu</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/benjamin-netanyahu.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/bernie-sanders.html">Bernie Sanders</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Bernie Sanders</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/bernie-sanders.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/bishop-robert-barron.html">Bishop Robert Barron: Christianity and the Catholic Church</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Bishop Robert Barron</div>
+    <div class="ep-topics"><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">哲学与宗教</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/bishop-robert-barron.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/bjarne-stroustrup.html">Bjarne Stroustrup: C++</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Bjarne Stroustrup</div>
+    <div class="ep-topics"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/bjarne-stroustrup.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/book-1984-george-orwell.html">Book 1984 George Orwell</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Book 1984 George Orwell</div>
+    <div class="ep-topics"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/book-1984-george-orwell.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/brian-kernighan.html">Brian Kernighan: UNIX, C, AWK, AMPL, and Go Programming</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Brian Kernighan</div>
+    <div class="ep-topics"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144">AI 与机器学习</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/brian-kernighan.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/brian-muraresku.html">Brian Muraresku: The Secret History of Psychedelics</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Brian Muraresku</div>
+    <div class="ep-topics"><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">哲学与宗教</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/brian-muraresku.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/cenk-uygur.html">Cenk Uygur</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Cenk Uygur</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/cenk-uygur.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/charles-isbell.html">Charles Isbell: Computing, Interactive AI, and Race in America</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Charles Isbell</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/charles-isbell.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/chris-blattman.html">Chris Blattman: War and Violence</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Chris Blattman</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/chris-blattman.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/chris-lattner.html">Chris Lattner: Compilers, LLVM, Swift, TPU, and ML Accelerators</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Chris Lattner</div>
+    <div class="ep-topics"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/chris-lattner.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/christopher-capozzola.html">Christopher Capozzola: World War I, Ideology, Propaganda, and Politics</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Christopher Capozzola</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/christopher-capozzola.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/craig-jones-2.html">Craig Jones #2</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Craig Jones</div>
+    <div class="ep-topics"><span class="tag" style="background:#f9731622;color:#f97316;border:1px solid #f9731644">体育与武术</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/craig-jones-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/dan-carlin.html">Dan Carlin: Hardcore History</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Dan Carlin</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/dan-carlin.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/dan-houser.html">Dan Houser</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Dan Houser</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#14b8a622;color:#14b8a6;border:1px solid #14b8a644">游戏与虚拟世界</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/dan-houser.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/daniel-schmachtenberger.html">Daniel Schmachtenberger: Steering Civilization Away from Self-Destruction</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Daniel Schmachtenberger</div>
+    <div class="ep-topics"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/daniel-schmachtenberger.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/dave-plummer.html">Dave Plummer</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Dave Plummer</div>
+    <div class="ep-topics"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/dave-plummer.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/dave-smith.html">Dave Smith</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Dave Smith</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/dave-smith.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/david-eagleman.html">David Eagleman: Neuroplasticity and the Livewired Brain</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">David Eagleman</div>
+    <div class="ep-topics"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/david-eagleman.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/david-fravor.html">David Fravor: UFOs, Aliens, Fighter Jets, and Aerospace Engineering</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">David Fravor</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/david-fravor.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/david-patterson.html">David Patterson: Computer Architecture and Data Storage</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">David Patterson</div>
+    <div class="ep-topics"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/david-patterson.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/david-silver.html">David Silver: AlphaGo, AlphaZero, and Deep Reinforcement Learning</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">David Silver</div>
+    <div class="ep-topics"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144">AI 与机器学习</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/david-silver.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/david-wolpe.html">David Wolpe: Judaism</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">David Wolpe</div>
+    <div class="ep-topics"><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">哲学与宗教</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/david-wolpe.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/donald-trump.html">Donald Trump</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Donald Trump</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/donald-trump.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/douglas-murray-2.html">Douglas Murray #2</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Douglas Murray</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/douglas-murray-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/douglas-murray.html">Douglas Murray: Racism, Marxism, and the War on the West</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Douglas Murray</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/douglas-murray.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/ed-barnhart.html">Ed Barnhart</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Ed Barnhart</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/ed-barnhart.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/edward-gibson.html">Edward Gibson</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Edward Gibson</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/edward-gibson.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/elon-musk-3.html">Elon Musk: SpaceX, Mars, Tesla Autopilot, Self-Driving, Robotics, and AI</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Elon Musk</div>
+    <div class="ep-topics"><span class="tag" style="background:#06b6d422;color:#06b6d4;border:1px solid #06b6d444">太空与探索</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/elon-musk-3.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/elon-musk-4.html">Elon Musk #4</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Elon Musk</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/elon-musk-4.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/elon-musk.html">Elon Musk: Tesla Autopilot</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Elon Musk</div>
+    <div class="ep-topics"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/elon-musk.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/eric-weinstein-4.html">Eric Weinstein: Difficult Conversations, Freedom of Speech, and Physics</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Eric Weinstein</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/eric-weinstein-4.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/eric-weinstein.html">Eric Weinstein: Revolutionary Ideas in Science, Math, and Society</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Eric Weinstein</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/eric-weinstein.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/ezra-klein-and-derek-thompson.html">Ezra Klein And Derek Thompson</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Derek Thompson</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/ezra-klein-and-derek-thompson.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/garry-kasparov.html">Garry Kasparov: Chess, Deep Blue, AI, and Putin</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Garry Kasparov</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/garry-kasparov.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/glenn-loury.html">Glenn Loury: Race, Racism, Identity Politics, and Cancel Culture</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Glenn Loury</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/glenn-loury.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/graham-hancock.html">Graham Hancock</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Graham Hancock</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/graham-hancock.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/greg-lukianoff.html">Greg Lukianoff</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Greg Lukianoff</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/greg-lukianoff.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/gregory-aldrete.html">Gregory Aldrete</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Gregory Aldrete</div>
+    <div class="ep-topics"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/gregory-aldrete.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/grimes.html">Grimes: Music, AI, and the Future of Humanity</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Grimes</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/grimes.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/guido-van-rossum.html">Guido van Rossum: Python</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Guido van Rossum</div>
+    <div class="ep-topics"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144">AI 与机器学习</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/guido-van-rossum.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/iran-war-debate.html">Iran War Debate</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Mark Dubowitz</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/iran-war-debate.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/irving-finkel.html">Irving Finkel</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Irving Finkel</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">哲学与宗教</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/irving-finkel.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/israel-palestine-debate.html">Israel Palestine Debate</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Steven Bonnell</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/israel-palestine-debate.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jack-barsky.html">Jack Barsky: KGB Spy</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jack Barsky</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jack-barsky.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jack-dorsey.html">Jack Dorsey: Square, Cryptocurrency, and Artificial Intelligence</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jack Dorsey</div>
+    <div class="ep-topics"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jack-dorsey.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jack-weatherford.html">Jack Weatherford</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jack Weatherford</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jack-weatherford.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/james-gosling.html">James Gosling: Java, JVM, Emacs, and the Early Days of Computing</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">James Gosling</div>
+    <div class="ep-topics"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/james-gosling.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/james-holland.html">James Holland</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">James Holland</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/james-holland.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jamie-metzl.html">Jamie Metzl: Lab Leak Theory</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jamie Metzl</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jamie-metzl.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jared-kushner.html">Jared Kushner</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jared Kushner</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jared-kushner.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/javier-milei.html">Javier Milei</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Javier Milei</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/javier-milei.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jed-buchwald.html">Jed Buchwald: Isaac Newton and the Philosophy of Science</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jed Buchwald</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#8b5cf622;color:#8b5cf6;border:1px solid #8b5cf644">物理与宇宙学</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jed-buchwald.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jeff-kaplan.html">Jeff Kaplan</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jeff Kaplan</div>
+    <div class="ep-topics"><span class="tag" style="background:#14b8a622;color:#14b8a6;border:1px solid #14b8a644">游戏与虚拟世界</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jeff-kaplan.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jeffrey-wasserstrom.html">Jeffrey Wasserstrom</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jeffrey Wasserstrom</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jeffrey-wasserstrom.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jennifer-burns.html">Jennifer Burns</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jennifer Burns</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jennifer-burns.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jeremi-suri.html">Jeremi Suri: History of American Power</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jeremi Suri</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jeremi-suri.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jim-keller-2.html">Jim Keller: The Future of Computing, AI, Life, and Consciousness</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jim Keller</div>
+    <div class="ep-topics"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144">AI 与机器学习</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jim-keller-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jocko-willink.html">Jocko Willink: War, Leadership, and Discipline</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jocko Willink</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jocko-willink.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/joe-rogan-2.html">Joe Rogan: Comedy, Controversy, Aliens, UFOs, Putin, CIA, and Freedom</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Joe Rogan</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/joe-rogan-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/john-clarke.html">John Clarke: The Art of Fighting and the Pursuit of Excellence</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">John Clarke</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/john-clarke.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/john-mearsheimer.html">John Mearsheimer</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">John Mearsheimer</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/john-mearsheimer.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/john-vervaeke.html">John Vervaeke: Meaning Crisis, Atheism, Religion &amp; the Search for Wisdom</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">John Vervaeke</div>
+    <div class="ep-topics"><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">哲学与宗教</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/john-vervaeke.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jonathan-reisman.html">Jonathan Reisman: The Human Body – From Sex &amp; Sperm to Hands &amp; Heart</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jonathan Reisman</div>
+    <div class="ep-topics"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jonathan-reisman.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jordan-jonas.html">Jordan Jonas</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jordan Jonas</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jordan-jonas.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/jordan-peterson-2.html">Jordan Peterson #2</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Jordan Peterson</div>
+    <div class="ep-topics"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">哲学与宗教</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/jordan-peterson-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/josh-barnett.html">Josh Barnett: Philosophy of Violence, Power, and the Martial Arts</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Josh Barnett</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#f9731622;color:#f97316;border:1px solid #f9731644">体育与武术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/josh-barnett.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/julia-shaw.html">Julia Shaw</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Julia Shaw</div>
+    <div class="ep-topics"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/julia-shaw.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/kate-darling.html">Kate Darling: Emotional Connection Between Humans and Robots</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Kate Darling</div>
+    <div class="ep-topics"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144">AI 与机器学习</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/kate-darling.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/kelsi-sheren.html">Kelsi Sheren: War, Artillery, PTSD, and Love</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Kelsi Sheren</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/kelsi-sheren.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/keoki-jackson.html">Keoki Jackson: Lockheed Martin</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Keoki Jackson</div>
+    <div class="ep-topics"><span class="tag" style="background:#06b6d422;color:#06b6d4;border:1px solid #06b6d444">太空与探索</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/keoki-jackson.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/keyu-jin.html">Keyu Jin</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Keyu Jin</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144">商业与创业</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/keyu-jin.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/konstantin-batygin.html">Konstantin Batygin: Planet 9 and the Edge of Our Solar System</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Konstantin Batygin</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#06b6d422;color:#06b6d4;border:1px solid #06b6d444">太空与探索</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/konstantin-batygin.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/lars-brownworth.html">Lars Brownworth</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Lars Brownworth</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/lars-brownworth.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/lee-smolin.html">Lee Smolin: Quantum Gravity and Einstein’s Unfinished Revolution</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Lee Smolin</div>
+    <div class="ep-topics"><span class="tag" style="background:#8b5cf622;color:#8b5cf6;border:1px solid #8b5cf644">物理与宇宙学</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/lee-smolin.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/lisa-feldman-barrett-2.html">Lisa Feldman Barrett: Love, Evolution, and the Human Brain</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Lisa Feldman Barrett</div>
+    <div class="ep-topics"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/lisa-feldman-barrett-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/liv-boeree.html">Liv Boeree: Poker, Game Theory, AI, Simulation, Aliens &amp; Existential Risk</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Liv Boeree</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/liv-boeree.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/manolis-kellis-2.html">Manolis Kellis: Origin of Life, Humans, Ideas, Suffering, and Happiness</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Manolis Kellis</div>
+    <div class="ep-topics"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/manolis-kellis-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/manolis-kellis-4.html">Manolis Kellis: Meaning of Life, the Universe, and Everything</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Manolis Kellis</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/manolis-kellis-4.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/marc-andreessen-2.html">Marc Andreessen #2</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Marc Andreessen</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/marc-andreessen-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/michael-malice-2.html">Michael Malice: The White Pill, Freedom, Hope, and Happiness Amidst Chaos</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Michael Malice</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/michael-malice-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/michael-malice-3.html">Michael Malice: Totalitarianism and Anarchy</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Michael Malice</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/michael-malice-3.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/michael-malice-7.html">Michael Malice #7</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Michael Malice</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/michael-malice-7.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/michael-malice.html">Michael Malice: Anarchy, Democracy, Libertarianism, Love, and Trolling</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Michael Malice</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/michael-malice.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/michael-saylor-2.html">Michael Saylor: Bitcoin, Inflation, and the Future of Money</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Michael Saylor</div>
+    <div class="ep-topics"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/michael-saylor-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/michael-saylor.html">Michael Saylor</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Michael Saylor</div>
+    <div class="ep-topics"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/michael-saylor.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/mohammed-el-kurd.html">Mohammed El Kurd</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Mohammed El Kurd</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/mohammed-el-kurd.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/narendra-modi.html">Narendra Modi</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Narendra Modi</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/narendra-modi.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/nationalism-debate.html">Nationalism Debate: Yaron Brook and Yoram Hazony</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Nationalism Debate</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/nationalism-debate.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/neal-stephenson.html">Neal Stephenson: Sci-Fi, Space, Aliens, AI, VR &amp; the Future of Humanity</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Neal Stephenson</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/neal-stephenson.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/niall-ferguson.html">Niall Ferguson: History of Money, Power, War, and Truth</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Niall Ferguson</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/niall-ferguson.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/nic-carter.html">Nic Carter: Bitcoin Core Values, Layered Scaling, and Blocksize Debates</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Nic Carter</div>
+    <div class="ep-topics"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/nic-carter.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/nick-lane-2.html">Nick Lane: Origin of Life, Evolution, Aliens, Biology, and Consciousness</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Nick Lane</div>
+    <div class="ep-topics"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/nick-lane-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/nick-lane.html">Nick Lane</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Nick Lane</div>
+    <div class="ep-topics"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/nick-lane.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/nicole-perlroth.html">Nicole Perlroth: Cybersecurity and the Weapons of Cyberwar</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Nicole Perlroth</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/nicole-perlroth.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/niels-jorgensen.html">Niels Jorgensen: New York Firefighters and the Heroes of 9/11</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Niels Jorgensen</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/niels-jorgensen.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/noam-chomsky-2.html">Noam Chomsky: Putin, Ukraine, China, and Nuclear War</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Noam Chomsky</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/noam-chomsky-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/norman-naimark.html">Norman Naimark: Genocide, Stalin, Hitler, Mao, and Absolute Power</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Norman Naimark</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/norman-naimark.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/norman-ohler.html">Norman Ohler</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Norman Ohler</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/norman-ohler.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/oliver-anthony.html">Oliver Anthony</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Oliver Anthony</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/oliver-anthony.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/oliver-stone.html">Oliver Stone: Vladimir Putin and War in Ukraine</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Oliver Stone</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/oliver-stone.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/omar-suleiman-2.html">Omar Suleiman #2</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Omar Suleiman</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/omar-suleiman-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/paul-krugman.html">Paul Krugman: Economics of Innovation, Automation, Safety Nets &amp; Universal Basic Income</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Paul Krugman</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/paul-krugman.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/paul-rosolie-2.html">Paul Rosolie #2</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Paul Rosolie</div>
+    <div class="ep-topics"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/paul-rosolie-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/paul-rosolie-3.html">Paul Rosolie #3</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Paul Rosolie</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/paul-rosolie-3.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/peter-norvig.html">Peter Norvig: Artificial Intelligence: A Modern Approach</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Peter Norvig</div>
+    <div class="ep-topics"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/peter-norvig.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/peter-singer.html">Peter Singer: Suffering in Humans, Animals, and AI</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Peter Singer</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/peter-singer.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/peter-steinberger.html">Peter Steinberger</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Peter Steinberger</div>
+    <div class="ep-topics"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144">AI 与机器学习</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/peter-steinberger.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/ray-dalio-2.html">Ray Dalio: Money, Power, and the Collapse of Empires</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Ray Dalio</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/ray-dalio-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/richard-dawkins.html">Richard Dawkins: Evolution, Intelligence, Simulation, and Memes</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Richard Dawkins</div>
+    <div class="ep-topics"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44">哲学与宗教</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/richard-dawkins.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/richard-wolff.html">Richard Wolff: Marxism and Communism</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Richard Wolff</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/richard-wolff.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/richard-wrangham.html">Richard Wrangham: Role of Violence, Sex, and Fire in Human Evolution</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Richard Wrangham</div>
+    <div class="ep-topics"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/richard-wrangham.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/rick-beato.html">Rick Beato</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Rick Beato</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/rick-beato.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/rick-doblin.html">Rick Doblin: Psychedelics</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Rick Doblin</div>
+    <div class="ep-topics"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/rick-doblin.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/rick-spence.html">Rick Spence</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Rick Spence</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/rick-spence.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/robert-crews.html">Robert Crews: Afghanistan, Taliban, Bin Laden, and War in the Middle East</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Robert Crews</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/robert-crews.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/robert-f-kennedy-jr.html">Robert F Kennedy Jr</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Robert F Kennedy Jr</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/robert-f-kennedy-jr.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/robin-hanson.html">Robin Hanson: Alien Civilizations, UFOs, and the Future of Humanity</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Robin Hanson</div>
+    <div class="ep-topics"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/robin-hanson.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/roman-yampolskiy.html">Roman Yampolskiy</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Roman Yampolskiy</div>
+    <div class="ep-topics"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144">AI 与机器学习</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/roman-yampolskiy.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/ryan-graves.html">Ryan Graves: UFOs, Fighter Jets, and Aliens</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Ryan Graves</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/ryan-graves.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/ryan-hall-2.html">Ryan Hall: Solving Martial Arts from First Principles</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Ryan Hall</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/ryan-hall-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/ryan-hall.html">Ryan Hall: Martial Arts and the Philosophy of Violence, Power, and Grace</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Ryan Hall</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/ryan-hall.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/saagar-enjeti-2.html">Saagar Enjeti #2</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Saagar Enjeti</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/saagar-enjeti-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/saagar-enjeti.html">Saagar Enjeti: Politics, History, and Power</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Saagar Enjeti</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/saagar-enjeti.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/saifedean-ammous.html">Saifedean Ammous: Bitcoin, Anarchy, and Austrian Economics</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Saifedean Ammous</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/saifedean-ammous.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/serhii-plokhy.html">Serhii Plokhy</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Serhii Plokhy</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/serhii-plokhy.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/simon-sinek.html">Simon Sinek: Leadership, Hard Work, Optimism and the Infinite Game</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Simon Sinek</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/simon-sinek.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/skye-fitzgerald.html">Skye Fitzgerald: Hunger, War, and Human Suffering</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Skye Fitzgerald</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/skye-fitzgerald.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/stephen-kotkin-2.html">Stephen Kotkin: Putin, Zelenskyy, and War in Ukraine</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Stephen Kotkin</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/stephen-kotkin-2.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/stephen-kotkin.html">Stephen Kotkin: Stalin, Putin, and the Nature of Power</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Stephen Kotkin</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/stephen-kotkin.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/stephen-schwarzman.html">Stephen Schwarzman: Going Big in Business, Investing, and AI</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Stephen Schwarzman</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/stephen-schwarzman.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/steve-keen.html">Steve Keen: Marxism, Capitalism, and Economics</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Steve Keen</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/steve-keen.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/steven-pinker.html">Steven Pinker: AI in the Age of Reason</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Steven Pinker</div>
+    <div class="ep-topics"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144">AI 与机器学习</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/steven-pinker.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/steven-pressfield.html">Steven Pressfield: The War of Art</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Steven Pressfield</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/steven-pressfield.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/stuart-russell.html">Stuart Russell: Long-Term Future of AI</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Stuart Russell</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144">AI 与机器学习</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/stuart-russell.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/sundar-pichai.html">Sundar Pichai</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Sundar Pichai</div>
+    <div class="ep-topics"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644">技术与编程</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/sundar-pichai.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/tim-dillon.html">Tim Dillon: Comedy, Power, Conspiracy Theories, and Freedom</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Tim Dillon</div>
+    <div class="ep-topics"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/tim-dillon.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/tom-brands.html">Tom Brands: Iowa Wrestling</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Tom Brands</div>
+    <div class="ep-topics"><span class="tag" style="background:#f9731622;color:#f97316;border:1px solid #f9731644">体育与武术</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/tom-brands.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/tucker-carlson.html">Tucker Carlson</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Tucker Carlson</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/tucker-carlson.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/tulsi-gabbard.html">Tulsi Gabbard</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Tulsi Gabbard</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/tulsi-gabbard.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/vejas-liulevicius.html">Vejas Liulevicius</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Vejas Liulevicius</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/vejas-liulevicius.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/vivek-ramaswamy.html">Vivek Ramaswamy</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Vivek Ramaswamy</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/vivek-ramaswamy.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/volodymyr-zelenskyy.html">Volodymyr Zelenskyy</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Volodymyr Zelenskyy</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/volodymyr-zelenskyy.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/william-macaskill.html">William MacAskill: Effective Altruism</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">William MacAskill</div>
+    <div class="ep-topics"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44">生物与进化</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/william-macaskill.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/yannis-pappas.html">Yannis Pappas: History and Comedy</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Yannis Pappas</div>
+    <div class="ep-topics"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944">音乐与艺术</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/yannis-pappas.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/yeonmi-park.html">Yeonmi Park: North Korea</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Yeonmi Park</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944">心理与人性</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/yeonmi-park.html" class="btn">阅读 →</a>
+  </div>
+</div>
+<div class="ep-item">
+  <div class="ep-info">
+    <div class="ep-title"><a href="../episodes/yuval-noah-harari.html">Yuval Noah Harari</a></div>
+    <div class="ep-guest" style="margin-bottom:4px">Yuval Noah Harari</div>
+    <div class="ep-topics"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444">政治与社会</span></div>
+  </div>
+  <div class="ep-actions">
+    <a href="../episodes/yuval-noah-harari.html" class="btn">阅读 →</a>
+  </div>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">said</span><span class="keyword-tag">human</span><span class="keyword-tag">got</span><span class="keyword-tag">doing</span><span class="keyword-tag">didn</span><span class="keyword-tag">talk</span><span class="keyword-tag">war</span><span class="keyword-tag">doesn</span><span class="keyword-tag">interesting</span><span class="keyword-tag">better</span><span class="keyword-tag">person</span><span class="keyword-tag">stuff</span><span class="keyword-tag">trying</span><span class="keyword-tag">able</span><span class="keyword-tag">talking</span><span class="keyword-tag">saying</span><span class="keyword-tag">history</span><span class="keyword-tag">put</span></div>
+      
+      <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:24px">💬 精彩语录</div>
+<div class="quote-block">
+  <div class="quote-text">"I’m certain I’m not. No, actually I think the providence is really important, and if I were to look at the highlighted points, I think having a founder that was anonymous or stood anonymous is important. I think the founder disappearing is also important. I think that the fact that the Satoshi coins never moved is also important. I think the lack of an initial coin offering is also important. I think the lack of a corporate sponsor is important. I think the fact that it traded for 15 months with no commercial value was also important. I think that the simplicity of the protocol is very important. I think that the outcome of the block size wars is very important and all of those things add up to common property. They’re all indicia, indicators of a digital property as opposed to security."</div>
+  <div class="quote-meta">— Michael Saylor</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"You know, and what their goals were for li- And I think the short answer is they were identical to us, which is why we can understand them. It’s why you should read things. It’s why you should read the Meditations because this is not just some dry whatever talking to himself in a culture that you cannot understand and can never recreate. It’s a human talking about being human, you know? And I think human nature has not changed, and I don’t think human nature will change. So we are flawed and broken, and we’re… that’s, that’s the human condition. We’re gonna be flawed and broken. So I don’t think… I actually think that’s the great, that’s the great question of history. If you wanna understand history, you have to know about human nature. What is our human nature?"</div>
+  <div class="quote-meta">— Lars Brownworth</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"However, one area where I’ll break with, Ben, is I think that minimizing civilian casualties and everything is very, very, very important I think on the Israeli side. I don’t think it’s important so that the US will stay with them because I think the US is probably going to stick with Israel as long as they’re not doing anything crazy, and I don’t even think it matters for the international community. It definitely doesn’t matter for the UN because Jesus Christ. However, I think it’s really, really, really important that… I think that in the Middle East, broadly speaking, I think that leadership, especially in the Gulf, has gotten over the Palestinian issue."</div>
+  <div class="quote-meta">— Destiny</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But it’s very tough to organize all of humanity that way. But I think if p(doom) is actually high, at some point, all of humanity is aligned in making sure that’s not the case. And so we’ll actually make more progress against it, I think. So the irony is, so there is a self-modulating aspect there. I think if humanity collectively puts their mind to solving a problem, whatever, it is, I think we can get there. So because of that, I think I’m optimistic on the p(doom) scenarios, I think the underlying risk is actually pretty high, but I have a lot of faith in humanity kind of rising up to meet that moment."</div>
+  <div class="quote-meta">— Sundar Pichai</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"If there was no religion, humans would have invented religion, because think about it. Think of the early humanity. You’re a caveman or whatever, and then you see your family members killed and then you say, “What? I’m going to be the sheep or the gazelle that just ends and perish? I am more important.” I think with the development of consciousness, humans thought that they are much more precious and important than the other animals because they have now intelligence. So my life will not end like that. My death will be even more important. There’s consequences for that. There’s consequences for what I do."</div>
+  <div class="quote-meta">— Bassem Youssef</div>
+</div>
+    </div>
+  </div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

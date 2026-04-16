@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jared Kushner - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Jared Kushner</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Jared Kushner</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/jared-kushner.html" style="font-size:16px;color:#818cf8;font-weight:600">Jared Kushner</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">43,372 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/jared-kushner-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">1:17</span>
+  <span class="chapter-title">Hamas attack on Israel<span class="zh-trans"> · 哈马斯袭击以色列</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:10</span>
+  <span class="chapter-title">Response to attack<span class="zh-trans"> · 对攻击的反应</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">10:28</span>
+  <span class="chapter-title">History of Hamas<span class="zh-trans"> · 哈马斯的历史</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">13:09</span>
+  <span class="chapter-title">Iran<span class="zh-trans"> · 伊朗</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:55</span>
+  <span class="chapter-title">Al-Aqsa Mosque<span class="zh-trans"> · 阿克萨清真寺</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">21:20</span>
+  <span class="chapter-title">Abraham Accords<span class="zh-trans"> · 亚伯拉罕协议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:14</span>
+  <span class="chapter-title">Trump vs Biden on Middle East<span class="zh-trans"> · 特朗普与拜登在中东问题上的较量</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">39:15</span>
+  <span class="chapter-title">Israeli-Saudi Normalization<span class="zh-trans"> · 以色列与沙特关系正常化</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">43:26</span>
+  <span class="chapter-title">How the Israel-Gaza war ends</span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">47:44</span>
+  <span class="chapter-title">Benjamin Netanyahu<span class="zh-trans"> · 本杰明·内塔尼亚胡</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">51:21</span>
+  <span class="chapter-title">Palestinian support</span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">54:01</span>
+  <span class="chapter-title">Trump 2024<span class="zh-trans"> · 特朗普 2024</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">57:30</span>
+  <span class="chapter-title">Human nature<span class="zh-trans"> · 人性</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:04:28</span>
+  <span class="chapter-title">Geopolitics and negotiation<span class="zh-trans"> · 地缘政治与谈判</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:13:10</span>
+  <span class="chapter-title">North Korea<span class="zh-trans"> · 北朝鲜</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:21:50</span>
+  <span class="chapter-title">Personalities of leaders<span class="zh-trans"> · 领导者的个性</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:28:25</span>
+  <span class="chapter-title">Government bureaucracy</span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:34:11</span>
+  <span class="chapter-title">Accusations of collusion with Russia<span class="zh-trans"> · 与俄罗斯勾结的指控</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:43:50</span>
+  <span class="chapter-title">Ivanka<span class="zh-trans"> · 伊万卡</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:49:45</span>
+  <span class="chapter-title">Father<span class="zh-trans"> · 父亲</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">israel</span><span class="keyword-tag">said</span><span class="keyword-tag">going</span><span class="keyword-tag">jared</span><span class="keyword-tag">kushner</span><span class="keyword-tag">trump</span><span class="keyword-tag">don</span><span class="keyword-tag">president</span><span class="keyword-tag">together</span><span class="keyword-tag">war</span><span class="keyword-tag">got</span><span class="keyword-tag">deal</span><span class="keyword-tag">able</span><span class="keyword-tag">hamas</span><span class="keyword-tag">government</span><span class="keyword-tag">didn</span><span class="keyword-tag">saudi</span><span class="keyword-tag">country</span><span class="keyword-tag">iran</span><span class="keyword-tag">east</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"So for a 1,000 years before the second World War, the Jews and the Muslims lived very peacefully together. So people say that what we’re doing now is an aberration. I actually think it’s not an aberration. I think it’s actually a return to the time where people can live together culturally. And so this is the beginning of the end of the Arab-Israeli conflict, and it’s the beginning of togetherness, which again, you think about how much war, how much provocation, how much terrorism has been made in the name of religious conflict. This is, I think, the start of the process of religious respect and understanding."</div>
+  <div class="quote-zh">因此，在第二次世界大战之前的一千年里，犹太人和穆斯林非常和平地生活在一起。所以人们说我们现在做的事情是一种失常。其实我觉得这并不是什么异常现象。我认为这实际上是回到了人们可以在文化上共处的时代。因此，这是阿以冲突结束的开始，也是团结的开始，你再想想，以宗教冲突的名义制造了多少战争、多少挑衅、多少恐怖主义。我认为，这是宗教尊重和理解过程的开始。</div>
+  <div class="quote-meta">— Jared Kushner （02:58:41）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"It also helped that my wife and I, we actually had a Chinese nanny and teacher in our house, and our kids learned fluent Mandarin, and our daughter actually opened when President Xi and President Trump were together with Melania and with Madame Peng, my daughter actually sang them a couple of Chinese songs. And I thought that was a nice way to show we’re tough, but we respect your culture because the Chinese have an incredible culture that goes back thousands of years: they’re very proud in how they do it. And I think that sign of respect also set things off in a very warm way for President Trump say, “My granddaughter speaks Chinese and we’re showing you the respect,” which I think is very important, and he did have respect for them."</div>
+  <div class="quote-zh">这也有帮助，我和我的妻子，我们家里实际上有一个中国保姆和老师，我们的孩子学会了流利的普通话，当习主席和特朗普总统与梅拉尼娅和彭女士在一起时，我们的女儿实际上打开了，我的女儿实际上给他们唱了几首中国歌曲。我认为这是展示我们强硬的好方法，但我们尊重你们的文化，因为中国人拥有令人难以置信的文化，可以追溯到数千年前：他们对自己的做法感到非常自豪。我认为这种尊重的表示也以一种非常热情的方式引发了特朗普总统的讲话，“我的孙女会说中文，我们向你们表示尊重”，我认为这非常重要，而且他确实尊重他们。</div>
+  <div class="quote-meta">— Jared Kushner （03:24:13）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"This is something I’ve observed over the years since I got involved with the Israeli-Palestinian issue with a lot of interest. I think a lot of the people who are pledging support for the Palestinian people, I think that they want to see the Palestinian people live a better life. And I actually agree with them in that regard. Unfortunately, I think many of them are incredibly ill-informed as to the facts on the ground. I think all of the people who are advocating online for the Palestinian people, who are going to these marches in support of them, I think they’d be best served if they really care about effectuating the outcome of joining with Israel right now and directing their anger towards the Hamas leadership."</div>
+  <div class="quote-zh">自从我饶有兴趣地参与以色列-巴勒斯坦问题以来，这是我多年来观察到的事情。我认为很多承诺支持巴勒斯坦人民的人，我认为他们希望看到巴勒斯坦人民过上更好的生活。在这方面我实际上同意他们的观点。不幸的是，我认为他们中的许多人对实际情况的了解非常少。我认为所有在网上为巴勒斯坦人民发声的人，以及参加这些游行支持他们的人，如果他们真的关心现在加入以色列的结果，并将他们的愤怒发泄到哈马斯领导层，他们会得到最好的服务。</div>
+  <div class="quote-meta">— Jared Kushner （00:51:35）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Again, the years of Trump, I think that he was an outsider and he represented something that was existential to the system. You think about for the 30 years before you were either part of the Clinton Dynasty or the Bush dynasty. I think a lot of people in the country felt like that whole class, whether you’re wearing a red shirt or a blue shirt, wasn’t representing them and Trump represented a true outsider to that system. I do think that as he went in there, there was a lot of norms that were broken to try to stop him from changing the traditional power structure. So I think that we’re at a time where maybe there will be an optimistic breakthrough where you’ll have institutions that will allow for a lot more transparency into what truth really is. Mohammed bin Salman"</div>
+  <div class="quote-zh">再说一次，在特朗普执政的那些年里，我认为他是一个局外人，他代表了对这个体系来说是存在的东西。你想想你属于克林顿王朝或布什王朝之前的 30 年。我认为这个国家的很多人都觉得整个班级，无论你穿红色衬衫还是蓝色衬衫，都不能代表他们，而特朗普代表了该体系的真正局外人。我确实认为，当他进入那里时，有很多规范被打破，试图阻止他改变传统的权力结构。所以我认为，我们正处在一个可能会出现乐观突破的时代，你将拥有能够让真相更加透明的机构。穆罕默德·本·萨勒曼</div>
+  <div class="quote-meta">— Jared Kushner （02:15:22）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But what I do know from his perspective is allowing Ukraine and to NATO was always a red line, and that’s why we never offered it. We never provoked it. We never brought it up. We said we’re going to arm them, and we basically said, “Just calm down. We don’t want any conflicts there. We have bigger issues and bigger opportunities to work from.” So I do think you have to think through, what’s a paradigm that he can accept? And I do think that he’ll give the justification for why he’s done what he’s done, and then I think the framework for a solution is about, how do we move both parties forward? Tough job. I hope you get the opportunity to do it because I think it’s a conversation that will only help the world hopefully find a pathway forward."</div>
+  <div class="quote-zh">但从他的角度来看，我确实知道允许乌克兰和北约加入始终是一条红线，这就是为什么我们从未提供过。我们从来没有挑衅过它。我们从来没有提起过。我们说我们要武装他们，我们基本上是说，“冷静点。我们不希望那里发生任何冲突。我们有更大的问题和更大的工作机会。”所以我觉得你必须要思考一下，什么样的范式是他能够接受的？我确实认为他会给出他所做的事情的理由，然后我认为解决方案的框架是，我们如何推动双方前进？工作很艰难。我希望你有机会这样做，因为我认为这是一次对话，只会帮助世界找到前进的道路。</div>
+  <div class="quote-meta">— Jared Kushner （03:18:58）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Jared Kushner, former senior advisor to the President during the Donald Trump administration and author of Breaking History, A White House memoir. He’s one of the most influential and effective presidential advisors in modern history, helping conduct negotiations with some of the most powerful leaders in the world and deliver results on trade, criminal justice ...</div>
+  <div class="dialogue-zh">以下是与唐纳德·特朗普政府期间总统前高级顾问、《打破历史，白宫回忆录》作者贾里德·库什纳的对话。他是现代历史上最有影响力和最有效的总统顾问之一，帮助与世界上一些最有权势的领导人进行谈判，并在贸易、刑事司法方面取得成果</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:17)</span>
+  </div>
+  <div class="dialogue-en">We did a lot of this conversation before the Hamas attack on Israel, and we decided to sit down again and finish the discussion to address the current situation which is still developing. If I may allow me to summarize the situation as it stands today, it’s morning Monday, October 9th. On Saturday, October 7th at 6:30 AM Israel time, Hamas fired thousands of rockets into Southern Israel. The rocke...</div>
+  <div class="dialogue-zh">在哈马斯袭击以色列之前，我们进行了很多这样的谈话，我们决定再次坐下来完成讨论，以解决目前仍在发展的局势。请允许我概括一下今天的情况，现在是 10 月 9 日星期一早上。以色列时间 10 月 7 日星期六上午 6:30，哈马斯向以色列南部发射了数千枚火箭弹。岩石</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:55)</span>
+  </div>
+  <div class="dialogue-en">The Hamas militants went door to door in border towns killing civilians and taking captives, including women and children. In response to this, Israeli Air Force began carrying out strikes in Gaza, also fighting on the ground in Israel to clear out Hamas militants from Israel territory and preparing to mobilize Israeli troops for potential ground attack on Hamas and Gaza. Now, of course, this is w...</div>
+  <div class="dialogue-zh">哈马斯武装分子在边境城镇挨家挨户杀害平民并俘虏，其中包括妇女和儿童。对此，以色列空军开始对加沙进行打击，同时也在以色列境内进行地面作战，清除以色列领土上的哈马斯武装分子，并准备动员以色列军队对哈马斯和加沙进行潜在的地面攻击。现在，当然，这是w</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:10)</span>
+  </div>
+  <div class="dialogue-en">Given that context, what are your feelings as a human being and what is your analysis as the former senior advisor to the president under the Trump administration of the current situation in Israel and Gaza?</div>
+  <div class="dialogue-zh">在这种背景下，您作为一个人的感受是什么？作为特朗普政府的前总统高级顾问，您对以色列和加沙目前的局势有何分析？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jared Kushner <span class="dialogue-time">(00:04:23)</span>
+  </div>
+  <div class="dialogue-en">I think you did an excellent job of summarizing a lot of the context, but watching what’s unfolded over the last 48 hours has been truly heartbreaking to see. We’re still in the early stages of what’s developing, but seeing the images on X of militants, terrorists going door to door with machine guns gunning down innocent civilians, seeing beheaded Israeli soldiers, seeing young 20 year olds at a ...</div>
+  <div class="dialogue-zh">我认为您总结了很多背景内容，做得非常出色，但看到过去 48 小时内所发生的事情确实令人心碎。我们仍处于发展的早期阶段，但在 X 上看到武装分子、恐怖分子挨家挨户用机枪扫射无辜平民、看到被斩首的以色列士兵、看到 20 岁的年轻人被杀的画面。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jared Kushner <span class="dialogue-time">(00:05:33)</span>
+  </div>
+  <div class="dialogue-en">My heart goes out, obviously, to all of the families of the victims, to the families of those who are held in captive now and to all of Israel because one of the beautiful things about the state of Israel is that when one Israeli is hurting, the entire nation comes together. It’s a shame that it’s taking an action like this to unify the nation, but I have seen incredibly beautiful signs over the l...</div>
+  <div class="dialogue-zh">显然，我的心与所有遇难者家属、现在被囚禁者的家属以及整个以色列同在，因为以色列国的美好之处之一就是，当一个以色列人受到伤害时，整个国家都会团结在一起。很遗憾它采取这样的行动来统一国家，但我在这片土地上看到了令人难以置信的美丽迹象</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jared Kushner <span class="dialogue-time">(00:06:26)</span>
+  </div>
+  <div class="dialogue-en">With that being said though, the backdrop, I’ve been speaking to friends over the last couple of days. One friend I spoke with last night who was saying that a good friend messaged him saying, I’m going in. We’re going to do some operations to try to free some of the hostages held in one of the kibbutzes. Messaged him the next morning. He was one of the first through the door to try to free these ...</div>
+  <div class="dialogue-zh">话虽这么说，但背景是，过去几天我一直在和朋友们交谈。昨晚我采访的一位朋友说，一位好朋友给他发信息说，我要进去。我们将采取一些行动，试图解救被关押在一个基布兹的一些人质。第二天早上给他发了信息。他是第一批尝试释放这些东西的人之一</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jared Kushner <span class="dialogue-time">(00:07:13)</span>
+  </div>
+  <div class="dialogue-en">It’s a very, very heartbreaking moment, and I do think that it’s very important at this moment in time for the entire world to stand behind Israel. I think that Hamas has shown the entire world who they really are. I think what their aim is, what they’re willing to do, and all of the strong security that Israel’s put in place over the last years, which in some instances was criticized, I think is ...</div>
+  <div class="dialogue-zh">这是一个非常非常令人心碎的时刻，我确实认为此时此刻全世界都支持以色列非常重要。我认为哈马斯已经向全世界展示了他们的真实身份。我认为他们的目标是什么，他们愿意做什么，以及以色列在过去几年中实施的所有强有力的安全措施（在某些情况下受到批评），我认为是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jared Kushner <span class="dialogue-time">(00:08:20)</span>
+  </div>
+  <div class="dialogue-en">As somebody who was formerly in this position, who was intimately involved with Israel with the strategies to minimize attacks from Hamas and to try to turn the region around, and I think we did do a very substantial job under President Trump. The Middle East went from one of the most chaotic regions in the world. You had ISIS in 2016, ISIS had a caliphate the size of Ohio. They’re beheading journ...</div>
+  <div class="dialogue-zh">作为以前担任此职位的人，他与以色列密切参与制定尽量减少哈马斯袭击并试图扭转该地区局势的战略，我认为我们在特朗普总统的领导下确实做了非常实质性的工作。中东是世界上最混乱的地区之一。 2016 年出现了 ISIS，当时 ISIS 的哈里发国面积相当于俄亥俄州。他们正在斩首journ</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:29)</span>
+  </div>
+  <div class="dialogue-en">I have a lot of questions to ask you about the journey towards this historic progress towards peace with Abraham Accords, of course. But first on this situation to step back and some of the history, is there things about the history of Hamas and Gaza that’s important to understand what is happening now? Just your comments, your thoughts, your understanding of Hamas.</div>
+  <div class="dialogue-zh">当然，我有很多问题要问你们，关于《亚伯拉罕协议》和平进程这一历史性进展的历程。但首先在这种情况下退一步，回顾一些历史，哈马斯和加沙的历史中是否有一些事情对于理解现在正在发生的事情很重要？只是你的评论、你的想法、你对哈马斯的理解。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jared Kushner <span class="dialogue-time">(00:10:51)</span>
+  </div>
+  <div class="dialogue-en">I think you did an excellent job, Lex, of really giving the summary. Just a couple of things, maybe I’ll add to it, is that Hamas was originally founded from the Muslim Brotherhood in Egypt, which is a group that’s caused a lot of issues in the region. They’ve attacked Israel many times in the past. There’s a lot of discussion about how Israel is an occupying power. Well, in Gaza, in 2005, they wi...</div>
+  <div class="dialogue-zh">我认为莱克斯，你的总结非常出色。或许我要补充的几件事是，哈马斯最初是由埃及的穆斯林兄弟会创立的，该组织在该地区造成了很多问题。他们过去多次袭击以色列。关于以色列如何成为占领国有很多讨论。嗯，2005 年在加沙，他们</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jared Kushner <span class="dialogue-time">(00:11:52)</span>
+  </div>
+  <div class="dialogue-en">In Gaza, you have basically 2.2 million people that are being held hostage by 30,000 Hamas terrorists. That’s really the problem, and I would just encourage people to push their attention and energy in this moment and their anger towards Hamas, those are the people who are killing innocent civilians, who are murdering indiscriminately, and those are the people who have held back the Palestinians f...</div>
+  <div class="dialogue-zh">在加沙，基本上有 220 万人被 30,000 名哈马斯恐怖分子扣为人质。这确实是问题所在，我只是鼓励人们在此时此刻将注意力和精力集中在哈马斯身上，这些人正在杀害无辜平民，他们在肆意谋杀，他们是那些阻止巴勒斯坦人前进的人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jared Kushner <span class="dialogue-time">(00:12:23)</span>
+  </div>
+  <div class="dialogue-en">Finally, what I would say is what we saw with Hamas was that if you go back to 2007, they basically had just one plan that they did over and over. We were very careful to try to monitor very closely and stop the Iranian money and the resources from coming in. Again, we took a little bit of criticism from the international community for keeping the border tight, but unfortunately, every time you’d ...</div>
+  <div class="dialogue-zh">最后，我要说的是，我们在哈马斯身上看到的是，如果你回到 2007 年，他们基本上只有一个计划，而且他们一遍又一遍地执行。我们非常小心地试图非常密切地监控并阻止伊朗的资金和资源进入。同样，我们因保持边境紧张而受到了国际社会的一些批评，但不幸的是，每次你</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:13:09)</span>
+  </div>
+  <div class="dialogue-en">What role does Iran play in this war, in this connection to Hamas? Can you speak to the connection between Hamas and Iran that’s important to understand, especially as this most recent attack unfolds?</div>
+  <div class="dialogue-zh">伊朗在这场与哈马斯有关的战争中扮演什么角色？您能否谈谈哈马斯和伊朗之间需要理解的重要联系，尤其是在最近的袭击发生之际？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jared Kushner <span class="dialogue-time">(00:13:22)</span>
+  </div>
+  <div class="dialogue-en">Sure. The correlation, there’s reports that Iran is behind the attack. Hamas has thanked Iran for their support, and it’s been very well known that Iran supports the destruction of the state of Israel. I won’t say Iran as a country. I’ll talk about Iran in the leadership. There’s actually a beautiful thing I saw on the internet where at one of the soccer games in Iran, they were trying to rally su...</div>
+  <div class="dialogue-zh">当然。与之相关的是，有报道称伊朗是此次袭击的幕后黑手。哈马斯感谢伊朗的支持，众所周知，伊朗支持摧毁以色列国。我不会说伊朗是一个国家。我将谈论领导层中的伊朗问题。实际上，我在互联网上看到了一件美丽的事情，在伊朗的一场足球比赛中，他们试图团结起来</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jared Kushner <span class="dialogue-time">(00:14:08)</span>
+  </div>
+  <div class="dialogue-en">Since now, there’s been more resources allowed to go to the Iranian regime by lack of enforcement of sanctions. As a result, Iran is funding Hezbollah, Hamas. They were funding the Houthis. Now there’s a little bit of a détente between Saudi and Iran, which has led to that going down, which only further proves that Iran was behind the Houthis, which is what the Saudis had been saying for years, an...</div>
+  <div class="dialogue-zh">从现在开始，由于制裁的缺乏执行，更多的资源被允许流向伊朗政权。结果，伊朗正在资助真主党、哈马斯。他们资助胡塞武装。现在沙特和伊朗之间的关系有所缓和，这导致了局势的恶化，这只会进一步证明伊朗是胡塞武装的幕后黑手，这也是沙特多年来一直在说的，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:14:55)</span>
+  </div>
+  <div class="dialogue-en">The name of this operation, of the Hamas operation is Al-Aqsa Flood, referring to the Al-Aqsa Mosque. How much of this attack is about the Al-Aqsa Mosque?</div>
+  <div class="dialogue-zh">哈马斯这次行动的名称是阿克萨洪水，指的是阿克萨清真寺。这次袭击有多少是关于阿克萨清真寺的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jared Kushner <span class="dialogue-time">(00:15:07)</span>
+  </div>
+  <div class="dialogue-en">In actuality, I don’t think any of it is, but the Al-Aqsa Mosque is something that all of the Shia Jihadists have used for years in order to justify their actions that are aggressive towards Israel. This is something, I’ll maybe even take a step back and go through when I was working initially in my first year on the Peace Plan, I was doing a lot of listening. Quite frankly, a lot of what people w...</div>
+  <div class="dialogue-zh">事实上，我认为这些都不是，但阿克萨清真寺是所有什叶派圣战分子多年来使用的地方，以便为他们侵略以色列的行为辩护。这是一件事，我什至可能会退一步回顾一下，当我最初在和平计划的第一年工作时，我做了很多倾听。坦白说，很多人都希望</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jared Kushner <span class="dialogue-time">(00:16:03)</span>
+  </div>
+  <div class="dialogue-en">The big thing everyone was saying is, “What do you do with this land where you have a mosque built over a very big Jewish site?” I was hearing all of the experts, and I always say experts with quotes, because only in Washington can you work on something for a decade and continue to fail, and then you basically leave are considered an expert. But that’s one of the problems with Washington, which ma...</div>
+  <div class="dialogue-zh">每个人都在说的最重要的事情是，“你如何处理这片土地，在一个非常大的犹太遗址上建造一座清真寺？”我听到了所有专家的意见，我总是用引号说专家，因为只有在华盛顿，你才能在某件事上工作十年并继续失败，然后你基本上就被认为是专家。但这是华盛顿的问题之一，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jared Kushner <span class="dialogue-time">(00:17:45)</span>
+  </div>
+  <div class="dialogue-en">Today, any Muslim who wants to come can come and pray at the mosque. The mosque is… Israel’s acknowledged that King Abdullah, the king of Jordan, is the custodian of the mosque and as long as people want to come to the country and pray peacefully, they’re able to do that. But if you look at a lot of the propaganda that’s been used by ISIS or Iran to recruit terrorists or to justify their incursion...</div>
+  <div class="dialogue-zh">今天，任何愿意来的穆斯林都可以来清真寺祈祷。这座清真寺是......以色列承认约旦国王阿卜杜拉国王是清真寺的监护人，只要人们想来到这个国家和平祈祷，他们就能够做到这一点。但如果你看看伊斯兰国或伊朗用来招募恐怖分子或为他们的入侵辩护的大量宣传</div>
+</div>
+    <a href="https://lexfridman.com/jared-kushner-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="alex-gladstein.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alex Gladstein: Bitcoin, Authoritarianism, and Human Rights</div>
+  <div class="card-meta">Alex Gladstein</div>
+</a>
+<a href="anthony-pompliano.html" class="card" style="text-decoration:none">
+  <div class="card-title">Anthony Pompliano: Bitcoin</div>
+  <div class="card-meta">Anthony Pompliano</div>
+</a>
+<a href="benjamin-netanyahu.html" class="card" style="text-decoration:none">
+  <div class="card-title">Benjamin Netanyahu</div>
+  <div class="card-meta">Benjamin Netanyahu</div>
+</a>
+<a href="marc-andreessen-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Marc Andreessen #2</div>
+  <div class="card-meta">Marc Andreessen</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

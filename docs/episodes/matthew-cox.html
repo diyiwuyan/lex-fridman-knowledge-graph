@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Matthew Cox - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Matthew Cox</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Matthew Cox</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/matthew-cox.html" style="font-size:16px;color:#818cf8;font-weight:600">Matthew Cox</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">64,463 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/matthew-cox-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:59</span>
+  <span class="chapter-title">Mortgage fraud<span class="zh-trans"> · 抵押贷款欺诈</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">16:47</span>
+  <span class="chapter-title">Creating fake people<span class="zh-trans"> · 制造假人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">50:33</span>
+  <span class="chapter-title">Arrested by FBI<span class="zh-trans"> · 被联邦调查局逮捕</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:07:24</span>
+  <span class="chapter-title">Omerta: Code of silence<span class="zh-trans"> · 奥默塔：沉默守则</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:29:41</span>
+  <span class="chapter-title">Fake ID’s<span class="zh-trans"> · 假身份证</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:59:03</span>
+  <span class="chapter-title">Getting caught<span class="zh-trans"> · 被抓住</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:12:28</span>
+  <span class="chapter-title">Going on the run from FBI<span class="zh-trans"> · 逃离 FBI</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:24:09</span>
+  <span class="chapter-title">Identity theft<span class="zh-trans"> · 身份盗窃</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:44:49</span>
+  <span class="chapter-title">More scams<span class="zh-trans"> · 更多骗局</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:56:38</span>
+  <span class="chapter-title">FBI Most Wanted<span class="zh-trans"> · 联邦调查局头号通缉犯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:59:06</span>
+  <span class="chapter-title">Close calls<span class="zh-trans"> · 千钧一发</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:30:01</span>
+  <span class="chapter-title">Break up with Becky<span class="zh-trans"> · 与贝基分手</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:34:42</span>
+  <span class="chapter-title">Calling parents<span class="zh-trans"> · 打电话给父母</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:36:41</span>
+  <span class="chapter-title">Calling FBI<span class="zh-trans"> · 致电联邦调查局</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:42:21</span>
+  <span class="chapter-title">Running from cops<span class="zh-trans"> · 逃离警察</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:04:11</span>
+  <span class="chapter-title">Getting arrested<span class="zh-trans"> · 被捕</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:19:36</span>
+  <span class="chapter-title">Snitching<span class="zh-trans"> · 告密</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:35:51</span>
+  <span class="chapter-title">Prison<span class="zh-trans"> · 监狱</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:53:23</span>
+  <span class="chapter-title">War dogs<span class="zh-trans"> · 战犬</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">said</span><span class="keyword-tag">cox</span><span class="keyword-tag">going</span><span class="keyword-tag">matthew</span><span class="keyword-tag">got</span><span class="keyword-tag">don</span><span class="keyword-tag">goes</span><span class="keyword-tag">guy</span><span class="keyword-tag">bank</span><span class="keyword-tag">money</span><span class="keyword-tag">went</span><span class="keyword-tag">says</span><span class="keyword-tag">guys</span><span class="keyword-tag">name</span><span class="keyword-tag">house</span><span class="keyword-tag">interviewer</span><span class="keyword-tag">didn</span><span class="keyword-tag">credit</span><span class="keyword-tag">doing</span><span class="keyword-tag">prison</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Oh, I’d scrap all this, yeah. Yeah, I’d scrap all this to be… You always hear these guys say, “I wouldn’t change it because it made me the man I am today.” The man I am today is a fucking 54-year- old scumbag, multiple felons, starting my life over broke, living off of scraps, trying to make YouTube work. I’ve got two dead parents. I’m divorced. I have a son that doesn’t talk to me. I have a son that doesn’t talk to me for good reason, not because of a misunderstanding, because he understands. You can’t even argue with him, he’s got a powerful argument. “I don’t want to be a part of this guy’s life. He’s a scumbag. He stole money. He went on the run. He abandoned me when I was three years old. I don’t want anything to do with him.”"</div>
+  <div class="quote-zh">哦，我会放弃这一切，是的。是的，我会放弃这一切……你总是听到这些人说，“我不会改变它，因为它让我成为了今天的我。”今天的我是一个他妈的 54 岁的渣男，犯过多项重罪，一开始我的生活一文不名，靠残羹剩饭维持生计，试图让 YouTube 运转起来。我有两个去世的父母。我离过婚。我有一个不跟我说话的儿子。我有一个儿子不跟我说话有充分的理由，不是因为误会，而是因为他理解。你甚至无法与他争论，他有一个强有力的论点。 “我不想成为这个人生活的一部分。他是个渣男。他偷了钱。他逃跑了。我三岁时他抛弃了我。我不想和他有任何关系。”</div>
+  <div class="quote-meta">— Matthew Cox （05:52:43）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And the truth is, and this is a horrible thing to say, because the first time I ever heard somebody say this, I remember thinking, “Oh, that’s a horrible thing to say.” Some people should not own a house. They shouldn’t be allowed to borrow. They’re not in a position financially. And there were many occasions where I put someone in a house that they 100% swore they could afford. I was helping them. I told myself I was helping them, and a year and a half later, they’re going into foreclosure. Their stuff’s on the corner, they don’t know where to go. And the truth is that I’m not smarter than the actuaries that came up with those underwriting guidelines."</div>
+  <div class="quote-zh">事实是，这是一件可怕的事情，因为我第一次听到有人这么说时，我记得我在想，“哦，这真是一件可怕的事情。”有些人不应该拥有房子。他们不应该被允许借钱。他们的经济状况不佳。有很多次我让某人住进他们 100% 发誓自己买得起的房子。我正在帮助他们。我告诉自己我正在帮助他们，一年半后，他们将丧失抵押品赎回权。他们的东西就在拐角处，他们不知道该去哪里。事实是，我并不比提出这些承保指南的精算师聪明。</div>
+  <div class="quote-meta">— Matthew Cox （00:14:28）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, what I realized through the course of… Because eventually I ended up leaving that one company and I opened my own mortgage company. When I opened that mortgage company, I was on the inside. Does that make sense? I wasn’t just a broker that was sitting out with everybody else and would periodically come in and ask questions or would call underwriting, but I really didn’t understand what was happening and exactly what the underwriting guidelines were. Now, I was actually talking to the underwriters and you’re talking to the owners of the lending institutions and the banks, and you’re talking to all of the account executives."</div>
+  <div class="quote-zh">好吧，我通过这个过程意识到......因为最终我最终离开了那家公司，并开设了自己的抵押贷款公司。当我开设那家抵押贷款公司时，我就在里面。这有道理吗？我不仅仅是一个与其他人坐在一起并定期进来询问问题或致电承保的经纪人，但我真的不明白发生了什么以及承保指南到底是什么。现在，我实际上是在与承销商交谈，而你是在与贷款机构和银行的所有者交谈，你是在与所有客户经理交谈。</div>
+  <div class="quote-meta">— Matthew Cox （00:17:53）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Okay. So I wasn’t. I couldn’t own the mortgage company anymore. That was a good question because you would think wouldn’t it be great if I could keep on going? But what they said was you have to forfeit your brokerage license and your brokerage business license. And what I did was I transferred my brokerage business license to a guy that essentially bought my business. They allowed me to work as a consultant in the mortgage industry because my lawyer goes to the judge and says, “What else can he do?” And so I have a friend, his name’s Dave Walker. He was a CPA. He came in and he bought my business and he paid me like $9,000 a month and that covered my bills. My wife and I got divorced, so she’s my ex-wife."</div>
+  <div class="quote-zh">好的。所以我不是。我不能再拥有这家抵押贷款公司了。这是一个很好的问题，因为你会认为如果我能继续下去不是很好吗？但他们说的是你必须没收你的经纪许可证和经纪业务许可证。我所做的是将我的经纪业务执照转让给一个实质上购买了我的业务的人。他们允许我在抵押贷款行业担任顾问，因为我的律师去找法官说：“他还能做什么？”我有一个朋友，他的名字叫戴夫·沃克。他是一名注册会计师。他进来买了我的生意，每月付给我 9,000 美元，这足以支付我的账单。我和我妻子离婚了，所以她是我的前妻。</div>
+  <div class="quote-meta">— Matthew Cox （01:17:48）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I’m already in trouble. It’s not like they’re going to add anything. Although, to be honest, it only got worse, because actually, at that point, I drive down the road. I stop at a homeless facility. I survey three guys. I’m a mile down the road. Looking back on it, I think, “What were you thinking?” But there were three homeless guys that were in their early 30s, and they were all Caucasian. That’s hard to find. So, trust me, I’ve spent hours before finding these guys."</div>
+  <div class="quote-zh">我已经有麻烦了。他们不会添加任何东西。不过，说实话，情况只会变得更糟，因为实际上，那时我正在路上开车。我在一个无家可归者收容所停下来。我调查了三个人。我还在路上一英里。回想起来，我想：“你在想什么？”但其中有三个30岁出头的无家可归者，而且都是白人。那很难找到。所以，相信我，我花了几个小时才找到这些人。</div>
+  <div class="quote-meta">— Matthew Cox （03:46:45）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Matthew Cox <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">She found $40,000 in cash in my freezer one night. So she’s like, “What is going on?” So we have this conversation and I tell her, “Look, people are looking for me.” “Who?” “Law enforcement.” “Which ones?” “All of them.” She’s like, “For what?” I go, “Mostly bank fraud.” And she’s like, “Well, how are they not finding you? I mean, people know you like your general contractor,” which I met four mon...</div>
+  <div class="dialogue-zh">一天晚上，她在我的冰箱里发现了 4 万美元现金。所以她就像，“发生了什么事？”所以我们进行了这次对话，我告诉她，“看，人们在找我。” “WHO？” “执法。” “哪些？” “他们全部。”她说：“为了什么？”我说：“主要是银行欺诈。”她说，“好吧，他们怎么找不到你？我的意思是，人们知道你喜欢你的总承包商，”我四个月遇到了这个人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:02)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Matthew Cox, a conman recently released from federal prison where he served 13 years for bank fraud, mortgage fraud, identity theft, passport fraud, and other charges. He has admitted guilt to all of it. He has written true-crime stories of many of his fellow prisoners. And now he continues this work by interviewing criminals about their crimes on his YouTube c...</div>
+  <div class="dialogue-zh">以下是与马修·考克斯 (Matthew Cox) 的对话，他是一名骗子，最近从联邦监狱获释，因银行欺诈、抵押贷款欺诈、身份盗窃、护照欺诈和其他指控而在监狱服刑 13 年。他对这一切都承认有罪。他写过许多狱友的真实犯罪故事。现在，他继续这项工作，在他的 YouTube 频道上采访犯罪分子，了解他们的罪行。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:59)</span>
+  </div>
+  <div class="dialogue-en">What was the first crime you committed?</div>
+  <div class="dialogue-zh">您犯下的第一起罪行是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Matthew Cox <span class="dialogue-time">(00:02:03)</span>
+  </div>
+  <div class="dialogue-en">The first mortgage I ever did.</div>
+  <div class="dialogue-zh">我做过的第一笔抵押贷款。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:04)</span>
+  </div>
+  <div class="dialogue-en">A mortgage is me borrowing money from a bank to buy a house.</div>
+  <div class="dialogue-zh">抵押贷款是我从银行借钱买房子。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Matthew Cox <span class="dialogue-time">(00:02:08)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:09)</span>
+  </div>
+  <div class="dialogue-en">How can you find a way to commit crime in this? How can you do fraud in this space?</div>
+  <div class="dialogue-zh">这怎么能找到犯罪的方法呢？你怎么能在这个领域进行欺诈呢？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Matthew Cox <span class="dialogue-time">(00:02:16)</span>
+  </div>
+  <div class="dialogue-en">It’s very difficult for the average guy to commit fraud because there’s so many safeguards set up. If you were to go in and say, “I make $300,000 a year,” “Okay, well, we want your W-2s, we want your pay stubs. We’re going to call your employer. We’re going to check to make sure your employer… how long they’ve been incorporated. We’re going to check to make sure they’re registered.” It’s like your...</div>
+  <div class="dialogue-zh">对于普通人来说，实施欺诈是非常困难的，因为设置了很多保障措施。 If you were to go in and say, “I make $300,000 a year,” “Okay, well, we want your W-2s, we want your pay stubs. We’re going to call your employer. We’re going to check to make sure your employer… how long they’ve been incorporated. We’re going to check to make sure they’re registered.”就像你的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Matthew Cox <span class="dialogue-time">(00:02:43)</span>
+  </div>
+  <div class="dialogue-en">So the average person, or “I’m going to put down this much money,” but you’re going to borrow that money from the seller. Okay, well then they start asking for bank statements. “Where did the money come from? How long has it been in your bank?” You can’t even have it put in your bank for a day, get a letter. It’s got to have been there for 90 days or 60 days, depending on the bank. And so there’s ...</div>
+  <div class="dialogue-zh">所以一般人，或者“我要付这么多钱”，但你要从卖家那里借这笔钱。好吧，然后他们开始索要银行对账单。 “钱从哪里来？在你银行存了多久了？”你甚至不能把它存入银行一天，收到一封信。 It’s got to have been there for 90 days or 60 days, depending on the bank.所以有</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:24)</span>
+  </div>
+  <div class="dialogue-en">So to commit fraud in this space, you have to misrepresent some aspect of your identity, of how much you’re worth, how much money you have, this kind of stuff?</div>
+  <div class="dialogue-zh">因此，要在这个领域进行欺诈，您必须歪曲您身份的某些方面，例如您的身价，您有多少钱，诸如此类的东西？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Matthew Cox <span class="dialogue-time">(00:03:33)</span>
+  </div>
+  <div class="dialogue-en">Right. You have to be able to lie to the bank. Anytime you lie to the bank, you’ve committed fraud. And it’s funny, when I was doing it, I would say, “Ah, it’s in the gray area.” There’s no gray area. You’re either lying in some capacity or you’re not. So for instance, the very first loan I did, my borrower had been 30 days late on her rent. So they’re really looking at the last two years. So when...</div>
+  <div class="dialogue-zh">正确的。你必须能够向银行撒谎。任何时候你对银行撒谎，你就犯了欺诈罪。有趣的是，当我这样做时，我会说，“啊，它处于灰色地带。”没有灰色地带。你要么以某种身份撒谎，要么没有。举例来说，在我办理的第一笔贷款中，我的借款人拖欠了 30 天的租金。所以他们确实在关注过去两年的情况。所以当</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Matthew Cox <span class="dialogue-time">(00:04:09)</span>
+  </div>
+  <div class="dialogue-en">They’re saying, “How long have you been on their job?” They care about two years, and “How long have you been at your residency?” They’re looking for two years. Now, you could be at three places in two years. That’s fine. As long as you consistently paid for two years. Well, she had been in an apartment complex, but she’d been 30 days late. Now she caught it up, but she was late. The bank doesn’t ...</div>
+  <div class="dialogue-zh">他们会问：“你在他们的岗位上工作多久了？” They care about two years, and “How long have you been at your residency?”他们正在寻找两年。现在，你可能在两年内到达三个地方。没关系。只要你连续两年坚持付款。嗯，她当时在公寓大楼，但迟到了 30 天。现在她追上了，但她迟到了。银行没有</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:52)</span>
+  </div>
+  <div class="dialogue-en">What did it feel like? So that was the first fraudulent action you committed.</div>
+  <div class="dialogue-zh">感觉如何？这是您犯下的第一个欺诈行为。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Matthew Cox <span class="dialogue-time">(00:04:56)</span>
+  </div>
+  <div class="dialogue-en">Yeah, I was worried. I always say I sweated bullets for four or five days, but I was concerned and I don’t know that I was concerned that I had broken the law. I was concerned because I was behind on my truck payment, I was behind on my mortgage. I had banked on being a mortgage broker, and I’d gone deep, deep behind on all my bills to do this. So in the last minute when this loan isn’t going to c...</div>
+  <div class="dialogue-zh">是的，我很担心。我总是说我已经汗流浃背了四五天了，但我很担心，我不知道我担心我触犯了法律。我很担心，因为我拖欠了卡车付款，拖欠了抵押贷款。我本来指望成为一名抵押贷款经纪人，但为了做到这一点，我已经严重拖欠了我的所有账单。所以在最后一刻，当这笔贷款无法完成时</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:56)</span>
+  </div>
+  <div class="dialogue-en">So we’ll maybe paint the picture here. Where were you working? Who was the manager?</div>
+  <div class="dialogue-zh">所以我们可能会在这里描绘这幅画。你在哪里工作？经理是谁？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Matthew Cox <span class="dialogue-time">(00:06:00)</span>
+  </div>
+  <div class="dialogue-en">The manager, it’s funny because I don’t think I ever really mentioned this, her name was Gretchen Zaas. I don’t mind saying it because she eventually ended up going to jail for fraud. Her name was Gretchen Zaas and she was a manager. I was working for a company called Eagle Lending, and it was in Tampa, and this was my first month. So it was my very first deal, three or four weeks into that first ...</div>
+  <div class="dialogue-zh">经理，这很有趣，因为我想我从来没有真正提到过这一点，她的名字叫格雷琴·扎斯(Gretchen Zaas)。我不介意这么说，因为她最终因欺诈而入狱。她的名字叫格雷琴·扎斯 (Gretchen Zaas)，是一名经理。我在坦帕一家名为 Eagle Lending 的公司工作，这是我的第一个月。所以这是我的第一笔交易，距离第一笔交易已经三四个星期了</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:00)</span>
+  </div>
+  <div class="dialogue-en">Okay.</div>
+  <div class="dialogue-zh">好的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Matthew Cox <span class="dialogue-time">(00:07:01)</span>
+  </div>
+  <div class="dialogue-en">And she started going… And I was like, “What?” She goes, “If I was you…” And she handed… She said, “I’d white it out. Make a copy, stick it back in the file.” She said, “It’ll be fine.” I was like, “That’s fraud. I could go to jail.” And she was like, “They’re never going to catch it.” She said, “Look, I do stuff all the time.” She said, “They’re not going to catch it, and nobody’s calling the FBI...</div>
+  <div class="dialogue-zh">她开始走了……我当时想，“什么？”她说，“如果我是你……”然后她递给……她说，“我会把它涂掉。复印一份，把它贴回文件里。”她说：“会好的。”我当时想，“那是欺诈。我可能会进监狱。”她说，“他们永远不会抓住它。”她说：“看，我一直在做事情。”她说：“他们不会抓住它，也没有人给联邦调查局打电话</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:45)</span>
+  </div>
+  <div class="dialogue-en">How old were you at this point?</div>
+  <div class="dialogue-zh">此时您几岁？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Matthew Cox <span class="dialogue-time">(00:07:46)</span>
+  </div>
+  <div class="dialogue-en">Probably 29. I think it was 29. I had gone to college and so many things had not worked out. I got a degree in fine arts. There’s not a lot of people looking for anyone with a fine arts degree. And I tried to be an insurance adjuster. Tried that for about a year, year and a half, that didn’t work out. Ended up working construction for a few years. And so finally the girl I was dating said, “You go...</div>
+  <div class="dialogue-zh">大概是29岁。我想是29岁。我已经上大学了，很多事情还没有解决。我获得了美术学位。没有很多人寻找具有美术学位的人。我尝试成为一名保险理算员。尝试了大约一年、一年半，但没有成功。结束了几年的建筑工作。最后我约会的那个女孩说：“你走吧</div>
+</div>
+    <a href="https://lexfridman.com/matthew-cox-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="brett-johnson.html" class="card" style="text-decoration:none">
+  <div class="card-title">Brett Johnson: US Most Wanted Cybercriminal</div>
+  <div class="card-meta">Brett Johnson</div>
+</a>
+<a href="jason-calacanis.html" class="card" style="text-decoration:none">
+  <div class="card-title">Jason Calacanis: Startups, Angel Investing, Capitalism, and Friendship</div>
+  <div class="card-meta">Jason Calacanis</div>
+</a>
+<a href="magatte-wade.html" class="card" style="text-decoration:none">
+  <div class="card-title">Magatte Wade: Africa, Capitalism, Communism, and the Future of Humanity</div>
+  <div class="card-meta">Magatte Wade</div>
+</a>
+<a href="mark-zuckerberg.html" class="card" style="text-decoration:none">
+  <div class="card-title">Mark Zuckerberg: Meta, Facebook, Instagram, and the Metaverse</div>
+  <div class="card-meta">Mark Zuckerberg</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

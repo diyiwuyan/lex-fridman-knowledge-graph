@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aravind Srinivas - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Aravind Srinivas</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Aravind Srinivas</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/aravind-srinivas.html" style="font-size:16px;color:#818cf8;font-weight:600">Aravind Srinivas</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">30,273 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/aravind-srinivas-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:53</span>
+  <span class="chapter-title">How Perplexity works<span class="zh-trans"> · 困惑如何运作</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">9:50</span>
+  <span class="chapter-title">How Google works<span class="zh-trans"> · 谷歌是如何运作的</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">32:17</span>
+  <span class="chapter-title">Larry Page and Sergey Brin<span class="zh-trans"> · 拉里·佩奇和谢尔盖·布林</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">46:52</span>
+  <span class="chapter-title">Jeff Bezos<span class="zh-trans"> · 杰夫·贝佐斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">50:20</span>
+  <span class="chapter-title">Elon Musk<span class="zh-trans"> · 埃隆·马斯克</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">52:38</span>
+  <span class="chapter-title">Jensen Huang<span class="zh-trans"> · 黄仁勋</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">55:55</span>
+  <span class="chapter-title">Mark Zuckerberg<span class="zh-trans"> · 马克·扎克伯格</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">57:23</span>
+  <span class="chapter-title">Yann LeCun<span class="zh-trans"> · 严乐存</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:04:09</span>
+  <span class="chapter-title">Breakthroughs in AI<span class="zh-trans"> · 人工智能的突破</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:20:07</span>
+  <span class="chapter-title">Curiosity<span class="zh-trans"> · 好奇心</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:26:24</span>
+  <span class="chapter-title">$1 trillion dollar question<span class="zh-trans"> · 1万亿美元的问题</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:41:14</span>
+  <span class="chapter-title">Perplexity origin story<span class="zh-trans"> · 困惑的起源故事</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:56:27</span>
+  <span class="chapter-title">RAG<span class="zh-trans"> · 抹布</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:18:45</span>
+  <span class="chapter-title">1 million H100 GPUs<span class="zh-trans"> · 100 万个 H100 GPU</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:21:17</span>
+  <span class="chapter-title">Advice for startups<span class="zh-trans"> · 给初创公司的建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:33:54</span>
+  <span class="chapter-title">Future of search<span class="zh-trans"> · 搜索的未来</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:51:31</span>
+  <span class="chapter-title">Future of AI<span class="zh-trans"> · 人工智能的未来</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">aravind</span><span class="keyword-tag">srinivas</span><span class="keyword-tag">google</span><span class="keyword-tag">search</span><span class="keyword-tag">perplexity</span><span class="keyword-tag">model</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">product</span><span class="keyword-tag">doesn</span><span class="keyword-tag">questions</span><span class="keyword-tag">better</span><span class="keyword-tag">query</span><span class="keyword-tag">human</span><span class="keyword-tag">data</span><span class="keyword-tag">hard</span><span class="keyword-tag">models</span><span class="keyword-tag">knowledge</span><span class="keyword-tag">compute</span><span class="keyword-tag">user</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I met him once and I asked him, “How do you handle the success and yet go and work hard?” And he just said, “Because I am actually paranoid about going out of business. Every day I wake up in sweat thinking about how things are going to go wrong.” Because one thing you got to understand, hardware is, you got to actually, I don’t know about the 10, 20 year thing, but you actually do need to plan two years in advance because it does take time to fabricate and get the chip back and you need to have the architecture ready. You might make mistakes in one generation of architecture and that could set you back by two years. Your competitor might get it right. So there’s that drive, the paranoia, obsession about details. You need that. And he’s a great example."</div>
+  <div class="quote-zh">我见过他一次，我问他：“你如何在成功的同时继续努力工作？”他只是说，“因为我实际上对倒闭感到偏执。每天我醒来都满头大汗，想着事情会如何出错。”因为你必须了解一件事，硬件，你实际上，我不知道 10 年、20 年的事情，但你实际上确实需要提前两年进行计划，因为制造和收回芯片确实需要时间，而且你需要准备好架构。您可能会在一代架构中犯下错误，这可能会让您倒退两年。你的竞争对手可能会做对。所以就有了那种动力、偏执、对细节的痴迷。你需要那个。他就是一个很好的例子。</div>
+  <div class="quote-meta">— Aravind Srinivas （00:54:37）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So I think curiosity makes humans special and we want to cater to that. That’s the mission of the company, and we harness the power of AI and all these frontier models to serve that. And I believe in a world where even if we have even more capable cutting-edge AIs, human curiosity is not going anywhere and it’s going to make humans even more special. With all the additional power, they’re going to feel even more empowered, even more curious, even more knowledgeable in truth-seeking and it’s going to lead to the beginning of infinity. Future of AI"</div>
+  <div class="quote-zh">所以我认为好奇心使人类变得特别，我们希望迎合这一点。这是公司的使命，我们利用人工智能和所有这些前沿模型的力量来实现这一目标。我相信，即使我们拥有更强大的尖端人工智能，人类的好奇心也不会消失，它会让人类变得更加特别。有了所有额外的力量，他们会感到更加强大，更加好奇，在寻求真理方面更加知识渊博，这将导致无限的开始。人工智能的未来</div>
+  <div class="quote-meta">— Aravind Srinivas （02:50:55）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I hope so. And even more than that, if we can change every person to be more truth-seeking than before just because they are able to, just because they have the tools to, I think it’ll lead to a better, well, more knowledge. And fundamentally, more people are interested in fact-checking and uncovering things rather than just relying on other humans and what they hear from other people, which always can be politicized or having ideologies."</div>
+  <div class="quote-zh">我希望如此。更重要的是，如果我们能够让每个人变得比以前更加追求真理，仅仅因为他们有能力，仅仅因为他们有工具，我认为这将带来更好、更多的知识。从根本上说，越来越多的人对事实核查和揭露事物感兴趣，而不是仅仅依赖其他人以及他们从其他人那里听到的信息，这些总是可能被政治化或带有意识形态。</div>
+  <div class="quote-meta">— Aravind Srinivas （02:36:40）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"When the products started getting users, I think instead of focusing on going and building a business team, marketing team, the traditional how internet businesses worked at the time, he had the contrarian insight to say, “Hey, search is actually going to be important, so I’m going to go and hire as many PhDs as possible.” And there was this arbitrage that internet bust was happening at the time, and so a lot of PhDs who went and worked at other internet companies were available at not a great market rate. So you could spend less get great talent like Jeff Dean and really focus on building core infrastructure and deeply grounded research. And the obsession about latency, that was, you take it for granted today, but I don’t think that was obvious."</div>
+  <div class="quote-zh">当产品开始吸引用户时，我认为他没有专注于建立业务团队、营销团队（当时互联网业务的传统运作方式），而是以逆向洞察力说：“嘿，搜索实际上会很重要，所以我要去雇佣尽可能多的博士。”当时存在互联网泡沫，因此很多在其他互联网公司工作的博士的市场价格并不高。因此，您可以花更少的钱获得像杰夫·迪恩这样的优秀人才，并真正专注于建设核心基础设施和扎根的研究。对延迟的痴迷，也就是说，你今天认为这是理所当然的，但我认为这并不明显。</div>
+  <div class="quote-meta">— Aravind Srinivas （00:35:12）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, and this trait is also visible in Jensen, like this real obsession and constantly improving the system, understanding the details. It’s common across all of them. And I think Jensen is pretty famous for saying, “I just don’t even do one-on-ones because I want to know simultaneously from all parts of the system like [inaudible 00:53:03] I just do one is to, and I have 60 direct reports and I made all of them together and that gets me all the knowledge at once and I can make the dots connect and it’s a lot more efficient.” Questioning the conventional wisdom and trying to do things a different way is very important."</div>
+  <div class="quote-zh">是的，这种特质在 Jensen 身上也很明显，比如这种真正的痴迷和不断改进系统、了解细节。这在他们所有人中都很常见。我认为 Jensen 非常有名的一句话是：“我什至不进行一对一的交谈，因为我想同时从系统的各个部分了解情况，例如 [听不清 00:53:03] 我只做一个，我有 60 名直接下属，我将所有这些都汇总在一起，这让我立即获得了所有知识，我可以将点连接起来，效率要高得多。”质疑传统智慧并尝试以不同的方式做事非常重要。</div>
+  <div class="quote-meta">— Aravind Srinivas （00:52:37）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Aravind Srinivas <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">Can you have a conversation with an AI where it feels like you talked to Einstein or Feynman, where you ask them a hard question, they’re like, “I don’t know,” and then after a week, they did a lot of research-</div>
+  <div class="dialogue-zh">你能否与人工智能进行对话，感觉就像你在与爱因斯坦或费曼交谈，你问他们一个难题，他们会说，“我不知道”，然后一周后，他们做了很多研究——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:12)</span>
+  </div>
+  <div class="dialogue-en">They disappear and come back, yeah.</div>
+  <div class="dialogue-zh">他们消失然后又回来，是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Aravind Srinivas <span class="dialogue-time">(00:00:13)</span>
+  </div>
+  <div class="dialogue-en">They come back and just blow your mind. If we can achieve that, that amount of inference compute, where it leads to a dramatically better answer as you apply more inference compute, I think that will be the beginning of real reasoning breakthroughs.</div>
+  <div class="dialogue-zh">他们回来后会让你大吃一惊。如果我们能够实现这一点，那么当您应用更多的推理计算时，大量的推理计算会带来更好的答案，我认为这将是真正推理突破的开始。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:28)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Aravind Srinivas, CEO of Perplexity, a company that aims to revolutionize how we humans get answers to questions on the internet. It combines search and large language models, LLMs, in a way that produces answers where every part of the answer has a citation to human-created sources on the web. This significantly reduces LLM hallucinations, and makes it much ea...</div>
+  <div class="dialogue-zh">以下是与 Perplexity 首席执行官 Aravind Srinivas 的对话，该公司旨在彻底改变人类在互联网上获取问题答案的方式。它将搜索和大型语言模型（LLM）结合起来，以产生答案的方式，其中答案的每个部分都引用了网络上人类创建的资源。这显着减少了法学硕士的幻觉，并使其变得更加容易</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:08)</span>
+  </div>
+  <div class="dialogue-en">I highly recommend you try it out. Aravind was previously a PhD student at Berkeley, where we long ago first met, and an AI researcher at DeepMind, Google, and finally, OpenAI as a research scientist. This conversation has a lot of fascinating technical details on state-of-the-art, in machine learning, and general innovation in retrieval augmented generation, AKA RAG, chain of thought reasoning, i...</div>
+  <div class="dialogue-zh">我强烈建议您尝试一下。 Aravind 之前是伯克利大学的博士生，我们很久以前就是在那里认识的，后来又在 DeepMind、谷歌担任人工智能研究员，最后在 OpenAI 担任研究科学家。这次对话有很多关于机器学习领域最先进的技术细节，以及检索增强生成、AKA RAG、思想推理链、i</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:48)</span>
+  </div>
+  <div class="dialogue-en">Now, dear friends, here’s Aravind Srinivas. Perplexity is part search engine, part LLM. How does it work, and what role does each part of that the search and the LLM play in serving the final result?</div>
+  <div class="dialogue-zh">现在，亲爱的朋友们，这是阿拉文德·斯里尼瓦斯 (Aravind Srinivas)。 Perplexity 一半是搜索引擎，一半是法学硕士。它是如何运作的，以及搜索和法学硕士的每个部分在提供最终结果方面发挥什么作用？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Aravind Srinivas <span class="dialogue-time">(00:02:05)</span>
+  </div>
+  <div class="dialogue-en">Perplexity is best described as an answer engine. You ask it a question, you get an answer. Except the difference is, all the answers are backed by sources. This is like how an academic writes a paper. Now, that referencing part, the sourcing part is where the search engine part comes in. You combine traditional search, extract results relevant to the query the user asked. You read those links, ex...</div>
+  <div class="dialogue-zh">困惑最好被描述为答案引擎。你问它一个问题，你就会得到答案。不同之处在于，所有答案都有消息来源支持。这就像学者写论文的方式一样。现在，引用部分、采购部分就是搜索引擎部分的用武之地。您可以结合传统搜索，提取与用户询问的查询相关的结果。你阅读了这些链接，例如</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Aravind Srinivas <span class="dialogue-time">(00:02:42)</span>
+  </div>
+  <div class="dialogue-en">That LLM takes the relevant paragraphs, looks at the query, and comes up with a well-formatted answer with appropriate footnotes to every sentence it says, because it’s been instructed to do so, it’s been instructed with that one particular instruction, given a bunch of links and paragraphs, write a concise answer for the user, with the appropriate citation. The magic is all of this working togeth...</div>
+  <div class="dialogue-zh">LLM 获取相关段落，查看查询，并给出一个格式良好的答案，并为它所说的每个句子添加适当的脚注，因为它被指示这样做，它被指示一条特定的指令，给定一堆链接和段落，为用户写一个简洁的答案，并带有适当的引用。神奇之处在于所有这些一起工作</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:12)</span>
+  </div>
+  <div class="dialogue-en">It was explicitly instructed to write like an academic, essentially. You found a bunch of stuff on the internet, and now you generate something coherent, and something that humans will appreciate, and cite the things you found on the internet in the narrative you create for the human?</div>
+  <div class="dialogue-zh">本质上，它被明确指示要像学者一样写作。你在互联网上找到了一堆东西，现在你生成了一些连贯的东西，一些人类会欣赏的东西，并在你为人类创造的叙述中引用了你在互联网上找到的东西？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Aravind Srinivas <span class="dialogue-time">(00:03:30)</span>
+  </div>
+  <div class="dialogue-en">Correct. When I wrote my first paper, the senior people who were working with me on the paper told me this one profound thing, which is that every sentence you write in a paper should be backed with a citation, with a citation from another peer reviewed paper, or an experimental result in your own paper. Anything else that you say in the paper is more like an opinion. It’s a very simple statement,...</div>
+  <div class="dialogue-zh">正确的。当我写第一篇论文时，和我一起写论文的前辈告诉我一件深刻的事情，那就是你在论文中写的每句话都应该有引文作为支撑，引用另一篇同行评审的论文，或者你自己论文中的实验结果。您在论文中所说的任何其他内容都更像是一种意见。这是一个非常简单的陈述，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Aravind Srinivas <span class="dialogue-time">(00:04:04)</span>
+  </div>
+  <div class="dialogue-en">We took this principle and asked ourselves, what is the best way to make chatbots accurate, is force it to only say things that it can find on the internet, and find from multiple sources. This kind of came out of a need rather than, “Oh, let’s try this idea.” When we started the startup, there were so many questions all of us had because we were complete noobs, never built a product before, never...</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Aravind Srinivas <span class="dialogue-time">(00:04:37)</span>
+  </div>
+  <div class="dialogue-en">Of course, we had worked on a lot of cool engineering and research problems, but doing something from scratch is the ultimate test. There were lots of questions. What is the health insure? The first employee we hired came and asked us about health insurance. Normal need, I didn’t care. I was like, “Why do I need a health insurance? If this company dies, who cares?” My other two co-founders were ma...</div>
+  <div class="dialogue-zh">当然，我们已经解决了很多很酷的工程和研究问题，但从头开始做一些事情才是最终的考验。有很多问题。什么是健康保险？我们雇用的第一位员工过来询问我们有关健康保险的问题。正常需要，我不在乎。我当时想，“为什么我需要健康保险？如果这家公司死了，谁在乎呢？”我的另外两位联合创始人是马</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Aravind Srinivas <span class="dialogue-time">(00:05:13)</span>
+  </div>
+  <div class="dialogue-en">Who are the providers? What is co-insurance, a deductible? None of these made any sense to me. You go to Google. Insurance is a category where, a major ad spend category. Even if you ask for something, Google has no incentive to give you clear answers. They want you to click on all these links and read for yourself, because all these insurance providers are bidding to get your attention.</div>
+  <div class="dialogue-zh">提供者是谁？什么是共同保险、免赔额？这些对我来说都没有任何意义。你去谷歌。保险是一个主要的广告支出类别。即使你提出什么要求，谷歌也没有动力给你明确的答案。他们希望您点击所有这些链接并自行阅读，因为所有这些保险公司都在竞价吸引您的注意力。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Aravind Srinivas <span class="dialogue-time">(00:05:38)</span>
+  </div>
+  <div class="dialogue-en">We integrated a Slack bot that just pings GPT 3.5 and answered a question. Now, sounds like problem solved, except we didn’t even know whether what it said was correct or not. In fact, it was saying incorrect things. We were like, “Okay, how do we address this problem?” We remembered our academic roots. Dennis and myself were both academics. Dennis is my co-founder. We said, “Okay, what is one way...</div>
+  <div class="dialogue-zh">我们集成了一个 Slack 机器人，它仅 ping GPT 3.5 并回答了一个问题。现在，听起来问题已经解决了，只是我们甚至不知道它所说的是否正确。事实上，它说的是不正确的话。我们想，“好吧，我们如何解决这个问题？”我们记住了我们的学术根源。丹尼斯和我都是学者。丹尼斯是我的联合创始人。我们说：“好吧，一种方法是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Aravind Srinivas <span class="dialogue-time">(00:06:09)</span>
+  </div>
+  <div class="dialogue-en">We’re always making sure we can cite what it says, what we write, every sentence. Now, what if we ask the chatbot to do that? Then we realized, that’s literally how Wikipedia works. In Wikipedia, if you do a random edit, people expect you to actually have a source for that, and not just any random source. They expect you to make sure that the source is notable. There are so many standards for what...</div>
+  <div class="dialogue-zh">我们总是确保我们可以引用它所说的、我们所写的、每一句话。现在，如果我们要求聊天机器人这样做怎么办？然后我们意识到，这就是维基百科的运作方式。在维基百科中，如果您进行随机编辑，人们希望您实际上拥有一个来源，而不仅仅是任何随机来源。他们希望您确保来源引人注目。有这么多的标准</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Aravind Srinivas <span class="dialogue-time">(00:06:37)</span>
+  </div>
+  <div class="dialogue-en">It’s not just a problem that will be solved by a smarter model. There’s so many other things to do on the search layer, and the sources layer, and making sure how well the answer is formatted and presented to the user. That’s why the product exists.</div>
+  <div class="dialogue-zh">这不仅仅是一个可以通过更智能的模型来解决的问题。在搜索层和源层上还有很多其他事情要做，并确保答案的格式和呈现给用户的效果如何。这就是该产品存在的原因。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:51)</span>
+  </div>
+  <div class="dialogue-en">Well, there’s a lot of questions to ask there, but first, zoom out once again. Fundamentally, it’s about search. You said first, there’s a search element, and then there’s a storytelling element via LLM and the citation element, but it’s about search first. You think of Perplexity as a search engine?</div>
+  <div class="dialogue-zh">好吧，有很多问题要问，但首先，再次缩小范围。从根本上来说，这是关于搜索的。你说首先有一个搜索元素，然后有一个通过法学硕士讲故事的元素和引文元素，但它首先是关于搜索的。您认为 Perplexity 是一个搜索引擎吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Aravind Srinivas <span class="dialogue-time">(00:07:14)</span>
+  </div>
+  <div class="dialogue-en">I think of Perplexity as a knowledge discovery engine, neither a search engine. Of course, we call it an answer engine, but everything matters here. The journey doesn’t end once you get an answer. In my opinion, the journey begins after you get an answer. You see related questions at the bottom, suggested questions to ask. Why? Because maybe the answer was not good enough, or the answer was good e...</div>
+  <div class="dialogue-zh">我认为 Perplexity 是一个知识发现引擎，而不是一个搜索引擎。当然，我们称之为答案引擎，但这里一切都很重要。一旦得到答案，旅程就不会结束。在我看来，当你得到答案后，旅程就开始了。您可以在底部看到相关问题以及建议提出的问题。为什么？因为也许答案不够好，或者答案很好</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Aravind Srinivas <span class="dialogue-time">(00:07:48)</span>
+  </div>
+  <div class="dialogue-en">That’s why in the search bar, we say where knowledge begins, because there’s no end to knowledge. You can only expand and grow. That’s the whole concept of The Beginning of Infinity book by David Deutsch. You always seek new knowledge. I see this as sort of a discovery process. Let’s say you literally, whatever you ask me right now, you could have asked Perplexity too. “Hey, Perplexity, is it a se...</div>
+  <div class="dialogue-zh">这就是为什么在搜索栏中，我们说知识从哪里开始，因为知识永无止境。你只能扩张和成长。这就是大卫·多伊奇（David Deutsch）所著的《无限的开始》一书的全部概念。你总是寻求新知识。我认为这是一个发现过程。让我们从字面上说，无论你现在问我什么，你也可以问困惑。 “嘿，困惑，这是一个自</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:18)</span>
+  </div>
+  <div class="dialogue-en">We’re going to straight up ask this right now.</div>
+  <div class="dialogue-zh">我们现在就直接问这个问题。</div>
+</div>
+    <a href="https://lexfridman.com/aravind-srinivas-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="ayanna-howard.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ayanna Howard: Human-Robot Interaction and Ethics of Safety-Critical Systems</div>
+  <div class="card-meta">Ayanna Howard</div>
+</a>
+<a href="boris-sofman.html" class="card" style="text-decoration:none">
+  <div class="card-title">Boris Sofman: Waymo, Cozmo, Self-Driving Cars, and the Future of Robotics</div>
+  <div class="card-meta">Boris Sofman</div>
+</a>
+<a href="colin-angle.html" class="card" style="text-decoration:none">
+  <div class="card-title">Colin Angle: iRobot</div>
+  <div class="card-meta">Colin Angle</div>
+</a>
+<a href="dhh-david-heinemeier-hansson.html" class="card" style="text-decoration:none">
+  <div class="card-title">DHH David Heinemeier Hansson</div>
+  <div class="card-meta">Dhh David Heinemeier Hansson</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

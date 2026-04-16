@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeff Bezos - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Jeff Bezos</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Jeff Bezos</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/jeff-bezos.html" style="font-size:16px;color:#818cf8;font-weight:600">Jeff Bezos</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">21,183 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/jeff-bezos-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#06b6d422;color:#06b6d4;border:1px solid #06b6d444;font-size:13px;padding:4px 12px">太空与探索</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:24</span>
+  <span class="chapter-title">Ranch<span class="zh-trans"> · 牧场</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:02</span>
+  <span class="chapter-title">Space<span class="zh-trans"> · 空间</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">16:36</span>
+  <span class="chapter-title">Physics<span class="zh-trans"> · 物理</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">26:10</span>
+  <span class="chapter-title">New Glenn<span class="zh-trans"> · 新格伦</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:08:59</span>
+  <span class="chapter-title">Lunar program<span class="zh-trans"> · 月球计划</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:18:55</span>
+  <span class="chapter-title">Amazon<span class="zh-trans"> · 亚马逊</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:36:16</span>
+  <span class="chapter-title">Principles<span class="zh-trans"> · 原则</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:54:56</span>
+  <span class="chapter-title">Productivity<span class="zh-trans"> · 生产率</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:05:34</span>
+  <span class="chapter-title">Future of humanity<span class="zh-trans"> · 人类的未来</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">jeff</span><span class="keyword-tag">bezos</span><span class="keyword-tag">going</span><span class="keyword-tag">don</span><span class="keyword-tag">space</span><span class="keyword-tag">amazon</span><span class="keyword-tag">rocket</span><span class="keyword-tag">decision</span><span class="keyword-tag">moon</span><span class="keyword-tag">blue</span><span class="keyword-tag">customer</span><span class="keyword-tag">truth</span><span class="keyword-tag">earth</span><span class="keyword-tag">better</span><span class="keyword-tag">said</span><span class="keyword-tag">thinking</span><span class="keyword-tag">stage</span><span class="keyword-tag">large</span><span class="keyword-tag">launch</span><span class="keyword-tag">doing</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"We need to start training ourselves to think longer term. Long-term thinking is a giant lever. You can literally solve problems if you think long-term, that are impossible to solve if you think short-term. And we aren’t really good at thinking long-term. Five years is a tough timeframe for most institutions to think past. And we probably need to stretch that to 10 years and 15 years and 20 years and 25 years, and we’d do a better job for our children or our grandchildren if we could stretch those thinking horizons. And so the clock, in a way, it’s an art project, it’s a symbol. And if it ever has any power to influence people to think longer term, that won’t happen for hundreds of years, but we are going to build it now and let it accrue the patina of age."</div>
+  <div class="quote-zh">我们需要开始训练自己进行更长远的思考。长期思考是一个巨大的杠杆。如果你考虑长远，你确实可以解决问题，但如果你考虑短期，你就不可能解决问题。而且我们并不擅长长远思考。对于大多数机构来说，五年是一个难以过去的时间框架。我们可能需要将其延长到 10 年、15 年、20 年和 25 年，如果我们能够延长这些思维视野，我们将为我们的子孙后代做得更好。因此，从某种程度上来说，时钟是一个艺术项目，是一个符号。如果它有任何力量影响人们进行更长远的思考，这在数百年之内都不会发生，但我们现在就要建造它，并让它随着时间的推移而产生光泽。</div>
+  <div class="quote-meta">— Jeff Bezos （02:07:56）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I’m here and I could say, “Lex, how tall do you think this ceiling is?” And you’d be like, “I don’t know, Jeff, maybe 12 feet tall.” And I would say, “I think it’s 11 feet tall.” And then we’d say, “You know what? Let’s just call it 11 and a half feet.” That’s compromise, instead of. The right thing to do is to get a tape measure or figure out some way of actually measuring, but think getting that tape measure and figure out how to get it to the top of the ceiling and all these things, that requires energy. Compromise, the advantage of compromise as a resolution mechanism is that it’s low energy, but it doesn’t lead to truth. And so in things like the height of the ceiling where truth is a noble thing, you shouldn’t allow compromise to be used when you can know the truth."</div>
+  <div class="quote-zh">我在这里，我可以说，“莱克斯，你认为这个天花板有多高？”你会说，“我不知道，杰夫，也许有 12 英尺高。”我会说，“我认为它有 11 英尺高。”然后我们会说，“你知道吗？我们就称它为 11 英尺半吧。”这是妥协，而不是。正确的做法是拿一个卷尺或找出某种实际测量的方法，但想想如何拿卷尺并弄清楚如何将其到达天花板的顶部以及所有这些需要能量的东西。妥协，妥协作为一种解决机制的优点是能量低，但它不会导致真相。因此，在像天花板的高度这样的事情上，真相是一件崇高的事情，当你知道真相时，你不应该允许妥协。</div>
+  <div class="quote-meta">— Jeff Bezos （01:06:00）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think with the geopolitical implications and how much resource was put into it. At the peak, that program was spending 2% or 3% of GDP on the Apollo program. So, much resource. I think it was pulled forward in time. We kind of did it ahead of when we, quote, unquote, should have done it. And so, in that way, it’s also a technical marvel. I mean it’s truly incredible. It’s the 20th century version of building the pyramids or something. It’s an achievement that because it was pulled forward in time and because it did something that had previously been thought impossible, it rightly deserves its place in the pantheon of great human achievements."</div>
+  <div class="quote-zh">我认为考虑到地缘政治影响以及投入了多少资源。在高峰期，该计划将 GDP 的 2% 或 3% 用于阿波罗计划。所以，资源很多。我认为它被及时推进了。我们在应该做的事情之前就做了这件事。因此，从这个角度来说，这也是一个技术奇迹。我的意思是这确实令人难以置信。这是建造金字塔之类的 20 世纪版本。这是一项成就，因为它被及时推进，并且因为它完成了以前被认为不可能的事情，所以它理应在人类伟大成就的万神殿中占有一席之地。</div>
+  <div class="quote-meta">— Jeff Bezos （00:05:31）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And take you back in time 10,000 years and you’re in a small village. If you go along to get along, you can survive. You can procreate. If you’re the village truth-teller, you might get clubbed to death in the middle of the night. Truths are often… They don’t want to be heard because important truths can be uncomfortable, they can be awkward, they can be exhausting."</div>
+  <div class="quote-zh">让你回到一万年前，你身处一个小村庄。如果你们相处融洽，就能生存。你可以生育。如果你是村里说真话的人，你可能会在半夜被棍棒打死。真相常常……他们不想被听到，因为重要的真相可能会让人不舒服、可能会尴尬、可能会让人筋疲力尽。</div>
+  <div class="quote-meta">— Jeff Bezos （01:28:44）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yes. I think if you’re doing … There are human activities where we tolerate more risk if you’re saving somebody’s life, if you are engaging in real exploration. These are things where I personally think we would accept more risk in part because you have to."</div>
+  <div class="quote-zh">是的。我认为，如果你正在做……在人类活动中，如果你在拯救某人的生命，如果你在进行真正的探索，我们会容忍更多的风险。我个人认为，在这些事情上我们会接受更多的风险，部分原因是你必须这样做。</div>
+  <div class="quote-meta">— Jeff Bezos （00:56:46）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Jeff Bezos, founder of Amazon and Blue Origin. This is his first time doing a conversation of this kind and of this length. And as he told me, it felt like we could have easily talked for many more hours, and I’m sure we will. This is the Lex Fridman Podcast. And now, dear friends, here’s Jeff Bezos.</div>
+  <div class="dialogue-zh">以下是与亚马逊和蓝色起源创始人杰夫·贝佐斯的对话。这是他第一次进行这种类型和长度的对话。正如他告诉我的那样，感觉我们可以轻松地聊更多个小时，我相信我们会的。这是莱克斯·弗里德曼播客。现在，亲爱的朋友们，这是杰夫·贝索斯。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ranch <span class="dialogue-time">(00:00:24)</span>
+  </div>
+  <div class="dialogue-en">You spent a lot of your childhood with your grandfather on a ranch here in Texas.</div>
+  <div class="dialogue-zh">您童年的大部分时间都是和祖父一起在德克萨斯州的一个牧场度过的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Bezos <span class="dialogue-time">(00:00:29)</span>
+  </div>
+  <div class="dialogue-en">Mm-hmm.</div>
+  <div class="dialogue-zh">嗯嗯。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:30)</span>
+  </div>
+  <div class="dialogue-en">And I heard you had a lot of work to do around the ranch. So, what’s the coolest job you remember doing there?</div>
+  <div class="dialogue-zh">我听说你在牧场周围有很多工作要做。那么，您记得在那里做过的最酷的工作是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Bezos <span class="dialogue-time">(00:00:35)</span>
+  </div>
+  <div class="dialogue-en">Wow. Coolest?</div>
+  <div class="dialogue-zh">哇。最酷？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:37)</span>
+  </div>
+  <div class="dialogue-en">Most interesting? Most memorable?</div>
+  <div class="dialogue-zh">最有趣？最难忘的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Bezos <span class="dialogue-time">(00:00:39)</span>
+  </div>
+  <div class="dialogue-en">Most memorable?</div>
+  <div class="dialogue-zh">最难忘的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:39)</span>
+  </div>
+  <div class="dialogue-en">Most impactful?</div>
+  <div class="dialogue-zh">最有影响力？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Bezos <span class="dialogue-time">(00:00:41)</span>
+  </div>
+  <div class="dialogue-en">It’s a real working ranch, and I spent all my summers on that ranch from age four to 16. And my grandfather was really taking me and in the early summers, he was letting me pretend to help on the ranch, because of course, a four-year-old is a burden, not a help in real life. He was really just watching me and taking care of me. And he was doing that because my mom was so young. She had me when she...</div>
+  <div class="dialogue-zh">这是一个真正的工作牧场，我从 4 岁到 16 岁，整个夏天都在那个牧场度过。我的祖父真的在带我，在初夏，他让我假装在牧场帮忙，因为当然，四岁的孩子在现实生活中是一种负担，而不是帮助。他真的只是看着我、照顾我。他这样做是因为我妈妈太年轻了。当她有我的时候</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Bezos <span class="dialogue-time">(00:01:15)</span>
+  </div>
+  <div class="dialogue-en">But as I got a little older, I actually was helpful on the ranch and I loved it. My grandfather had a huge influence on me, a huge factor in my life. I did all the jobs you would do on a ranch. I’ve fixed windmills, and laid fences, and pipelines, and done all the things that any rancher would do, vaccinated the animals, everything. But after my grandmother died, I was about 12 and I kept coming t...</div>
+  <div class="dialogue-zh">但随着年龄的增长，我实际上对牧场很有帮助，而且我很喜欢它。我的祖父对我影响很大，是我人生中的一个重要因素。我做了你在牧场会做的所有工作。我修好了风车，铺设了栅栏和管道，做了所有牧场主都会做的事情，给动物接种了疫苗，等等。但我的祖母去世后，我大约 12 岁，我一直来</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:07)</span>
+  </div>
+  <div class="dialogue-en">Just the image of that, the two of you sitting there watching a soap opera, two ranchers.</div>
+  <div class="dialogue-zh">就这样的形象，你们两个坐在那里看肥皂剧，两个牧场主。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Bezos <span class="dialogue-time">(00:02:13)</span>
+  </div>
+  <div class="dialogue-en">He had these big crazy dogs. It was really a very formative experience for me. But the key thing about it for me, the great gift I got from it was that my grandfather was so resourceful. He did everything himself. He made his own veterinary tools. He would make needles to suture the cattle up with. He would find a little piece of wire and heat it up and pound it thin and drill a hole in it and sha...</div>
+  <div class="dialogue-zh">他有这些疯狂的大狗。这对我来说确实是一次非常有影响力的经历。但对我来说最重要的是，我从中得到的伟大礼物是我的祖父是如此足智多谋。一切都是他自己做的。他自己制作兽医工具。他会制作针来缝合牛。他会找到一小段金属丝，将其加热，捣碎，在上面钻一个孔，然后将其敲碎。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:43)</span>
+  </div>
+  <div class="dialogue-en">So, self-reliance?</div>
+  <div class="dialogue-zh">那么，自力更生？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Bezos <span class="dialogue-time">(00:02:44)</span>
+  </div>
+  <div class="dialogue-en">Yeah, figuring out that you can solve problems with enough persistence and ingenuity. And my grandfather bought a D6 bulldozer, which is a big bulldozer, and he got it for like $5,000 because it was completely broken down. It was like a 1955 Caterpillar D6 bulldozer. New it would’ve cost, I don’t know, more than $100,000. And we spent an entire summer repairing that bulldozer. And we’d use mail or...</div>
+  <div class="dialogue-zh">是的，弄清楚你可以通过足够的毅力和聪明才智来解决问题。我祖父买了一台 D6 推土机，这是一台大推土机，他花了大约 5,000 美元买了它，因为它完全坏了。它就像 1955 年的 Caterpillar D6 推土机。我不知道，新的它会花费超过 100,000 美元。我们花了整个夏天修理那台推土机。我们会使用邮件或</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:39)</span>
+  </div>
+  <div class="dialogue-en">But just the image of the two of you fixing a D6 bulldozer and then going in for a little break at 1:00 PM to watch soap operas.</div>
+  <div class="dialogue-zh">但只是你们两个修理一台 D6 推土机，然后在下午 1:00 休息一下看肥皂剧的画面。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Bezos <span class="dialogue-time">(00:03:47)</span>
+  </div>
+  <div class="dialogue-en">Days of Our Lives. Laying on the floor, that’s how he watched TV. He was a really, really remarkable guy.</div>
+  <div class="dialogue-zh">我们生命中的日子。躺在地板上，他就是这样看电视的。他是一个非常非常了不起的人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:52)</span>
+  </div>
+  <div class="dialogue-en">That’s how I imagine Clint Eastwood also in all those westerns, when he’s not doing what he’s doing, he’s just watching soap operas. All right. I read that you fell in love with the idea of space and space exploration when you were five, watching Neil Armstrong walking on the moon. So, let me ask you to look back at the historical context and impact of that. So, the space race from 1957 to 1969 be...</div>
+  <div class="dialogue-zh">这就是我对所有西部片中克林特·伊斯特伍德的想象，当他不做他正在做的事情时，他只是在看肥皂剧。好的。我读到，当你五岁的时候，看着尼尔·阿姆斯特朗在月球上行走，就爱上了太空和太空探索的想法。那么，我请大家回顾一下当时的历史背景和影响。所以，1957年到1969年的太空竞赛是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Bezos <span class="dialogue-time">(00:04:51)</span>
+  </div>
+  <div class="dialogue-en">Well, I mean there’s so much inspiring there. One of the great things to take away from that, one of the great von Braun quotes is, “I have come to use the word impossible with great caution.” And so, that’s kind of the big story of Apollo is that going to the moon was literally an analogy that people used for something that’s impossible. “Oh, yeah, you’ll do that when men walk on the moon.” And o...</div>
+  <div class="dialogue-zh">嗯，我的意思是那里有很多鼓舞人心的东西。冯·布劳恩的一句伟大名言是，“我在使用‘不可能’这个词时非常谨慎。”所以，这就是阿波罗的大故事，登月实际上是人们用来比喻不可能的事情。 “哦，是的，当人类登上月球时，你就会这么做。”还有哦</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Bezos <span class="dialogue-time">(00:05:31)</span>
+  </div>
+  <div class="dialogue-en">I think with the geopolitical implications and how much resource was put into it. At the peak, that program was spending 2% or 3% of GDP on the Apollo program. So, much resource. I think it was pulled forward in time. We kind of did it ahead of when we, quote, unquote, should have done it. And so, in that way, it’s also a technical marvel. I mean it’s truly incredible. It’s the 20th century versio...</div>
+  <div class="dialogue-zh">我认为考虑到地缘政治影响以及投入了多少资源。在高峰期，该计划将 GDP 的 2% 或 3% 用于阿波罗计划。所以，资源很多。我认为它被及时推进了。我们在应该做的事情之前就做了这件事。因此，从这个角度来说，这也是一个技术奇迹。我的意思是这确实令人难以置信。这是20世纪的版本</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:17)</span>
+  </div>
+  <div class="dialogue-en">And of course, you named the rockets that Blue Origin is working on after some of the folks involved.</div>
+  <div class="dialogue-zh">当然，您以一些参与人员的名字命名了蓝色起源正在研发的火箭。</div>
+</div>
+    <a href="https://lexfridman.com/jeff-bezos-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-huberman-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Sleep, Dreams, Creativity &amp; the Limits of the Human Mind</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="andrew-ng.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Ng: Deep Learning, Education, and Real-World AI</div>
+  <div class="card-meta">Andrew Ng</div>
+</a>
+<a href="aravind-srinivas.html" class="card" style="text-decoration:none">
+  <div class="card-title">Aravind Srinivas</div>
+  <div class="card-meta">Aravind Srinivas</div>
+</a>
+<a href="ayanna-howard.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ayanna Howard: Human-Robot Interaction and Ethics of Safety-Critical Systems</div>
+  <div class="card-meta">Ayanna Howard</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Benjamin Netanyahu - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Benjamin Netanyahu</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Benjamin Netanyahu</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/benjamin-netanyahu.html" style="font-size:16px;color:#818cf8;font-weight:600">Benjamin Netanyahu</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">11,196 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/benjamin-netanyahu-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:35</span>
+  <span class="chapter-title">Hate<span class="zh-trans"> · 恨</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">8:15</span>
+  <span class="chapter-title">Judicial reform and protests<span class="zh-trans"> · 司法改革和抗议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">16:51</span>
+  <span class="chapter-title">AI<span class="zh-trans"> · 人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">26:53</span>
+  <span class="chapter-title">Competition<span class="zh-trans"> · 竞赛</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">33:34</span>
+  <span class="chapter-title">Power and corruption<span class="zh-trans"> · 权力与腐败</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:45</span>
+  <span class="chapter-title">Peace<span class="zh-trans"> · 和平</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">55:18</span>
+  <span class="chapter-title">War in Ukraine<span class="zh-trans"> · 乌克兰战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">59:15</span>
+  <span class="chapter-title">Abraham Accords<span class="zh-trans"> · 亚伯拉罕协议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:03:15</span>
+  <span class="chapter-title">History<span class="zh-trans"> · 历史</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:08:02</span>
+  <span class="chapter-title">Survival<span class="zh-trans"> · 生存</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">israel</span><span class="keyword-tag">don</span><span class="keyword-tag">netanyahu</span><span class="keyword-tag">benjamin</span><span class="keyword-tag">said</span><span class="keyword-tag">going</span><span class="keyword-tag">state</span><span class="keyword-tag">peace</span><span class="keyword-tag">history</span><span class="keyword-tag">human</span><span class="keyword-tag">political</span><span class="keyword-tag">israeli</span><span class="keyword-tag">arab</span><span class="keyword-tag">democracy</span><span class="keyword-tag">jewish</span><span class="keyword-tag">market</span><span class="keyword-tag">states</span><span class="keyword-tag">doesn</span><span class="keyword-tag">conversation</span><span class="keyword-tag">iran</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Well, first of all, I have a high regard for the people I talked to. And I understand that they understand things I don’t understand, and I don’t pretend to understand everything. But I do understand one thing. I understand that AI is developing at a geometric rate and mostly in political life and in life in general people don’t have an intuitive grasp of geometric growth. You understand things basically in linear increments. And the idea that you’re coming up a ski slope is very foreign to people. So they don’t understand it, and they’re naturally also sort of taken aback by it. Because what do you do? So I think there’s several conclusions from my conversations with them and from my other observations that I’ve been talking about for many years. I’m talking about the need-"</div>
+  <div class="quote-zh">嗯，首先，我非常尊重与我交谈过的人。我明白他们理解我不理解的事情，我不会假装理解一切。但我确实明白一件事。我知道人工智能正在以几何速度发展，而且主要是在政治生活和一般生活中，人们对几何增长没有直观的把握。你基本上以线性增量的方式理解事物。对于人们来说，你要上滑雪场的想法非常陌生。所以他们不明白，自然也有些愕然。因为你做什么？因此，我认为从我与他们的谈话以及我多年来一直在谈论的其他观察中可以得出几个结论。我说的是需求——</div>
+  <div class="quote-meta">— Benjamin Netanyahu （00:17:09）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"We’re doing that right now, and it actually works. I think there is a solution to this. It’s not the perfect world that people think of because that model I think doesn’t apply here. If it applies elsewhere, it’s a question. I don’t think so. But I think there’s one other thing, and that’s the main thing that I’ve been involved in. People said, “If you don’t solve the Palestinian problem, you’re not going to get to the Arab world. You’re not going to have peace with the Arab world.” Remember, the Palestinians are about 2% of the Arab world, and the other 98%, you’re not going to make peace with them. And that’s our goal."</div>
+  <div class="quote-zh">我们现在正在这样做，而且确实有效。我认为这个问题有一个解决方案。这不是人们想象的完美世界，因为我认为这个模型在这里不适用。如果它适用于其他地方，那就是一个问题。我不这么认为。但我认为还有另一件事，这是我参与的主要事情。人们说，“如果不解决巴勒斯坦问题，你就无法进入阿拉伯世界。你就不会与阿拉伯世界实现和平。”请记住，巴勒斯坦人约占阿拉伯世界的 2%，而其余 98% 的人，你不会与他们讲和。这就是我们的目标。</div>
+  <div class="quote-meta">— Benjamin Netanyahu （00:49:57）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"… free markets. So we also had to fight this battle that said you have to go through the Palestinian straight, S-T-R-A-I-T, to get to the other places. There’s no way to avoid this, you have to go through this impassable pass. And I think that now people are recognizing that we’ll go around it and probably circle back. And that, I think, actually gives hope not only to have an Arab-Israeli peace, but circling back in Israeli-Palestinian peace. And obviously this is not something that you find in the soundbites and so on, but in the popular discussion of the press. But that idea is permeating and I think it’s the right idea, because I think it’s the only one that will work."</div>
+  <div class="quote-zh">……自由市场。所以我们也必须打这场仗，你必须穿过巴勒斯坦直道，S-T-R-A-I-T，才能到达其他地方。这是没有办法避免的，你必须要经过这个不通的关口。我认为现在人们已经认识到我们会绕开它，并且可能会绕回来。我认为，这实际上不仅带来了实现阿拉伯-以色列和平的希望，而且还带来了实现以色列-巴勒斯坦和平的希望。显然，这不是你在原声摘要等中发现的东西，而是在媒体的流行讨论中发现的。但这种想法正在渗透，我认为这是正确的想法，因为我认为这是唯一可行的。</div>
+  <div class="quote-meta">— Benjamin Netanyahu （00:54:00）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"No, I think that’s complete hogwash because I think there’s very few people who are demonstrating against this. Quite a few, quite many, don’t have an idea what is being discussed. They’re basically being sloganized. You can sloganized, you know something about not mass media right now, but the social network, you can basically feed deliberately with big data and big money, you can just feed slogans and get into people’s minds. I’m sure you don’t think I exaggerate, because you can tell me more about that."</div>
+  <div class="quote-zh">不，我认为这完全是胡言乱语，因为我认为很少有人抗议这一点。很多，很多，不知道正在讨论什么。他们基本上是被口号化了。你可以打口号，你现在了解的不是大众媒体，而是社交网络，你基本上可以用大数据和大钱故意喂食，你可以只喂口号并进入人们的头脑。我相信你不会认为我夸大其词，因为你可以告诉我更多关于这一点的信息。</div>
+  <div class="quote-meta">— Benjamin Netanyahu （00:09:04）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"There’s been a decline in investments in high-tech globally. I think that’s driven by many factors. But the most important one is the interest rate, which I think will, it’ll fluctuate up and down. But Israel will remain a very attractive country because it produces so many knowledge workers in a knowledge based economy. And it’s changing so rapidly. The world is changing. You’re looking for the places that have innovation. The future belongs to those who innovate."</div>
+  <div class="quote-zh">全球高科技投资有所下降。我认为这是由很多因素驱动的。但最重要的是利率，我认为它会上下波动。但以色列仍将是一个非常有吸引力的国家，因为它在知识经济中培养了如此多的知识工人。而且变化如此之快。世界正在发生变化。您正在寻找具有创新的地方。未来属于创新者。</div>
+  <div class="quote-meta">— Benjamin Netanyahu （00:15:09）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">We should never, and I never sit aside and say, oh, they’re just threatening to destroy us. They won’t do it. If somebody threatens to eliminate you as Iran is doing today, and as Hitler did then and people discounted it, well, if somebody threatens to annihilate us, take them seriously and act to prevent it early on. Don’t let them have the means to do so because that may be too late.</div>
+  <div class="dialogue-zh">我们永远不应该，我也永远不会袖手旁观，说，哦，他们只是威胁要摧毁我们。他们不会这么做。如果有人威胁要消灭你们，就像伊朗今天所做的那样，就像希特勒当时所做的那样，人们对此不以为然，那么，如果有人威胁要消灭我们，请认真对待他们，并尽早采取行动阻止这种情况发生。不要让他们有办法这样做，因为那可能为时已晚。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:26)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Benjamin Netanyahu, prime Minister of Israel, currently serving his sixth term in office. He’s one of the most influential, powerful, and controversial men in the world, leading a right-wing coalition government at the center of one of the most intense and long-lasting conflicts and crises in human history.</div>
+  <div class="dialogue-zh">以下是与现任第六任期以色列总理本杰明·内塔尼亚胡的对话。他是世界上最有影响力、最有权势和最具争议性的人物之一，领导的右翼联合政府正处于人类历史上最激烈、最持久的冲突和危机之一的中心。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:47)</span>
+  </div>
+  <div class="dialogue-en">As we spoke, and as I speak now, large scale protests are breaking out all over Israel over this government’s proposed judicial reform that seeks to weaken the Supreme Court in a bold accumulation of power. Given the current intense political battles in Israel, our previous intention to speak for three hours was adjusted to one hour for the time being, but we agreed to speak again for much longer ...</div>
+  <div class="dialogue-zh">正如我们所说，正如我现在所说，以色列各地正在爆发大规模抗议活动，抗议本届政府拟议的司法改革，该改革旨在大胆积累权力，削弱最高法院。鉴于目前以色列政治斗争激烈，我们原定的三小时演讲暂时调整为一小时，但我们同意再次演讲更长的时间</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:35)</span>
+  </div>
+  <div class="dialogue-en">For this, I will travel anywhere no matter how dangerous if there’s any chance, it may help add to understanding and love in the world. I believe in the power of conversation to do just this, to remind us of our common humanity. I know I’m under-qualified and under-skilled for these conversations, so I will often fall short and I will certainly get attacked, derided and slandered. But I will alway...</div>
+  <div class="dialogue-zh">为此，无论多么危险，只要有机会，我都会去旅行，这可能有助于增加世界上的理解和爱。我相信对话的力量可以做到这一点，提醒我们共同的人性。我知道我对这些对话的资格和技能不够，所以我经常会达不到要求，我肯定会受到攻击、嘲笑和诽谤。但我会永远</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:12)</span>
+  </div>
+  <div class="dialogue-en">This life, this world of ours is too beautiful not to keep trying. Trying to do some good in whatever way each of us know how. I love you all.</div>
+  <div class="dialogue-zh">我们的生活、这个世界太美好了，我们不能不继续努力。尝试以我们每个人都知道的方式做一些好事。我爱你们。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:25)</span>
+  </div>
+  <div class="dialogue-en">This is The Lex Fridman Podcast. To support it please check out our sponsors in the description. And now, dear friends, here’s Benjamin Netanyahu.</div>
+  <div class="dialogue-zh">这是莱克斯·弗里德曼播客。要支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是本杰明·内塔尼亚胡。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Hate <span class="dialogue-time">(00:02:35)</span>
+  </div>
+  <div class="dialogue-en">You’re loved by many people here in Israel and in the world, but you’re also hated by many. In fact, I think you may be one of the most hated men in the world. So if there’s a young man or a young woman listening to this right now who have such hate in their heart, what can you say to them to one day turn that hate into love?</div>
+  <div class="dialogue-zh">你受到以色列和世界各地很多人的喜爱，但也有很多人讨厌你。事实上，我认为你可能是世界上最令人讨厌的男人之一。所以，如果现在有一个年轻的男人或年轻的女人在听这个，他们心里有这样的仇恨，你能对他们说些什么，让他们有一天能把这种仇恨变成爱呢？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:02:58)</span>
+  </div>
+  <div class="dialogue-en">I disagree with the premise of your question. I think I’ve enjoyed a very broad support around the world. There are certain corners in which we have this animosity that you describe, and it sort of permeates in some of the newspapers and the news organs and so on in the United States, but it certainly doesn’t reflect the broad support that I have. I just gave an interview on an Iranian channel, 60...</div>
+  <div class="dialogue-zh">我不同意你问题的前提。我想我在世界各地都得到了非常广泛的支持。在某些角落，我们存在你所描述的这种敌意，它渗透到美国的一些报纸和新闻机构等中，但这肯定不能反映出我所获得的广泛支持。我刚刚接受了伊朗频道的采访，60</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:03:45)</span>
+  </div>
+  <div class="dialogue-en">And when I go around the world and I’ve been around the world, people want to hear what we have to say. What I have to say as a leader of Israel whom they respect increasingly as a rising power in the world. So I disagree with that. And the most important thing that goes against what you said is the respect that we receive from the Arab world and the fact that we’ve made four historic peace agreem...</div>
+  <div class="dialogue-zh">当我环游世界并且我已经环游世界时，人们想听听我们要说的话。作为以色列的领导人，我不得不说，他们越来越尊重以色列作为世界上崛起的大国。所以我不同意这一点。与你所说的相反的最重要的是我们从阿拉伯世界得到的尊重以及我们达成了四项历史性和平协议的事实</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:24)</span>
+  </div>
+  <div class="dialogue-en">Well, there’s a lot of love, yes. A lot of leaders are collaborating are –</div>
+  <div class="dialogue-zh">嗯，有很多爱，是的。许多领导人正在合作——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:04:32)</span>
+  </div>
+  <div class="dialogue-en">Respect, I said not love.</div>
+  <div class="dialogue-zh">我说的是尊重，不是爱。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:34)</span>
+  </div>
+  <div class="dialogue-en">Okay. All right. Well, it’s a spectrum, but there is people who don’t have good things to say about Israel, who do have hate in their heart for Israel.</div>
+  <div class="dialogue-zh">好的。好的。嗯，这是一个范围，但有些人对以色列没有好话可说，他们心里确实对以色列怀有仇恨。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:04:45)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:46)</span>
+  </div>
+  <div class="dialogue-en">And what can you say to those people?</div>
+  <div class="dialogue-zh">你能对那些人说什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:04:49)</span>
+  </div>
+  <div class="dialogue-en">Well, I think they don’t know very much. I think they’re guided by a lot of ignorance. They don’t know about Israel. They don’t know that Israel is a stellar democracy, that it happens to be one of the most advanced societies on the planet. That what Israel develops helps humanity in every field, in medicine, in agriculture and in the environment and telecoms and talk about AI in a minute. But cha...</div>
+  <div class="dialogue-zh">嗯，我认为他们知道的不多。我认为他们受到很多无知的引导。他们不了解以色列。他们不知道以色列是一个出色的民主国家，而且它恰好是地球上最先进的社会之一。以色列开发的技术可以帮助人类在医学、农业、环境和电信等各个领域，稍后就谈谈人工智能。但查</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:05:21)</span>
+  </div>
+  <div class="dialogue-en">We’ve sent rescue teams more than any other country in the world, and we’re one 10th of 1% of the world’s population. But when there’s an earthquake or a devastation in Haiti or in the Philippines, Israel is there. When there’s an devastating earthquake in Turkey, Israel was there. When there’s something in Nepal, Israel is there, and it’s the second country. It’s the second country after, in one ...</div>
+  <div class="dialogue-zh">我们派出的救援队比世界上任何其他国家都多，而且我们的人口只占世界人口的十分之一。但当海地或菲律宾发生地震或破坏时，以色列就会在那里。当土耳其发生毁灭性地震时，以色列就在那里。当尼泊尔有什么东西的时候，以色列就在那里，它是第二个国家。这是继之后的第二个国家</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:57)</span>
+  </div>
+  <div class="dialogue-en">So you’re a student of history. If I can just linger on that philosophical notion of hate, that part of human nature. If you look at World War II, what do you learn from human nature, from the rise of the Third Reich and the rise of somebody like Hitler and the hate that permeates that?</div>
+  <div class="dialogue-zh">所以你是历史系的学生。如果我能停留在仇恨的哲学概念上，那是人性的一部分。如果你回顾一下第二次世界大战，你会从人性、第三帝国的崛起、希特勒等人的崛起以及弥漫在其中的仇恨中学到什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:06:19)</span>
+  </div>
+  <div class="dialogue-en">Well, what I’ve learned is that you have to nip bad things in the bud. There’s a Latin term that says [foreign language 00:06:29], stop bad things when they’re small. And the deliberate hatred, the incitement of hatred against one community, it’s demonization, delegitimization that goes with it is a very dangerous thing.</div>
+  <div class="dialogue-zh">嗯，我学到的是，你必须将坏事消灭在萌芽状态。有一个拉丁术语说[外语00:06:29]，勿以恶小而为之。蓄意的仇恨，煽动对一个群体的仇恨，随之而来的妖魔化、非法化是一件非常危险的事情。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benjamin Netanyahu <span class="dialogue-time">(00:06:48)</span>
+  </div>
+  <div class="dialogue-en">And that happened in the case of the Jews. What started with the Jews soon spread to all of humanity. So what we’ve learned is that we should never, and I never sit aside and say, “Oh, they’re just threatening to destroy us. They won’t do it.” If somebody threatens to eliminate you as Iran is doing today, and as Hitler did then, and people discounted it, well, if somebody threatens to annihilate u...</div>
+  <div class="dialogue-zh">And that happened in the case of the Jews.从犹太人开始的事情很快就蔓延到全人类。所以我们学到的是，我们永远不应该，我也从来不会袖手旁观，说：“哦，他们只是威胁要摧毁我们。他们不会这么做。”如果有人威胁要消灭你，就像伊朗今天所做的那样，就像希特勒当时所做的那样，而人们对此不以为然，那么，如果有人威胁要消灭你</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:21)</span>
+  </div>
+  <div class="dialogue-en">So in those threats underlying that hatred, how much of it is anti-Zionism, and how much of it is anti-Semitism?</div>
+  <div class="dialogue-zh">那么，在这些仇恨背后的威胁中，有多少是反犹太复国主义的，有多少是反犹太主义的？</div>
+</div>
+    <a href="https://lexfridman.com/benjamin-netanyahu-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="alex-gladstein.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alex Gladstein: Bitcoin, Authoritarianism, and Human Rights</div>
+  <div class="card-meta">Alex Gladstein</div>
+</a>
+<a href="anthony-pompliano.html" class="card" style="text-decoration:none">
+  <div class="card-title">Anthony Pompliano: Bitcoin</div>
+  <div class="card-meta">Anthony Pompliano</div>
+</a>
+<a href="jared-kushner.html" class="card" style="text-decoration:none">
+  <div class="card-title">Jared Kushner</div>
+  <div class="card-meta">Jared Kushner</div>
+</a>
+<a href="marc-andreessen-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Marc Andreessen #2</div>
+  <div class="card-meta">Marc Andreessen</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

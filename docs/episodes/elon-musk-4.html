@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elon Musk #4 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Elon Musk #4</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Elon Musk #4</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/elon-musk.html" style="font-size:16px;color:#818cf8;font-weight:600">Elon Musk</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">20,630 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/elon-musk-4-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:07</span>
+  <span class="chapter-title">War and human nature<span class="zh-trans"> · 战争与人性</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:33</span>
+  <span class="chapter-title">Israel-Hamas war<span class="zh-trans"> · 以色列与哈马斯战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">10:41</span>
+  <span class="chapter-title">Military-Industrial Complex<span class="zh-trans"> · 军工联合体</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:58</span>
+  <span class="chapter-title">War in Ukraine<span class="zh-trans"> · 乌克兰战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">19:41</span>
+  <span class="chapter-title">China<span class="zh-trans"> · 中国</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">33:57</span>
+  <span class="chapter-title">xAI Grok<span class="zh-trans"> · xAI格罗克</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">44:55</span>
+  <span class="chapter-title">Aliens<span class="zh-trans"> · 外星人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">52:55</span>
+  <span class="chapter-title">God<span class="zh-trans"> · 上帝</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">55:22</span>
+  <span class="chapter-title">Diablo 4 and video games<span class="zh-trans"> · 暗黑破坏神 4 和视频游戏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:04:29</span>
+  <span class="chapter-title">Dystopian worlds: 1984 and Brave New World<span class="zh-trans"> · 反乌托邦世界：1984 和美丽新世界</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:10:41</span>
+  <span class="chapter-title">AI and useful compute per watt<span class="zh-trans"> · 人工智能和每瓦有用计算</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:16:22</span>
+  <span class="chapter-title">AI regulation<span class="zh-trans"> · 人工智能监管</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:23:14</span>
+  <span class="chapter-title">Should AI be open-sourced?<span class="zh-trans"> · 人工智能应该开源吗？</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:30:36</span>
+  <span class="chapter-title">X algorithm<span class="zh-trans"> · X算法</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:41:57</span>
+  <span class="chapter-title">2024 presidential elections<span class="zh-trans"> · 2024 年总统选举</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:54:55</span>
+  <span class="chapter-title">Politics<span class="zh-trans"> · 政治</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:57:57</span>
+  <span class="chapter-title">Trust<span class="zh-trans"> · 相信</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:03:29</span>
+  <span class="chapter-title">Tesla’s Autopilot and Optimus robot<span class="zh-trans"> · 特斯拉的自动驾驶仪和擎天柱机器人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:12:28</span>
+  <span class="chapter-title">Hardships<span class="zh-trans"> · 艰辛</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">elon</span><span class="keyword-tag">musk</span><span class="keyword-tag">don</span><span class="keyword-tag">war</span><span class="keyword-tag">going</span><span class="keyword-tag">human</span><span class="keyword-tag">got</span><span class="keyword-tag">china</span><span class="keyword-tag">said</span><span class="keyword-tag">grok</span><span class="keyword-tag">drug</span><span class="keyword-tag">seems</span><span class="keyword-tag">physics</span><span class="keyword-tag">real</span><span class="keyword-tag">far</span><span class="keyword-tag">least</span><span class="keyword-tag">video</span><span class="keyword-tag">saying</span><span class="keyword-tag">guess</span><span class="keyword-tag">possible</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"So now China historically has always been, with rare exception, been internally focused. They have not been inquisitive. They’ve fought each other. There’ve been many, many civil wars. In the Three Kingdoms war, I believe they lost about 70% of their population. So they’ve had brutal internal wars, civil wars that make the US Civil War look small by comparison. So I think it’s important to appreciate that China is not monolithic. We sort of think of China as a sort of one entity of one mind. And this is definitely not the case. From what I’ve seen and I think most people who understand China would agree, people in China think about China 10 times more than they think about anything outside of China. So it’s like 90% of their consideration is internal."</div>
+  <div class="quote-zh">因此，中国历史上除了极少数例外，一直以国内为重点。他们并没有好奇心。他们互相争斗过。发生过很多很多内战。在三国战争中，我相信他们损失了大约70%的人口。因此，他们经历了残酷的内战和内战，相比之下，美国内战显得微不足道。所以我认为重要的是要认识到中国并不是铁板一块。我们认为中国是一个思想的统一体。而事实绝对不是这样的。从我所看到的情况来看，我想大多数了解中国的人都会同意，中国人对中国的看法是他们对中国以外任何事物的看法的十倍。所以他们 90% 的考虑都是内部的。</div>
+  <div class="quote-meta">— Elon Musk （00:24:50）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, I think it’s helpful, the tools of physics are very powerful and can be applied I think to really any arena in life. It’s really just critical thinking. For something important you need to reason with from first principles and think about things in the limit one direction or the other. So in the limit, even at the Kardashev scale, meaning even if you harness the entire power of the sun, you’ll still care about useful compute per watt. That’s where I think, probably where things are headed from the standpoint of AI is that we have a silicon shortage now that will transition to a voltage transformer shortage in about a year. Ironically, transformers for transformers. You need transformers to run transformers."</div>
+  <div class="quote-zh">嗯，我认为这很有帮助，物理工具非常强大，我认为可以应用于生活中的任何领域。这实际上只是批判性思维。对于重要的事情，你需要从第一原则出发进行推理，并在有限的一个方向或另一个方向上思考事情。因此，在极限情况下，即使在卡尔达肖夫规模下，这意味着即使您利用太阳的全部能量，您仍然会关心每瓦特的有用计算量。这就是我认为，从人工智能的角度来看，事情的发展方向可能是我们现在的硅短缺，并将在大约一年内转变为电压互感器短缺。讽刺的是，变压器归变压器。你需要变压器来运行变压器。</div>
+  <div class="quote-meta">— Elon Musk （01:10:59）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah. I mean, it did prompt me to think about just hate in general, which is you want to be careful of one of those things where you wish for something that sounds good, but if you get it’s actually a dystopian situation. So if you wish for world peace sounds good, but how’d it enforced and at what cost eternal peace? It might actually be worse to have eternal peace because of what that would entail. The suppression of everyone, it might be the suppression of progress. It might be an ossified society that never changes. What I’m saying is that there is an argument that if you wish for no war, you should be careful what you wish for because what’s required in order for there to be no war might be worse than a little war. Dystopian worlds: 1984 and Brave New World"</div>
+  <div class="quote-zh">是的。我的意思是，它确实促使我思考一般的仇恨，即你想要小心那些听起来不错的事情之一，但如果你得到了它实际上是一种反乌托邦的情况。因此，如果你希望世界和平听起来不错，但它是如何实现的以及永恒和平的代价是什么？事实上，拥有永恒的和平可能会更糟糕，因为这会带来什么后果。对所有人的压制，可能就是对进步的压制。这可能是一个永远不会改变的僵化社会。我想说的是，有一种观点认为，如果你希望不要战争，你应该小心你的愿望，因为为了不发生战争，所需要的可能比一场小战争更糟糕。反乌托邦世界：1984 和美丽新世界</div>
+  <div class="quote-meta">— Elon Musk （01:03:09）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"If the woke is left, then I suppose that would be true. But I’m not sure, I think there are aspects of the left that are good. I mean, if you’re in favor of the environment, if you want to have a positive future for humanity, if you believe in empathy for your fellow human beings, being kind and not cruel, whatever those values are."</div>
+  <div class="quote-zh">如果留下了唤醒者，那么我想那是真的。但我不确定，我认为左派有一些好的方面。我的意思是，如果你支持环境，如果你想为人类拥有一个积极的未来，如果你相信对人类同胞的同情心，善良而不是残酷，无论这些价值观是什么。</div>
+  <div class="quote-meta">— Elon Musk （01:55:58）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"They’re both going to understand the world, but I think Tesla’s approach is fundamentally more compute efficient. It had to be, there was no choice. Our brain is very compute efficient, very energy efficient. Think of what is our brain able to do. There’s only about 10 watts of higher brain function, not counting stuff that’s just used to control our body. The thinking part of our brain is less than 10 watts. And those 10 watts can still produce a much better novel than a 10 megawatt GPU cluster. So, there’s a six order of magnitude difference there."</div>
+  <div class="quote-zh">他们都会了解世界，但我认为特斯拉的方法从根本上来说计算效率更高。必须如此，没有选择。我们的大脑计算效率非常高，能源效率也非常高。想想我们的大脑能够做什么。大脑的高级功能只有大约 10 瓦，这还不包括那些仅仅用于控制我们身体的东西。我们大脑的思考部分的功率不到10瓦。与 10 兆瓦 GPU 集群相比，这 10 瓦仍然可以产生更好的小说。因此，存在六个数量级的差异。</div>
+  <div class="quote-meta">— Elon Musk （02:07:13）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Introduction
+  </div>
+  <div class="dialogue-en">War and human nature</div>
+  <div class="dialogue-zh">战争与人性</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Elon Musk, his fourth time on this, the Lex Fridman Podcast. I thought you were going to finish it. It’s one of the greatest themes in all of film history.</div>
+  <div class="dialogue-zh">以下是与埃隆·马斯克的对话，这是他第四次在莱克斯·弗里德曼播客上进行对话。我以为你会完成它。这是电影史上最伟大的主题之一。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:00:31)</span>
+  </div>
+  <div class="dialogue-en">Yeah, that’s great.</div>
+  <div class="dialogue-zh">是的，那太好了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:33)</span>
+  </div>
+  <div class="dialogue-en">So I was just thinking about the Roman Empire, as one does.</div>
+  <div class="dialogue-zh">所以我只是在想罗马帝国，正如人们所做的那样。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:00:38)</span>
+  </div>
+  <div class="dialogue-en">Is that whole meme where all guys are thinking about the Roman Empire at least once a day?</div>
+  <div class="dialogue-zh">这是所有人每天至少一次思考罗马帝国的整个模因吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:44)</span>
+  </div>
+  <div class="dialogue-en">And half the population is confused whether it’s true or not. But more seriously, thinking about the wars going on in the world today, and as you know, war and military conquest has been a big part of Roman society and culture, and I think has been a big part of most empires and dynasties throughout human history.</div>
+  <div class="dialogue-zh">一半的人对这是否真实感到困惑。但更严肃地说，想想当今世界上正在发生的战争，如你所知，战争和军事征服一直是罗马社会和文化的重要组成部分，我认为也是人类历史上大多数帝国和王朝的重要组成部分。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:01:06)</span>
+  </div>
+  <div class="dialogue-en">Yeah, they usually came as a result of conquest. I mean, there’s some like the Hapsburg Empire where there was just a lot of clever marriages.</div>
+  <div class="dialogue-zh">是的，他们通常是征服的结果。我的意思是，像哈布斯堡王朝这样的国家有很多聪明的婚姻。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:16)</span>
+  </div>
+  <div class="dialogue-en">But fundamentally there’s an engine of conquest and they celebrate excellence in warfare, many of the leaders were excellent generals, that kind of thing. So a big picture question, Grok approved, I asked if this is a good question to ask.</div>
+  <div class="dialogue-zh">但从根本上来说，这是一个征服的引擎，他们庆祝战争中的卓越表现，许多领导人都是优秀的将军，诸如此类。这是一个大局问题，Grok 同意了，我问这是否是一个好问题。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:01:33)</span>
+  </div>
+  <div class="dialogue-en">Tested, Grok approved. Yeah.</div>
+  <div class="dialogue-zh">经过测试，Grok 批准。是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:36)</span>
+  </div>
+  <div class="dialogue-en">At least on fun mode. To what degree do you think war is part of human nature versus a consequence of how human societies are structured? I ask this as you have somehow controversially been a proponent of peace.</div>
+  <div class="dialogue-zh">至少在乐趣模式下是这样。您认为战争在多大程度上是人性的一部分，而不是人类社会结构的结果？我问这个问题是因为您一直是颇有争议的和平支持者。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:01:57)</span>
+  </div>
+  <div class="dialogue-en">I’m generally a proponent of peace. I mean, ignorance is perhaps, in my view, the real enemy to be countered. That’s the real hard part, not fighting other humans, but all creatures fight. I mean, the jungle is… People think of nature as perhaps some sort of peaceful thing, but in fact it is not. There’s some quite funny Werner Herzog thing where he is in the jungle saying that it’s basically just...</div>
+  <div class="dialogue-zh">我通常是和平的支持者。我的意思是，在我看来，无知也许才是真正需要对抗的敌人。这才是真正困难的部分，不是与其他人类战斗，而是所有生物都在战斗。我的意思是，丛林……人们认为大自然可能是某种和平的事物，但事实上并非如此。沃纳·赫尔佐格（Werner Herzog）在丛林中做了一些非常有趣的事情，他说这基本上只是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:40)</span>
+  </div>
+  <div class="dialogue-en">Well, there’s a relevant question here, whether with greater intelligence comes greater control over these base instincts for violence.</div>
+  <div class="dialogue-zh">好吧，这里有一个相关的问题，智力越高，是否就能更好地控制这些基本的暴力本能。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:02:49)</span>
+  </div>
+  <div class="dialogue-en">Yes. We have much more vulnerability to control our limbic instinct for violence than say a chimpanzee. And in fact, if one looks at say, chimpanzee society, it is not friendly. I mean, the Bonobos are an exception, but chimpanzee society is filled with violence and it’s quite horrific, frankly. That’s our limbic system in action. You don’t want to be on the wrong side of a chimpanzee, it’ll eat y...</div>
+  <div class="dialogue-zh">是的。与黑猩猩相比，我们更容易控制边缘的暴力本能。事实上，如果我们看看黑猩猩社会，就会发现它并不友好。我的意思是，倭黑猩猩是一个例外，但黑猩猩社会充满了暴力，坦率地说，这是相当可怕的。这就是我们正在发挥作用的边缘系统。你不想站在黑猩猩的对立面，它会吃掉你</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:22)</span>
+  </div>
+  <div class="dialogue-en">Yeah. Basically there’s no limits or ethics or they almost had just war. There’s no just war in the chimpanzee societies. Is war and dominance by any means necessary?</div>
+  <div class="dialogue-zh">是的。基本上没有限制或道德，否则他们几乎只有战争。黑猩猩社会中不存在正义的战争。战争和统治有必要吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:03:33)</span>
+  </div>
+  <div class="dialogue-en">Yeah. Chimpanzee society is a permanent version of human society. They’re not like peace loving basically at all. There’s extreme violence and then once in a while, somebody who’s watched too many Disney movies decides to raise a chimpanzee as a pet, and then that eats their face or they’re nuts off or chew their fingers off and that kind of thing. It’s happened several times.</div>
+  <div class="dialogue-zh">是的。黑猩猩社会是人类社会的永久版本。他们根本不像爱好和平的人。有极端的暴力，然后偶尔，看过太多迪士尼电影的人决定养一只黑猩猩作为宠物，然后黑猩猩会吃掉他们的脸，或者让他们发疯，或者咬掉他们的手指之类的事情。这种事已经发生过好几次了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:58)</span>
+  </div>
+  <div class="dialogue-en">Ripping your nuts off is an interesting strategy for interaction.</div>
+  <div class="dialogue-zh">疯狂是一种有趣的互动策略。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:04:02)</span>
+  </div>
+  <div class="dialogue-en">It’s happened to people. It’s unfortunate. That’s, I guess, one way to ensure that the other chimp doesn’t contribute to the gene pool.</div>
+  <div class="dialogue-zh">这发生在人们身上。很不幸。我想，这是确保另一只黑猩猩不会对基因库做出贡献的一种方法。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:10)</span>
+  </div>
+  <div class="dialogue-en">Well, from a martial arts perspective is the fascinating strategy.</div>
+  <div class="dialogue-zh">嗯，从武术的角度来看，这是一个令人着迷的策略。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:04:15)</span>
+  </div>
+  <div class="dialogue-en">The nut rougher.</div>
+  <div class="dialogue-zh">坚果比较粗糙。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:18)</span>
+  </div>
+  <div class="dialogue-en">I wonder which of the martial arts teaches that one.</div>
+  <div class="dialogue-zh">我想知道哪一门武术教导这一门派。</div>
+</div>
+    <a href="https://lexfridman.com/elon-musk-4-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="chris-lattner.html" class="card" style="text-decoration:none">
+  <div class="card-title">Chris Lattner: Compilers, LLVM, Swift, TPU, and ML Accelerators</div>
+  <div class="card-meta">Chris Lattner</div>
+</a>
+<a href="david-patterson.html" class="card" style="text-decoration:none">
+  <div class="card-title">David Patterson: Computer Architecture and Data Storage</div>
+  <div class="card-meta">David Patterson</div>
+</a>
+<a href="peter-steinberger.html" class="card" style="text-decoration:none">
+  <div class="card-title">Peter Steinberger</div>
+  <div class="card-meta">Peter Steinberger</div>
+</a>
+<a href="ryan-graves.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ryan Graves: UFOs, Fighter Jets, and Aliens</div>
+  <div class="card-meta">Ryan Graves</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

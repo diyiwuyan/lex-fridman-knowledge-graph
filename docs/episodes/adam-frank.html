@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adam Frank - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Adam Frank</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Adam Frank</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/adam-frank.html" style="font-size:16px;color:#818cf8;font-weight:600">Adam Frank</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">38,724 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/adam-frank-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#06b6d422;color:#06b6d4;border:1px solid #06b6d444;font-size:13px;padding:4px 12px">太空与探索</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#8b5cf622;color:#8b5cf6;border:1px solid #8b5cf644;font-size:13px;padding:4px 12px">物理与宇宙学</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:58</span>
+  <span class="chapter-title">Planet formation<span class="zh-trans"> · 行星形成</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">7:08</span>
+  <span class="chapter-title">Plate tectonics<span class="zh-trans"> · 板块构造</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:30</span>
+  <span class="chapter-title">Extinction events<span class="zh-trans"> · 灭绝事件</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">18:41</span>
+  <span class="chapter-title">Biosphere<span class="zh-trans"> · 生物圈</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">21:39</span>
+  <span class="chapter-title">Technosphere<span class="zh-trans"> · 科技圈</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">25:53</span>
+  <span class="chapter-title">Emergence of intelligence<span class="zh-trans"> · 智力的出现</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">32:06</span>
+  <span class="chapter-title">Drake equation<span class="zh-trans"> · 德雷克方程</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">36:20</span>
+  <span class="chapter-title">Exoplanets<span class="zh-trans"> · 系外行星</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">39:04</span>
+  <span class="chapter-title">Habitable zones<span class="zh-trans"> · 宜居区</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">42:06</span>
+  <span class="chapter-title">Fermi Paradox<span class="zh-trans"> · 费米悖论</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">51:04</span>
+  <span class="chapter-title">Alien civilizations<span class="zh-trans"> · 外星文明</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:00:32</span>
+  <span class="chapter-title">Colonizing Mars<span class="zh-trans"> · 殖民火星</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:12:48</span>
+  <span class="chapter-title">Search for aliens<span class="zh-trans"> · 寻找外星人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:29:13</span>
+  <span class="chapter-title">Alien megastructures<span class="zh-trans"> · 外星巨型建筑</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:35:19</span>
+  <span class="chapter-title">Kardashev scale<span class="zh-trans"> · 卡尔达肖夫量表</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:40:32</span>
+  <span class="chapter-title">Detecting aliens<span class="zh-trans"> · 探测外星人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:47:14</span>
+  <span class="chapter-title">Warp drives<span class="zh-trans"> · 曲速驱动器</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:53:21</span>
+  <span class="chapter-title">Cryogenics<span class="zh-trans"> · 低温学</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:56:39</span>
+  <span class="chapter-title">What aliens look like<span class="zh-trans"> · 外星人长什么样子</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">adam</span><span class="keyword-tag">frank</span><span class="keyword-tag">going</span><span class="keyword-tag">planet</span><span class="keyword-tag">experience</span><span class="keyword-tag">don</span><span class="keyword-tag">earth</span><span class="keyword-tag">science</span><span class="keyword-tag">got</span><span class="keyword-tag">whole</span><span class="keyword-tag">civilizations</span><span class="keyword-tag">able</span><span class="keyword-tag">civilization</span><span class="keyword-tag">evolution</span><span class="keyword-tag">hard</span><span class="keyword-tag">looking</span><span class="keyword-tag">said</span><span class="keyword-tag">planets</span><span class="keyword-tag">biosphere</span><span class="keyword-tag">space</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"We think plate tectonics may have been really important for life on Earth, for the evolution of complex life on Earth. It turns out, and this is the next generation where we’re going with the understanding the evolution of planets and life. It turns out that you actually have to think hard about the planetary context for life. You can just be like, “Oh, there’s a warm pond,” and then some interesting chemistry happens in the warm pond. You actually have to think about the planet as a whole and what it’s gone through in order to really understand whether a planet is a good place for life or not."</div>
+  <div class="quote-zh">我们认为板块构造对于地球上的生命、对于地球上复杂生命的进化可能非常重要。事实证明，这是我们将要了解行星和生命演化的下一代。事实证明，你实际上必须认真思考生命存在的行星环境。你可以说，“哦，有一个温暖的池塘”，然后温暖的池塘里就会发生一些有趣的化学反应。实际上，你必须将地球作为一个整体来思考，以及它经历了什么，才能真正了解一个行星是否适合生命生存。</div>
+  <div class="quote-meta">— Adam Frank （00:09:44）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah. Because it’s really what about, thinking about complex systems? A space habitat would have to be as robust as an ecosystem. As the kind of thing, you go out and you see a pond with all the different webs of interactions. That’s why I always think that if this process of going out into space will help us with climate change and with thinking about making a long-term sustainable version of human civilization. Because you really have to think about these webs, the complexity of these webs and recognize the biosphere has been doing this forever. The biosphere knows how to do this."</div>
+  <div class="quote-zh">是的。因为这实际上是关于复杂系统的思考？太空栖息地必须像生态系统一样强大。作为一种事情，你走出去，你会看到一个池塘，里面有各种不同的相互作用网络。这就是为什么我一直认为，进入太空的过程是否有助于我们应对气候变化，并思考建立一个长期可持续的人类文明版本。因为你真的必须考虑这些网，这些网的复杂性，并认识到生物圈一直在这样做。生物圈知道如何做到这一点。</div>
+  <div class="quote-meta">— Adam Frank （01:06:47）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But what we actually found was that none of those are actually hard. The whole idea of hard steps, that there are hard steps, is actually suspect. What’s amazing about this model is it shows how important it is to actually work with people who are in the field. Brandon Carter was a brilliant physicist, the guy who came up with this. And then lots of physicists and astrophysicists like me have used this. But the people who actually study evolution and the planet were never involved."</div>
+  <div class="quote-zh">但我们实际发现，这些其实都不难。困难步骤的整个想法，即存在困难步骤，实际上是值得怀疑的。这个模型的惊人之处在于它显示了与该领域的人们实际合作是多么重要。布兰登·卡特是一位杰出的物理学家，他是这个想法的提出者。然后很多像我这样的物理学家和天体物理学家都使用了这个。但真正研究进化论和地球的人却从未参与其中。</div>
+  <div class="quote-meta">— Adam Frank （00:27:13）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So that’s why I think the LLMs are not going to, it’s not imitation. It’s going to require, this goes to the brain in the VAT thing. I did an article about the brain in the vat, which was really Evans, I was reporting on Evans. Where they did the brain in the VAT argument. But they said, “Look, in the end, actually the only way to actually get a real brain in the VAT is actually to have a brain in a body.” And it could be a robot body, but you still need a brain in the body. So I don’t think LLMs will get there because they can’t. You really need to be embedded in a world, at least that’s the E-four idea."</div>
+  <div class="quote-zh">所以这就是为什么我认为法学硕士不会这样做，这不是模仿。这将需要，这会进入增值税问题的大脑。我写了一篇关于缸中之脑的文章，这确实是埃文斯，我正在报道埃文斯。他们在增值税争论中动了脑筋。但他们说，“看，最终，实际上，真正在增值税中获得真正的大脑的唯一方法就是在身体中拥有大脑。”它可能是一个机器人身体，但你的身体里仍然需要一个大脑。所以我认为法学硕士不会到达那里，因为他们做不到。你确实需要融入一个世界，至少这是 E-4 的想法。</div>
+  <div class="quote-meta">— Adam Frank （03:12:46）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And he realized this, and so he was like, “Why aren’t they here now?” And that was the beginning of the Fermi paradox. It actually got picked up as a formal thing in 1975 in a paper by Hart where he actually went through this calculation and showed and said, “Well, there’s nobody here now, therefore, there’s nobody anywhere.” Okay, so that is what we will call the direct Fermi paradox, why aren’t they here now? But something happened after SETI began, where people started to, there was this idea of the great silence. People got this idea in their head that like, “Oh, we’ve been looking for decades now for signals of extra-terrestrial intelligence that we haven’t found any. Therefore, there’s nothing out there."</div>
+  <div class="quote-zh">他意识到了这一点，所以他想，“为什么他们现在不在这里？”这就是费米悖论的开始。实际上，哈特在 1975 年的一篇论文中将其作为正式内容，他实际上进行了计算，并表示：“好吧，现在这里没有人，因此，任何地方都没有人。”好吧，这就是我们所说的直接费米悖论，为什么它们现在不在这里？但在 SETI 开始后发生了一些事情，人们开始出现这种巨大的沉默的想法。人们脑子里有这样的想法，“哦，我们几十年来一直在寻找外星智慧生物的信号，但我们还没有找到任何信号。因此，那里什么也没有。”</div>
+  <div class="quote-meta">— Adam Frank （00:43:34）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Adam Frank <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">If we don’t ask how long they last, but instead ask what’s the probability that there have been any civilizations at all, now matter how long they lasted. I’m not asking whether they exist now or not, I’m just asking in general about probabilities to make a technological civilization anywhere and at any time in the history of the university. That, we’re able to constrain. What we found was basical...</div>
+  <div class="dialogue-zh">如果我们不问它们持续了多久，而是问文明存在的可能性有多大，那么无论它们持续了多久。我不是问它们现在是否存在，我只是一般性地问在大学历史上任何地方、任何时间创造技术文明的可能性。那，我们能够限制。我们发现的是基本的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Adam Frank <span class="dialogue-time">(00:00:51)</span>
+  </div>
+  <div class="dialogue-en">Therefore, you could put a probability, we called it the Pessimism Line. We don’t really know what nature sets for the probability of making intelligent civilizations, but we could set a limit using this. We could say, look, if the probability per habitable zone planet is less than 10 to the minus-22, one in 10 billion trillion, then yeah, we’re alone. If it’s anywhere larger than that, then we’re...</div>
+  <div class="dialogue-zh">因此，你可以输入一个概率，我们称之为悲观线。我们真的不知道大自然为创造智能文明的可能性设定了什么，但我们可以利用它来设定一个限制。我们可以说，看，如果每个宜居带行星的概率小于 10 到负 22，即百亿万亿分之一，那么是的，我们是孤独的。如果它比这个大，那么我们</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:36)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Adam Frank, an astrophysicist interested in the evolution of star systems and the search for alien civilizations in our universe. This is The Lex Fridman Podcast. To support it, please check out our sponsors in the description. And now, dear friends, here’s Adam Frank. Planet formation</div>
+  <div class="dialogue-zh">以下是与亚当·弗兰克的对话，他是一位对恒星系统演化和在宇宙中寻找外星文明感兴趣的天体物理学家。这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是亚当·弗兰克。行星形成</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:58)</span>
+  </div>
+  <div class="dialogue-en">You wrote a book about aliens. The big question, how many alien civilizations are out there?</div>
+  <div class="dialogue-zh">你写了一本关于外星人的书。最大的问题是，到底有多少外星文明？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Adam Frank <span class="dialogue-time">(00:02:04)</span>
+  </div>
+  <div class="dialogue-en">Yeah, that’s the question. The amazing thing is that, after two-and-a-half millennia of people yelling at each other, or setting each other on fire occasionally over the answer, we now actually have the capacity to answer that question. In the next 10, 20, 30 years, we’re going to have data relevant to the answer to that question. We’re going to have hard data finally that will, one way or the oth...</div>
+  <div class="dialogue-zh">是的，这就是问题所在。令人惊奇的是，在两千年来，人们互相大喊大叫，或者偶尔因为答案而互相火冒三丈之后，我们现在实际上有能力回答这个问题。在接下来的 10 年、20 年、30 年中，我们将获得与该问题答案相关的数据。我们最终将获得硬数据，无论是哪种方式</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Adam Frank <span class="dialogue-time">(00:02:38)</span>
+  </div>
+  <div class="dialogue-en">The one answer I can tell you, which was an important part of the problem, is how many planets are there? Just like people have been arguing about the existence of life elsewhere for 2500 years, people have been arguing about planets for the exact same amount of time. You can see Aristotle yelling at Democritus about this. You can see they had very wildly different opinions about how common planet...</div>
+  <div class="dialogue-zh">我可以告诉你的一个答案是问题的重要组成部分：有多少颗行星？就像 2500 年来人们一直在争论其他地方是否存在生命一样，人们对于行星的争论也同样持续了同样长的时间。你可以看到亚里士多德为此对德谟克利特大喊大叫。你可以看到他们对于地球的普遍性有着截然不同的看法</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Adam Frank <span class="dialogue-time">(00:03:14)</span>
+  </div>
+  <div class="dialogue-en">It was possible that planets were really rare. We didn’t really understand how planets formed. If you go back to, say the turn of the 20th Century, there was a theory that said planets formed when two stars passed by each other closely, and then material was gravitationally squeezed out. In which case, those kinds of collisions are so rare that you would expect one in a trillion stars to have plan...</div>
+  <div class="dialogue-zh">行星可能真的很稀有。我们并不真正了解行星是如何形成的。如果你回到20世纪初，有一种理论认为，行星是在两颗恒星近距离擦过时形成的，然后物质被引力挤出。在这种情况下，此类碰撞非常罕见，以至于您会期望一万亿颗恒星中就有一颗有计划</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:42)</span>
+  </div>
+  <div class="dialogue-en">One of the things you’ve done is simulated the formation of stars. How difficult do you think it is to simulate the formation of planet? Like simulate a solar system through the entire of the evolution of the solar system. This is a numerical simulation sneaking up to the question of how many planets are there.</div>
+  <div class="dialogue-zh">你所做的事情之一就是模拟恒星的形成。您认为模拟行星的形成有多困难？就像模拟一个太阳系一样，经历整个太阳系的演化过程。这是一个数值模拟，旨在探讨有多少颗行星的问题。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Adam Frank <span class="dialogue-time">(00:04:01)</span>
+  </div>
+  <div class="dialogue-en">That, actually, we’re able to do now. You can run simulations of the formation of planetary system. If you run the simulation, really where you want to start is a cloud of gas, these giant interstellar clouds of gas that may have a million times the mass of the Sun in them. You run a simulation of that, it’s turbulent. Gas is roiling and tumbling. Every now and then, you get a place where the gas ...</div>
+  <div class="dialogue-zh">事实上，我们现在就能做到。您可以运行行星系统形成的模拟。如果你运行模拟，你真正想要开始的是气体云，这些巨大的星际气体云的质量可能是太阳的一百万倍。你运行一个模拟，它是动荡的。气体在翻滚翻滚。时不时地，你会找到一个有天然气的地方</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Adam Frank <span class="dialogue-time">(00:04:32)</span>
+  </div>
+  <div class="dialogue-en">A proto-star is basically the young star, this ball of gas where nuclear reactions are getting started. But it’s also a disc. As material falls inward because everything’s rotating, as it falls inward, it’ll spin up and then it’ll form a disc. The material will collect in what’s called an accretion disc or a proto-planetary disc. You can simulate all of that.</div>
+  <div class="dialogue-zh">原恒星基本上是年轻的恒星，是核反应开始的气体球。但它也是一张光盘。当物质向内落下时，因为一切都在旋转，当它向内落下时，它会向上旋转，然后形成一个圆盘。这些物质将聚集在所谓的吸积盘或原行星盘中。您可以模拟所有这些。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Adam Frank <span class="dialogue-time">(00:04:56)</span>
+  </div>
+  <div class="dialogue-en">Once you get into the disc itself and you want to do planets, things get a little bit more complicated because the physics gets more complicated. Now you got to start worrying about dust, because actually dust … Dust is the wrong word. It’s smoke, really. These are the tiniest bits of solids. They will coagulate in the disc to form pebbles, and then the pebbles will collide to form rocks. And then...</div>
+  <div class="dialogue-zh">一旦你进入圆盘本身并且你想做行星，事情就会变得有点复杂，因为物理学变得更加复杂。现在你必须开始担心灰尘，因为实际上灰尘……“灰尘”这个词是错误的。确实是烟。这些是最小的固体。它们会在圆盘中凝结成卵石，然后卵石会碰撞形成岩石。进而</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Adam Frank <span class="dialogue-time">(00:05:37)</span>
+  </div>
+  <div class="dialogue-en">The next step is those things start slamming into each other to form planetary-sized bodies. Then the planetary bodies slam into each other. Earth, the Moon came about because there was a Mars-sized body that slammed into the Earth and basically blew off all the material. Then eventually formed the Moon.</div>
+  <div class="dialogue-zh">下一步是这些东西开始相互撞击，形成行星大小的物体。然后行星体相互撞击。地球、月球的出现是因为有一个火星大小的天体撞击了地球，基本上炸掉了所有的物质。然后最终形成了月球。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:54)</span>
+  </div>
+  <div class="dialogue-en">And all of them have different chemical compositions, different temperatures?</div>
+  <div class="dialogue-zh">而且它们都有不同的化学成分、不同的温度？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Adam Frank <span class="dialogue-time">(00:06:00)</span>
+  </div>
+  <div class="dialogue-en">Yeah. The temperature of the material in the disc depends on how far away you are from the star.</div>
+  <div class="dialogue-zh">是的。圆盘中物质的温度取决于你离恒星的距离。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:07)</span>
+  </div>
+  <div class="dialogue-en">Got it.</div>
+  <div class="dialogue-zh">知道了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Adam Frank <span class="dialogue-time">(00:06:07)</span>
+  </div>
+  <div class="dialogue-en">It decreases.</div>
+  <div class="dialogue-zh">它减少了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Adam Frank <span class="dialogue-time">(00:06:08)</span>
+  </div>
+  <div class="dialogue-en">There’s a really interesting point. Close to the star, temperatures are really high. The only thing that can condense, that can freeze out, is going to be stuff like metals. That’s why you find Mercury is this giant ball of iron, basically. Then as you go further out, stuff, the gas gets cooler. And now you can start getting things like water to freeze. There’s something we call the Snow Line, whi...</div>
+  <div class="dialogue-zh">有一个非常有趣的点。靠近恒星，温度非常高。唯一可以凝结、可以冻结的东西就是金属之类的东西。这就是为什么你会发现水星基本上是一个巨大的铁球。然后，当你走得更远时，气体就会变冷。现在你可以开始冷冻水之类的东西了。有一种东西我们称之为雪线</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Adam Frank <span class="dialogue-time">(00:06:47)</span>
+  </div>
+  <div class="dialogue-en">Actually, Jupiter and Saturn don’t have so much, but the moons do. The moons have so much water in them that there’s oceans. We’ve got a number of those moons have got more water on them than there’s water on Earth.</div>
+  <div class="dialogue-zh">事实上，木星和土星没有那么多，但卫星有。月球上有大量的水，因此有海洋。我们有许多这样的卫星，其上的水比地球上的水还要多。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:58)</span>
+  </div>
+  <div class="dialogue-en">Do you think it’s possible to do that kind of simulation to have a stronger and stronger estimate of how likely an Earth-like planet is? Can we get the physics simulation done well enough to where we can start estimating what are the possible Earth-like things that could be generated? Plate tectonics</div>
+  <div class="dialogue-zh">你认为是否有可能通过这种模拟来对类地行星的可能性有越来越强的估计？我们能否将物理模拟做得足够好，以便我们可以开始估计可能产生的类地物体？板块构造</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Adam Frank <span class="dialogue-time">(00:07:17)</span>
+  </div>
+  <div class="dialogue-en">Yeah, I think we can. I think we’re learning how to do that now. One part is trying to just figure out how planets form themselves in doing the simulations. That cascade from dust grains up to planetary embryos, that’s hard to simulate because you got to do both the gas, and you got to do the dust and the dust colliding, and all that physics.</div>
+  <div class="dialogue-zh">是的，我想我们可以。我想我们现在正在学习如何做到这一点。一方面是试图在模拟中弄清楚行星是如何形成的。从尘埃颗粒到行星胚胎的级联，这很难模拟，因为你必须同时处理气体、尘埃和尘埃碰撞，以及所有物理过程。</div>
+</div>
+    <a href="https://lexfridman.com/adam-frank-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="avi-loeb.html" class="card" style="text-decoration:none">
+  <div class="card-title">Avi Loeb: Aliens, Black Holes, and the Mystery of the Oumuamua</div>
+  <div class="card-meta">Avi Loeb</div>
+</a>
+<a href="konstantin-batygin.html" class="card" style="text-decoration:none">
+  <div class="card-title">Konstantin Batygin: Planet 9 and the Edge of Our Solar System</div>
+  <div class="card-meta">Konstantin Batygin</div>
+</a>
+<a href="alex-filippenko.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alex Filippenko: Supernovae, Dark Energy, Aliens &amp; the Expanding Universe</div>
+  <div class="card-meta">Alex Filippenko</div>
+</a>
+<a href="alien-debate.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alien Debate: Sara Walker and Lee Cronin</div>
+  <div class="card-meta">Alien Debate</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tim Sweeney - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Tim Sweeney</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Tim Sweeney</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/tim-sweeney.html" style="font-size:16px;color:#818cf8;font-weight:600">Tim Sweeney</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">47,399 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/tim-sweeney-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#14b8a622;color:#14b8a6;border:1px solid #14b8a644;font-size:13px;padding:4px 12px">游戏与虚拟世界</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:06</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:39</span>
+  <span class="chapter-title">10,000 hours programming<span class="zh-trans"> · 10,000小时编程</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">6:56</span>
+  <span class="chapter-title">Advice for young programmers<span class="zh-trans"> · 给年轻程序员的建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">15:07</span>
+  <span class="chapter-title">Video games in the 80s and 90s<span class="zh-trans"> · 80 年代和 90 年代的电子游戏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">17:16</span>
+  <span class="chapter-title">Epic Games origin story<span class="zh-trans"> · Epic Games 起源故事</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">29:54</span>
+  <span class="chapter-title">Indie game development<span class="zh-trans"> · 独立游戏开发</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">35:47</span>
+  <span class="chapter-title">Unreal Engine<span class="zh-trans"> · 虚幻引擎</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:01:44</span>
+  <span class="chapter-title">Technical details of Unreal Engine<span class="zh-trans"> · 虚幻引擎的技术细节</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:06:36</span>
+  <span class="chapter-title">Constructive solid geometry<span class="zh-trans"> · 构造立体几何</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:12:35</span>
+  <span class="chapter-title">Dynamic lighting<span class="zh-trans"> · 动态照明</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:17:05</span>
+  <span class="chapter-title">Volumetric fog<span class="zh-trans"> · 体积雾</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:20:32</span>
+  <span class="chapter-title">John Carmack<span class="zh-trans"> · 约翰·卡马克</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:22:19</span>
+  <span class="chapter-title">Evolution of Unreal Engine<span class="zh-trans"> · 虚幻引擎的演变</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:28:34</span>
+  <span class="chapter-title">Unreal Engine 5<span class="zh-trans"> · 虚幻引擎5</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:39:45</span>
+  <span class="chapter-title">Creating realistic humans<span class="zh-trans"> · 创造现实的人类</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:48:54</span>
+  <span class="chapter-title">Lumen global illumination<span class="zh-trans"> · 流明全局照明</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:53:24</span>
+  <span class="chapter-title">Movies<span class="zh-trans"> · 电影</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:08:06</span>
+  <span class="chapter-title">Simulating reality<span class="zh-trans"> · 模拟现实</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:20:21</span>
+  <span class="chapter-title">Metaverse<span class="zh-trans"> · 元宇宙</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">game</span><span class="keyword-tag">games</span><span class="keyword-tag">tim</span><span class="keyword-tag">sweeney</span><span class="keyword-tag">engine</span><span class="keyword-tag">going</span><span class="keyword-tag">fortnite</span><span class="keyword-tag">epic</span><span class="keyword-tag">unreal</span><span class="keyword-tag">programming</span><span class="keyword-tag">together</span><span class="keyword-tag">real</span><span class="keyword-tag">code</span><span class="keyword-tag">apple</span><span class="keyword-tag">language</span><span class="keyword-tag">don</span><span class="keyword-tag">light</span><span class="keyword-tag">building</span><span class="keyword-tag">human</span><span class="keyword-tag">doing</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"If we might think in the future where we have AI helping us write certain kinds of code, the big problem with AI is you ask it to do something, ask to write a fragment of code that does something, it might give you a perfectly valid fragment of code that compiles but does the wrong thing. And if we had languages where you could say, “Write a function that sorts this array and prove that it did that,” it could actually write the proof. And if the compiler didn’t beep with it, you could trust that it was actually sorting the array. And otherwise you could go back to the AI and say, “Well, that didn’t work.” But getting to the point where we know that our programs do what we say they’re going to do or think they’re going to do is a very important thing."</div>
+  <div class="quote-zh">如果我们认为未来人工智能可以帮助我们编写某些类型的代码，那么人工智能的最大问题是你要求它做某事，要求编写一段执行某事的代码片段，它可能会给你一个完全有效的代码片段，该片段可以编译，但会做错误的事情。如果我们有语言，你可以说，“编写一个函数来对这个数组进行排序并证明它做到了这一点”，它实际上可以编写证明。如果编译器没有发出蜂鸣声，您可以相信它实际上正在对数组进行排序。否则你可以回到人工智能并说：“好吧，那不起作用。”但是，让我们知道我们的程序会按照我们所说的或认为它们会做的事情去做，这是一件非常重要的事情。</div>
+  <div class="quote-meta">— Tim Sweeney （03:08:32）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, there’s a lot happening here on screen. The real hero of this image isn’t Epic. It’s the artists and technical artists who work together to build this environment. Because the reason we showed it at GDC was it went way, way beyond what we realized the system was capable of doing, largely because of their brilliance. This is the magic of computer graphics. There’s not one feature that makes this cool. There’s a dozen technical features that each interplay, and because of the ways that they interplay with each other, you really don’t … It’s hard to actually identify the individual components of it."</div>
+  <div class="quote-zh">是的，屏幕上发生了很多事情。这张图片的真正英雄不是 Epic。艺术家和技术艺术家共同努力构建了这个环境。因为我们在 GDC 上展示它的原因是它远远超出了我们意识到的系统能力，很大程度上是因为它们的才华横溢。这就是计算机图形学的魔力。没有一项功能可以让它变得很酷。有十几个技术功能，每个功能都相互作用，并且由于它们相互作用的方式，你真的不知道......很难真正识别它的各个组成部分。</div>
+  <div class="quote-meta">— Tim Sweeney （01:30:30）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But I don’t see this reducing the need for people or the role of people. Rather, I think it actually is probably an enhancer on that. I can’t help but think when I go on Amazon and Netflix to watch a movie there’s an awful lot of linear content and most of it isn’t very good because of the limitations of the media and the budgets and of other things. If we can use AI as an enhancer on that, then everybody’s going to have even more opportunity than they have now. Every single technological revolution has changed the way that people work, but it’s ultimately created more opportunity for people. The pundits predicting that this might be the last, but I think just the opposite. I’m an optimist on this and an optimist that it’s going to create opportunity for everyone."</div>
+  <div class="quote-zh">但我并不认为这会减少对人的需求或人的作用。相反，我认为它实际上可能是一个增强器。我不禁想到，当我在亚马逊和 Netflix 上看电影时，有大量的线性内容，而且由于媒体、预算和其他因素的限制，其中大部分内容都不是很好。如果我们可以使用人工智能作为增强器，那么每个人都将拥有比现在更多的机会。每一次技术革命都改变了人们的工作方式，但最终为人们创造了更多机会。专家预测这可能是最后一次，但我认为恰恰相反。我对此持乐观态度，并且乐观地认为这将为每个人创造机会。</div>
+  <div class="quote-meta">— Tim Sweeney （01:57:55）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think it’s going to become a more powerful directable and human serving tool in the future. I think a lot of the alienation comes from the prompt either being immensely powerful at giving you an entire creation, but then being completely unwilling to let you control the nuances of it. That feels alienating. You give it an image, but you’re like, replace the image of this part of it with this thing or make that object green and it just, it can’t do it. Often it can’t be convinced with any number of words in the prompt. That makes it feel like the computer is taking control away from us, humans and artists, and is refusing to do what we want and has its own opinions. It feels like a competitor."</div>
+  <div class="quote-zh">我认为它未来将成为一个更强大的可指导和人性化的服务工具。我认为很多疏离感来自于提示要么非常强大地给你一个完整的创作，但又完全不愿意让你控制它的细微差别。那感觉很疏远。你给它一个图像，但你会想，用这个东西替换它这部分的图像，或者让那个物体变成绿色，但它做不到。通常，提示中的任何单词都无法令人信服。这让人感觉计算机正在从我们、人类和艺术家手中夺走控制权，拒绝做我们想做的事，并有自己的意见。感觉就像是竞争对手。</div>
+  <div class="quote-meta">— Tim Sweeney （02:03:33）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"The topic of boilerplate code is an interesting one because the mere existence of boilerplate code is a failure of programming language and of the idea of creating software modules. You ask AI to create a sorting function, great. Now you have another sorting function that might be buggy alongside the million others that different people have written. It would be better to have a sorting function that’s been written and tested and optimized and everybody relies on it. More modular software I think will actually reduce the opportunity of AI because people doing programming work will largely be solving unique problems. They’re actually hard problems in themselves and not just connecting other widgets. Simulating reality"</div>
+  <div class="quote-zh">样板代码这个话题很有趣，因为样板代码的存在本身就是编程语言和创建软件模块思想的失败。你让人工智能创建一个排序功能，太棒了。现在你有了另一个排序函数，它可能与不同人编写的数百万个其他排序函数一起存在错误。最好有一个经过编写、测试和优化并且每个人都依赖它的排序函数。我认为更多的模块化软件实际上会减少人工智能的机会，因为从事编程工作的人很大程度上将解决独特的问题。它们实际上本身就是难题，而不仅仅是连接其他小部件。模拟现实</div>
+  <div class="quote-meta">— Tim Sweeney （02:07:20）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tim Sweeney <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">Humans are by far the hardest part of computer graphics because millions of years of evolution have given us dedicated brain systems to detect patterns in faces and infer emotions and intent because cavemen had to, when they see a stranger, determine whether they were likely friendly or they might be trying to kill them. And so people in the world have extraordinarily detailed expectations of a fa...</div>
+  <div class="dialogue-zh">人类是迄今为止计算机图形学中最难的部分，因为数百万年的进化为我们提供了专门的大脑系统来检测面部模式并推断情绪和意图，因为穴居人在看到陌生人时必须确定他们是否可能是友好的还是可能试图杀死他们。所以世界上的人们对法有着非常详细的期望</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tim Sweeney <span class="dialogue-time">(00:00:53)</span>
+  </div>
+  <div class="dialogue-en">So it’s not only about the shape of a person’s face, but it’s also about the entire range of motion that they might go through. So that’s the data problem. There’s a lot of other problems with computer graphics. There’s technology for rendering hair, which is really hard. Because you can’t render every… Again, we know the laws of physics. It would be easy to just render every hair. It would just b...</div>
+  <div class="dialogue-zh">因此，这不仅与人脸的形状有关，还与他们可能经历的整个运动范围有关。这就是数据问题。计算机图形学还有很多其他问题。有渲染头发的技术，这确实很难。因为你无法渲染每一个……再说一遍，我们知道物理定律。渲染每根头发会很容易。它只会</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tim Sweeney <span class="dialogue-time">(00:01:38)</span>
+  </div>
+  <div class="dialogue-en">And this is why there’s no way you can paint a mannequin to look realistic for a human. It’s just a solid surface and we’ll never have the sort of detail you see.</div>
+  <div class="dialogue-zh">这就是为什么你无法将人体模型画得对人类来说看起来很真实。它只是一个坚固的表面，我们永远不会有你看到的那种细节。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:48)</span>
+  </div>
+  <div class="dialogue-en">That kind of blew my mind, thinking through that. I think I heard that sort of the oiliness of the skin creates very specific, nuanced, complex reflections and then some light is absorbed and travels through the skin and that creates textures that our human eye is able to perceive and it creates the thing that we consider human, whatever that is. All of that, while considering all the muscles invo...</div>
+  <div class="dialogue-zh">仔细想想，这让我大吃一惊。我想我听说皮肤的油性会产生非常具体、细致、复杂的反射，然后一些光被吸收并穿过皮肤，从而产生我们人眼能够感知的纹理，并创造出我们认为是人类的东西，无论那是什么。所有这些，同时考虑到所有肌肉</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tim Sweeney <span class="dialogue-time">(00:02:50)</span>
+  </div>
+  <div class="dialogue-en">That’s right. Getting faces right requires the interplay of literally dozens of different systems and aspects of computer graphics. And if any one of them is wrong, your eye is completely drawn to that and you find it on the wrong side of Uncanny Valley.</div>
+  <div class="dialogue-zh">这是正确的。获得正确的面孔需要数十种不同系统和计算机图形学方面的相互作用。如果其中任何一个是错误的，你的眼睛就会完全被它吸引，然后你会发现它在恐怖谷的错误一侧。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:06)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Tim Sweeney, a legendary video game programmer, founder and CEO of Epic games that created many incredible games and technologies, including the Unreal Engine and Fortnite, which both revolutionized the video game industry and the experience of playing and creating video games. This is the Lex Fridman podcast. To support it, please check out our sponsors in the...</div>
+  <div class="dialogue-zh">以下是与传奇视频游戏程序员、Epic games 创始人兼首席执行官 Tim Sweeney 的对话，他创造了许多令人难以置信的游戏和技术，包括虚幻引擎和 Fortnite，它们彻底改变了视频游戏行业以及玩和创建视频游戏的体验。这是莱克斯·弗里德曼播客。为了支持它，请查看我们的赞助商</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:06)</span>
+  </div>
+  <div class="dialogue-en">When did you first fall in love with computers and maybe with programming? 10,000 hours programming</div>
+  <div class="dialogue-zh">您什么时候第一次爱上计算机或者编程？ 10,000小时编程</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tim Sweeney <span class="dialogue-time">(00:03:42)</span>
+  </div>
+  <div class="dialogue-en">I had a brother, Steve Sweeney, who 16 years older than me, and at some point when I was a little kid, he went off to work in California for a tech company and he’d gotten one of the first IBM PCs. And so for one summer, I think I was about 11, I went to visit him in California. It was my first trip away from my family just to hang out with him and he had this brand new IBM computer and I learned ...</div>
+  <div class="dialogue-zh">我有一个兄弟，史蒂夫·斯威尼 (Steve Sweeney)，他比我大 16 岁，在我小时候的某个时候，他去加利福尼亚州的一家科技公司工作，并获得了第一批 IBM PC 之一。有一年夏天，我想我大概 11 岁，我去加利福尼亚拜访了他。这是我第一次离开家人去和他一起出去玩，他有这台全新的 IBM 计算机，我了解到</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:19)</span>
+  </div>
+  <div class="dialogue-en">Do you remember what you wrote in BASIC? Is it a video game type thing? Is it like for loop, some numerical thing? Do you remember?</div>
+  <div class="dialogue-zh">你还记得你用 BASIC 写过什么吗？这是视频游戏类型的东西吗？是不是像for循环，一些数值的东西？你是否记得？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tim Sweeney <span class="dialogue-time">(00:04:27)</span>
+  </div>
+  <div class="dialogue-en">Yeah, it’s funny. I have a perfectly vivid memory of all of the first things I learned to program. I have a hard time remembering people’s names, but code really sticks with me. Every step and every challenge, there were lessons learned, some of which I’ve come to realize were just like me getting over some learning hurdles. But other things were actually shortcomings of programming languages and ...</div>
+  <div class="dialogue-zh">是的，这很有趣。我对最初学会编程的所有事情都记忆犹新。我很难记住人们的名字，但代码确实让我印象深刻。每一步、每一个挑战，都吸取了教训，其中一些我逐渐意识到，就像我克服了一些学习障碍一样。但其他的事情实际上是编程语言的缺点</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:11)</span>
+  </div>
+  <div class="dialogue-en">Yeah, the friction and the pain is the guide to learning in programming. If I were to describe programming journey that’d be marked by pain and that pain, you shouldn’t escape the pain. The pain is instructive for you to understand programming languages. But do you remember what kind of stuff you were writing at that time? Just the early programs?</div>
+  <div class="dialogue-zh">是的，摩擦和痛苦是学习编程的指南。如果我要描述以痛苦和痛苦为标志的编程之旅，那么你不应该逃避痛苦。这种痛苦对于你理解编程语言是有启发的。但你还记得你当时写的是什么样的东西吗？只是早期的节目吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tim Sweeney <span class="dialogue-time">(00:05:35)</span>
+  </div>
+  <div class="dialogue-en">Yeah. In the early days, I wrote a little bit of everything. I wrote some games. The first game I wrote on the Apple II was, since I only knew how to program in text mode, the computer would throw asterisks across the screen, they’d flow from left to right, and you’d have a parenthesis on the right-hand side of the screen and it looks like a baseball mitt and you’re supposed to catch the asterisks...</div>
+  <div class="dialogue-zh">是的。早期，我什么都写一点。我写了一些游戏。我在 Apple II 上编写的第一个游戏是，因为我只知道如何在文本模式下编程，所以计算机会在屏幕上抛出星号，它们会从左向右流动，屏幕右侧会有一个括号，它看起来像棒球手套，你应该抓住星号</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tim Sweeney <span class="dialogue-time">(00:06:17)</span>
+  </div>
+  <div class="dialogue-en">Before we had the internet in the hands of consumers, you used your modem and you dialed into a local phone number and connected to whoever was running the computer there. And every town or city had hundreds of these bulletin boards run by different people with their own personalities and themes. And so I spent a lot of time building a bulletin board program and learning how to deal with database ...</div>
+  <div class="dialogue-zh">在我们将互联网交到消费者手中之前，您可以使用调制解调器拨打本地电话号码并连接到那里运行计算机的任何人。每个城镇都有数百个这样的公告板，由不同的人管理，具有自己的个性和主题。所以我花了很多时间构建一个公告板程序并学习如何处理数据库</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:56)</span>
+  </div>
+  <div class="dialogue-en">10 to 15,000 hours. What was the value of the hours as a kid you put in in programming that led to the success you’ve had in later life? Maybe this is by way of advice to younger people in terms of how they allocate the hours of their early life.</div>
+  <div class="dialogue-zh">10 至 15,000 小时。你小时候花在编程上的时间对你后来的成功有什么价值？也许这是对年轻人如何分配早年生活的建议。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tim Sweeney <span class="dialogue-time">(00:07:12)</span>
+  </div>
+  <div class="dialogue-en">Yeah, it’s not just hours. It’s really striving to learn, to understand what knowledge you have, what knowledge you lack, and to continually do experiments and work on projects that improve your knowledge base. And I didn’t do this with a great amount of structure or planning. I was rather just going from project to project, doing things that I thought would be fun and cool. And with each project ...</div>
+  <div class="dialogue-zh">是的，这不仅仅是几个小时。它真的是努力学习，了解你拥有什么知识，你缺乏什么知识，并不断地做实验和致力于提高你的知识基础的项目。我并没有通过大量的结构或计划来做到这一点。我只是从一个项目到另一个项目，做一些我认为有趣和酷的事情。以及每个项目</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:15)</span>
+  </div>
+  <div class="dialogue-en">All the experimentation and all the exploration somehow contributed, somehow made sense later on. All of that is integrated somehow in the stuff you build. It’s funny how life works. The pieces kind of come together eventually.</div>
+  <div class="dialogue-zh">所有的实验和探索都以某种方式做出了贡献，后来以某种方式变得有意义。所有这些都以某种方式集成到您构建的东西中。生活的运作方式很有趣。这些碎片最终会拼凑在一起。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tim Sweeney <span class="dialogue-time">(00:08:32)</span>
+  </div>
+  <div class="dialogue-en">Yeah, there are definitely karate kid moments because all this time I was learning math in high school and in college I studied mechanical engineering. And so you learn all kinds of math, vector calculus and vector math and matrices and all of these related fields, physics and stress and strain and how to deal with complex physical systems. And yeah, I wasn’t really sure how engineers would actual...</div>
+  <div class="dialogue-zh">是的，肯定有空手道孩子的时刻，因为我在高中学习数学，在大学学习机械工程。因此，您将学习各种数学、矢量微积分、矢量数学和矩阵以及所有这些相关领域、物理、应力和应变以及如何处理复杂的物理系统。是的，我不太确定工程师会如何实际操作</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:37)</span>
+  </div>
+  <div class="dialogue-en">Also, I think what’s useful is over and over learning a hard thing and then showing to yourself that you can do it, that you can learn a hard thing. So then when you come to having to write a 3D engine in ways that haven’t been done before, you’re like, I’ve been here. I’ve been here in this experience, I don’t know what to do, but we’ll figure it out. We’ll learn. I’ll learn all the necessary com...</div>
+  <div class="dialogue-zh">另外，我认为有用的是一遍又一遍地学习一件困难的事情，然后向自己证明你可以做到，你可以学习一件困难的事情。因此，当您不得不以前所未有的方式编写 3D 引擎时，您会想，我来过。我有过这样的经历，我不知道该怎么办，但我们会解决的。我们会学习的。我将学习所有必要的知识</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tim Sweeney <span class="dialogue-time">(00:10:10)</span>
+  </div>
+  <div class="dialogue-en">That’s right. And constantly striving to make connections between these fields and look for their applications. Long after I chipped Unreal Engine, it was like going back through an engineering textbook and looking at, oh yeah, I used that, I used that, I used that. And then I got to the section on eigenvalues. I’m like, I don’t know what the hell this is. But it turns out eigenvectors and eigenva...</div>
+  <div class="dialogue-zh">这是正确的。并不断努力在这些领域之间建立联系并寻找它们的应用。在我开发虚幻引擎很久之后，这就像回顾一本工程教科书并看着，哦，是的，我用过那个，我用过那个，我用过那个。然后我进入了特征值部分。我想，我不知道这到底是什么。但事实证明特征向量和特征值</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tim Sweeney <span class="dialogue-time">(00:10:46)</span>
+  </div>
+  <div class="dialogue-en">Then those eigenvectors described the best search results for different things. And so constantly picking up knowledge and looking for ways to put it together is the thing to do. And if you aspire to be a programmer, you’ve got to write a lot of code and you’ve got to continually learn new things and improve. And if you want to be an artist, you’ve got to continually draw artwork of all styles and...</div>
+  <div class="dialogue-zh">然后这些特征向量描述了不同事物的最佳搜索结果。因此，不断地学习知识并寻找将其组合起来的方法是我们要做的事情。如果你渴望成为一名程序员，你就必须编写大量代码，并且必须不断学习新事物并进行改进。如果你想成为一名艺术家，你就必须不断地绘制各种风格和风格的艺术品</div>
+</div>
+    <a href="https://lexfridman.com/tim-sweeney-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="aravind-srinivas.html" class="card" style="text-decoration:none">
+  <div class="card-title">Aravind Srinivas</div>
+  <div class="card-meta">Aravind Srinivas</div>
+</a>
+<a href="ayanna-howard.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ayanna Howard: Human-Robot Interaction and Ethics of Safety-Critical Systems</div>
+  <div class="card-meta">Ayanna Howard</div>
+</a>
+<a href="boris-sofman.html" class="card" style="text-decoration:none">
+  <div class="card-title">Boris Sofman: Waymo, Cozmo, Self-Driving Cars, and the Future of Robotics</div>
+  <div class="card-meta">Boris Sofman</div>
+</a>
+<a href="brendan-eich.html" class="card" style="text-decoration:none">
+  <div class="card-title">Brendan Eich: JavaScript, Firefox, Mozilla, and Brave</div>
+  <div class="card-meta">Brendan Eich</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

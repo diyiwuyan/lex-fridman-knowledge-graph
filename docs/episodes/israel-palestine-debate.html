@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Israel Palestine Debate - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Israel Palestine Debate</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Israel Palestine Debate</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/steven-bonnell.html" style="font-size:16px;color:#818cf8;font-weight:600">Steven Bonnell</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">53,410 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/israel-palestine-debate-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:42</span>
+  <span class="chapter-title">1948<span class="zh-trans"> · 1948年</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:03:14</span>
+  <span class="chapter-title">Partition<span class="zh-trans"> · 分割</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:07:47</span>
+  <span class="chapter-title">October 7<span class="zh-trans"> · 10 月 7 日</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:01:59</span>
+  <span class="chapter-title">Gaza<span class="zh-trans"> · 加沙</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:28:34</span>
+  <span class="chapter-title">Peace<span class="zh-trans"> · 和平</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:33:18</span>
+  <span class="chapter-title">Hope for the future<span class="zh-trans"> · 对未来的希望</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">morris</span><span class="keyword-tag">benny</span><span class="keyword-tag">norman</span><span class="keyword-tag">finkelstein</span><span class="keyword-tag">mouin</span><span class="keyword-tag">rabbani</span><span class="keyword-tag">bonnell</span><span class="keyword-tag">steven</span><span class="keyword-tag">don</span><span class="keyword-tag">said</span><span class="keyword-tag">israel</span><span class="keyword-tag">state</span><span class="keyword-tag">arab</span><span class="keyword-tag">inaudible</span><span class="keyword-tag">jewish</span><span class="keyword-tag">jews</span><span class="keyword-tag">palestinians</span><span class="keyword-tag">israeli</span><span class="keyword-tag">palestine</span><span class="keyword-tag">international</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I think it’s important to understand there’s three different things here that we need to think about. So, one is a policy of killing civilians. So, I would ask the other side, I’m going to ask all three, because I know there won’t be a short answer, do you think there is a policy, top down from the IDF to target civilians? That’s one thing-"</div>
+  <div class="quote-zh">我认为重要的是要了解我们需要考虑三件不同的事情。因此，其中之一就是杀害平民的政策。所以，我会问对方，我要问所有三个人，因为我知道不会有一个简短的答案，你认为以色列国防军是否有一项自上而下的针对平民的政策？这是一件事——</div>
+  <div class="quote-meta">— Steven Bonnell （02:50:18）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"When 90% of Israelis think that Israel’s using enough or too little force in Gaza, I don’t want to get inside that head. 40% think that Israel is using insufficient force in Gaza. I don’t want to get inside that head. I don’t want to get inside the head of people who think they’re using insufficient force against the population, half of which is children. I don’t want to get inside that head, but here’s the point, because your partner wants to know the point. You don’t understand political constraints. One of your ministers said, “Let’s drop an atomic bomb on Gaza.”"</div>
+  <div class="quote-zh">当 90% 的以色列人认为以色列在加沙使用的武力足够或太少时，我不想深究这个问题。 40%的人认为以色列在加沙使用的武力不足。我不想进入那个头脑。我不想深入了解那些认为他们对民众（其中一半是儿童）使用的武力不足的人。我不想深入探讨这个问题，但这就是重点，因为你的伴侣想知道重点。你不了解政治约束。你们的一位部长说：“让我们在加沙投下一颗原子弹吧。”</div>
+  <div class="quote-meta">— Norman Finkelstein （02:59:44）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I grew up in Western Europe in the long shadow of the Second World War. I think we can all agree that there could have been no peace in Europe had certain regimes on that continent not been removed from power. I look at Southeast Asia in the late 1970s, and I think we all agreed that there could not have been peace that region had the Khmer Rouge not been ousted. I look at Southern Africa during the 1990s and I think we can all be agreed that had the white minority regimes that ruled Zimbabwe and South Africa not been dismantled, there could not have been peace in that region. And although I think it’s worth having a discussion, I do think it’s now legitimate question to ask, can there be peace without dismantling the Zionist regime?"</div>
+  <div class="quote-zh">我在西欧长大，受到第二次世界大战的长期阴影。我想我们都同意，如果欧洲大陆上的某些政权不被推翻，欧洲就不可能有和平。我回顾了 20 世纪 70 年代末的东南亚，我想我们都同意，如果红色高棉没有被驱逐，该地区就不可能实现和平。我看看 20 世纪 90 年代的南部非洲，我想我们都同意，如果统治津巴布韦和南非的白人少数政权没有被推翻，该地区就不可能有和平。尽管我认为值得讨论，但我确实认为现在提出一个合理的问题：在不解体犹太复国主义政权的情况下能否实现和平？</div>
+  <div class="quote-meta">— Mouin Rabbani （03:38:22）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think that, historically, I think that the big issue is I think that both sides have had their own internal motivations to fight because they feel like they have something to gain from it. But I think as time has gone on, unfortunately, the record proves that the Palestinian side is delusional. The longer that the conflict endures, the worse position they’ll be in."</div>
+  <div class="quote-zh">我认为，从历史上看，我认为最大的问题是，我认为双方都有自己的内在动机去战斗，因为他们觉得自己可以从中获益。但我认为，不幸的是，随着时间的推移，记录证明巴勒斯坦方面是妄想。冲突持续的时间越长，他们的处境就越糟糕。</div>
+  <div class="quote-meta">— Steven Bonnell （04:13:09）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Because Israel believes it has to restore what it calls its deterrence capability. I think you’ve written about it actually, I just realized. Israel has to restore its deterrence capability, and after the catastrophe of October 7th, restoring its deterrence capacity means… this part you didn’t write about… the annihilation of Gaza and then moving on to the Hezbollah."</div>
+  <div class="quote-zh">因为以色列认为它必须恢复所谓的威慑能力。我想你实际上已经写过这件事了，我刚刚意识到。以色列必须恢复其威慑能力，在10月7日的灾难之后，恢复其威慑能力意味着……这部分你没有写……消灭加沙，然后转向真主党。</div>
+  <div class="quote-meta">— Norman Finkelstein （04:34:07）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benny Morris <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">That’s a good point. No, no, that’s a good point.</div>
+  <div class="dialogue-zh">这是一个很好的观点。不，不，这是一个很好的观点。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Finkelstein <span class="dialogue-time">(00:00:02)</span>
+  </div>
+  <div class="dialogue-en">Now, some people accuse me of speaking very slowly, and they’re advised on YouTube to turn up the speed twice to three times whenever I’m on. One of the reasons I speak slowly is because I attach value to every word I say.</div>
+  <div class="dialogue-zh">现在，有些人指责我说话太慢，YouTube 上建议他们每次我说话时就把速度调高两到三倍。我说得慢的原因之一是因为我重视我所说的每一个字。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Bonnell <span class="dialogue-time">(00:00:20)</span>
+  </div>
+  <div class="dialogue-en">Norman say this all over and over and over again, “I only deal in facts. I don’t deal in hypotheticals. I only deal in facts. I only deal in facts.” And that seems to be the case except for when the facts are completely and totally contrary to the particular point you’re trying to push. The idea that Jews would’ve out of hand rejected any state that had Arabs on it or always had a plan of expulsio...</div>
+  <div class="dialogue-zh">诺曼一遍又一遍地说，“我只处理事实。我不处理假设。我只处理事实。我只处理事实。”情况似乎确实如此，除非事实与你试图推动的特定观点完全相反。犹太人会立即拒绝任何有阿拉伯人的国家或总是有驱逐计划的想法</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Finkelstein <span class="dialogue-time">(00:00:41)</span>
+  </div>
+  <div class="dialogue-en">I don’t think you understand politics.</div>
+  <div class="dialogue-zh">我认为你不懂政治。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benny Morris <span class="dialogue-time">(00:00:43)</span>
+  </div>
+  <div class="dialogue-en">They forced the British to prevent immigration of Jews from Europe and reaching safe shores in Palestine. That’s what they did. And they knew that the Jews were being persecuted in Europe at the time.</div>
+  <div class="dialogue-zh">他们迫使英国阻止​​犹太人从欧洲移民并到达巴勒斯坦的安全海岸。他们就是这么做的。他们知道当时犹太人在欧洲受到迫害。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mouin Rabbani <span class="dialogue-time">(00:00:53)</span>
+  </div>
+  <div class="dialogue-en">Was Palestine the only spot of land on Earth?</div>
+  <div class="dialogue-zh">巴勒斯坦是地球上唯一的陆地吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benny Morris <span class="dialogue-time">(00:00:56)</span>
+  </div>
+  <div class="dialogue-en">Yes. Basically that was the problem. The Jews couldn’t immigrate anywhere else.</div>
+  <div class="dialogue-zh">是的。基本上这就是问题所在。犹太人无法移民到其他地方。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mouin Rabbani <span class="dialogue-time">(00:00:59)</span>
+  </div>
+  <div class="dialogue-en">What about your great friends in Britain, the architects of the Balfour Declaration?</div>
+  <div class="dialogue-zh">你在英国的好朋友、《贝尔福宣言》的缔造者呢？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benny Morris <span class="dialogue-time">(00:01:04)</span>
+  </div>
+  <div class="dialogue-en">By the late 1930s-</div>
+  <div class="dialogue-zh">到了 20 世纪 30 年代末——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mouin Rabbani <span class="dialogue-time">(00:01:05)</span>
+  </div>
+  <div class="dialogue-en">What about the United States?</div>
+  <div class="dialogue-zh">美国呢？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benny Morris <span class="dialogue-time">(00:01:07)</span>
+  </div>
+  <div class="dialogue-en">… they weren’t happy to take in Jews, and the Americans weren’t happy to take in Jews.</div>
+  <div class="dialogue-zh">……他们不乐意接纳犹太人，美国人也不乐意接纳犹太人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mouin Rabbani <span class="dialogue-time">(00:01:09)</span>
+  </div>
+  <div class="dialogue-en">And why are Palestinians who were not Europeans, who had zero role in the rise of Nazism, who had no relation to any of this, why are they somehow uniquely responsible for what happened in Europe and uniquely-</div>
+  <div class="dialogue-zh">为什么巴勒斯坦人不是欧洲人，他们在纳粹主义的崛起中扮演了零角色，他们与这一切都没有关系，为什么他们对欧洲发生的事情负有独特的责任，并且独特地——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benny Morris <span class="dialogue-time">(00:01:23)</span>
+  </div>
+  <div class="dialogue-en">Because maybe helping the cause is the only safe haven for Jews.</div>
+  <div class="dialogue-zh">因为也许帮助这一事业是犹太人唯一的避风港。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Finkelstein <span class="dialogue-time">(00:01:25)</span>
+  </div>
+  <div class="dialogue-en">Professor Morris, because of your logic, and I’m not disputing it, that’s why October 7th happened.</div>
+  <div class="dialogue-zh">莫里斯教授，按照你的逻辑，我不争论，这就是 10 月 7 日发生的原因。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Bonnell <span class="dialogue-time">(00:01:33)</span>
+  </div>
+  <div class="dialogue-en">Oh my God.</div>
+  <div class="dialogue-zh">我的天啊。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Finkelstein <span class="dialogue-time">(00:01:34)</span>
+  </div>
+  <div class="dialogue-en">Because there was no options left for those people.</div>
+  <div class="dialogue-zh">因为那些人​​已经没有选择了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Benny Morris <span class="dialogue-time">(00:01:38)</span>
+  </div>
+  <div class="dialogue-en">The Hamas guys who attacked the kibbutzim, apart from the attacks on the military sites, when they attacked the kibbutzim, were out to kill civilians and they killed family after family, house after house.</div>
+  <div class="dialogue-zh">袭击基布兹的哈马斯人，除了袭击军事地点外，他们袭击基布兹的时候，就是为了杀害平民，他们杀了一个又一个家庭，一个又一个房子。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Finkelstein <span class="dialogue-time">(00:01:51)</span>
+  </div>
+  <div class="dialogue-en">Talk fast so people think that you’re coherent.</div>
+  <div class="dialogue-zh">说得快一点，这样人们就会认为你语气连贯。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Steven Bonnell <span class="dialogue-time">(00:01:53)</span>
+  </div>
+  <div class="dialogue-en">I’m just reading from the UN.</div>
+  <div class="dialogue-zh">我刚刚读到联合国的消息。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Norman Finkelstein <span class="dialogue-time">(00:01:54)</span>
+  </div>
+  <div class="dialogue-en">Yeah. But you think…</div>
+  <div class="dialogue-zh">是的。但你认为……</div>
+</div>
+    <a href="https://lexfridman.com/israel-palestine-debate-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a>
+<a href="cenk-uygur.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cenk Uygur</div>
+  <div class="card-meta">Cenk Uygur</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

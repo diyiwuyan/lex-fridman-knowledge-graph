@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pieter Levels - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Pieter Levels</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Pieter Levels</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/pieter-levels.html" style="font-size:16px;color:#818cf8;font-weight:600">Pieter Levels</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">46,664 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/pieter-levels-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:03</span>
+  <span class="chapter-title">Startup philosophy<span class="zh-trans"> · 创业理念</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">9:34</span>
+  <span class="chapter-title">Low points<span class="zh-trans"> · 低点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">13:03</span>
+  <span class="chapter-title">12 startups in 12 months<span class="zh-trans"> · 12 个月内 12 家初创公司</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">19:55</span>
+  <span class="chapter-title">Travelling and depression<span class="zh-trans"> · 旅行与抑郁</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">32:34</span>
+  <span class="chapter-title">Indie hacking<span class="zh-trans"> · 独立黑客</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">36:37</span>
+  <span class="chapter-title">Photo AI<span class="zh-trans"> · 照片人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:12:53</span>
+  <span class="chapter-title">How to learn AI<span class="zh-trans"> · 如何学习人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:21:30</span>
+  <span class="chapter-title">Robots<span class="zh-trans"> · 机器人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:29:47</span>
+  <span class="chapter-title">Hoodmaps<span class="zh-trans"> · 罩图</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:53:52</span>
+  <span class="chapter-title">Learning new programming languages<span class="zh-trans"> · 学习新的编程语言</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:03:24</span>
+  <span class="chapter-title">Monetize your website<span class="zh-trans"> · 通过您的网站获利</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:09:59</span>
+  <span class="chapter-title">Fighting SPAM<span class="zh-trans"> · 打击垃圾邮件</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:13:33</span>
+  <span class="chapter-title">Automation<span class="zh-trans"> · 自动化</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:24:58</span>
+  <span class="chapter-title">When to sell startup<span class="zh-trans"> · 何时出售初创公司</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:27:52</span>
+  <span class="chapter-title">Coding solo<span class="zh-trans"> · 独奏编码</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:33:54</span>
+  <span class="chapter-title">Ship fast<span class="zh-trans"> · 发货快</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:42:38</span>
+  <span class="chapter-title">Best IDE for programming<span class="zh-trans"> · 最佳编程 IDE</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:52:09</span>
+  <span class="chapter-title">Andrej Karpathy<span class="zh-trans"> · 安德烈·卡帕蒂</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:01:34</span>
+  <span class="chapter-title">Productivity<span class="zh-trans"> · 生产率</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">pieter</span><span class="keyword-tag">levels</span><span class="keyword-tag">stuff</span><span class="keyword-tag">don</span><span class="keyword-tag">man</span><span class="keyword-tag">money</span><span class="keyword-tag">cool</span><span class="keyword-tag">going</span><span class="keyword-tag">started</span><span class="keyword-tag">doing</span><span class="keyword-tag">amazing</span><span class="keyword-tag">website</span><span class="keyword-tag">didn</span><span class="keyword-tag">interesting</span><span class="keyword-tag">code</span><span class="keyword-tag">nice</span><span class="keyword-tag">shit</span><span class="keyword-tag">photo</span><span class="keyword-tag">data</span><span class="keyword-tag">working</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I think it’s accidental, because that’s the thing I knew. I knew PHP, I knew HTML, CSS, because you make websites, and when my startups started taking off, I didn’t have time to… I remember putting on my to-do list like, “Learn Node.js,” because it’s important to switch, because this obviously is much better language than PHP, and I never learned it. I never did it, because I didn’t have time. These things were growing like this, and I was launching more projects, and I never had time. It’s like, “One day I’ll start coding properly,” and I never got to it."</div>
+  <div class="quote-zh">我认为这是偶然的，因为那是我所知道的。我了解 PHP、HTML、CSS，因为你可以制作网站，当我的初创公司开始腾飞时，我没有时间……我记得在我的待办事项列表中添加了“学习 Node.js”之类的内容，因为切换很重要，因为这显然是比 PHP 更好的语言，而我从未学过它。我从来没有这样做过，因为我没有时间。这些事情就这样增长，我正在启动更多的项目，但我从来没有时间。就像，“有一天我会开始正确编码”，但我从未做到这一点。</div>
+  <div class="quote-meta">— Pieter Levels （00:41:47）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, I tried to learn virtual reality because this was same as AI. It came up suddenly 2016, 2017 with I think HTC Vive, these big VR glasses before Apple Vision Pro. And I was like, “Oh, this is going to be big so I need to learn this.” And I know nothing about 3D. I installed I think Unity and Blender and stuff, and I started learning all this stuff because I thought this was a new nascent technology that was going to be big. And if I had the skills for it, I could use this to build stuff. And so I think with learning, for me, I think learning is so funny because people always ask me, “How do you learn to code? Should I learn to code?” And I’m like, “I don’t know.” Every day I’m learning. It’s kind of cliche, but every day I’m learning new stuff."</div>
+  <div class="quote-zh">是的，我尝试学习虚拟现实，因为这与人工智能相同。它是在 2016 年、2017 年突然出现的，我想是 HTC Vive，这些大型 VR 眼镜在 Apple Vision Pro 之前。我当时想，“哦，这会很重要，所以我需要学习这个。”而且我对 3D 一无所知。我安装了 Unity 和 Blender 之类的东西，然后我开始学习所有这些东西，因为我认为这是一项即将发展壮大的新兴技术。如果我有这方面的技能，我可以用它来构建东西。所以我认为对于我来说，学习非常有趣，因为人们总是问我，“你如何学习编码？我应该学习编码吗？”我说：“我不知道。”我每天都在学习。这有点陈词滥调，但我每天都在学习新东西。</div>
+  <div class="quote-meta">— Pieter Levels （01:54:25）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah. But I had to learn the actual coding, so this was good. It was a good idea to … every month launch a startup, so I could learn to code, learn basic stuff. But it was still very scrappy, which is on purpose, because I didn’t have time to spend a lot of … I had a month to do something, so I couldn’t spend more than a month and I was pretty strict about that. And I published it as a blog post. I think I put it on Hacker News and people would check, “Oh, did you actually …” I felt accountability because I put it public, that I actually had to do it."</div>
+  <div class="quote-zh">是的。但我必须学习实际的编码，所以这很好。这是一个好主意......每个月启动一家初创公司，这样我就可以学习编码，学习基本的东西。但它仍然非常斗志旺盛，这是故意的，因为我没有时间花很多时间……我有一个月的时间来做某事，所以我不能花超过一个月的时间，而且我对此非常严格。我将其作为博客文章发布。我想我把它放在黑客新闻上，人们会检查，“哦，你真的……”我感到有责任，因为我把它公开了，我实际上必须这样做。</div>
+  <div class="quote-meta">— Pieter Levels （00:15:20）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think the hard part is figuring out what you shouldn’t add, what you shouldn’t build, because you don’t have time. So you need to build a landing page. Well, you need to build the product, actually, because there needs to be something they pay for. Do you need to build a login system? Maybe no. Maybe you can build some scrappy login system. For photo AI, you sign up, you pay with Stripe Checkout and you get a login link. And when I started out, there was only a login link with a hash, and that’s just a static link, so it’s very easy to log in. It’s not so safe, what if you leak the link? And now I have real Google login, but that took a year. So keeping it very scrappy is very important to … because you don’t have time. You need to focus on what you can build fast."</div>
+  <div class="quote-zh">我认为困难的部分是弄清楚你不应该添加什么，你不应该构建什么，因为你没有时间。所以你需要建立一个登陆页面。嗯，实际上，你需要构建产品，因为他们需要付费。您需要建立一个登录系统吗？也许不会。也许你可以构建一些杂乱的登录系统。对于照片 AI，您需要注册、使用 Stripe Checkout 付款并获得登录链接。而且我刚开始的时候只有一个带有哈希值的登录链接，而且只是一个静态链接，所以很容易登录。不太安全，万一链接泄露了怎么办？现在我有了真正的谷歌登录，但这花了一年的时间。因此，保持斗志旺盛对于……来说非常重要，因为你没有时间。您需要专注于可以快速构建的内容。</div>
+  <div class="quote-meta">— Pieter Levels （00:18:37）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"No, I was a little bit sad, because all my products would work out, and I never had real fierce competition, and now I have fierce competition from a very skilled high talent. I was developer studio or something, and they already had an app. They had an app in the app store for I think retouching your face or something, so they were very smart. They add these avatars to there, it’s a feature. They had the users, they do a push notification to everybody who have these avatars. Man, I think they made so much money, and I think they did a really great job, and I also made a lot of money with it, but I quickly realized it wasn’t my thing, because it was so cheesy. It was like kitsch. It’s kind like me as a Barbie or me as a… It was too cheesy."</div>
+  <div class="quote-zh">不，我有点难过，因为我所有的产品都会成功，而我从来没有遇到过真正激烈的竞争，现在我面临着来自技术精湛的高素质人才的激烈竞争。我是开发工作室之类的，他们已经有一个应用程序了。他们在应用程序商店中有一个应用程序，我认为可以修饰你的脸或其他东西，所以他们非常聪明。他们将这些头像添加到那里，这是一个功能。他们拥有用户，他们向拥有这些头像的每个人发送推送通知。伙计，我认为他们赚了很多钱，我认为他们做得非常出色，我也赚了很多钱，但我很快意识到这不是我的事，因为它太俗气了。这就像媚俗。这有点像我作为芭比娃娃或我作为......这太俗气了。</div>
+  <div class="quote-meta">— Pieter Levels （00:52:45）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pieter Levels <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">So I was trying to figure out how to do photorealistic AI photos, and it was … Stable Diffusion by itself is not doing that well. The faces look all mangled, and it doesn’t have enough resolution or something to do that well. But I started seeing these base models, these fine-tuned models, and people would train on porn, and I would try them and they would be very photorealistic. They would have b...</div>
+  <div class="dialogue-zh">所以我试图弄清楚如何制作逼真的人工智能照片，结果是……稳定扩散本身做得并不好。这些面孔看起来都被毁坏了，而且它没有足够的分辨率或其他东西来做得很好。但我开始看到这些基础模型，这些经过微调的模型，人们会接受色情训练，我会尝试它们，它们会非常逼真。他们会有b</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:36)</span>
+  </div>
+  <div class="dialogue-en">You have to keep reminding the model, “You need to put clothes on the thing.”</div>
+  <div class="dialogue-zh">你必须不断提醒模特，“你需要给这个东西穿上衣服。”</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pieter Levels <span class="dialogue-time">(00:00:39)</span>
+  </div>
+  <div class="dialogue-en">Yeah. “Don’t put naked,” because it’s very risky. I have Google Vision that checks every photo before it’s shown to the user to check for NSFW.</div>
+  <div class="dialogue-zh">是的。 “不要裸露”，因为这是非常危险的。我有 Google Vision，可以在向用户显示照片之前检查每张照片是否存在 NSFW。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:45)</span>
+  </div>
+  <div class="dialogue-en">Like a nipple detector? Oh, an NSFW detector.</div>
+  <div class="dialogue-zh">比如乳头探测器？哦，一个 NSFW 探测器。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pieter Levels <span class="dialogue-time">(00:00:48)</span>
+  </div>
+  <div class="dialogue-en">Because the journalist gets very angry.</div>
+  <div class="dialogue-zh">因为记者非常生气。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:52)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Pieter Levels, also known on X as levelsio. He is a self-taught developer and entrepreneur who designed, programed shipped and ran over 40 startups, many of which are hugely successful. In most cases, he did it all by himself while living the digital nomad life in over 40 countries and over 150 cities, programming on a laptop while chilling on a couch, using va...</div>
+  <div class="dialogue-zh">以下是与 Pieter Levels（在 X 上也称为levelsio）的对话。他是一位自学成才的开发人员和企业家，设计、编程、运营并运营了 40 多家初创公司，其中许多都取得了巨大成功。在大多数情况下，他都是自己完成这一切，同时在 40 多个国家和 150 多个城市过着数字游牧生活，一边在沙发上休息一边在笔记本电脑上编程，使用 va</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:40)</span>
+  </div>
+  <div class="dialogue-en">Pieter is an inspiration to a huge number of developers and entrepreneurs who love creating cool things in the world that are hopefully useful for people. This was an honor and a pleasure for me. This is the Lex Friedman Podcast. To support it, please check out our sponsors in the description. And now, dear friends, here’s Pieter Levels. Startup philosophy</div>
+  <div class="dialogue-zh">Pieter 激励了众多热爱在世界上创造对人们有用的酷炫事物的开发者和企业家。这对我来说是一种荣幸和快乐。这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是彼得·莱弗斯（Pieter Levels）。创业理念</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:03)</span>
+  </div>
+  <div class="dialogue-en">You’ve launched a lot of companies and built a lot of products. As you say, most failed, but some succeeded. What’s your philosophy behind building the startups that you did?</div>
+  <div class="dialogue-zh">您创办了很多公司并开发了很多产品。正如你所说，大多数人都失败了，但也有一些人成功了。您创办初创公司的理念是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pieter Levels <span class="dialogue-time">(00:02:14)</span>
+  </div>
+  <div class="dialogue-en">I think my philosophy is very different than most people in startups, because most people in startups, they build a company and they raise money and they hire people and then they build a product and they find something that makes money. And I don’t really raise money. I don’t use VC funding, I do everything myself. I’m a designer, I’m the developer, I make everything, I make the logo. So for me, ...</div>
+  <div class="dialogue-zh">我认为我的理念与大多数初创公司的人非常不同，因为大多数初创公司的人建立了一家公司，筹集资金，雇用人员，然后开发产品，然后找到赚钱的东西。而且我并没有真正筹集资金。我不使用风险投资资金，我自己做所有事情。我是设计师，我是开发人员，我制作一切，我制作徽标。所以对我来说，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:05)</span>
+  </div>
+  <div class="dialogue-en">So there’s this rapid iterative phase where you just build a prototype that works, launch it, see if people like it, improving it really, really quickly to see if people like it a little bit more enough to pay and all that. That whole rapid process is how you think of-</div>
+  <div class="dialogue-zh">因此，有一个快速迭代阶段，您只需构建一个可用的原型，启动它，看看人们是否喜欢它，然后非常非常快地改进它，看看人们是否更喜欢它，足以支付费用等等。整个快速过程就是你所想到的-</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pieter Levels <span class="dialogue-time">(00:03:22)</span>
+  </div>
+  <div class="dialogue-en">Yeah. I think it’s very rapid. If I compare it to, for example, Google or big tech companies, especially Google right now is struggling. They made transformers, they invented all the AI stuff years ago and they never really shipped. They could have shipped ChatGPT for example, I heard, in 2019. And they never shipped it because they were so stuck in bureaucracy. But they had everything. They had t...</div>
+  <div class="dialogue-zh">是的。我认为速度非常快。如果我将其与谷歌或大型科技公司进行比较，尤其是谷歌现在正在苦苦挣扎。他们制造了变形金刚，他们几年前发明了所有人工智能的东西，但他们从未真正发货。例如，我听说，他们本可以在 2019 年发布 ChatGPT。但他们从未发布过它，因为他们深陷官僚主义之中。但他们拥有一切。他们有</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:02)</span>
+  </div>
+  <div class="dialogue-en">Do you always code in your underwear? Your profile picture, you’re slouching on a couch in your underwear, chilling on a laptop.</div>
+  <div class="dialogue-zh">你总是在内裤里写代码吗？在你的个人资料照片中，你穿着内衣无精打采地坐在沙发上，坐在笔记本电脑上。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pieter Levels <span class="dialogue-time">(00:04:10)</span>
+  </div>
+  <div class="dialogue-en">No, but I do wear shorts a lot and I usually just wear shorts and no T-shirt, because I’m always too hot. I’m always overheating.</div>
+  <div class="dialogue-zh">没有，但我确实经常穿短裤，而且通常只穿短裤，不穿 T 恤，因为我总是太热。我总是过热。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:16)</span>
+  </div>
+  <div class="dialogue-en">Thank you for showing up not just in your underwear but wearing shorts.</div>
+  <div class="dialogue-zh">感谢您不仅穿着内衣，还穿着短裤出现。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pieter Levels <span class="dialogue-time">(00:04:20)</span>
+  </div>
+  <div class="dialogue-en">I still wearing this for you, but …</div>
+  <div class="dialogue-zh">我仍然为你穿着这件衣服，但是……</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:21)</span>
+  </div>
+  <div class="dialogue-en">Thank you. Thank you for dressing up.</div>
+  <div class="dialogue-zh">谢谢。谢谢你精心打扮。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pieter Levels <span class="dialogue-time">(00:04:23)</span>
+  </div>
+  <div class="dialogue-en">I think it’s because since I go to the gym, I’m always too hot.</div>
+  <div class="dialogue-zh">我想这是因为自从我去健身房之后，我总是太热了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:26)</span>
+  </div>
+  <div class="dialogue-en">What’s your favorite exercise in the gym?</div>
+  <div class="dialogue-zh">你在健身房最喜欢的运动是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pieter Levels <span class="dialogue-time">(00:04:28)</span>
+  </div>
+  <div class="dialogue-en">Man, overhead press.</div>
+  <div class="dialogue-zh">伙计，过头推举。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:29)</span>
+  </div>
+  <div class="dialogue-en">Overhead press, like shoulder press?</div>
+  <div class="dialogue-zh">过头推举，就像肩部推举一样？</div>
+</div>
+    <a href="https://lexfridman.com/pieter-levels-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="cristiano-amon.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cristiano Amon: Qualcomm CEO</div>
+  <div class="card-meta">Cristiano Amon</div>
+</a>
+<a href="eric-schmidt.html" class="card" style="text-decoration:none">
+  <div class="card-title">Eric Schmidt: Google</div>
+  <div class="card-meta">Eric Schmidt</div>
+</a>
+<a href="robert-langer.html" class="card" style="text-decoration:none">
+  <div class="card-title">Robert Langer: Edison of Medicine</div>
+  <div class="card-meta">Robert Langer</div>
+</a>
+<a href="sergey-nazarov.html" class="card" style="text-decoration:none">
+  <div class="card-title">Sergey Nazarov: Chainlink, Smart Contracts, and Oracle Networks</div>
+  <div class="card-meta">Sergey Nazarov</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

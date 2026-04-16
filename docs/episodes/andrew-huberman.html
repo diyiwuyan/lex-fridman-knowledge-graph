@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Andrew Huberman: Neuroscience of Optimal Performance - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Andrew Huberman: Neuroscience of Optimal Performan</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Andrew Huberman: Neuroscience of Optimal Performance</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/andrew-huberman.html" style="font-size:16px;color:#818cf8;font-weight:600">Andrew Huberman</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">26,864 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/andrew-huberman" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <p style="color:#64748b;font-size:14px">暂无章节信息</p>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">don</span><span class="keyword-tag">brain</span><span class="keyword-tag">going</span><span class="keyword-tag">space</span><span class="keyword-tag">stuff</span><span class="keyword-tag">neurons</span><span class="keyword-tag">experience</span><span class="keyword-tag">cortex</span><span class="keyword-tag">talking</span><span class="keyword-tag">interesting</span><span class="keyword-tag">trying</span><span class="keyword-tag">visual</span><span class="keyword-tag">sensory</span><span class="keyword-tag">doing</span><span class="keyword-tag">neuron</span><span class="keyword-tag">saying</span><span class="keyword-tag">thinking</span><span class="keyword-tag">stress</span><span class="keyword-tag">states</span><span class="keyword-tag">getting</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"not fair to monkeys though, Elon, because actually monkeys can make plans. They just don&#39;t make plans"</div>
+  <div class="quote-zh">但这对猴子不公平，埃隆，因为实际上猴子可以制定计划。他们只是不制定计划</div>
+  <div class="quote-meta">— Andrew Huberman （1:21:49.680）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"think you mentioned this on Rogan or with Whitney that scare them. So just on a practical, psychological"</div>
+  <div class="quote-zh">我想你在罗根或惠特尼身上提到过这一点，这让他们感到害怕。所以只是从实际的、心理的角度</div>
+  <div class="quote-meta">— Andrew Huberman （02:40.320）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"instance, it might actually be that you want to be almost sleepy, almost in a drowsy state to be able"</div>
+  <div class="quote-zh">例如，实际上您可能想要几乎昏昏欲睡，几乎处于昏昏欲睡的状态，以便能够</div>
+  <div class="quote-meta">— Andrew Huberman （25:00.960）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"action? Well, we haven&#39;t done too much work there, but I think I can comment on it from a neuroscience"</div>
+  <div class="quote-zh">行动？好吧，我们还没有在那里做太多的工作，但我想我可以从神经科学的角度对此进行评论</div>
+  <div class="quote-meta">— Andrew Huberman （27:26.640）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"demands and thinking in particular. And he used an interesting example. I&#39;d be curious to know if you"</div>
+  <div class="quote-zh">特别是要求和思考。他举了一个有趣的例子。我很想知道你是否</div>
+  <div class="quote-meta">— Andrew Huberman （28:34.880）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:00.000)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Andrew Huberman, a neuroscientist at Stanford,</div>
+  <div class="dialogue-zh">以下是与斯坦福大学神经科学家安德鲁·胡伯曼的对话，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:05.280)</span>
+  </div>
+  <div class="dialogue-en">working to understand how the brain works, how it can change through experience,</div>
+  <div class="dialogue-zh">努力了解大脑是如何工作的，它如何通过经验而改变，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:09.680)</span>
+  </div>
+  <div class="dialogue-en">and how to repair brain circuits damaged by injury or disease. He has a great Instagram account</div>
+  <div class="dialogue-zh">以及如何修复因受伤或疾病而受损的大脑回路。他有一个很棒的 Instagram 帐户</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:17.040)</span>
+  </div>
+  <div class="dialogue-en">at Huberman Lab where he teaches the world about the brain and the human mind. Also, he&#39;s a friend</div>
+  <div class="dialogue-zh">在休伯曼实验室，他向世界传授大脑和人类思维的知识。而且，他还是一个朋友</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:24.160)</span>
+  </div>
+  <div class="dialogue-en">and an inspiration in that he shows that you can be humble, giving, and still succeed in the</div>
+  <div class="dialogue-zh">他的启示是，你可以谦虚、奉献，并且仍然能在这个领域取得成功</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:31.080)</span>
+  </div>
+  <div class="dialogue-en">science world. Quick mention of each sponsor, followed by some thoughts related to the episode.</div>
+  <div class="dialogue-zh">科学世界。快速提及每个赞助商，然后是与该集相关的一些想法。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:36.720)</span>
+  </div>
+  <div class="dialogue-en">8Sleep, a mattress that cools itself and gives me yet another reason to enjoy sleep. SEMrush,</div>
+  <div class="dialogue-zh">8Sleep，一款能够自我冷却的床垫，给了我另一个享受睡眠的理由。 SEMrush,</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:43.760)</span>
+  </div>
+  <div class="dialogue-en">the most advanced SEO optimization tool I&#39;ve ever come across, and CashApp, the app I use to send</div>
+  <div class="dialogue-zh">我遇到过的最先进的 SEO 优化工具，以及我用来发送的应用程序 CashApp</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:50.720)</span>
+  </div>
+  <div class="dialogue-en">money to friends. Please check out these sponsors in the description to get a discount and to support</div>
+  <div class="dialogue-zh">钱给朋友。请在说明中查看这些赞助商以获得折扣和支持</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:56.240)</span>
+  </div>
+  <div class="dialogue-en">this podcast. As a side note, let me say that I heard from a lot of people about the previous</div>
+  <div class="dialogue-zh">这个播客。顺便说一句，我从很多人那里听说过之前的事情</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(01:01.680)</span>
+  </div>
+  <div class="dialogue-en">conversation I had with Yaron Brook about objectivism. Some people loved it, some people</div>
+  <div class="dialogue-zh">我和亚伦·布鲁克关于客观主义的谈话。有些人喜欢，有些人喜欢</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(01:08.720)</span>
+  </div>
+  <div class="dialogue-en">hated it. I misspoke in some parts, was more critical on occasion than I&#39;m meant to be,</div>
+  <div class="dialogue-zh">讨厌它。我在某些地方说错了，有时比我应该的更挑剔，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(01:14.560)</span>
+  </div>
+  <div class="dialogue-en">didn&#39;t push on certain points that I should&#39;ve, was undereducated or completely unaware about</div>
+  <div class="dialogue-zh">没有强调我应该强调的某些观点，受教育程度较低或完全不了解</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(01:20.080)</span>
+  </div>
+  <div class="dialogue-en">some major things that happened in the past or major ideas out there. I bring all that up to say</div>
+  <div class="dialogue-zh">过去发生的一些重大事件或重大想法。我提出这一切是为了说</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(01:27.120)</span>
+  </div>
+  <div class="dialogue-en">that if we are to have difficult conversations, we have to give each other space to make mistakes,</div>
+  <div class="dialogue-zh">如果我们要进行困难的对话，我们必须给彼此犯错误的空间，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(01:32.960)</span>
+  </div>
+  <div class="dialogue-en">to learn, to grow. Taking one or two statements from a three hour podcast and suggesting that</div>
+  <div class="dialogue-zh">学习，成长。从三小时的播客中提取一两个陈述并建议</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(01:39.520)</span>
+  </div>
+  <div class="dialogue-en">they encapsulate who I am, I was, or ever will be is a standard that we can&#39;t hold each other to.</div>
+  <div class="dialogue-zh">它们概括了我是谁、我曾经是谁、或者将来是谁，这是我们不能互相遵守的标准。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(01:48.480)</span>
+  </div>
+  <div class="dialogue-en">I don&#39;t think anyone could live up to that kind of standard, at least I know I can&#39;t.</div>
+  <div class="dialogue-zh">我认为没有人能够达到这样的标准，至少我知道我不能。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(01:53.040)</span>
+  </div>
+  <div class="dialogue-en">The conversation with Yaron is mild relative to some conversations that I will likely have in</div>
+  <div class="dialogue-zh">与我可能会进行的一些对话相比，与 Yaron 的对话比较温和</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(01:59.040)</span>
+  </div>
+  <div class="dialogue-en">the coming year. Please continue to challenge me, but please try to do so with love and with</div>
+  <div class="dialogue-zh">来年。请继续挑战我，但请尝试带着爱和努力去做</div>
+</div>
+    <a href="https://lexfridman.com/andrew-huberman" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="dan-reynolds.html" class="card" style="text-decoration:none">
+  <div class="card-title">Dan Reynolds: Imagine Dragons</div>
+  <div class="card-meta">Dan Reynolds</div>
+</a>
+<a href="duncan-trussell.html" class="card" style="text-decoration:none">
+  <div class="card-title">Duncan Trussell: Comedy, Sentient Robots, Suffering, Love &amp; Burning Man</div>
+  <div class="card-meta">Duncan Trussell</div>
+</a>
+<a href="karl-deisseroth.html" class="card" style="text-decoration:none">
+  <div class="card-title">Karl Deisseroth: Depression, Schizophrenia, and Psychiatry</div>
+  <div class="card-meta">Karl Deisseroth</div>
+</a>
+<a href="matt-walker.html" class="card" style="text-decoration:none">
+  <div class="card-title">Matt Walker: Sleep</div>
+  <div class="card-meta">Matt Walker</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

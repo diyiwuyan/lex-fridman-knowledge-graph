@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vejas Liulevicius - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Vejas Liulevicius</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Vejas Liulevicius</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/vejas-liulevicius.html" style="font-size:16px;color:#818cf8;font-weight:600">Vejas Liulevicius</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">28,068 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/vejas-liulevicius-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:10</span>
+  <span class="chapter-title">Marxism<span class="zh-trans"> · 马克思主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:55</span>
+  <span class="chapter-title">Anarchism<span class="zh-trans"> · 无政府主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">45:52</span>
+  <span class="chapter-title">The Communist Manifesto<span class="zh-trans"> · 共产党宣言</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">54:51</span>
+  <span class="chapter-title">Communism in the Soviet Union<span class="zh-trans"> · 苏联的共产主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:14:45</span>
+  <span class="chapter-title">Lenin, Trotsky, and Stalin<span class="zh-trans"> · 列宁、托洛茨基和斯大林</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:24:33</span>
+  <span class="chapter-title">Stalin<span class="zh-trans"> · 斯大林</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:31:48</span>
+  <span class="chapter-title">Holodomor<span class="zh-trans"> · 大饥荒</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:45:38</span>
+  <span class="chapter-title">The Great Terror<span class="zh-trans"> · 大恐怖</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:58:39</span>
+  <span class="chapter-title">Totalitarianism<span class="zh-trans"> · 极权主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:09:40</span>
+  <span class="chapter-title">Response to Darryl Cooper<span class="zh-trans"> · 对达里尔·库珀的回应</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:24:49</span>
+  <span class="chapter-title">Nazis vs Communists in Germany<span class="zh-trans"> · 德国纳粹与共产党</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:31:11</span>
+  <span class="chapter-title">Mao<span class="zh-trans"> · 毛</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:36:19</span>
+  <span class="chapter-title">Great Leap Forward<span class="zh-trans"> · 大跃进</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:43:20</span>
+  <span class="chapter-title">China after Mao<span class="zh-trans"> · 毛泽东之后的中国</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:48:52</span>
+  <span class="chapter-title">North Korea<span class="zh-trans"> · 北朝鲜</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:52:56</span>
+  <span class="chapter-title">Communism in US<span class="zh-trans"> · 美国的共产主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:00:26</span>
+  <span class="chapter-title">Russia after Soviet Union<span class="zh-trans"> · 继苏联之后的俄罗斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:11:57</span>
+  <span class="chapter-title">Advice for Lex<span class="zh-trans"> · 给莱克斯的建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:19:39</span>
+  <span class="chapter-title">Book recommendations<span class="zh-trans"> · 书籍推荐</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">marx</span><span class="keyword-tag">vejas</span><span class="keyword-tag">liulevicius</span><span class="keyword-tag">history</span><span class="keyword-tag">stalin</span><span class="keyword-tag">soviet</span><span class="keyword-tag">war</span><span class="keyword-tag">communism</span><span class="keyword-tag">union</span><span class="keyword-tag">communist</span><span class="keyword-tag">lenin</span><span class="keyword-tag">revolution</span><span class="keyword-tag">human</span><span class="keyword-tag">german</span><span class="keyword-tag">germany</span><span class="keyword-tag">state</span><span class="keyword-tag">russian</span><span class="keyword-tag">mao</span><span class="keyword-tag">class</span><span class="keyword-tag">ideas</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"We hear nature abhorring a vacuum, and I think that there are places in human character that long for transcendental explanations, that it’s not all meaningless. In fact, there’s a larger purpose, and I think it’s not a coincidence that such a significant part of resistance to communist regimes has in part come from, on the one hand, religious believers, and on the other hand, from disillusioned true believers in communism who find themselves undergoing an internal experience of revulsion, finding that their ideals have not been followed through on."</div>
+  <div class="quote-zh">我们听到大自然憎恶真空，我认为人类性格中有些地方渴望超验的解释，这并非毫无意义。事实上，还有一个更大的目的，我认为，对共产主义政权的如此重要的抵抗一方面来自宗教信徒，另一方面来自幻灭的共产主义真正信徒，他们发现自己正在经历一种内心的厌恶体验，发现自己的理想没有得到贯彻，这并非巧合。</div>
+  <div class="quote-meta">— Vejas Liulevicius （00:42:23）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, you mentioned in the context of the claims of science, humility as a crucial attribute. I think that humility, sobriety, realism are tremendously valuable in trying to understand another society, another form of government. And so, I think one needs to be very self-aware that projection onto others of what we think they’re about is no substitute for actual study of the sources that a society like that produces. It’s declarations of what matters most to them, the leadership’s own pronouncements about what the future holds. I think that matters a lot more than pious hopes or versions of being convinced that inevitably everyone will come to resemble us in a better future."</div>
+  <div class="quote-zh">嗯，你在科学主张的背景下提到，谦逊是一个重要的品质。我认为谦逊、清醒、现实主义对于理解另一个社会、另一种形式的政府非常有价值。因此，我认为人们需要非常清醒地认识到，向他人投射我们对他们的看法并不能替代对这样一个社会所产生的来源的实际研究。这是对他们最重要的事情的宣言，是领导层自己对未来的宣言。我认为这比虔诚的希望或相信每个人在更美好的未来不可避免地会变得像我们一样重要得多。</div>
+  <div class="quote-meta">— Vejas Liulevicius （02:47:54）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Marx had been a student of Hegel. And Hegel as a German idealist philosopher had announced very definitively that history has a purpose. History is not a collection of random facts. And as an idealist, he proposed that the true movement of history, the true meaning of history, what made history, history with a capital H, something that’s transcendent and meaningful was that it was the working out of an idea through different civilizations, different stages of historical development. And that idea was the idea of human freedom. So it was not individuals or great thinkers alone making history and having an impact. It was the idea itself striving to come to fruition, striving to come to an evermore perfect realization."</div>
+  <div class="quote-zh">马克思是黑格尔的学生。黑格尔作为德国唯心主义哲学家，非常明确地宣布历史是有目的的。历史不是随机事实的集合。作为一个唯心主义者，他提出，历史的真正运动、历史的真正意义、历史、大写H的历史之所以是超然的、有意义的，是因为它是一个思想在不同文明、不同历史发展阶段的体现。这个想法就是人类自由的想法。因此，创造历史并产生影响的不仅仅是个人或伟大的思想家。这个想法本身正在努力实现，努力实现更加完美的实现。</div>
+  <div class="quote-meta">— Vejas Liulevicius （00:08:37）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Absolutely. So Engels, when he gives the graveside eulogy for his beloved friend Marx, claims that Marx is essentially the Darwin of history, the Darwin of history. That he had done for the world of politics and of human history what Darwin had done with this theory of evolution, understanding the hidden mechanism, understanding the laws that are at work and that make that whole process meaningful rather than just one damn thing after another."</div>
+  <div class="quote-zh">绝对地。因此，恩格斯在为他挚爱的朋友马克思在墓地致悼词时声称，马克思本质上是历史的达尔文，历史的达尔文。他为政治世界和人类历史所做的事情就像达尔文在进化论中所做的那样，理解了隐藏的机制，理解了正在起作用的法则，并使整个过程变得有意义，而不仅仅是一件又一件该死的事情。</div>
+  <div class="quote-meta">— Vejas Liulevicius （00:11:21）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And we have testimony to this in the case of people who later became dissidents, like Lev Kopelev, who wrote in his memoirs about how he was among those who were sent in to enact these policies, and he saw families with the last food being taken away even as signs of starvation were visible already in the present. And yet he did not go mad. He didn’t kill himself. He didn’t fall into despair because he believed, because he had been taught and believed at least then that this was justified. This was a larger historical process and a greater good would result even from these enormities. So, I think that this was quite deliberate."</div>
+  <div class="quote-zh">我们在后来成为持不同政见者的例子中得到了证明，比如列夫·科佩列夫（Lev Kopelev），他在回忆录中写道，他是如何被派去制定这些政策的人之一，他看到家庭最后的食物被拿走，尽管饥饿的迹象已经显而易见。但他并没有发疯。他没有自杀。他没有陷入绝望，因为他相信，因为他被教导并至少在那时相信这是合理的。这是一个更大的历史进程，即使这些暴行也会带来更大的好处。所以，我认为这是非常故意的。</div>
+  <div class="quote-meta">— Vejas Liulevicius （01:44:50）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vejas Liulevicius <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">And the outcome here is a horrific man-made famine, not a natural disaster, not bad harvests, but a man-made famine as a result of then the compulsion that gets used by the Soviet state to extract those resources, cordoning off the area, not allowing starving people to escape.</div>
+  <div class="dialogue-zh">这里的结果是一场可怕的人为饥荒，不是自然灾害，也不是歉收，而是人为饥荒，这是苏联国家强制开采这些资源的结果，封锁了该地区，不让饥饿的人们逃脱。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vejas Liulevicius <span class="dialogue-time">(00:00:18)</span>
+  </div>
+  <div class="dialogue-en">You put very well some of the implications of this case study in how things look in the abstract versus in practice, and those phenomena were going to haunt the rest of the experience of the Soviet Union. The whole notion that up and down the chain of command, everybody is falsifying or tinkering with or purifying the statistics or their reports in order not to look bad and not to have vengeance v...</div>
+  <div class="dialogue-zh">你很好地阐述了这个案例研究的一些含义，即事物在抽象与实践中的表现，这些现象将困扰苏联的其他经验。整个指挥链上上下下，每个人都在伪造、修改或净化统计数据或他们的报告，以免看起来很糟糕，也没有报复v</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vejas Liulevicius <span class="dialogue-time">(00:01:15)</span>
+  </div>
+  <div class="dialogue-en">A deliberate plan to bring class conflict and bring civil war and then heighten it in the countryside does damage, and not least of that is this phenomenon of a negative selection. Those who have most enterprise, those who are most entrepreneurial, those who have most self-discipline, those who are best organized will be winnowed again and again and again, sending the message that mediocrity is co...</div>
+  <div class="dialogue-zh">蓄意引发阶级冲突和内战，然后在农村加剧这种冲突的计划确实会造成损害，尤其是这种负面选择现象。最有进取心的人、最有进取心的人、最自律的人、最有组织性的人，将被一次又一次地筛选出来，传达出平庸是共存的信息。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vejas Liulevicius <span class="dialogue-time">(00:01:49)</span>
+  </div>
+  <div class="dialogue-en">Hitler and Himmler envisioned permanent war on the Eastern Front, not a peace treaty, not a settlement, not a border, but a constant moving of the border every generation hundreds of miles east in order to keep winning more and more living space and with analogy to other frontiers to always give more fighting experience and more training and aggression to generation after generation of German sold...</div>
+  <div class="dialogue-zh">希特勒和希姆莱设想在东线进行永久战争，不是和平条约，不是解决方案，不是边界，而是每一代人不断地将边界向东移动数百英里，以不断赢得越来越多的生存空间，并与其他边境类似，始终为一代又一代的德国士兵提供更多的战斗经验、更多的训练和侵略。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:29)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Vejas Liulevicius, a historian specializing in Germany and Eastern Europe. He has lectured extensively on the rise, the reign, and the fall of communism. Our discussion goes deep on this, the very heaviest of topics, the communist ideology that has led to over 100 million deaths in the 20th century. We also discuss Hitler, Nazi ideology, and World War II. This ...</div>
+  <div class="dialogue-zh">以下是与专门研究德国和东欧的历史学家 Vejas Liulevicius 的对话。他就共产主义的兴起、统治和垮台发表了广泛的演讲。我们的讨论深入探讨了这个最沉重的话题，即导致 20 世纪超过 1 亿人死亡的共产主义意识形态。我们还讨论希特勒、纳粹意识形态和第二次世界大战。这</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:10)</span>
+  </div>
+  <div class="dialogue-en">Let’s start with Karl Marx. What were the central ideas of Marx that lay the foundation of communism?</div>
+  <div class="dialogue-zh">让我们从卡尔·马克思开始。奠定共产主义基础的马克思的中心思想是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vejas Liulevicius <span class="dialogue-time">(00:03:17)</span>
+  </div>
+  <div class="dialogue-en">I think there were several key ideas that Marx deployed that were destined to have such an impact, and in some ways they were actually kind of contradictory. On the one hand, Marx insisted that history has a purpose. That history is not just random events, but that rather it’s history, we might say, with a capital H, history moving in a deliberate direction, history having a goal, a direction that...</div>
+  <div class="dialogue-zh">我认为马克思所运用的几个关键思想注定会产生如此大的影响，但在某些方面它们实际上是相互矛盾的。一方面，马克思坚持认为历史是有目的的。历史不仅仅是随机事件，而是历史，我们可以说，大写的H，历史朝着有意的方向发展，历史有一个目标，一个方向</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vejas Liulevicius <span class="dialogue-time">(00:03:47)</span>
+  </div>
+  <div class="dialogue-en">At the same time, in the Communist Manifesto, Karl Marx and his colleague Friedrich Engels also suggested that there was a role for special individuals who might even if history was still moving in this predetermined direction, might give it an extra push, might play a heroic role in that process. And I think that these two ideas added together, the notion that there is a science of revolution tha...</div>
+  <div class="dialogue-zh">与此同时，卡尔·马克思和他的同事弗里德里希·恩格斯在《共产党宣言》中也提出，特殊的个人可以发挥作用，即使历史仍然朝着这个预定的方向前进，他们也可能会给予它额外的推动，可能会在这个过程中发挥英雄的作用。我认为这两个想法加在一起，即存在一门革命科学</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vejas Liulevicius <span class="dialogue-time">(00:04:43)</span>
+  </div>
+  <div class="dialogue-en">Earlier thinkers who were socialists had already dreamt of or projected futures where all conflict would be resolved and human life would achieve some sort of perfection. Marx added these other elements that made it far more powerful than the earlier versions that he decried as merely utopian socialism.</div>
+  <div class="dialogue-zh">早期的社会主义思想家已经梦想或预测了未来，所有冲突都将得到解决，人类生活将达到某种完美。马克思添加了这些其他元素，使其比他谴责为空想社会主义的早期版本更加强大。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:05)</span>
+  </div>
+  <div class="dialogue-en">So there’s a million questions I could ask there. So on the utopian side. So there is a utopian component to the way he tried to conceive of his ideas.</div>
+  <div class="dialogue-zh">所以我可以在那里问一百万个问题。所以在乌托邦方面。因此，他试图构想他的想法的方式有一个乌托邦的成分。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vejas Liulevicius <span class="dialogue-time">(00:05:16)</span>
+  </div>
+  <div class="dialogue-en">Yeah, absolutely. I mean, first of all, one has to stress, Marx would’ve gotten extremely upset at this point in the conversation because to call someone a utopian was precisely to argue that you’re not scientific, you’re not rational, you are not laying out the iron laws of history. You’re merely hoping for the best. And that might be laudable, but it was fundamentally unrealistic.</div>
+  <div class="dialogue-zh">是的，绝对是。我的意思是，首先，必须强调，马克思在谈话的这一点上会感到非常不安，因为称某人为乌托邦恰恰是在论证你不科学，你不理性，你没有制定历史的铁律。你只是希望得到最好的结果。这或许值得称赞，但从根本上说是不现实的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vejas Liulevicius <span class="dialogue-time">(00:05:36)</span>
+  </div>
+  <div class="dialogue-en">That said, hidden among Marx’s insistence that there are laws and structures as history moves through class conflict, modes of production towards its ultimate goal of a comprehensive final revolution that will see all exploitation overthrown and people finally being freed from necessity, smuggled in among those things are most definitely utopian elements. And there, they come especially at the end...</div>
+  <div class="dialogue-zh">也就是说，马克思坚持认为，随着历史通过阶级冲突，生产方式将走向全面的最终革命的最终目标，其中存在着规律和结构，这场革命将推翻所有剥削，使人们最终摆脱必然性，这些东西中偷偷混入的东西绝对是乌托邦元素。在那里，他们特别在最后出现</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vejas Liulevicius <span class="dialogue-time">(00:06:18)</span>
+  </div>
+  <div class="dialogue-en">There, vagueness sets in. It’s clear that it’s a blessed state that’s being talked about. People no longer exploiting one another, people no longer subject to necessity or poverty, but instead enjoying all of the productivity of industrialization that hitherto had been put to private profit now collectively owned and deployed. The notion that one will be able to work at one job in the morning and ...</div>
+  <div class="dialogue-zh">在那里，模糊性开始出现。很明显，正在谈论的是一种受祝福的状态。人们不再互相剥削，人们不再受困于必需品或贫困，而是享受工业化的所有生产力，而这些生产力迄今为止一直被用于私人利润，现在已被集体所有和部署。人们能够在早上做一份工作的想法</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:22)</span>
+  </div>
+  <div class="dialogue-en">So there is a long journey from capitalism to communism that includes a lot of problems. He thought once you resolve the problems, all the complexities of human interactions, the friction, the problems will be gone.</div>
+  <div class="dialogue-zh">所以从资本主义到共产主义是一个漫长的过程，其中存在很多问题。他认为一旦解决了问题，人类互动的所有复杂性、摩擦、问题都会消失。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vejas Liulevicius <span class="dialogue-time">(00:07:37)</span>
+  </div>
+  <div class="dialogue-en">To the extent that they were based on inequalities and on man’s exploitation of man, the result was supposed to be a resolution of all of this. And inevitably, when you talk about the history of communism, you have to include the fact that this often tragic and dramatic history produced a lot of jokes. Jokes that were in part reactions sometimes to the ideological claims made by people like Marx. ...</div>
+  <div class="dialogue-zh">在某种程度上，它们是基于不平等和人对人的剥削，其结果应该是所有这一切的解决。不可避免地，当你谈论共产主义历史时，你必须包括这样一个事实：这段经常悲惨而戏剧性的历史产生了很多笑话。这些笑话有时部分是对马克思等人提出的意识形态主张的反应。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:18)</span>
+  </div>
+  <div class="dialogue-en">Yeah, you actually have electron humor. I love it. And you deliver in such a dry, beautiful way. Okay, there’s again, a million questions. So you outline a set of contradictions, but it’s interesting to talk about his view. For example, what was Marx’s view of history?</div>
+  <div class="dialogue-zh">是的，你确实有电子幽默。我喜欢它。你以一种如此干巴巴、美丽的方式表达。好吧，又是一百万个问题。所以你概述了一系列矛盾，但谈论他的观点很有趣。例如，马克思的历史观是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vejas Liulevicius <span class="dialogue-time">(00:08:37)</span>
+  </div>
+  <div class="dialogue-en">Marx had been a student of Hegel. And Hegel as a German idealist philosopher had announced very definitively that history has a purpose. History is not a collection of random facts. And as an idealist, he proposed that the true movement of history, the true meaning of history, what made history, history with a capital H, something that’s transcendent and meaningful was that it was the working out ...</div>
+  <div class="dialogue-zh">马克思是黑格尔的学生。黑格尔作为德国唯心主义哲学家，非常明确地宣布历史是有目的的。历史不是随机事实的集合。作为一个唯心主义者，他提出，历史的真正运动，历史的真正意义，是什么创造了历史，大写的历史，是超越的、有意义的，是它的运作。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vejas Liulevicius <span class="dialogue-time">(00:09:28)</span>
+  </div>
+  <div class="dialogue-en">In the case of Hegel, in this very Prussian and German context, he identified the realization of freedom also with the growth of the state because he thought that governments are the ones that are going to be able to deliver on laws and on the ideal of a state of the rule of law, in German the Rechtsstaat. That was a noble dream. At the same time, as we recognize from our perspective, state power ...</div>
+  <div class="dialogue-zh">就黑格尔而言，在普鲁士和德国的背景下，他将自由的实现也等同于国家的发展，因为他认为政府将能够实现法律和法治国家理想（德语为Rechtsstaat）。那是一个崇高的梦想。与此同时，正如我们从我们的角度认识到的，国家权力</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vejas Liulevicius <span class="dialogue-time">(00:10:01)</span>
+  </div>
+  <div class="dialogue-en">What Marx did was to take this characteristic insistence of Hegel that history is moving in a meaningful and discernible way towards the realization of an idea and flipped it on its head. Marx insisted that Hegel had so much that was right in his thinking, but what he had neglected to keep in mind was that in fact, history is based on matter. So hence, dialectical materialism, dialectical referrin...</div>
+  <div class="dialogue-zh">马克思所做的就是采用了黑格尔这一独特的坚持，即历史正在以一种有意义的、可辨别的方式朝着一种理念的实现前进，并将其翻转过来。马克思坚称黑格尔的思想有很多正确之处，但他忽略了一点，事实上，历史是建立在物质基础上的。因此，辩证唯物主义、辩证法指的是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vejas Liulevicius <span class="dialogue-time">(00:10:42)</span>
+  </div>
+  <div class="dialogue-en">And so Marx adapts a lot of ideas of Hegel. You can recognize entire rhetorical maneuvers that are indebted to that earlier training, but now taken in a very different direction. What remained though was the confidence of being on the right side of history. And there are few things that are as intoxicating as being convinced that your actions not only are right in the abstract, but are also destin...</div>
+  <div class="dialogue-zh">因此马克思借鉴了黑格尔的很多思想。你可以认出所有的修辞技巧都归功于早期的训练，但现在采取了一个非常不同的方向。但剩下的就是站在历史正确一边的信心。很少有事情比确信你的行为不仅在抽象上是正确的，而且也是命中注定的更令人陶醉。</div>
+</div>
+    <a href="https://lexfridman.com/vejas-liulevicius-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="book-1984-george-orwell.html" class="card" style="text-decoration:none">
+  <div class="card-title">Book 1984 George Orwell</div>
+  <div class="card-meta">Book 1984 George Orwell</div>
+</a>
+<a href="daniel-schmachtenberger.html" class="card" style="text-decoration:none">
+  <div class="card-title">Daniel Schmachtenberger: Steering Civilization Away from Self-Destruction</div>
+  <div class="card-meta">Daniel Schmachtenberger</div>
+</a>
+<a href="douglas-murray.html" class="card" style="text-decoration:none">
+  <div class="card-title">Douglas Murray: Racism, Marxism, and the War on the West</div>
+  <div class="card-meta">Douglas Murray</div>
+</a>
+<a href="glenn-loury.html" class="card" style="text-decoration:none">
+  <div class="card-title">Glenn Loury: Race, Racism, Identity Politics, and Cancel Culture</div>
+  <div class="card-meta">Glenn Loury</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

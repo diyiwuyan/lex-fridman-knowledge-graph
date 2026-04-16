@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Michael Saylor - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Michael Saylor</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Michael Saylor</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/michael-saylor.html" style="font-size:16px;color:#818cf8;font-weight:600">Michael Saylor</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">35,475 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/michael-saylor-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:43</span>
+  <span class="chapter-title">Grading our understanding<span class="zh-trans"> · 给我们的理解打分</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:01</span>
+  <span class="chapter-title">Inflation<span class="zh-trans"> · 通货膨胀</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">33:37</span>
+  <span class="chapter-title">Government<span class="zh-trans"> · 政府</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">54:47</span>
+  <span class="chapter-title">War and power<span class="zh-trans"> · 战争与权力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:05:57</span>
+  <span class="chapter-title">Dematerializing information<span class="zh-trans"> · 信息非物质化</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:37:18</span>
+  <span class="chapter-title">Digital energy and assets<span class="zh-trans"> · 数字能源和资产</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:48:56</span>
+  <span class="chapter-title">Oil barrel vs Bitcoin<span class="zh-trans"> · 石油桶 vs 比特币</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:58:16</span>
+  <span class="chapter-title">Layers of Bitcoin<span class="zh-trans"> · 比特币的层数</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:15:27</span>
+  <span class="chapter-title">Bitcoin’s role during wartime<span class="zh-trans"> · 比特币在战时的作用</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:20:11</span>
+  <span class="chapter-title">Jack Dorsey<span class="zh-trans"> · 杰克·多尔西</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:36:31</span>
+  <span class="chapter-title">Bitcoin conflict of interest<span class="zh-trans"> · 比特币利益冲突</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:43:13</span>
+  <span class="chapter-title">Satoshi Nakamoto<span class="zh-trans"> · 中本聪</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:48:38</span>
+  <span class="chapter-title">Volatility<span class="zh-trans"> · 挥发性</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:01:03</span>
+  <span class="chapter-title">Bitcoin price<span class="zh-trans"> · 比特币价格</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:13:19</span>
+  <span class="chapter-title">Twitter verification<span class="zh-trans"> · 推特验证</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:22:16</span>
+  <span class="chapter-title">Second best crypto<span class="zh-trans"> · 第二好的加密货币</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:27:58</span>
+  <span class="chapter-title">Dogecoin<span class="zh-trans"> · 狗狗币</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:32:31</span>
+  <span class="chapter-title">Elon Musk<span class="zh-trans"> · 埃隆·马斯克</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:38:00</span>
+  <span class="chapter-title">Advice for young people<span class="zh-trans"> · 给年轻人的建议</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">michael</span><span class="keyword-tag">saylor</span><span class="keyword-tag">bitcoin</span><span class="keyword-tag">going</span><span class="keyword-tag">don</span><span class="keyword-tag">property</span><span class="keyword-tag">money</span><span class="keyword-tag">energy</span><span class="keyword-tag">digital</span><span class="keyword-tag">human</span><span class="keyword-tag">got</span><span class="keyword-tag">layer</span><span class="keyword-tag">million</span><span class="keyword-tag">inflation</span><span class="keyword-tag">asset</span><span class="keyword-tag">security</span><span class="keyword-tag">billion</span><span class="keyword-tag">crypto</span><span class="keyword-tag">dollars</span><span class="keyword-tag">government</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I’m certain I’m not. No, actually I think the providence is really important, and if I were to look at the highlighted points, I think having a founder that was anonymous or stood anonymous is important. I think the founder disappearing is also important. I think that the fact that the Satoshi coins never moved is also important. I think the lack of an initial coin offering is also important. I think the lack of a corporate sponsor is important. I think the fact that it traded for 15 months with no commercial value was also important. I think that the simplicity of the protocol is very important. I think that the outcome of the block size wars is very important and all of those things add up to common property. They’re all indicia, indicators of a digital property as opposed to security."</div>
+  <div class="quote-zh">我确定我不是。不，实际上我认为天意非常重要，如果我要看看突出的要点，我认为拥有一位匿名或匿名的创始人很重要。我认为创始人的消失也很重要。我认为中本聪币从未移动过这一事实也很重要。我认为缺乏首次代币发行也很重要。我认为缺乏企业赞助商很重要。我认为它交易了 15 个月而没有商业价值这一事实也很重要。我认为协议的简单性非常重要。我认为区块大小战争的结果非常重要，所有这些都构成了共同财产。它们都是数字财产而非安全性的标记和指标。</div>
+  <div class="quote-meta">— Michael Saylor （02:43:40）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So when you’re actually inflating the money supply at 7% but you’re calling it 2% because you want to help the economy, you’re literally bleeding the free market to death. But the sad fact is George Washington went along with it ’cause he thought that they were going to do him good. And the majority of the society, most companies, most conventional thinkers, the working class, they go along with this because they think that someone has their best interest in mind. And the people that are bleeding them to death, they believe that prescription because their mental models are just so defective and they’re understanding of energy and engineering and the economics that are at play is crippled by these mental models."</div>
+  <div class="quote-zh">因此，当你实际上将货币供应量膨胀到 7%，但因为你想帮助经济而将其称为 2% 时，你实际上是在让自由市场流血致死。但可悲的事实是，乔治·华盛顿同意了，因为他认为他们会对他有好处。社会的大多数人、大多数公司、最传统的思想家、工人阶级，他们都同意这一点，因为他们认为某人考虑到了他们的最大利益。而那些让他们流血致死的人，他们相信处方，因为他们的心智模型有缺陷，他们对能源和工程以及正在发挥作用的经济学的理解被这些心智模型削弱了。</div>
+  <div class="quote-meta">— Michael Saylor （00:53:14）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So I don’t think every objective is equally practical. And I think the benefit of being an engineer or thinking about practical achievements is when the government pursues an impractical objective or when anybody, an entrepreneur, not so bad with an entrepreneur because they don’t have that much money to waste. When a government pursues an impractical objective, they squander trillions and trillions of dollars and achieve nothing. Whereas if they pursue a practical objective or if they simply get out of the way and do nothing and they allow the free market to pursue the practical objectives, then I think you can have profound impact on the human civilization."</div>
+  <div class="quote-zh">所以我认为并不是每个目标都同样实用。我认为，当政府追求不切实际的目标时，或者当任何人（企业家）对企业家的态度还不错，因为他们没有那么多钱可以浪费时，成为一名工程师或考虑实际成就的好处是。当政府追求不切实际的目标时，他们会浪费数万亿美元却一无所获。然而，如果他们追求一个实际的目标，或者如果他们只是不做任何事，让自由市场去追求实际的目标，那么我认为你可以对人类文明产生深远的影响。</div>
+  <div class="quote-meta">— Michael Saylor （01:35:30）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I’d rather think that the thing that Satoshi taught us is you should do your part during some phase of the journey, and then you should get out of the way. I think Steve Jobs said something similar to that effect in a very famous speech one day, which is “Death is a natural part of life and it makes way for the next generation.” And I think the goal is you upgrade the world, right? You leave it a better place, but you get out of the way. And I think when that breaks down, bad things happen. I think nature cleanses itself. There’s a cycle of life. Meaning of life"</div>
+  <div class="quote-zh">我宁愿认为中本聪教给我们的事情是你应该在旅程的某个阶段尽自己的一份力量，然后你应该离开。我认为史蒂夫·乔布斯在一次非常著名的演讲中说过类似的话，那就是“死亡是生命的自然组成部分，它为下一代让路。”我认为目标是升级世界，对吧？你把它留在一个更好的地方，但你又让开。我认为当这种情况崩溃时，就会发生糟糕的事情。我认为大自然会自我净化。生命有一个循环。生命的意义</div>
+  <div class="quote-meta">— Michael Saylor （03:51:27）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well-meaning physicians bled him to death. Okay? The last thing in the world you would want to do to a sick person is bleed them in the modern world. I think we understand that oxygen is carried by the blood cells, and if… There’s that phrase, triage phrase, what’s the first thing you do in an injury? Stop the bleeding. Single first thing, right? You show up after any accident, I look at you, stop the bleeding because you’re going to be dead in a matter of minutes if you bleed out. So it strikes me as being ironic that orthodox conventional wisdom was bleed the patient to death. And this was the most important patient in the country, maybe in the history of the country, and we bled him to death trying to help him."</div>
+  <div class="quote-zh">好心的医生放血致死。好的？在现代世界，你最不想对病人做的事情就是让他们流血。我想我们都知道氧气是由血细胞携带的，如果……有句话，分类短语，受伤时你要做的第一件事是什么？止血。第一件事就是单身，对吗？任何事故发生后你都会出现，我看着你，止血，因为如果你失血过多，几分钟后你就会死亡。因此，正统的传统智慧让病人流血致死，这让我觉得很讽刺。这是这个国家最重要的病人，也许是这个国家历史上最重要的病人，我们为了帮助他而让他流血致死。</div>
+  <div class="quote-meta">— Michael Saylor （00:52:18）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Saylor <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">Remember George Washington, you know how he died? Well-meaning physicians bled him to death. And this was the most important patient in the country, maybe in the history of the country, and we bled him to death trying to help him. So when you’re actually inflating the money supply at 7%, but you’re calling it 2% because you want to help the economy, you’re literally bleeding the free market to dea...</div>
+  <div class="dialogue-zh">还记得乔治·华盛顿吗？你知道他是怎么死的吗？好心的医生放血致死。这是这个国家最重要的病人，也许是这个国家历史上最重要的病人，我们为了帮助他而让他流血致死。因此，当你实际上将货币供应量膨胀到 7%，但因为你想帮助经济而将其称为 2% 时，你实际上是在让自由市场失血过多。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Michael Saylor, one of the most prominent and brilliant Bitcoin proponents in the world. He is the CEO of MicroStrategy, founder of Saylor Academy, graduate of MIT. And Michael was one of the most fascinating and rigorous thinkers I’ve ever gotten a chance to explore ideas with. He can effortlessly zoom out to the big perspectives of human civilization and huma...</div>
+  <div class="dialogue-zh">以下是与世界上最著名、最杰出的比特币支持者之一迈克尔·塞勒 (Michael Saylor) 的对话。他是 MicroStrategy 的首席执行官、Saylor Academy 的创始人、麻省理工学院的毕业生。迈克尔是我有机会与之探讨想法的最迷人、最严谨的思想家之一。他可以毫不费力地把视角拉到人类文明和人类的大视野。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:43)</span>
+  </div>
+  <div class="dialogue-en">Let’s start with a big question of truth and wisdom. When advanced humans or aliens or AI systems, let’s say, five to 10 centuries from now, look back at earth on this early 21st century, how much do you think they would say we understood about money and economics, or even about engineering, science, life, death, meaning, intelligence, consciousness, all the big interesting questions?</div>
+  <div class="dialogue-zh">让我们从一个关于真理和智慧的大问题开始。当先进的人类、外星人或人工智能系统，比方说，从现在起 5 到 10 个世纪，回顾 21 世纪初的地球时，你认为他们会说我们对金钱和经济，甚至工程、科学、生命、死亡、意义、智力、意识以及所有有趣的大问题了解多少？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Saylor <span class="dialogue-time">(00:02:12)</span>
+  </div>
+  <div class="dialogue-en">I think they would probably give us a B minus on engineering, on all the engineering things, the hard sciences.</div>
+  <div class="dialogue-zh">我认为他们可能会给我们在工程、所有工程事物、硬科学方面的 B 减分。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:23)</span>
+  </div>
+  <div class="dialogue-en">A passing grade.</div>
+  <div class="dialogue-zh">及格成绩。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Saylor <span class="dialogue-time">(00:02:25)</span>
+  </div>
+  <div class="dialogue-en">We’re doing okay. We’re working our way through rockets and jets and electric cars and electricity, transport systems and nuclear power, and space flight and the like. And if you look at the walls that the great court at MIT, it’s full of all the great thinkers and they’re all pretty admirable. If you could be with Newton or Gauss or Madame Curie or Einstein, you would respect them. I would say th...</div>
+  <div class="dialogue-zh">我们做得很好。我们正在火箭、喷气式飞机、电动汽车、电力、运输系统、核电、太空飞行等方面努力。如果你看看麻省理工学院大庭院的墙壁，你会发现里面挤满了所有伟大的思想家，他们都非常令人钦佩。如果你能和牛顿、高斯、居里夫人或爱因斯坦在一起，你就会尊重他们。我会说</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:08)</span>
+  </div>
+  <div class="dialogue-en">You see, they have an optimistic vision. First of all, optimistic vision of engineering because everybody you’ve listed, not everybody, but most people you’ve listed is just over the past couple of centuries, and maybe stretches a little farther back. But mostly all the cool stuff we’ve done in engineering is the past couple of centuries.</div>
+  <div class="dialogue-zh">You see, they have an optimistic vision.首先，对工程学的乐观看法，因为你列出的每个人，不是每个人，而是你列出的大多数人都只是在过去的几个世纪里，也许可以追溯到更早一些。但我们在工程领域所做的所有很酷的事情大多都是过去几个世纪的事。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Saylor <span class="dialogue-time">(00:03:26)</span>
+  </div>
+  <div class="dialogue-en">Archimedes had his virtues. I studied the history of science at MIT, and I also studied aerospace engineering. And so I clearly have a bias in favor of science. And if I look at the past 10,000 years, and I consider all of the philosophy and the politics and their impact on the human condition, I think it’s a wash. For every politician that came up with a good idea, another politician came up with...</div>
+  <div class="dialogue-zh">阿基米德有他的优点。我在麻省理工学院学习了科学史，还学习了航空航天工程。所以我显然偏向于科学。如果我回顾过去一万年，考虑所有的哲学和政治及其对人类状况的影响，我认为这是一次洗礼。每一位政治家提出一个好主意，另一位政治家就会想出一个好主意</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:34)</span>
+  </div>
+  <div class="dialogue-en">And for people who are just listening or watching, there’s a beautiful sexy ship from 16th, 17th century.</div>
+  <div class="dialogue-zh">对于那些只是聆听或观看的人来说，这里有一艘 16、17 世纪的美丽性感的船。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Saylor <span class="dialogue-time">(00:04:43)</span>
+  </div>
+  <div class="dialogue-en">This is a 19th century handmade model of a 17th century sailing ship, which is of the type that the Dutch East Indias Company used to sail the world and trade. So the original was made sometime in the 1600s. And then this model is made in the 19th century by individuals.</div>
+  <div class="dialogue-zh">这是一艘 17 世纪帆船的 19 世纪手工模型，属于荷兰东印度公司用于航行世界和进行贸易的类型。所以原作是在 1600 年代的某个时候制作的。然后这个模型是在19世纪由个人制作的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:04)</span>
+  </div>
+  <div class="dialogue-en">Both the model and the ship itself is engineering at its best. And just imagine just like rockets flying out the space, how much hope this filled people with, exploring the unknown, going into the mystery, both the entrepreneurs and the business people and the engineers and just humans. What’s out there? What’s out there to be discovered?</div>
+  <div class="dialogue-zh">模型和船舶本身都处于最佳设计状态。想象一下，就像火箭飞出太空一样，这让人们充满了多少希望，探索未知，进入神秘，无论是企业家、商人、工程师还是人类。外面有什么？那里有什么有待发现？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Saylor <span class="dialogue-time">(00:05:24)</span>
+  </div>
+  <div class="dialogue-en">Yeah, the metaphor of human beings leaving shore or sailing across the horizon, risking their lives in pursuit of a better life is an incredibly powerful one. In 1900, I suppose the average life expectancy is 50. During the Revolutionary War, while our founding fathers were fighting to establish life, liberty, pursuit of happiness, the constitution, average life expectancy was 32, somewhere betwee...</div>
+  <div class="dialogue-zh">是的，人类离开海岸或驶过地平线，冒着生命危险去追求更好的生活的比喻是一个非常有力的比喻。 1900年，我认为平均预期寿命是50岁。在独立战争期间，当我们的开国元勋们为建立生命、自由、追求幸福、宪法而奋斗时，平均预期寿命是32岁，介于两者之间</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Saylor <span class="dialogue-time">(00:06:50)</span>
+  </div>
+  <div class="dialogue-en">And probably not 1% of the people in the world could deliver a kilowatt-hour in a day. And the commercial value of a kilowatt-hour, the retail value is 11 cents today, and the wholesale value is 2 cents. And so you have to look at the contribution of politicians and philosophers and economists to the human condition, and it’s like at best to wash one way or the other. And then if you look at the c...</div>
+  <div class="dialogue-zh">世界上可能没有 1% 的人可以一天发电一千瓦时。而一千瓦时的商业价值，今天的零售价值是11美分，批发价值是2美分。所以你必须看看政治家、哲学家和经济学家对人类状况的贡献，最好的办法就是以一种或另一种方式清洗。然后如果你看一下 c</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:19)</span>
+  </div>
+  <div class="dialogue-en">You gave a D minus to the economists. So are they too, like the politicians, the wash in terms of there’s good ideas and bad ideas, and that tiny delta between good and bad is how you squeak pass the F plus onto the D minus territory?</div>
+  <div class="dialogue-zh">你给经济学家的评分是 D 减。那么，他们是否也像政治家一样，在好主意和坏主意方面进行洗礼，好主意和坏主意之间的微小差异就是你如何将F+传递到D-区域的方式？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Saylor <span class="dialogue-time">(00:08:36)</span>
+  </div>
+  <div class="dialogue-en">I think most economic ideas are bad ideas.</div>
+  <div class="dialogue-zh">我认为大多数经济想法都是糟糕的想法。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:39)</span>
+  </div>
+  <div class="dialogue-en">Most?</div>
+  <div class="dialogue-zh">最多？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Saylor <span class="dialogue-time">(00:08:42)</span>
+  </div>
+  <div class="dialogue-en">Take us back to MIT and you want to solve a fluid dynamics problem. Design the shape of the hull of that ship. Or you want to design an airfoil, a wing. Or if you want to design an engine or a nozzle in a rocket ship, you wouldn’t do it with simple arithmetic, you wouldn’t do it with a scalar. There’s not a single number, right? It’s vector math. Computational fluid dynamics is n-dimensional, high...</div>
+  <div class="dialogue-zh">让我们回到麻省理工学院，你想解决流体动力学问题。设计那艘船船体的形状。或者你想设计一个翼型，一个机翼。或者，如果你想设计火箭飞船中的发动机或喷嘴，你不会用简单的算术来完成，也不会用标量来完成。没有一个数字，对吗？这是向量数学。计算流体动力学是n维的、高</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Saylor <span class="dialogue-time">(00:09:34)</span>
+  </div>
+  <div class="dialogue-en">So the truth of the matter is, inflation is not a scalar. Inflation is an n-dimensional vector. Money velocity is not a scalar. Saying, “What’s the velocity of money?” Oh, it’s slow or it’s fast. It ignores the question of what medium is the money moving through? And the same way that, what’s the speed of sound? Okay, well, what is sound, right? Sound is a compression wave. It’s energy moving thro...</div>
+  <div class="dialogue-zh">所以事实是，通货膨胀不是一个标量。通货膨胀是一个n维向量。货币流通速度不是一个标量。问道：“货币流通速度是多少？”哦，要么慢，要么快。它忽略了资金通过什么媒介流动的问题？同样的，声速是多少？好吧，什么是声音，对吧？声音是一种压缩波。这是能量在流动</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:27)</span>
+  </div>
+  <div class="dialogue-en">What is the fundamental problem with the way economists reduce the world down to a model? Is it too simple or is it just even the first principles of constructing the model is wrong?</div>
+  <div class="dialogue-zh">经济学家将世界简化为模型的方式的根本问题是什么？是否太简单了，或者只是构建模型的首要原则都是错误的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Saylor <span class="dialogue-time">(00:10:37)</span>
+  </div>
+  <div class="dialogue-en">I think that the fundamental problem is, if you see the world as a scalar, you simply pick the one number which supports whatever you want to do, and you ignore the universe of other consequences from your behavior.</div>
+  <div class="dialogue-zh">我认为根本问题是，如果你将世界视为一个标量，你只需选择一个支持你想做的事情的数字，而忽略你的行为所带来的其他后果。</div>
+</div>
+    <a href="https://lexfridman.com/michael-saylor-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="alex-gladstein.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alex Gladstein: Bitcoin, Authoritarianism, and Human Rights</div>
+  <div class="card-meta">Alex Gladstein</div>
+</a>
+<a href="anthony-pompliano.html" class="card" style="text-decoration:none">
+  <div class="card-title">Anthony Pompliano: Bitcoin</div>
+  <div class="card-meta">Anthony Pompliano</div>
+</a>
+<a href="benjamin-netanyahu.html" class="card" style="text-decoration:none">
+  <div class="card-title">Benjamin Netanyahu</div>
+  <div class="card-meta">Benjamin Netanyahu</div>
+</a>
+<a href="jared-kushner.html" class="card" style="text-decoration:none">
+  <div class="card-title">Jared Kushner</div>
+  <div class="card-meta">Jared Kushner</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

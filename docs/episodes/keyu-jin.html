@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keyu Jin - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Keyu Jin</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Keyu Jin</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/keyu-jin.html" style="font-size:16px;color:#818cf8;font-weight:600">Keyu Jin</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">17,055 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/keyu-jin-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:47</span>
+  <span class="chapter-title">Misconceptions about China<span class="zh-trans"> · 对中国的误解</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">5:17</span>
+  <span class="chapter-title">Education in China<span class="zh-trans"> · 中国教育</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:34</span>
+  <span class="chapter-title">Economic reforms of Deng Xiaoping<span class="zh-trans"> · 邓小平的经济改革</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">19:53</span>
+  <span class="chapter-title">Mayor economy and GDP growth race<span class="zh-trans"> · 市长经济与GDP增长竞赛</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">33:40</span>
+  <span class="chapter-title">Growing up in China<span class="zh-trans"> · 在中国长大</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">39:18</span>
+  <span class="chapter-title">First time in the US<span class="zh-trans"> · 第一次来美国</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">43:32</span>
+  <span class="chapter-title">China’s government vs business sector<span class="zh-trans"> · 中国政府与企业界</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">47:06</span>
+  <span class="chapter-title">Communism and capitalism<span class="zh-trans"> · 共产主义和资本主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">50:45</span>
+  <span class="chapter-title">Jack Ma<span class="zh-trans"> · 马云</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">56:58</span>
+  <span class="chapter-title">China’s view on innovation and copying ideas<span class="zh-trans"> · 中国对创新和抄袭的看法</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:03:35</span>
+  <span class="chapter-title">DeepSeek moment<span class="zh-trans"> · 深度搜索时刻</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:07:29</span>
+  <span class="chapter-title">CHIPS Act<span class="zh-trans"> · 筹码法案</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:09:16</span>
+  <span class="chapter-title">Tariffs and Trade<span class="zh-trans"> · 关税与贸易</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:21:41</span>
+  <span class="chapter-title">Immigration<span class="zh-trans"> · 移民</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:26:28</span>
+  <span class="chapter-title">Taiwan<span class="zh-trans"> · 台湾</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:32:14</span>
+  <span class="chapter-title">One-child policy<span class="zh-trans"> · 一孩政策</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:40:11</span>
+  <span class="chapter-title">China’s economy collapse predictions<span class="zh-trans"> · 中国经济崩溃预测</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:44:54</span>
+  <span class="chapter-title">Advice for visiting China<span class="zh-trans"> · 访问中国的建议</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">china</span><span class="keyword-tag">keyu</span><span class="keyword-tag">jin</span><span class="keyword-tag">chinese</span><span class="keyword-tag">don</span><span class="keyword-tag">economy</span><span class="keyword-tag">going</span><span class="keyword-tag">companies</span><span class="keyword-tag">country</span><span class="keyword-tag">competition</span><span class="keyword-tag">important</span><span class="keyword-tag">economic</span><span class="keyword-tag">local</span><span class="keyword-tag">government</span><span class="keyword-tag">society</span><span class="keyword-tag">state</span><span class="keyword-tag">innovation</span><span class="keyword-tag">social</span><span class="keyword-tag">american</span><span class="keyword-tag">education</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"We have an absence of diplomacy. But you’re absolutely right, there needs to be respect. The Chinese at least really care about respect. And I wish there was just a bit more cultural fluency, and I think a lot of things would be so much easier between the two countries, just understanding that because you can actually push China to do a lot of things, all within reason that would work in favor of the US, but understand that respect is vitally important. Face-saving is very, very, very important."</div>
+  <div class="quote-zh">我们缺乏外交。但你说得完全正确，需要尊重。中国人至少真的很在乎尊重。我希望文化更加流畅，我认为两国之间的很多事情都会容易得多，只要理解这一点，因为你实际上可以推动中国做很多事情，所有这些都在有利于美国的合理范围内，但要明白尊重是至关重要的。面子是非常非常非常重要的。</div>
+  <div class="quote-meta">— Keyu Jin （01:13:44）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"From a purely economic and rational level, you’d say immigration is very important because it keeps the prices down, keeps inflation down, it keeps up the supply, which is very important when you have that much demand. And look, the standards of living have also improved for many people who can afford it. The low-cost workers being able to sustain the service economy. So I understand both sides of the story. I think that in the end, it is a balance. And I do believe even as an economist, that social harmony, and I come back to this word harmony repeatedly, even though as an economist, this thing doesn’t even exist, is becoming ever more important."</div>
+  <div class="quote-zh">从纯粹的经济和理性层面来看，你会说移民非常重要，因为它可以压低价格，压低通货膨胀，保持供应，当你有那么大的需求时，这一点非常重要。而且，对于许多有能力负担得起的人来说，生活水平也得到了提高。低成本工人能够维持服务经济。所以我理解故事的两面。我认为最终是一个平衡。我确实相信，即使作为一名经济学家，社会和谐，我反复回到和谐这个词，尽管作为一名经济学家，这个东西甚至不存在，但它正变得越来越重要。</div>
+  <div class="quote-meta">— Keyu Jin （01:22:46）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"That short, flat, fast attitude, which was so popular, especially before the pandemic, that’s actually somewhat disappearing, so in some sense, this economic downturn is not that bad for China, because it made the Chinese realize that it’s not always going to go up, and it made them really look down deeper into what they really should be focused on, that there will be cycles, there will be up and downs, and so these very short-termist thinking and opportunistic way of driving business will ultimately fail. It’s bad for China that we’re having a sustained economic softness, but I think it’s also a very, very important lesson for the Chinese people to go through. Growing up in China"</div>
+  <div class="quote-zh">那种流行的短、平、快的态度，特别是在疫情之前，实际上已经在某种程度上消失了，所以从某种意义上说，这次经济衰退对中国来说并没有那么糟糕，因为它让中国人意识到它并不总是会上涨，也让他们真正深入地思考自己真正应该关注的是什么，会有周期，会有起起落落，所以这些非常短期主义的思维和机会主义的商业驱动方式最终会失败。经济持续疲软对中国来说是不利的，但我认为这对中国人民来说也是一个非常非常重要的教训。在中国长大</div>
+  <div class="quote-meta">— Keyu Jin （00:32:53）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And mainland China is a very, very important economic partner to the Taiwanese economy. I think that I don’t have a lot of views around this, but I just say this, I think there’s more political wisdom of the Chinese government side than we assume outside of China. And that strategic ambiguity, but also strategic patience, especially given China’s economic situation currently means that more likely or not, I think that if China does really well economically. And Taiwan is not doing as well economically as we’ve seen that over time, this is still the best strategy from China’s point of view to resolve these differences. I think any military use and action would be actually quite detrimental to China."</div>
+  <div class="quote-zh">而中国大陆对于台湾经济来说是非常非常重要的经济伙伴。我认为我对此没有太多看法，但我只是说，我认为中国政府方面的政治智慧比我们在中国以外的想象要多。这种战略模糊性，但也有战略耐心，特别是考虑到中国目前的经济形势，我认为无论中国的经济表现是否良好，这都意味着这种可能性更大。而且台湾的经济表现并不像我们所看到的那么好，随着时间的推移，从中国的角度来看，这仍然是解决这些分歧的最佳策略。我认为任何军事使用和行动实际上都会对中国非常不利。</div>
+  <div class="quote-meta">— Keyu Jin （01:27:28）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah. There’s also something that I think people miss, which is that the soldiers in mainland China, that’s part of the one-child policy generation, right? There’s only one son. Families have only one son. And I think to assume that the Chinese people desire and would be able to forsake that generation for unification purposes, or be able to tolerate lost lives for this, I think is also a bit of an exaggeration in stress. And I think Chinese people also really… They really care about peace and stability. Chaos is just not part of what they think is good for them."</div>
+  <div class="quote-zh">是的。我认为还有一点人们会怀念，那就是中国大陆的士兵，他们是独生子女政策一代的一部分，对吗？只有一个儿子。家庭只有一个儿子。我认为假设中国人民渴望并且能够为了统一目的而放弃这一代人，或者能够容忍为此而失去生命，我认为压力也有点夸张。我认为中国人也真的……他们真的关心和平与稳定。他们认为混乱并不是对他们有好处的一部分。</div>
+  <div class="quote-meta">— Keyu Jin （01:29:08）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Keyu Jin, an economist at the London School of Economics, specializing in China’s economy, international macroeconomics, global trade imbalances, and financial policy. She wrote the highly lauded book on China titled The New China Playbook: Beyond Socialism and Capitalism that details China’s economic transformation since 1978 to today. And it dispels a lot of ...</div>
+  <div class="dialogue-zh">以下是与伦敦政治经济学院经济学家金克羽的对话，主要研究领域为中国经济、国际宏观经济、全球贸易失衡和金融政策。她写了一本备受赞誉的关于中国的书，名为《新中国剧本：超越社会主义和资本主义》，详细介绍了中国自 1978 年至今的经济转型。并且能驱散很多</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:47)</span>
+  </div>
+  <div class="dialogue-en">What is the single biggest misconception the West has about China’s economy today?</div>
+  <div class="dialogue-zh">当今西方对中国经济最大的误解是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Keyu Jin <span class="dialogue-time">(00:00:52)</span>
+  </div>
+  <div class="dialogue-en">The biggest misunderstanding is somehow that a group of people or even just one person runs the entire Chinese economy. It is far from the reality. It is a very complex, large economy, and even if there is an extreme form of political centralization, the economy is totally decentralized. The role that the local mayors, I call this the mayor economy, plays in reforms, but also driving the technolog...</div>
+  <div class="dialogue-zh">最大的误解是，中国的整个经济是由一群人甚至一个人掌控的。这与现实相去甚远。这是一个非常复杂、庞大的经济体，即使存在极端形式的政治集权，经济也是完全分散的。地方市长（我称之为市长经济）在改革中发挥的作用，同时也推动了技术的发展</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:36)</span>
+  </div>
+  <div class="dialogue-en">Can you elaborate on that?</div>
+  <div class="dialogue-zh">你能详细说明一下吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Keyu Jin <span class="dialogue-time">(00:01:37)</span>
+  </div>
+  <div class="dialogue-en">Well, people think that somehow there’s almost blind submission to authority in China. We have a very nuanced relationship with authority, whether it is between kids and parents or students and their teachers or with your bosses and the Chinese government, it’s kind of the same thing. There’s paternalism, they think that they’re responsible for you. But a certain amount of deference to authority i...</div>
+  <div class="dialogue-zh">嗯，人们认为在中国几乎存在盲目服从权威的现象。我们与权威之间的关系非常微妙，无论是孩子和家长之间、学生和老师之间，还是老板和中国政府之间，都是一样的。有家长作风，他们认为他们对你负责。但对权威有一定程度的尊重</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:20)</span>
+  </div>
+  <div class="dialogue-en">So there is some element that we have in the West of freedom of the individual so that a little bit of the rebel is allowed in balance with the deference to authority.</div>
+  <div class="dialogue-zh">因此，在西方，我们有一些个人自由的元素，因此允许一点点反叛与对权威的尊重保持平衡。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Keyu Jin <span class="dialogue-time">(00:02:30)</span>
+  </div>
+  <div class="dialogue-en">Yeah, absolutely. Without that, how can you have this radical, dynamic entrepreneurialism you see in China? If you don’t have a sense of self, a sense of the fact that you can find opportunities, you look for opportunities, you drive opportunities, it’s all self-motivated.</div>
+  <div class="dialogue-zh">是的，绝对是。如果没有这一点，你怎么能拥有在中国看到的这种激进、充满活力的企业家精神呢？如果你没有自我意识，没有一种你能找到机会、你寻找机会、你推动机会的感觉，那么这一切都是自我激励的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:50)</span>
+  </div>
+  <div class="dialogue-en">Is there still a young kid in China that’s able to dream to be the stereotypical Steve Jobs in the garage, start a business and change the world by doing so?</div>
+  <div class="dialogue-zh">中国还有一个孩子能够梦想成为车库里典型的史蒂夫·乔布斯，创业并以此改变世界吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Keyu Jin <span class="dialogue-time">(00:03:02)</span>
+  </div>
+  <div class="dialogue-en">There are millions of young kids like that in China. They might not be thinking about changing the world. And this is where the Chinese approach to innovation is very different from the Silicon Valley one, I’d say. But they see opportunity. They see a country with a billion consumers. They see scale, they see speed, they see that with their dreams and the team that you have in China with engineers...</div>
+  <div class="dialogue-zh">中国有数百万这样的孩子。他们可能没有考虑改变世界。我想说，这就是中国的创新方式与硅谷的创新方式非常不同的地方。但他们看到了机会。他们看到了一个拥有十亿消费者的国家。他们看到了规模，他们看到了速度，他们看到了自己的梦想以及中国的工程师团队</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:41)</span>
+  </div>
+  <div class="dialogue-en">Well, let’s stay on the big picture a bit, there’s a perception that China is a communist country. So to what degree is China a capitalist country and to what degree is it a communist country?</div>
+  <div class="dialogue-zh">好吧，让我们从大局来看，人们认为中国是一个共产主义国家。那么中国到什么程度是资本主义国家，到什么程度是共产主义国家呢？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Keyu Jin <span class="dialogue-time">(00:03:54)</span>
+  </div>
+  <div class="dialogue-en">I’ve rarely seen a more capitalist society than China, from the pure economic side. I’ve rarely seen companies that are as competitive as Chinese companies. People as ambitious and obsessed with making money as Chinese people. Kind of ruthless actually. And look, consumers shop, firms invest. If you invest well financially, you’ll get great returns. What is not capitalistic about the Chinese econo...</div>
+  <div class="dialogue-zh">从纯粹的经济角度来看，我很少见过比中国更资本主义的社会。我很少见过像中国企业那样有竞争力的企业。和中国人一样有野心、痴迷于赚钱的人。其实有点无情。看，消费者购物，公司投资。如果您进行良好的财务投资，您将获得丰厚的回报。中国经济有哪些不是资本主义的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:17)</span>
+  </div>
+  <div class="dialogue-en">So just to go back to something you said, there is a value for competition culturally. So on the business side, on the economic side, there is a cultural value of people competing in a meritocratic way?</div>
+  <div class="dialogue-zh">回到你刚才所说的，竞争在文化上是有价值的。那么在商业方面、在经济方面，存在着人们以精英方式竞争的文化价值？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Keyu Jin <span class="dialogue-time">(00:05:33)</span>
+  </div>
+  <div class="dialogue-en">Competition is ferocious in China, especially when it comes to Chinese companies, but also in education. I should be thankful that I’m not born later that I am because I thought China was pretty competitive already going to the schools and studying for the exams. It is a different level today. Competition is not necessarily in the culture, I’d say, it’s driven really by the changing economic and s...</div>
+  <div class="dialogue-zh">中国的竞争非常激烈，尤其是在中国企业方面，而且在教育方面也是如此。我应该庆幸的是，我没有出生得晚，因为我认为中国已经很有竞争力了，已经上学并准备考试了。今天这是一个不同的水平。我想说，竞争不一定是文化上的，它实际上是由不断变化的经济和社会驱动的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Keyu Jin <span class="dialogue-time">(00:06:17)</span>
+  </div>
+  <div class="dialogue-en">And I think, again, I’m sure we’re going to get to this, but there’s a lot of that kind of competition, which really drives the world sometimes crazy of replication. But it’s because it’s not easy. It’s not easy to make money. In the education system, there are not enough jobs for the young people. So how do you get ahead? Let’s say if you’re part of a lower stratum society, how are you going to m...</div>
+  <div class="dialogue-zh">我再次认为，我确信我们会做到这一点，但是存在很多这种竞争，这确实让世界有时疯狂地进行复制。但这是因为这并不容易。赚钱并不容易。在教育系统中，年轻人没有足够的工作机会。那么你如何取得进步呢？假设你是下层社会的一员，你将如何生活？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:53)</span>
+  </div>
+  <div class="dialogue-en">Let’s go back to the roots of that. So you described the China’s economy model is rooted in its history. So can we talk about Confucianism? Can you explain to what degree those roots run back to Confucianism and in general to other parts of Chinese history?</div>
+  <div class="dialogue-zh">让我们回到根源。所以你描述的中国经济模式植根于它的历史。那么我们可以谈谈儒家思想吗？您能否解释一下这些根源在多大程度上可以追溯到儒家思想以及中国历史的其他部分？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Keyu Jin <span class="dialogue-time">(00:07:10)</span>
+  </div>
+  <div class="dialogue-en">Yeah. Confucianism is more of a moral philosophy than let’s say a religion or a belief system. It prioritizes social harmony above anything else. It’s not about metaphysics, but more about ethics. And at the individual level, the responsibility, the duties are all meant to preserve that social order. So it’s filial piety, it is loyalty, it is how to be a Chinese gentleman. But things like saving, ...</div>
+  <div class="dialogue-zh">是的。儒家思想更多地是一种道德哲学，而不是一种宗教或信仰体系。它把社会和谐放在第一位。这不是关于形而上学，而是更多关于伦理学。在个人层面上，责任、义务都是为了维护社会秩序。所以这就是孝，就是忠，就是如何做一个中国君子。但像储蓄这样的事情，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:02)</span>
+  </div>
+  <div class="dialogue-en">On the education side, a part of Confucianism is a value for meritocracy. So how does that permeate the education system in China? You’ve already spoken to it a little bit, the value of competition in that it’s already getting more and more intense. But it would be very interesting to get your understanding of the education system, its history and as it stands today.</div>
+  <div class="dialogue-zh">在教育方面，儒家思想的一部分是贤能政治的价值观。那么，这种现象是如何渗透到中国的教育体系中的呢？你已经谈过一点了，竞争的价值在于它已经变得越来越激烈。但了解教育体系、其历史和现状将是非常有趣的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Keyu Jin <span class="dialogue-time">(00:08:23)</span>
+  </div>
+  <div class="dialogue-en">If China were relatively successful economically, a huge part of the reason is by and large, it’s been meritocratic. That is changing somewhat now, but the only way that you have still that many poor people, especially a couple of decades back, still be in harmony with society, seeing all these rich people make tons of money and you’re still belonging to that lower stratum. The only reason is that...</div>
+  <div class="dialogue-zh">如果说中国在经济上相对成功，那么很大一部分原因大体上就是精英统治。现在情况有所改变，但仍然有那么多穷人，尤其是几十年前的穷人，仍然与社会和谐相处，看到所有这些富人赚了很多钱，而你仍然属于下层。唯一的原因是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Keyu Jin <span class="dialogue-time">(00:09:36)</span>
+  </div>
+  <div class="dialogue-en">And actually the standardized exams, as imperfect as it is, to select talent is still by and large fair. And that’s how that whole generation of entrepreneurs, bureaucrats, government officials were selected. If you look at the Chinese premiers, the presidents of the past, they all went to great schools, a lot of them were engineers. And same thing for civil servants. It has changed somewhat. The ...</div>
+  <div class="dialogue-zh">事实上，标准化考试虽然不完善，但选拔人才大体上还是公平的。这就是整整一代企业家、官僚、政府官员的选拔方式。如果你看看中国的总理、过去的总统，他们都毕业于一流的学校，其中很多人都是工程师。对于公务员来说也是如此。它已经发生了一些变化。这</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Keyu Jin <span class="dialogue-time">(00:10:22)</span>
+  </div>
+  <div class="dialogue-en">Of course, this is not just a unique Chinese phenomenon, it’s actually everywhere. But I guess what I’m saying is that that meritocracy, which was so fundamental to the ancient Chinese education system, by the way, civil servants were selected based on standardized exams in the past. That’s always been throughout Chinese history and that relates to Confucianism. Now, the opportunities, and coming ...</div>
+  <div class="dialogue-zh">当然，这不仅仅是中国特有的现象，实际上到处都有。但我想我想说的是，精英制度是中国古代教育制度的基础，顺便说一句，过去的公务员是根据标准化考试选拔的。这在中国历史上一直存在，并且与儒家思想有关。现在，机遇即将来临</div>
+</div>
+    <a href="https://lexfridman.com/keyu-jin-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="jocko-willink.html" class="card" style="text-decoration:none">
+  <div class="card-title">Jocko Willink: War, Leadership, and Discipline</div>
+  <div class="card-meta">Jocko Willink</div>
+</a>
+<a href="richard-wolff.html" class="card" style="text-decoration:none">
+  <div class="card-title">Richard Wolff: Marxism and Communism</div>
+  <div class="card-meta">Richard Wolff</div>
+</a>
+<a href="alex-gladstein.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alex Gladstein: Bitcoin, Authoritarianism, and Human Rights</div>
+  <div class="card-meta">Alex Gladstein</div>
+</a>
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

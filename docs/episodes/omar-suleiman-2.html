@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Omar Suleiman #2 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Omar Suleiman #2</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Omar Suleiman #2</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/omar-suleiman.html" style="font-size:16px;color:#818cf8;font-weight:600">Omar Suleiman</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">21,316 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/omar-suleiman-2-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:36</span>
+  <span class="chapter-title">Oct 7<span class="zh-trans"> · 10 月 7 日</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">10:32</span>
+  <span class="chapter-title">Palestinian diaspora<span class="zh-trans"> · 巴勒斯坦侨民</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:47</span>
+  <span class="chapter-title">Wael Al-Dahdouh<span class="zh-trans"> · 瓦埃尔·达赫杜</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">29:39</span>
+  <span class="chapter-title">Violence<span class="zh-trans"> · 暴力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">53:17</span>
+  <span class="chapter-title">Biden and Trump<span class="zh-trans"> · 拜登和特朗普</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:06:28</span>
+  <span class="chapter-title">Ceasefire march<span class="zh-trans"> · 停火游行</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:16:42</span>
+  <span class="chapter-title">Benjamin Netanyahu<span class="zh-trans"> · 本杰明·内塔尼亚胡</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:23:44</span>
+  <span class="chapter-title">Houthi rebel attacks<span class="zh-trans"> · 胡塞叛军袭击</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:25:21</span>
+  <span class="chapter-title">Hostages<span class="zh-trans"> · 人质</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:31:41</span>
+  <span class="chapter-title">MLK Jr and Malcolm X<span class="zh-trans"> · 小 MLK 和马尔科姆 X</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:44:22</span>
+  <span class="chapter-title">Palestinian refugees<span class="zh-trans"> · 巴勒斯坦难民</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:53:32</span>
+  <span class="chapter-title">Mohammad and Jesus<span class="zh-trans"> · 穆罕默德和耶稣</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:04:24</span>
+  <span class="chapter-title">Al-Aqsa Mosque<span class="zh-trans"> · 阿克萨清真寺</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:13:22</span>
+  <span class="chapter-title">Ramadan<span class="zh-trans"> · 斋月</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:18:14</span>
+  <span class="chapter-title">Hope for the future<span class="zh-trans"> · 对未来的希望</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">palestinian</span><span class="keyword-tag">gaza</span><span class="keyword-tag">omar</span><span class="keyword-tag">suleiman</span><span class="keyword-tag">israel</span><span class="keyword-tag">going</span><span class="keyword-tag">palestinians</span><span class="keyword-tag">don</span><span class="keyword-tag">peace</span><span class="keyword-tag">occupation</span><span class="keyword-tag">united</span><span class="keyword-tag">states</span><span class="keyword-tag">israeli</span><span class="keyword-tag">muslim</span><span class="keyword-tag">genocide</span><span class="keyword-tag">violence</span><span class="keyword-tag">american</span><span class="keyword-tag">muslims</span><span class="keyword-tag">state</span><span class="keyword-tag">palestine</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I do believe in the power of healing. I do believe in the power of growth. I do believe that we have seen ugly episodes of history before that have been rectified. I also believe in the heart of my people. I believe that the Palestinian people are people of resistance, they’re people of resilience, they’re people of courage. They’re people of benevolence and magnanimity, and they’re people who have been made to grow under the worst of circumstances. I don’t see, in the hearts of young Palestinians that have been tormented, I don’t see darkness. I see light. I see the ability to still laugh and find joy despite everything that’s happened. So I think that the urgency right now just has to be towards ensuring that they have a life, that they’re not being killed anymore. Palestinian refugees"</div>
+  <div class="quote-zh">我确实相信治愈的力量。我确实相信成长的力量。我确实相信，我们之前看到过的丑陋历史片段已经得到纠正。我也相信我的人民的心。我相信巴勒斯坦人民是抵抗的人民，他们是坚韧的人民，他们是勇敢的人民。他们是仁慈宽宏的人，是在最恶劣的环境下成长起来的人。我看不到，在那些饱受折磨的巴勒斯坦年轻人的心中，我看不到黑暗。我看到了光。尽管发生了这一切，我看到了仍然可以笑并找到快乐的能力。所以我认为现在的紧迫任务就是确保他们拥有生命，确保他们不再被杀害。巴勒斯坦难民</div>
+  <div class="quote-meta">— Omar Suleiman （01:43:20）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So, the United States, at this point, unfortunately, has rightfully lost all credibility. It should remove itself from this because it is not an honest peace broker. I think Americans are probably sick of us paying for wars in general. I think Americans are probably sick of our tax dollars going to funding a genocide, while we have a rise of homelessness and income disparity here in the United States. I think that Americans probably don’t like that we’re making ourselves so deeply unpopular in the world because of Israel’s actions. So, in the immediate moment, make the stop."</div>
+  <div class="quote-zh">因此，不幸的是，美国此时已经理所当然地失去了所有信誉。它应该远离这一点，因为它不是一个诚实的和平调解人。我认为美国人可能已经厌倦了我们为战争买单。我认为美国人可能厌倦了我们的税款用于资助种族灭绝，而美国的无家可归者和收入差距却在增加。我认为美国人可能不喜欢我们因为以色列的行为而在世界上变得如此不受欢迎。所以，立刻停下来。</div>
+  <div class="quote-meta">— Omar Suleiman （00:54:57）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"It’s human. I mean, look, any child that is under that type of oppression is going to hate their oppressor. I don’t care who you are. I don’t care what you are. But here’s my problem with how that gets brought up. You’re talking about the future of the security of Israel. Even some people that speak about it seemingly from a place of being well-meaning, that say the only way that Israel can have its security is to stop killing Palestinians. And so, the future of Israel depends upon Palestinians not hating Israel so much. And so, we’ve got to stop tormenting these people so that they don’t grow up to want to torment us."</div>
+  <div class="quote-zh">这是人类。我的意思是，看，任何受到这种压迫的孩子都会仇恨他们的压迫者。我不在乎你是谁。我不在乎你是什么。但我的问题是如何提出这个问题。你谈论的是以色列安全的未来。甚至一些似乎出于善意谈论此事的人也表示，以色列获得安全的唯一途径就是停止杀害巴勒斯坦人。因此，以色列的未来取决于巴勒斯坦人不要那么仇恨以色列。因此，我们必须停止折磨这些人，以免他们长大后想要折磨我们。</div>
+  <div class="quote-meta">— Omar Suleiman （00:26:09）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"… of reflection. This is a moment of restoration if you want it to be, right? And to think about what we’ve enabled in the first place, he’s shown absolutely no real empathy, and I think that he is under great delusion in thinking that the Muslim community or people of conscience are going to forgive this, are going to forget this come November. You can’t tell us that, ” Well, at least I don’t have the Trump Muslim ban,” while also carrying out a genocide primarily against Muslims and think that the Muslims are still going to vote for you."</div>
+  <div class="quote-zh">……反思。如果你愿意的话，这就是一个恢复的时刻，对吗？想想我们一开始所做的事情，他绝对没有表现出真正的同理心，我认为他陷入了极大的错觉，认为穆斯林社区或有良心的人会原谅这一点，会在十一月忘记这一点。你不能告诉我们，“好吧，至少我没有特朗普的穆斯林禁令”，同时还主要针对穆斯林进行种族灭绝，并认为穆斯林仍然会投票给你。</div>
+  <div class="quote-meta">— Omar Suleiman （00:58:00）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think he’s trying to secure his seat in office. He knows his days are numbered. This is not about Israel. This isn’t about the hostages for him. This isn’t about anything but Benjamin Netanyahu, he is a narcissist. He’s a tyrant. He is despised around the world, and I think even amongst Israelis, I think there’s a deep hatred for him. I think the hostages’ families know that he doesn’t care about the families or about the hostages, that he’s driving a political agenda that doesn’t care about people, not Palestinian people or otherwise."</div>
+  <div class="quote-zh">我认为他正在努力确保自己的职位。他知道他的日子屈指可数了。这与以色列无关。这与他的人质无关。这与本杰明·内塔尼亚胡无关，他是一个自恋者。他是一个暴君。他在世界各地都受到鄙视，我认为即使在以色列人中，我认为也对他怀有深深的仇恨。我认为人质的家人知道他不关心家人或人质，他正在推动一个不关心人民的政治议程，不关心巴勒斯坦人民或其他人。</div>
+  <div class="quote-meta">— Omar Suleiman （01:18:42）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Omar Suleiman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">You always know when you live in Gaza that it’s only a matter of time before the next bombs drop. You know if you’re in Gaza that you are waiting for your death. People dream about going out in the world and pursuing education. People dream about going out in the world and pursuing economic opportunity. In Gaza, your idea of opportunity is an opportunity to see the next year. That has been the cas...</div>
+  <div class="dialogue-zh">当你住在加沙时，你总是知道下一枚炸弹落下只是时间问题。你知道如果你在加沙，你正在等待死亡。人们梦想着走出去，追求教育。人们梦想着走出去，追求经济机会。在加沙，你对机会的看法是看到明年的机会。这就是cas</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:59)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Imam Dr. Omar Suleiman, his second time on the podcast. He is a Palestinian American, a Muslim scholar, a civil rights leader, president of the Yaqeen Institute for Islamic Research, and is one of the most influential Muslims in the world. Our previous conversation was focused on Islam. This time the focus was on Gaza and Palestine.</div>
+  <div class="dialogue-zh">以下是与伊玛目奥马尔·苏莱曼博士的对话，这是他第二次参加播客。他是巴勒斯坦裔美国人、穆斯林学者、民权领袖、亚琴伊斯兰研究所所长，也是世界上最有影响力的穆斯林之一。我们之前的谈话重点是伊斯兰教。这次的焦点是加沙和巴勒斯坦。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:26)</span>
+  </div>
+  <div class="dialogue-en">This is the Lex Fridman Podcast. To support it, please check out our sponsors in the description. Oct 7</div>
+  <div class="dialogue-zh">这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。 10 月 7 日</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:31)</span>
+  </div>
+  <div class="dialogue-en">And now, dear friends, here’s Omar Suleiman. What did you think, feel, and pray for in the days that followed October 7th?</div>
+  <div class="dialogue-zh">现在，亲爱的朋友们，这是奥马尔·苏莱曼。 10 月 7 日之后的几天里，你有什么想法、感受和祈祷？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Omar Suleiman <span class="dialogue-time">(00:01:43)</span>
+  </div>
+  <div class="dialogue-en">I think the first feeling was that there’s going to be a lot of death and destruction in Gaza as a result. We always kind of see this where one Israeli casualty leads to hundreds of Palestinian casualties, right? So, it’s a pretty familiar cycle in some ways where there are daily transgressions against Palestinians in the West Bank and in Gaza, the checkpoints, the aggression on Mosque Al-Aqsa, th...</div>
+  <div class="dialogue-zh">我认为第一感觉是加沙将会出现大量死亡和破坏。我们总是看到这样的情况：一名以色列人的伤亡导致数百名巴勒斯坦人的伤亡，对吗？因此，从某些方面来说，这是一个非常熟悉的循环，在西岸和加沙，检查站、对阿克萨清真寺的侵略等，每天都有针对巴勒斯坦人的侵犯行为。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:54)</span>
+  </div>
+  <div class="dialogue-en">You wrote a statement on October 9th. I was hoping to read it, if it’s okay?</div>
+  <div class="dialogue-zh">你在10月9日写了一份声明。我很想读一下，可以吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Omar Suleiman <span class="dialogue-time">(00:03:01)</span>
+  </div>
+  <div class="dialogue-en">Yeah, go ahead.</div>
+  <div class="dialogue-zh">是的，继续吧。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:02)</span>
+  </div>
+  <div class="dialogue-en">Our Palestinian casualties are always your footnotes. The daily humiliation of occupation ignored, the aggression by settlers and soldiers alike on holy sites and souls, the annihilation of entire families that follows, the devastation of whatever scraps remain in the open air prison of Gaza, unsustainable and inhumane. So, if you’re waking up to a sudden interest in the region and want to know wh...</div>
+  <div class="dialogue-zh">我们巴勒斯坦人的伤亡永远是你的脚注。占领的日常耻辱被忽视，定居者和士兵对圣地和灵魂的侵略，随之而来的是整个家庭的毁灭，加沙露天监狱中剩余的一切残骸的破坏，这是不可持续和不人道的。因此，如果您突然对该地区产生兴趣并想知道</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Omar Suleiman <span class="dialogue-time">(00:03:39)</span>
+  </div>
+  <div class="dialogue-en">Again, this was not surprising. This was very predictable. If you’ve been watching what’s been unfolding before October 7th, 2021, Human Rights Watch puts out the report, Threshold reached, Israel is an apartheid state. Amnesty International 2022, the crime of apartheid, showing how all of the legal determinations of apartheid have been reached, the occupations only getting more aggressive.</div>
+  <div class="dialogue-zh">同样，这并不奇怪。这是非常可预见的。如果您一直在关注 2021 年 10 月 7 日之前发生的事情，人权观察组织会发布报告，达到阈值，以色列是一个种族隔离国家。国际特赦组织 2022，种族隔离罪行，展示了种族隔离的所有法律决定是如何达成的，占领只会变得更加侵略性。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Omar Suleiman <span class="dialogue-time">(00:04:10)</span>
+  </div>
+  <div class="dialogue-en">Shireen Abu Akleh, a Palestinian American journalist, is shot dead in 2022 in front of the world. The United States says initially that if it is shown that Israel was complicit or that Israel carried out the execution, then there will be consequences. Of course, once it was shown that Israel was indeed responsible for the bullet that killed Shireen Abu Akleh, the United States did absolutely nothi...</div>
+  <div class="dialogue-zh">巴勒斯坦裔美国记者 Shireen Abu Akleh 于 2022 年在全世界面前被枪杀。美国最初表示，如果证明以色列是同谋或以色列执行了处决，那么就会产生后果。当然，一旦证明以色列确实对杀死 Shireen Abu Akleh 的子弹负责，美国绝对没有采取任何行动。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Omar Suleiman <span class="dialogue-time">(00:04:46)</span>
+  </div>
+  <div class="dialogue-en">The aggression against worshipers in Al-Aqsa is getting worse. You have the Flag March, the Jerusalem Flag March where extremist settlers are let loose and wild on Palestinians by the thousands, chanting things like, “Muhammad is dead. We’re going to murder you, Arabs.” All with the protection of the state with Israeli soldiers. And throughout this time, it’s like something bad is going to happen.</div>
+  <div class="dialogue-zh">阿克萨清真寺针对礼拜者的袭击日益严重。在“国旗游行”、“耶路撒冷国旗游行”中，极端主义定居者对成千上万的巴勒斯坦人肆意妄为，高呼“穆罕默德死了。我们要谋杀你们，阿拉伯人”之类的口号。所有这些都得到以色列士兵的国家保护。而在这段时间里，就好像有什么不好的事情要发生一样。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Omar Suleiman <span class="dialogue-time">(00:05:15)</span>
+  </div>
+  <div class="dialogue-en">And then 2023 comes along. You had 13,000 settler units in 2023. A plan of 13,000 settler units, the most in the history of the occupation, the most racist and extremist government, Israeli government, that you have ever had. And people don’t realize that in 2023 alone, over 600 Palestinians had already been killed. It just doesn’t make Western headlines. And so, if you wonder why the American pub...</div>
+  <div class="dialogue-zh">然后 2023 年到来了。到 2023 年，你将拥有 13,000 个定居者单位。计划拥有 13,000 个定居者单位，这是占领历史上最多的定居者单位，以色列政府是你所拥有的最种族主义和极端主义的政府。人们没有意识到，仅 2023 年，就有 600 多名巴勒斯坦人被杀害。它只是没有成为西方头条新闻。所以，如果你想知道为什么美国酒吧</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Omar Suleiman <span class="dialogue-time">(00:06:55)</span>
+  </div>
+  <div class="dialogue-en">So, it’s like, “Stop the settler violence.” The United States will issue statement after statements, “Stop the settler violence. Stop the incursions on Mosque Al-Aqsa. Stop violating the people in Jerusalem. Stop trying to wipe out the Palestinian people. Stop openly saying that there is no two-state solution, that we will never allow a Palestinian state to be established.” But at the same time, “...</div>
+  <div class="dialogue-zh">所以，这就像是“停止定居者的暴力”。美国将发表一个又一个声明，“停止定居者的暴力。停止入侵阿克萨清真寺。停止侵犯耶路撒冷人民。停止试图消灭巴勒斯坦人民。停止公开说不存在两国解决方案，我们永远不会允许建立巴勒斯坦国。”但与此同时，“</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Omar Suleiman <span class="dialogue-time">(00:07:36)</span>
+  </div>
+  <div class="dialogue-en">And so, I always tell people, “Read beyond the headlines.” Even now with the backdrop of a genocide, over 30,000 people have been killed. If you open the front page of most American mainstream sites, you will see stories about the hostages, the Israeli hostages. You will see stories about October 7th, but October 8th is missing. October 9th is missing. October 10th is missing. A hundred days of ge...</div>
+  <div class="dialogue-zh">因此，我总是告诉人们，“阅读标题之外的内容。”即使现在在种族灭绝的背景下，仍有超过 30,000 人被杀害。如果你打开大多数美国主流网站的首页，你会看到有关人质的故事，以色列人质。您会看到有关 10 月 7 日的故事，但缺少 10 月 8 日。 10月9日不见了。 10月10日不见了。一百天葛</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Omar Suleiman <span class="dialogue-time">(00:08:28)</span>
+  </div>
+  <div class="dialogue-en">And this is well-documented, that they have to review their media tapes with Israel before they can publicize them. And so, this is state propaganda at this point. The mainstream media and the United States government are in lockstep, telling a very skewed story. And that is leading to a greater sense of frustration. And I think the American public has been wronged as well by not knowing what’s ha...</div>
+  <div class="dialogue-zh">这是有据可查的，他们必须先与以色列审查媒体录像带，然后才能公开。所以，这就是目前的国家宣传。主流媒体和美国政府步调一致，讲述了一个非常扭曲的故事。这会导致更大的挫败感。我认为美国公众也因为不知道发生了什么而受到了冤屈。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:56)</span>
+  </div>
+  <div class="dialogue-en">You mentioned settlements. So, to you, this is bigger than Gaza. It is the West Bank. It is the Palestinian people broadly.</div>
+  <div class="dialogue-zh">你提到了定居点。所以，对你来说，这比加沙还要大。这是约旦河西岸。广义上是巴勒斯坦人民。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Omar Suleiman <span class="dialogue-time">(00:09:05)</span>
+  </div>
+  <div class="dialogue-en">Absolutely. You can’t disconnect Gaza from Palestine. You can’t disconnect the West Bank from Palestine. You can’t disconnect Jerusalem from Palestine. And you can’t disconnect the very human story from the political plight.</div>
+  <div class="dialogue-zh">绝对地。你无法将加沙与巴勒斯坦分开。你无法将西岸与巴勒斯坦分开。你无法将耶路撒冷与巴勒斯坦分开。而且你无法将这个非常人性化的故事与政治困境分开。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Omar Suleiman <span class="dialogue-time">(00:09:19)</span>
+  </div>
+  <div class="dialogue-en">You interviewed Mohammed El-Kurd, met him. What did the world do when it saw the images of the Kurd household being taken over by a guy from Brooklyn or Long Island who just shows up and lays claim to their home? What did the world do when American settlers suddenly decided they could walk into historic Palestinian homes and throw people out of their homes? What did the world do? And so, yes, this...</div>
+  <div class="dialogue-zh">您采访了穆罕默德·埃尔-库德，见到了他。当看到库尔德家庭被一个来自布鲁克林或长岛的人接管，而这个人刚刚出现并声称拥有他们的家时，世界做了什么？当美国定居者突然决定走进巴勒斯坦历史悠久的房屋并将人们赶出家园时，世界做了什么？世界做了什么？所以，是的，这个</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Omar Suleiman <span class="dialogue-time">(00:09:55)</span>
+  </div>
+  <div class="dialogue-en">If you realize here, we are erased in peace and we are erased in war. In peace, it’s the Abraham Accords, agreements between Israel and its Arab neighbors, which is supposedly to solve the Palestinian problem. The Palestinians are absent from their own fate, from discussions about their own fate. In war, it’s the Israel-Hamas war. It’s Israel and Gaza. Where are the Palestinian people? The million...</div>
+  <div class="dialogue-zh">如果你在这里意识到，我们在和平中被抹去，我们在战争中被抹去。在和平时期，《亚伯拉罕协议》是以色列与其阿拉伯邻国之间达成的协议，据说可以解决巴勒斯坦问题。巴勒斯坦人缺席了他们自己的命运，缺席了关于他们自己命运的讨论。在战争中，这是以色列与哈马斯的战争。这是以色列和加沙。巴勒斯坦人民在哪里？百万</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:32)</span>
+  </div>
+  <div class="dialogue-en">What are the Palestinians in the diaspora feeling?</div>
+  <div class="dialogue-zh">散居海外的巴勒斯坦人有何感想？</div>
+</div>
+    <a href="https://lexfridman.com/omar-suleiman-2-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="lars-brownworth.html" class="card" style="text-decoration:none">
+  <div class="card-title">Lars Brownworth</div>
+  <div class="card-meta">Lars Brownworth</div>
+</a>
+<a href="robert-f-kennedy-jr.html" class="card" style="text-decoration:none">
+  <div class="card-title">Robert F Kennedy Jr</div>
+  <div class="card-meta">Robert F Kennedy Jr</div>
+</a>
+<a href="albert-bourla.html" class="card" style="text-decoration:none">
+  <div class="card-title">Albert Bourla: Pfizer CEO</div>
+  <div class="card-meta">Albert Bourla</div>
+</a>
+<a href="alex-gladstein.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alex Gladstein: Bitcoin, Authoritarianism, and Human Rights</div>
+  <div class="card-meta">Alex Gladstein</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sundar Pichai - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Sundar Pichai</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Sundar Pichai</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/sundar-pichai.html" style="font-size:16px;color:#818cf8;font-weight:600">Sundar Pichai</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">21,600 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/sundar-pichai-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:08</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:18</span>
+  <span class="chapter-title">Growing up in India<span class="zh-trans"> · 在印度长大</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">8:27</span>
+  <span class="chapter-title">Advice for young people<span class="zh-trans"> · 给年轻人的建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">10:09</span>
+  <span class="chapter-title">Styles of leadership<span class="zh-trans"> · 领导风格</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:29</span>
+  <span class="chapter-title">Impact of AI in human history<span class="zh-trans"> · 人工智能对人类历史的影响</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">26:39</span>
+  <span class="chapter-title">Veo 3 and future of video<span class="zh-trans"> · Veo 3 和视频的未来</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">34:24</span>
+  <span class="chapter-title">Scaling laws<span class="zh-trans"> · 缩放定律</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">38:09</span>
+  <span class="chapter-title">AGI and ASI<span class="zh-trans"> · AGI 和 ASI</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">44:33</span>
+  <span class="chapter-title">P(doom)<span class="zh-trans"> · P（厄运）</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">51:24</span>
+  <span class="chapter-title">Toughest leadership decisions<span class="zh-trans"> · 最艰难的领导决策</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:02:32</span>
+  <span class="chapter-title">AI mode vs Google Search<span class="zh-trans"> · AI 模式 vs Google 搜索</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:15:22</span>
+  <span class="chapter-title">Google Chrome<span class="zh-trans"> · 谷歌浏览器</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:30:52</span>
+  <span class="chapter-title">Programming<span class="zh-trans"> · 编程</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:37:37</span>
+  <span class="chapter-title">Android<span class="zh-trans"> · 安卓</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:42:49</span>
+  <span class="chapter-title">Questions for AGI<span class="zh-trans"> · AGI 问题</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:48:05</span>
+  <span class="chapter-title">Future of humanity<span class="zh-trans"> · 人类的未来</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:51:26</span>
+  <span class="chapter-title">Demo: Google Beam<span class="zh-trans"> · 演示：Google Beam</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:59:09</span>
+  <span class="chapter-title">Demo: Google XR Glasses<span class="zh-trans"> · 演示：Google XR 眼镜</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:01:54</span>
+  <span class="chapter-title">Biggest invention in human history<span class="zh-trans"> · 人类历史上最伟大的发明</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">sundar</span><span class="keyword-tag">pichai</span><span class="keyword-tag">google</span><span class="keyword-tag">human</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">doing</span><span class="keyword-tag">better</span><span class="keyword-tag">andrew</span><span class="keyword-tag">humans</span><span class="keyword-tag">progress</span><span class="keyword-tag">models</span><span class="keyword-tag">together</span><span class="keyword-tag">gemini</span><span class="keyword-tag">technology</span><span class="keyword-tag">incredible</span><span class="keyword-tag">sure</span><span class="keyword-tag">obviously</span><span class="keyword-tag">making</span><span class="keyword-tag">history</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"But it’s very tough to organize all of humanity that way. But I think if p(doom) is actually high, at some point, all of humanity is aligned in making sure that’s not the case. And so we’ll actually make more progress against it, I think. So the irony is, so there is a self-modulating aspect there. I think if humanity collectively puts their mind to solving a problem, whatever, it is, I think we can get there. So because of that, I think I’m optimistic on the p(doom) scenarios, I think the underlying risk is actually pretty high, but I have a lot of faith in humanity kind of rising up to meet that moment."</div>
+  <div class="quote-zh">但以这种方式组织全人类是非常困难的。但我认为，如果 p(doom) 实际上很高，那么在某个时刻，全人类都会一致确保情况并非如此。所以我认为我们实际上会在这方面取得更多进展。讽刺的是，那里有一个自我调节的方面。我认为，如果人类共同致力于解决一个问题，无论是什么问题，我认为我们都能实现这一目标。因此，我认为我对末日情景持乐观态度，我认为潜在的风险实际上相当高，但我对人类挺身而出迎接那一刻充满信心。</div>
+  <div class="quote-meta">— Sundar Pichai （00:45:50）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So, I’ve always had this thing, first-hand feeling of how technology can dramatically change your life, and the opportunity it brings. I think if p(doom) is actually high, at some point, all of humanity is aligned in making sure that’s not the case, and so we’ll actually make more progress against it, I think. So the irony is there is a self-modulating aspect there. I think if humanity collectively puts their mind to solving a problem, whatever it is, I think we can get there."</div>
+  <div class="quote-zh">所以，我一直对技术如何极大地改变你的生活以及它带来的机会有切身的感受。我认为，如果 p(doom) 实际上很高，那么在某个时刻，全人类都会团结起来，确保情况并非如此，所以我认为，我们实际上会在对抗它方面取得更多进展。具有讽刺意味的是，那里有一个自我调节的方面。我认为，如果人类共同致力于解决问题，无论是什么问题，我认为我们都能实现这一目标。</div>
+  <div class="quote-meta">— Sundar Pichai （00:01:02）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So you talking to AGI, I think there is some chance it’ll understand you in a very deep way, I think in a profound way, that’s a possibility. I think there is also the obvious thing of maybe it helps us understand the universe better in a way that expands the frontiers of our understanding of the world. That is something super exciting. But look, I really don’t know. I think I haven’t had access to something that powerful yet, but I think those are all possibilities."</div>
+  <div class="quote-zh">所以当你与 AGI 交谈时，我认为它有可能会非常深入地理解你，我认为以深刻的方式，这是有可能的。我认为还有一个显而易见的事情，也许它可以帮助我们更好地理解宇宙，从而扩展我们对世界理解的前沿。这是非常令人兴奋的事情。但你看，我真的不知道。我想我还没有接触到如此强大的东西，但我认为这些都是可能的。</div>
+  <div class="quote-meta">— Sundar Pichai （01:43:47）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"You have a lot of luck along the way, but you obviously have to make smart choices, you’re thinking about what you want to do, your brain is telling you something. But when you do things, I think it’s important to get that… Listen to your heart and see whether you actually enjoy doing it. That feeling of if you love what you do, it’s so much easier, and you’re going to see the best version of yourself. It’s easier said than done. I think it’s tough to find things you love doing. But I think listening to your heart a bit more than your mind in terms of figuring out what you want to do, I think is one of the best things I would tell people."</div>
+  <div class="quote-zh">一路走来你很幸运，但你显然必须做出明智的选择，你正在思考你想做什么，你的大脑正在告诉你一些事情。但当你做事时，我认为重要的是要明白……倾听你的内心，看看你是否真的喜欢这样做。如果你热爱自己所做的事情，就会感觉容易多了，你就会看到最好的自己。说起来容易做起来难。我认为找到自己喜欢做的​​事情很难。但我认为，在弄清楚自己想做什么时，多倾听自己的内心，而不是自己的想法，这是我会告诉人们的最好的事情之一。</div>
+  <div class="quote-meta">— Sundar Pichai （00:08:45）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Look, I think news and journalism will play an important role in the future. We are pretty committed to it, right? So I think making sure that ecosystem, in fact, I think we’ll be able to differentiate ourselves as a company over time because of our commitment there. So it’s something, I think, I definitely value a lot, and as we are designing, we’ll continue prioritizing approaches."</div>
+  <div class="quote-zh">看，我认为新闻和新闻业将在未来发挥重要作用。我们非常致力于它，对吧？因此，我认为确保这个生态系统，事实上，我认为随着时间的推移，我们将能够使自己作为一家公司脱颖而出，因为我们对此的承诺。所以，我认为，我绝对非常看重这一点，并且在我们设计时，我们将继续优先考虑方法。</div>
+  <div class="quote-meta">— Sundar Pichai （01:11:37）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sundar Pichai <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">It was a five-year waiting list, and we got a rotary telephone. But it dramatically changed our lives. People would come to our house to make calls to their loved ones. I would have to go all the way to the hospital to get blood test records and it would take two hours to go and they would say, “Sorry, it’s not ready. Come back the next day.”, two hours to come back. And that became a five-minute ...</div>
+  <div class="dialogue-zh">这是一个五年的等待名单，我们得到了一部旋转电话。但它极大地改变了我们的生活。人们会来我们家给亲人打电话。我必须大老远去医院取血检记录，需要两个小时，他们会说，“对不起，还没准备好。第二天再来。”，两个小时才回来。这变成了五分钟</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sundar Pichai <span class="dialogue-time">(00:00:32)</span>
+  </div>
+  <div class="dialogue-en">We had no running water. It was a massive drought, so they would get water in these trucks, maybe eight buckets per household. So me and my brother, sometimes my mom, we would wait in line, get that and bring it back home. Many years later, we had running water and we had a water heater, and you could get hot water to take a shower. For me, everything was discreet like that.</div>
+  <div class="dialogue-zh">我们没有自来水。当时正值大旱，所以他们会用卡车取水，每户可能有八桶。所以我和我的兄弟，有时是我的妈妈，我们会排队等候，拿到它并把它带回家。许多年后，我们有了自来水，有了热水器，可以用热水洗澡了。对我来说，一切都是那么谨慎。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sundar Pichai <span class="dialogue-time">(00:01:02)</span>
+  </div>
+  <div class="dialogue-en">So, I’ve always had this thing, first-hand feeling of how technology can dramatically change your life, and the opportunity it brings. I think if p(doom) is actually high, at some point, all of humanity is aligned in making sure that’s not the case, and so we’ll actually make more progress against it, I think. So the irony is there is a self-modulating aspect there. I think if humanity collectivel...</div>
+  <div class="dialogue-zh">所以，我一直对技术如何极大地改变你的生活以及它带来的机会有切身的感受。我认为，如果 p(doom) 实际上很高，那么在某个时刻，全人类都会团结起来，确保情况并非如此，所以我认为，我们实际上会在对抗它方面取得更多进展。具有讽刺意味的是，那里有一个自我调节的方面。我想如果人类集体</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sundar Pichai <span class="dialogue-time">(00:01:38)</span>
+  </div>
+  <div class="dialogue-en">Because of that, I think I’m optimistic on the p(doom) scenarios, but that doesn’t mean I think the underlying risk is actually pretty high. But I have a lot of faith in humanity rising up to meet that moment.</div>
+  <div class="dialogue-zh">正因为如此，我认为我对 p(doom) 情景持乐观态度，但这并不意味着我认为潜在风险实际上相当高。但我对人类会奋起迎接那一刻充满信心。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:55)</span>
+  </div>
+  <div class="dialogue-en">Take me through that experience, when there’s all these articles saying, ” You’re the wrong guy to lead Google through this. Google’s lost. It’s done. It’s over.”</div>
+  <div class="dialogue-zh">请带我回顾一下那次经历，当时所有这些文章都在说：“你是错误的人来带领谷歌度过这一切。谷歌已经失败了。一切都结束了。一切都结束了。”</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:08)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Sundar Pichai, the CEO of Google and Alphabet on this, the Lex Fridman podcast. Growing up in India</div>
+  <div class="dialogue-zh">以下是与 Google 和 Alphabet 首席执行官 Sundar Pichai 就 Lex Fridman 播客进行的对话。在印度长大</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:18)</span>
+  </div>
+  <div class="dialogue-en">Your life story is inspiring to a lot of people. It’s inspiring to me. You grew up in India, whole family living in a humble two-room apartment, very little, almost no access to technology. And from those humble beginnings, you rose to lead a $2 trillion technology company.</div>
+  <div class="dialogue-zh">您的人生故事启发了很多人。这对我很有启发。你在印度长大，全家人都住在一间简陋的两居室公寓里，几乎没有接触到科技的机会。您出身卑微，后来领导了一家价值 2 万亿美元的科技公司。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:41)</span>
+  </div>
+  <div class="dialogue-en">If you could travel back in time and told that, let’s say, twelve-year-old Sundar that you’re now leading one of the largest companies in human history, what do you think that young kid would say?</div>
+  <div class="dialogue-zh">如果你能回到过去，告诉 12 岁的 Sundar，你现在领导着人类历史上最大的公司之一，你认为那个年轻人会说什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sundar Pichai <span class="dialogue-time">(00:02:51)</span>
+  </div>
+  <div class="dialogue-en">I would’ve probably laughed it off. Probably too far-fetched to imagine or believe at that time.</div>
+  <div class="dialogue-zh">我可能会一笑置之。也许在当时还太牵强，无法想象或相信。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:00)</span>
+  </div>
+  <div class="dialogue-en">You would have to explain the internet first.</div>
+  <div class="dialogue-zh">你必须先解释一下互联网。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sundar Pichai <span class="dialogue-time">(00:03:02)</span>
+  </div>
+  <div class="dialogue-en">For sure. Computers to me, at that time, I was 12 in 1984, so probably… By then, I’d started reading about them, but I hadn’t seen one.</div>
+  <div class="dialogue-zh">一定。计算机对我来说，1984 年，当时我 12 岁，所以可能……到那时，我已经开始阅读有关它们的文章，但我还没有见过。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:16)</span>
+  </div>
+  <div class="dialogue-en">What was that place like? Take me to your childhood.</div>
+  <div class="dialogue-zh">那个地方是什么样的？带我去你的童年吧</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sundar Pichai <span class="dialogue-time">(00:03:19)</span>
+  </div>
+  <div class="dialogue-en">I grew up in Chennai. It’s in south of India. It’s a beautiful, bustling city, lots of people, lots of energy, simple life. Definitely fond memories of playing cricket outside the home. We just used to play on the streets. All the neighborhood kids would come out and we would play until it got dark and we couldn’t play anymore, barefoot. Traffic would come. We would just stop the game. Everything ...</div>
+  <div class="dialogue-zh">我在钦奈长大。它位于印度南部。这是一座美丽、繁华的城市，人口众多，精力充沛，生活简单。在家里打板球绝对是美好的回忆。我们以前只是在街上玩。所有邻居的孩子都会出来，我们会玩到天黑，我们不能再赤脚玩了。交通就会来。我们只会停止比赛。一切</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sundar Pichai <span class="dialogue-time">(00:03:51)</span>
+  </div>
+  <div class="dialogue-en">Pre computers, there a lot of free time, now that I think about it. Now you have to go and seek that quiet solitude or something. Newspapers, books is how I gained access to the world’s information at the time [inaudible 00:04:06].</div>
+  <div class="dialogue-zh">现在想起来，在没有计算机之前，有很多空闲时间。现在你必须去寻找那种安静的孤独之类的东西。报纸、书籍是我当时获取世界信息的方式 [听不清 00:04:06]。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sundar Pichai <span class="dialogue-time">(00:04:07)</span>
+  </div>
+  <div class="dialogue-en">My grandfather was a big influence. He worked in the post office. He was so good with language. His English… His handwriting, till today, is the most beautiful handwriting I’ve ever seen. He would write so clearly. He was so articulate, and so he got me introduced into books. He loved politics. We could talk about anything.</div>
+  <div class="dialogue-zh">我的祖父对我影响很大。他在邮局工作。他的语言非常好。他的英文……他的字迹，直到今天，都是我见过的最漂亮的字迹。他会写得这么清楚。他非常善于表达，所以他让我接触了书籍。他热爱政治。我们可以谈论任何事情。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sundar Pichai <span class="dialogue-time">(00:04:33)</span>
+  </div>
+  <div class="dialogue-en">That was there in my family throughout. Lots of books, trashy books, good books, everything from Ayn Rand to books on philosophy to stupid crime novels. Books was a big part of my life, but the soul, it’s not surprising I ended up at Google, because Google’s mission always resonated deeply with me. This access to knowledge, I was hungry for it.</div>
+  <div class="dialogue-zh">我的家人一直都这样。很多书，垃圾书，好书，从安·兰德到哲学书再到愚蠢的犯罪小说，应有尽有。书籍是我生活的重要组成部分，但对于灵魂来说，我最终来到谷歌并不奇怪，因为谷歌的使命总是与我产生深刻的共鸣。这种获取知识的方式，让我如饥似渴。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sundar Pichai <span class="dialogue-time">(00:04:58)</span>
+  </div>
+  <div class="dialogue-en">But definitely have fond memories of my childhood. Access to knowledge was there, so that’s the wealth we had. Every aspect of technology I had to wait for a while. I’ve obviously spoken before about how long it took for us to get a phone, about five years, but it’s not the only thing.</div>
+  <div class="dialogue-zh">但绝对给我的童年留下了美好的回忆。获取知识的途径就在那里，所以这就是我们拥有的财富。技术的每一个方面我都不得不等待一段时间。我之前显然已经说过我们花了多长时间才得到一部手机，大约五年，但这并不是唯一的事情。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:15)</span>
+  </div>
+  <div class="dialogue-en">A telephone?</div>
+  <div class="dialogue-zh">电话？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sundar Pichai <span class="dialogue-time">(00:05:16)</span>
+  </div>
+  <div class="dialogue-en">There was a five-year waiting list, and we got a rotary telephone. But it dramatically changed our lives. People would come to our house to make calls to their loved ones. I would have to go all the way to the hospital to get blood test records, and it would take two hours to go and they would say, “Sorry, it’s not ready. Come back the next day.”, two hours to come back. And that became a five-min...</div>
+  <div class="dialogue-zh">有一个五年的等待名单，我们得到了一部旋转电话。但它极大地改变了我们的生活。人们会来我们家给亲人打电话。我得大老远去医院拿验血记录，去医院要两个小时，他们会说，“对不起，还没准备好。第二天再来。”，两个小时才回来。这变成了五分钟</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sundar Pichai <span class="dialogue-time">(00:05:48)</span>
+  </div>
+  <div class="dialogue-en">We had no running water. It was a massive drought, so they would get water in these trucks, maybe eight buckets per household. So me and my brother, sometimes my mom, we would wait in line, get that and bring it back home. Many years later, we had running water and we had a water heater, and you could get hot water to take a shower. For me, everything was discreet like that. So, I’ve always had th...</div>
+  <div class="dialogue-zh">我们没有自来水。当时正值大旱，所以他们会用卡车取水，每户可能有八桶。所以我和我的兄弟，有时是我的妈妈，我们会排队等候，拿到它并把它带回家。许多年后，我们有了自来水，有了热水器，可以用热水洗澡了。对我来说，一切都是如此谨慎。所以，我一直都有</div>
+</div>
+    <a href="https://lexfridman.com/sundar-pichai-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="david-eagleman.html" class="card" style="text-decoration:none">
+  <div class="card-title">David Eagleman: Neuroplasticity and the Livewired Brain</div>
+  <div class="card-meta">David Eagleman</div>
+</a>
+<a href="guido-van-rossum.html" class="card" style="text-decoration:none">
+  <div class="card-title">Guido van Rossum: Python</div>
+  <div class="card-meta">Guido van Rossum</div>
+</a>
+<a href="william-macaskill.html" class="card" style="text-decoration:none">
+  <div class="card-title">William MacAskill: Effective Altruism</div>
+  <div class="card-meta">William MacAskill</div>
+</a>
+<a href="alex-garland.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alex Garland: Ex Machina, Devs, Annihilation, and the Poetry of Science</div>
+  <div class="card-meta">Alex Garland</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

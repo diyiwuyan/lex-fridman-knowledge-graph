@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dario Amodei - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Dario Amodei</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Dario Amodei</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/dario-amodei.html" style="font-size:16px;color:#818cf8;font-weight:600">Dario Amodei</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">57,022 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/dario-amodei-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:14</span>
+  <span class="chapter-title">Scaling laws<span class="zh-trans"> · 缩放定律</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">12:20</span>
+  <span class="chapter-title">Limits of LLM scaling<span class="zh-trans"> · LLM 扩展的限制</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">20:45</span>
+  <span class="chapter-title">Competition with OpenAI, Google, xAI, Meta<span class="zh-trans"> · 与 OpenAI、Google、xAI、Meta 的竞争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">26:08</span>
+  <span class="chapter-title">Claude<span class="zh-trans"> · 克洛德</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">29:44</span>
+  <span class="chapter-title">Opus 3.5<span class="zh-trans"> · 作品3.5</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">34:30</span>
+  <span class="chapter-title">Sonnet 3.5<span class="zh-trans"> · 十四行诗3.5</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">37:50</span>
+  <span class="chapter-title">Claude 4.0<span class="zh-trans"> · 克劳德4.0</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">42:02</span>
+  <span class="chapter-title">Criticism of Claude<span class="zh-trans"> · 对克劳德的批评</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">54:49</span>
+  <span class="chapter-title">AI Safety Levels<span class="zh-trans"> · 人工智能安全级别</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:05:37</span>
+  <span class="chapter-title">ASL-3 and ASL-4<span class="zh-trans"> · ASL-3 和 ASL-4</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:09:40</span>
+  <span class="chapter-title">Computer use<span class="zh-trans"> · 电脑使用</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:19:35</span>
+  <span class="chapter-title">Government regulation of AI<span class="zh-trans"> · 政府对人工智能的监管</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:38:24</span>
+  <span class="chapter-title">Hiring a great team<span class="zh-trans"> · 聘请一支优秀的团队</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:47:14</span>
+  <span class="chapter-title">Post-training<span class="zh-trans"> · 培训后</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:52:39</span>
+  <span class="chapter-title">Constitutional AI<span class="zh-trans"> · 宪法人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:58:05</span>
+  <span class="chapter-title">Machines of Loving Grace<span class="zh-trans"> · 慈爱机器</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:17:11</span>
+  <span class="chapter-title">AGI timeline<span class="zh-trans"> · 通用人工智能时间表</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:29:46</span>
+  <span class="chapter-title">Programming<span class="zh-trans"> · 编程</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:36:46</span>
+  <span class="chapter-title">Meaning of life<span class="zh-trans"> · 生命的意义</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">model</span><span class="keyword-tag">models</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">claude</span><span class="keyword-tag">dario</span><span class="keyword-tag">amodei</span><span class="keyword-tag">amanda</span><span class="keyword-tag">better</span><span class="keyword-tag">doing</span><span class="keyword-tag">human</span><span class="keyword-tag">humans</span><span class="keyword-tag">training</span><span class="keyword-tag">neural</span><span class="keyword-tag">data</span><span class="keyword-tag">talk</span><span class="keyword-tag">chris</span><span class="keyword-tag">trying</span><span class="keyword-tag">olah</span><span class="keyword-tag">doesn</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I don’t think any of us knows the answer to that question. My strong instinct would be that there’s no ceiling below the level of humans. We humans are able to understand these various patterns. And so that makes me think that if we continue to scale up these models to kind of develop new methods for training them and scaling them up, that will at least get to the level that we’ve gotten to with humans. There’s then a question of how much more is it possible to understand than humans do? How much is it possible to be smarter and more perceptive than humans? I would guess the answer has got to be domain-dependent."</div>
+  <div class="quote-zh">我认为我们中没有人知道这个问题的答案。我强烈的直觉是，人类的水平没有上限。我们人类能够理解这些不同的模式。因此，这让我认为，如果我们继续扩大这些模型的规模，开发新的方法来训练它们并扩大规模，那么至少会达到我们人类所达到的水平。那么问题来了，它的理解能力比人类多多少？比人类更聪明、更有洞察力的可能性有多大？我猜答案必须与领域相关。</div>
+  <div class="quote-meta">— Dario Amodei （00:12:30）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Right, some people, I think there’s a class of people who are against regulation on principle. I understand where that comes from. If you go to Europe and you see something like GDPR, you see some of the other stuff that they’ve done. Some of it’s good, but some of it is really unnecessarily burdensome and I think it’s fair to say really has slowed innovation. And so I understand where people are coming from on priors. I understand why people start from that position. But again, I think AI is different. If we go to the very serious risks of autonomy and misuse that I talked about just a few minutes ago, I think that those are unusual and they warrant an unusually strong response. And so I think it’s very important."</div>
+  <div class="quote-zh">对了，有些人，我觉得有一类人原则上是反对监管的。我明白这是从哪里来的。如果你去欧洲，你会看到 GDPR 之类的东西，你也会看到他们所做的其他一些事情。其中一些是好的，但其中一些确实是不必要的负担，我认为公平地说确实减缓了创新。所以我了解人们的先验来自哪里。我理解为什么人们从这个位置开始。但我再次认为人工智能是不同的。如果我们讨论我几分钟前谈到的自治和滥用的非常严重的风险，我认为这些都是不寻常的，因此需要做出异常强烈的反应。所以我认为这非常重要。</div>
+  <div class="quote-meta">— Dario Amodei （01:22:52）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But, I noticed that one flaw in that way of thinking, and it’s not a change in how seriously I take the risks. It’s maybe a change in how I talk about them, is that no matter how logical or rational, that line of reasoning that I just gave might be. If you only talk about risks, your brain only thinks about risks. And so, I think it’s actually very important to understand, what if things do go well? And the whole reason we’re trying to prevent these risks is not because we’re afraid of technology, not because we want to slow it down. It’s because if we can get to the other side of these risks, if we can run the gauntlet successfully, to put it in stark terms, then on the other side of the gauntlet are all these great things."</div>
+  <div class="quote-zh">但是，我注意到这种思维方式的一个缺陷，但这并没有改变我对待风险的认真程度。也许是我谈论它们的方式发生了变化，无论我刚才给出的推理有多合乎逻辑或合理。如果你只谈论风险，你的大脑只会考虑风险。所以，我认为理解这一点实际上非常重要：如果事情进展顺利怎么办？我们试图预防这些风险的全部原因并不是因为我们害怕技术，也不是因为我们想放慢它的速度。这是因为，如果我们能够克服这些风险，如果我们能够成功地应对挑战，用严格的术语来说，那么挑战的另一面就是所有这些伟大的事情。</div>
+  <div class="quote-meta">— Dario Amodei （01:59:46）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And so, I figured that I think it would be interesting and valuable for someone who’s actually coming from the risk side to try and really make a try at explaining what the benefits are, both because I think it’s something we can all get behind and I want people to understand. I want them to really understand that this isn’t Doomers versus Accelerationists. This is that, if you have a true understanding of where things are going with AI, and maybe that’s the more important axis, AI is moving fast versus AI is not moving fast, then you really appreciate the benefits and you really want humanity or civilization to seize those benefits. But, you also get very serious about anything that could derail them."</div>
+  <div class="quote-zh">因此，我认为对于真正来自风险方面的人来说，尝试并真正尝试解释好处是什么，这将是有趣且有价值的，因为我认为这是我们所有人都可以支持的事情，而且我希望人们能够理解。我希望他们真正明白，这不是末日论者与加速论者之间的较量。也就是说，如果你真正了解人工智能的发展方向，也许这是更重要的轴，人工智能正在快速发展，而人工智能却没有快速发展，那么你就会真正体会到其中的好处，并且你真的希望人类或文明能够抓住这些好处。但是，你也会非常认真地对待任何可能使他们脱轨的事情。</div>
+  <div class="quote-meta">— Dario Amodei （02:01:17）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And so, I think this is going to be more, and this is just an instinct. I could easily see how I’m wrong. I think it’s going to be more five or 10 years, as I say in the essay than it’s going to be 50 or 100 years. I also think it’s going to be five or 10 years more than it’s going to be five or 10 hours, because I’ve just seen how human systems work. And I think a lot of these people who write down these differential equations, who say AI is going to make more powerful AI, who can’t understand how it could possibly be the case that these things won’t change so fast. I think they don’t understand these things. AGI timeline"</div>
+  <div class="quote-zh">所以，我认为这会更多，这只是一种本能。 I could easily see how I’m wrong.正如我在文章中所说，我认为这将是五年或十年，而不是五十年或一百年。我还认为这将比 5 或 10 小时多花 5 到 10 年，因为我刚刚看到了人类系统是如何工作的。我认为很多写下这些微分方程的人，他们说人工智能将创造出更强大的人工智能，他们无法理解这些事情怎么可能不会改变得这么快。 I think they don’t understand these things.通用人工智能时间表</div>
+  <div class="quote-meta">— Dario Amodei （02:16:35）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dario Amodei <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">If you extrapolate the curves that we’ve had so far, right? If you say, “Well, I don’t know, we’re starting to get to PhD level, and last year we were at undergraduate level, and the year before we were at the level of a high school student,” again, you can quibble with what tasks and for what. “We’re still missing modalities, but those are being added,” like computer use was added, like image gen...</div>
+  <div class="dialogue-zh">如果你推断出我们迄今为止的曲线，对吗？如果你说，“嗯，我不知道，我们开始达到博士学位水平，去年我们处于本科水平，前一年我们处于高中生水平，”你可以再次争论什么任务和目的。 “我们仍然缺少模式，但这些正在被添加，”就像添加了计算机使用一样，例如图像生成</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dario Amodei <span class="dialogue-time">(00:00:31)</span>
+  </div>
+  <div class="dialogue-en">I think there are still worlds where it doesn’t happen in 100 years. The number of those worlds is rapidly decreasing. We are rapidly running out of truly convincing blockers, truly compelling reasons why this will not happen in the next few years. The scale-up is very quick. We do this today, we make a model, and then we deploy thousands, maybe tens of thousands of instances of it. I think by the...</div>
+  <div class="dialogue-zh">我认为仍然有一些世界 100 年后不会发生这种情况。这些世界的数量正在迅速减少。我们正在迅速耗尽真正令人信服的阻碍因素，以及在未来几年内不会发生这种情况的真正令人信服的理由。规模扩大的速度非常快。我们今天这样做，创建一个模型，然后部署数千个甚至数万个它的实例。我认为通过</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dario Amodei <span class="dialogue-time">(00:01:03)</span>
+  </div>
+  <div class="dialogue-en">I am optimistic about meaning. I worry about economics and the concentration of power. That’s actually what I worry about more, the abuse of power.</div>
+  <div class="dialogue-zh">我对意义持乐观态度。我担心经济和权力集中。其实我更担心的是滥用权力。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:14)</span>
+  </div>
+  <div class="dialogue-en">And AI increases the amount of power in the world. And if you concentrate that power and abuse that power, it can do immeasurable damage.</div>
+  <div class="dialogue-zh">人工智能增加了世界的力量。如果你集中这种力量并滥用这种力量，它会造成不可估量的损害。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dario Amodei <span class="dialogue-time">(00:01:22)</span>
+  </div>
+  <div class="dialogue-en">Yes, it’s very frightening. It’s very frightening.</div>
+  <div class="dialogue-zh">是的，这非常可怕。这非常可怕。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:27)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Dario Amodei, CEO of Anthropic, the company that created Claude, that is currently and often at the top of most LLM benchmark leader boards. On top of that, Dario and the Anthropic team have been outspoken advocates for taking the topic of AI safety very seriously. And they have continued to publish a lot of fascinating AI on this and other topics.</div>
+  <div class="dialogue-zh">以下是与 Anthropic 首席执行官达里奥·阿莫迪 (Dario Amodei) 的对话，该公司创建了 Claude，该公司目前经常位居大多数 LLM 基准排行榜的榜首。最重要的是，Dario 和 Anthropic 团队一直直言不讳地倡导非常严肃地对待人工智能安全话题。他们继续在这个主题和其他主题上发表许多令人着迷的人工智能。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:55)</span>
+  </div>
+  <div class="dialogue-en">I’m also joined afterwards by two other brilliant people from Anthropic. First Amanda Askell, who is a researcher working on alignment and fine-tuning of Claude, including the design of Claude’s character and personality. A few folks told me she has probably talked with Claude more than any human at Anthropic. So she was definitely a fascinating person to talk to about prompt engineering and pract...</div>
+  <div class="dialogue-zh">随后，来自 Anthropic 的另外两位杰出人士也加入了我的行列。首先是阿曼达·阿斯克尔（Amanda Askell），她是一名研究员，致力于克劳德的对齐和微调，包括克劳德的角色和个性的设计。有几个人告诉我，她与克劳德的交谈可能比 Anthropic 的任何人都多。所以她绝对是一个很有趣的人，可以和她谈论即时工程和实践</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:27)</span>
+  </div>
+  <div class="dialogue-en">After that, Chris Olah stopped by for a chat. He’s one of the pioneers of the field of mechanistic interpretability, which is an exciting set of efforts that aims to reverse engineering neural networks, to figure out what’s going on inside, inferring behaviors from neural activation patterns inside the network. This is a very promising approach for keeping future super-intelligent AI systems safe....</div>
+  <div class="dialogue-zh">之后，克里斯·奥拉 (Chris Olah) 过来聊天。他是机械可解释性领域的先驱之一，该领域是一系列令人兴奋的工作，旨在对神经网络进行逆向工程，弄清楚内部发生了什么，从网络内部的神经激活模式推断行为。这是保证未来超级智能人工智能系统安全的一种非常有前途的方法。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:03)</span>
+  </div>
+  <div class="dialogue-en">This is the Lex Fridman podcast. To support it, please check out our sponsors in the description. And now, dear friends, here’s Dario Amodei. Scaling laws</div>
+  <div class="dialogue-zh">这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是达里奥·阿莫代。缩放定律</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:14)</span>
+  </div>
+  <div class="dialogue-en">Let’s start with a big idea of scaling laws and the scaling hypothesis. What is it? What is its history, and where do we stand today?</div>
+  <div class="dialogue-zh">让我们从缩放定律和缩放假设的大概念开始。它是什么？它的历史是什么？我们今天处于什么位置？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dario Amodei <span class="dialogue-time">(00:03:22)</span>
+  </div>
+  <div class="dialogue-en">So I can only describe it as it relates to my own experience, but I’ve been in the AI field for about 10 years and it was something I noticed very early on. So I first joined the AI world when I was working at Baidu with Andrew Ng in late 2014, which is almost exactly 10 years ago now. And the first thing we worked on, was speech recognition systems. And in those days I think deep learning was a n...</div>
+  <div class="dialogue-zh">所以我只能根据我自己的经历来描述它，但我在人工智能领域已经有大约10年了，这是我很早就注意到的事情。所以我第一次进入人工智能世界是在 2014 年底，当时我在百度与吴恩达一起工作，现在已经快整整 10 年前了。我们做的第一件事是语音识别系统。在那些日子里，我认为深度学习是一个n</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dario Amodei <span class="dialogue-time">(00:04:05)</span>
+  </div>
+  <div class="dialogue-en">And in some ways it was fortunate, you can have almost beginner’s luck. I was like a newcomer to the field. And I looked at the neural net that we were using for speech, the recurrent neural networks, and I said, “I don’t know, what if you make them bigger and give them more layers? And what if you scale up the data along with this?” I just saw these as independent dials that you could turn. And I...</div>
+  <div class="dialogue-zh">从某些方面来说，这是幸运的，你几乎可以拥有初学者的运气。我就像是这个领域的新人。我看了看我们用于语音的神经网络，即循环神经网络，我说，“我不知道，如果你让它们更大并给它们更多的层会怎么样？如果你同时扩大数据规模会怎么样？”我只是将它们视为可以转动的独立转盘。而我</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dario Amodei <span class="dialogue-time">(00:04:51)</span>
+  </div>
+  <div class="dialogue-en">And so initially my thinking was, “Hey, maybe that is just true for speech recognition systems. Maybe that’s just one particular quirk, one particular area.” I think it wasn’t until 2017 when I first saw the results from GPT-1 that it clicked for me that language is probably the area in which we can do this. We can get trillions of words of language data, we can train on them. And the models we we...</div>
+  <div class="dialogue-zh">所以最初我的想法是，“嘿，也许这对于语音识别系统来说是正确的。也许这只是一个特定的怪癖，一个特定的领域。”我认为直到 2017 年，当我第一次看到 GPT-1 的结果时，我才意识到语言可能是我们可以做到这一点的领域。我们可以获得数万亿个单词的语言数据，我们可以对它们进行训练。还有我们的模型</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dario Amodei <span class="dialogue-time">(00:05:28)</span>
+  </div>
+  <div class="dialogue-en">And so when I saw those two things together, and there were a few people like Ilya Sudskever who you’ve interviewed, who had somewhat similar views. He might’ve been the first one, although I think a few people came to similar views around the same time, right? There was Rich Sutton’s bitter lesson, Gwern wrote about the scaling hypothesis. But I think somewhere between 2014 and 2017 was when it r...</div>
+  <div class="dialogue-zh">所以当我把这两件事放在一起看到时，有一些像你采访过的 Ilya Sudskever 这样的人也有一些相似的观点。他可能是第一个，尽管我认为一些人大约在同一时间提出了类似的观点，对吗？格温（Gwern）写了有关缩放假设的文章，其中有里奇·萨顿（Rich Sutton）的惨痛教训。但我认为 2014 年至 2017 年之间的某个时间是它发生的时候</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dario Amodei <span class="dialogue-time">(00:06:03)</span>
+  </div>
+  <div class="dialogue-en">And at every stage of scaling, there are always arguments. And when I first heard them honestly, I thought, “Probably I’m the one who’s wrong and all these experts in the field are right. They know the situation better than I do, right?” There’s the Chomsky argument about, “You can get syntactics but you can’t get semantics.” There was this idea, “Oh, you can make a sentence make sense, but you ca...</div>
+  <div class="dialogue-zh">在扩展的每个阶段，总是存在争论。当我第一次诚实地听到他们的声音时，我想：“也许我是错的，而该领域的所有专家都是对的。他们比我更了解情况，对吗？”乔姆斯基的论点是：“你可以获得句法，但无法获得语义。”有这样的想法，“哦，你可以让一个句子有意义，但你不能</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dario Amodei <span class="dialogue-time">(00:06:34)</span>
+  </div>
+  <div class="dialogue-en">And each time, every time, we manage to either find a way around or scaling just is the way around. Sometimes it’s one, sometimes it’s the other. And so I’m now at this point, I still think it’s always quite uncertain. We have nothing but inductive inference to tell us that the next two years are going to be like the last 10 years. But I’ve seen the movie enough times, I’ve seen the story happen f...</div>
+  <div class="dialogue-zh">每一次，每一次，我们要么设法找到解决办法，要么扩大规模就是解决办法。有时是一个，有时是另一个。所以现在我仍然认为它总是相当不确定。除了归纳推理之外，我们什么也没有告诉我们，未来两年将会像过去十年一样。但我已经看过这部电影足够多次了，我已经看到了故事的发生</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:10)</span>
+  </div>
+  <div class="dialogue-en">And of course the scaling here is bigger networks, bigger data, bigger compute?</div>
+  <div class="dialogue-zh">当然，这里的扩展是指更大的网络、更大的数据、更大的计算？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dario Amodei <span class="dialogue-time">(00:07:16)</span>
+  </div>
+  <div class="dialogue-en">Yes.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:17)</span>
+  </div>
+  <div class="dialogue-en">All of those?</div>
+  <div class="dialogue-zh">所有这些？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dario Amodei <span class="dialogue-time">(00:07:17)</span>
+  </div>
+  <div class="dialogue-en">In particular, linear scaling up of bigger networks, bigger training times and more and more data. So all of these things, almost like a chemical reaction, you have three ingredients in the chemical reaction and you need to linearly scale up the three ingredients. If you scale up one, not the others, you run out of the other reagents and the reaction stops. But if you scale up everything in series...</div>
+  <div class="dialogue-zh">特别是更大网络的线性扩展、更长的训练时间和越来越多的数据。所以所有这些事情，几乎就像一个化学反应，化学反应中有三种成分，你需要线性放大这三种成分。如果扩大其中一种试剂的规模，而不扩大其他试剂的规模，则会耗尽其他试剂，反应就会停止。但如果你按系列放大所有内容</div>
+</div>
+    <a href="https://lexfridman.com/dario-amodei-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="bret-weinstein.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bret Weinstein: Truth, Science, and Censorship in the Time of a Pandemic</div>
+  <div class="card-meta">Bret Weinstein</div>
+</a>
+<a href="cursor-team.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cursor Team</div>
+  <div class="card-meta">Cursor Team</div>
+</a>
+<a href="dmitry-korkin.html" class="card" style="text-decoration:none">
+  <div class="card-title">Dmitry Korkin: Computational Biology of Coronavirus</div>
+  <div class="card-meta">Dmitry Korkin</div>
+</a>
+<a href="jim-keller.html" class="card" style="text-decoration:none">
+  <div class="card-title">Jim Keller: Moore’s Law, Microprocessors, Abstractions, and First Principles</div>
+  <div class="card-meta">Jim Keller</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Craig Jones #2 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Craig Jones #2</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Craig Jones #2</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/craig-jones.html" style="font-size:16px;color:#818cf8;font-weight:600">Craig Jones</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">25,073 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/craig-jones-2-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#f9731622;color:#f97316;border:1px solid #f9731644;font-size:13px;padding:4px 12px">体育与武术</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:04</span>
+  <span class="chapter-title">$1 million in cash<span class="zh-trans"> · 100万美元现金</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">5:08</span>
+  <span class="chapter-title">Kazakhstan<span class="zh-trans"> · 哈萨克斯坦</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">7:33</span>
+  <span class="chapter-title">Ukraine<span class="zh-trans"> · 乌克兰</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">39:42</span>
+  <span class="chapter-title">Bali<span class="zh-trans"> · 巴厘岛</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">47:01</span>
+  <span class="chapter-title">CJI<span class="zh-trans"> · CJI</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">58:04</span>
+  <span class="chapter-title">Gabi Garcia<span class="zh-trans"> · 加比·加西亚</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:00:58</span>
+  <span class="chapter-title">The Alley<span class="zh-trans"> · 胡同</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:16:08</span>
+  <span class="chapter-title">Gordon Ryan and Nicholas Meregali<span class="zh-trans"> · 戈登·瑞安和尼古拉​​斯·梅雷加利</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:23:01</span>
+  <span class="chapter-title">Trolling<span class="zh-trans"> · 拖钓</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:25:49</span>
+  <span class="chapter-title">ADCC<span class="zh-trans"> · ADCC</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:36:02</span>
+  <span class="chapter-title">Training camp<span class="zh-trans"> · 训练营</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:47:45</span>
+  <span class="chapter-title">Breaking legs<span class="zh-trans"> · 断腿</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:48:27</span>
+  <span class="chapter-title">Advice for beginners<span class="zh-trans"> · 给初学者的建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:55:07</span>
+  <span class="chapter-title">Volk<span class="zh-trans"> · 沃尔克</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:04:09</span>
+  <span class="chapter-title">Future of jiu jitsu<span class="zh-trans"> · 柔术的未来</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:07:16</span>
+  <span class="chapter-title">Steroids<span class="zh-trans"> · 类固醇</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:10:44</span>
+  <span class="chapter-title">Hope<span class="zh-trans"> · 希望</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">craig</span><span class="keyword-tag">jones</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">guys</span><span class="keyword-tag">adcc</span><span class="keyword-tag">got</span><span class="keyword-tag">money</span><span class="keyword-tag">obviously</span><span class="keyword-tag">event</span><span class="keyword-tag">sport</span><span class="keyword-tag">said</span><span class="keyword-tag">jitsu</span><span class="keyword-tag">jiu</span><span class="keyword-tag">guy</span><span class="keyword-tag">went</span><span class="keyword-tag">hard</span><span class="keyword-tag">million</span><span class="keyword-tag">guess</span><span class="keyword-tag">doing</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"That’s protecting Kjiv, yeah. That was at the time where US hadn’t voted to I guess keep funding the weapons over there. It was a tense moment because I think, I don’t know, everyone was thinking when do those air defense missiles run out? That was a heavy moment for me thinking, look at what it shot out the sky. Imagine if they didn’t have that. But that was probably the most surreal moment. But Kjiv largely, life goes on most of the time as per normal. I was faced with crazy messages and comments, even just posting that video. Like I’m getting paid by Ukraine and stuff. It’s just like people just don’t understand that life has to go on like Kjiv here, the front lines far away. The cities have to largely try to operate as normal or just life will not go on in those villages and cities."</div>
+  <div class="quote-zh">这是在保护 Kjiv，是的。当时美国还没有投票支持继续资助那里的武器。这是一个紧张的时刻，因为我想，我不知道，每个人都在想那些防空导弹什么时候用完？那对我来说是一个沉重的时刻，看看它从天空中射出的东西。想象一下，如果他们没有这个。但这可能是最超现实的时刻。但在很大程度上，Kjiv 的生活大部分时间都在正常进行。我面临着疯狂的消息和评论，甚至只是发布了那个视频。就像我从乌克兰等人那里得到报酬一样。就像人们不明白生活必须像这里的克吉夫一样继续下去，前线在遥远的地方。城市必须在很大程度上努力正常运转，否则这些村庄和城市的生活将无法继续。</div>
+  <div class="quote-meta">— Craig Jones （00:10:55）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So, whether you feel like you’re training hard enough, you’re over training. Those to me are the most difficult aspects. And I think really, those are an individual thing and that’s really something where a coach can provide what he thinks to you is the right amount of work. And I think that’s different for different people. I think Nicky Rod could do eight hours a day, you know what I mean? I think Nick Ryan, 8 minutes."</div>
+  <div class="quote-zh">所以，无论你是否觉得自己训练得足够努力，你都已经训练过度了。这些对我来说是最困难的方面。我认为，这些都是个人的事情，教练可以为你提供他认为合适的工作量。我认为这对于不同的人来说是不同的。我认为尼基·罗德每天可以工作八小时，你明白我的意思吗？我认为尼克·瑞安，8 分钟。</div>
+  <div class="quote-meta">— Craig Jones （01:36:51）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think it would be a soldier by soldier basis. I know each of them had a different perspective. I remember I would ask them about, in terms of US politics and their fears, because the first trip I went there, US hadn’t agreed to resupply weapons. So, it was a very different feeling in the air there of concern over what was going to happen but they still remained quite optimistic that, no matter who got in, they felt would do the right thing. But in terms of prolonged war, most people think it’s going to go for a very long time. The children’s hospital that just was bombed in Kyiv, anytime there’s a moment like that, that reignites everything and I think it happens on both sides."</div>
+  <div class="quote-zh">我认为这将是一个逐个士兵的基础。我知道他们每个人都有不同的观点。我记得我会问他们有关美国政治和他们的恐惧的问题，因为我第一次去那里时，美国没有同意重新供应武器。因此，空气中弥漫着一种非常不同的感觉，他们担心将会发生什么，但他们仍然非常乐观，无论谁加入，他们都觉得会做正确的事情。但就长期战争而言，大多数人认为它会持续很长时间。基辅的儿童医院刚刚被炸，任何时候出现这样的时刻，都会重新点燃一切，我认为双方都会发生这种情况。</div>
+  <div class="quote-meta">— Craig Jones （00:36:52）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"However, at CJI, everyone gets $10,001 across the board and a million dollars prize money so there’s no room for, really, negotiation for the tournament aspect of us. So, he has a vested interest in putting his guys in ADCC because he can negotiate show money and he can basically take 20% of that for himself. But really, for the sport of grappling, this is incredible across the board because, by us stealing or at least borrowing a bunch of athletes from ADCC, ADCC had to fill their divisions. So, they filled their divisions with many other competitors that wouldn’t have ordinarily had the chance to do ADCC. And really, although we’ve scheduled it the same weekend, ours is actually Friday, Saturday, ADCC being Saturday, Sunday, our day starts pretty late. So, we start 5:00 PM Saturday."</div>
+  <div class="quote-zh">然而，在 CJI，每个人都能获得 10,001 美元的总奖金和 100 万美元的奖金，因此我们在锦标赛方面没有任何谈判的空间。所以，让他的球员加入ADCC对他来说是有既得利益的，因为他可以协商演出费用，而且他基本上可以为自己拿走其中的20%。但实际上，对于格斗运动来说，这在整体上都是令人难以置信的，因为通过我们从 ADCC 窃取或至少借用一批运动员，ADCC 必须填补他们的空缺。因此，他们在自己的部门中加入了许多其他通常没有机会参加 ADCC 的竞争对手。事实上，虽然我们安排在同一个周末，但我们的实际上是周五、周六，ADCC 是周六、周日，我们的一天开始得很晚。所以，我们周六下午 5:00 开始。</div>
+  <div class="quote-meta">— Craig Jones （00:56:27）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think so. I think we need… The origins of MDMA was couples therapy in the ’70s in Houston, I believe. I believe something like that for us could resolve these underlying issues."</div>
+  <div class="quote-zh">我想是的。我认为我们需要……我相信 MDMA 的起源是 70 年代休斯顿的夫妻疗法。我相信这样的事情对我们来说可以解决这些根本问题。</div>
+  <div class="quote-meta">— Craig Jones （01:22:04）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Craig Jones <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">I like to match looks from time to time.</div>
+  <div class="dialogue-zh">我有时喜欢搭配外观。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:04)</span>
+  </div>
+  <div class="dialogue-en">Thank you.</div>
+  <div class="dialogue-zh">谢谢。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Craig Jones <span class="dialogue-time">(00:00:04)</span>
+  </div>
+  <div class="dialogue-en">In an homage.</div>
+  <div class="dialogue-zh">致敬。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:05)</span>
+  </div>
+  <div class="dialogue-en">You look sexy. How many legs did you break in Eastern Europe?</div>
+  <div class="dialogue-zh">你看起来很性感。你在东欧摔断了多少条腿？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Craig Jones <span class="dialogue-time">(00:00:09)</span>
+  </div>
+  <div class="dialogue-en">Three or four.</div>
+  <div class="dialogue-zh">三四个。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:11)</span>
+  </div>
+  <div class="dialogue-en">To send a message or just for your own personal enjoyment?</div>
+  <div class="dialogue-zh">发送消息还是只是为了个人享受？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Craig Jones <span class="dialogue-time">(00:00:14)</span>
+  </div>
+  <div class="dialogue-en">If she wins, I’ll personally give her a million dollars. If I can foot lock her, we’re going to collaborate together in an OnlyFans sex tape.</div>
+  <div class="dialogue-zh">如果她赢了，我会亲自给她一百万美元。如果我能用脚锁住她，我们将一起合作录制 OnlyFans 性爱录像带。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:27)</span>
+  </div>
+  <div class="dialogue-en">Did she agree to this?</div>
+  <div class="dialogue-zh">她同意这个吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Craig Jones <span class="dialogue-time">(00:00:28)</span>
+  </div>
+  <div class="dialogue-en">She shook on it.</div>
+  <div class="dialogue-zh">她对此感到震惊。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:30)</span>
+  </div>
+  <div class="dialogue-en">You do have an OnlyFans channel. Is that still up?</div>
+  <div class="dialogue-zh">您确实有一个 OnlyFans 频道。还这样吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Craig Jones <span class="dialogue-time">(00:00:32)</span>
+  </div>
+  <div class="dialogue-en">After August 17th? It’s going to be fire.</div>
+  <div class="dialogue-zh">8月17日之后？会很火的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:35)</span>
+  </div>
+  <div class="dialogue-en">It’s going to be on fire.</div>
+  <div class="dialogue-zh">它会着火的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Craig Jones <span class="dialogue-time">(00:00:36)</span>
+  </div>
+  <div class="dialogue-en">Honestly, when we talk about secret investor, I think that could fund the entire tournament.</div>
+  <div class="dialogue-zh">老实说，当我们谈论秘密投资者时，我认为这可以为整个锦标赛提供资金。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:40)</span>
+  </div>
+  <div class="dialogue-en">I missed all that. What gives you hope?</div>
+  <div class="dialogue-zh">我错过了这一切。是什么给了你希望？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Craig Jones <span class="dialogue-time">(00:00:42)</span>
+  </div>
+  <div class="dialogue-en">That you can still make fun of anything as long as it’s funny.</div>
+  <div class="dialogue-zh">只要有趣，你仍然可以取笑任何事情。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:48)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Craig Jones, martial artist, world traveler and one of the funniest people in the sport of submission grappling. While he does make fun of himself a lot, he is legitimately one of the greatest submission grapplers in the world. Underneath the veil of nonstop sexualized Aussie humor and incessant online trolling, he is truly a kindhearted human being who’s tryin...</div>
+  <div class="dialogue-zh">以下是与武术家、环球旅行家、降服格斗运动中最有趣的人之一克雷格·琼斯的对话。虽然他确实经常取笑自己，但他确实是世界上最伟大的降服格斗手之一。在不间断的澳大利亚性幽默和不断的网上恶搞的面纱之下，他确实是一个善良的人，正在努力</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:22)</span>
+  </div>
+  <div class="dialogue-en">Like with a new CJI tournament that has over $2 million in prize money. It’s coming up this Friday and Saturday. Yes, the same weekend as the prestigious ADCC tournament. The goal of CGI tournament is to grow the sport. You’ll be able to watch it for free online, live on YouTube and other places. All ticket profits go to charity, mainly to cancer research. I encourage you to support the mission of...</div>
+  <div class="dialogue-zh">就像奖金超过 200 万美元的新 CJI 锦标赛一样。它将于本周五和周六推出。是的，与著名的 ADCC 锦标赛在同一个周末。 CGI 锦标赛的目标是发展这项运动。您可以在 YouTube 和其他地方免费在线观看直播。所有门票利润都捐给慈善机构，主要用于癌症研究。我鼓励您支持我们的使命</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:58)</span>
+  </div>
+  <div class="dialogue-en">Craig gave me a special link that gives you a 50% discount on the tickets. Go to lexfreeman.com/cji and it should forward you to the right place. They’re trying to sell the last few tickets now. It’s a good cause. Go buy some. Also let me say, as a fan of the sport, I highly encourage you to watch both CJI and ADCC. To celebrate athletes competing in both. From CJI with Nicky Ryan, Nicky Rod, or R...</div>
+  <div class="dialogue-zh">克雷格给了我一个特殊的链接，可以给你 50% 的门票折扣。访问 lexfreeman.com/cji，它应该会将您转到正确的位置。他们现在正试图出售最后几张票。这是一个很好的理由。去买一些吧。另外我想说的是，作为这项运动的粉丝，我强烈建议您观看 CJI 和 ADCC。庆祝参加两项比赛的运动员。来自 CJI 与 Nicky Ryan、Nicky Rod 或 R</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:29)</span>
+  </div>
+  <div class="dialogue-en">To ADCC with Gordon Ryan, Nicholas Meregali, Giancarlo Bodoni, Rafael Lovato, Jr., Mica Galvao, and more. I have a lot of respect for everyone involved. I trained with many of them regularly and consider many of them friends. Including Craig Gordon and of course John Danaher, who I will talk to many, many more times on this podcast. This is a Lex Fridman podcast. To support it please check out our...</div>
+  <div class="dialogue-zh">与 Gordon Ryan、Nicholas Meregali、Giancarlo Bodoni、Rafael Lovato, Jr.、Mica Galvao 等一起前往 ADCC。我非常尊重所有参与其中的人。我定期与他们中的许多人一起训练，并把他们中的许多人视为朋友。包括克雷格·戈登，当然还有约翰·丹纳赫，我将在这个播客上与他交谈很多很多次。这是莱克斯·弗里德曼的播客。要支持它，请查看我们的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:04)</span>
+  </div>
+  <div class="dialogue-en">When you brought the $1 million in cash on Rogan’s podcast, did you have security with you?</div>
+  <div class="dialogue-zh">当你在罗根的播客上带来 100 万美元现金时，你身边有保安吗？</div>
+</div>
+    <a href="https://lexfridman.com/craig-jones-2-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="james-holland.html" class="card" style="text-decoration:none">
+  <div class="card-title">James Holland</div>
+  <div class="card-meta">James Holland</div>
+</a>
+<a href="ryan-hall-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ryan Hall: Solving Martial Arts from First Principles</div>
+  <div class="card-meta">Ryan Hall</div>
+</a>
+<a href="ryan-hall.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ryan Hall: Martial Arts and the Philosophy of Violence, Power, and Grace</div>
+  <div class="card-meta">Ryan Hall</div>
+</a>
+<a href="ai-sota-2026.html" class="card" style="text-decoration:none">
+  <div class="card-title">AI SOTA 2026</div>
+  <div class="card-meta">Sebastian Raschka</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

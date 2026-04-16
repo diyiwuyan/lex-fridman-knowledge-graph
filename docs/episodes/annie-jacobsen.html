@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Annie Jacobsen - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Annie Jacobsen</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Annie Jacobsen</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/annie-jacobsen.html" style="font-size:16px;color:#818cf8;font-weight:600">Annie Jacobsen</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">27,124 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/annie-jacobsen-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#06b6d422;color:#06b6d4;border:1px solid #06b6d444;font-size:13px;padding:4px 12px">太空与探索</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:13</span>
+  <span class="chapter-title">Nuclear war<span class="zh-trans"> · 核战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">6:57</span>
+  <span class="chapter-title">Launch procedure<span class="zh-trans"> · 启动程序</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">12:36</span>
+  <span class="chapter-title">Deterrence<span class="zh-trans"> · 威慑</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">16:09</span>
+  <span class="chapter-title">Tactical nukes<span class="zh-trans"> · 战术核武器</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">25:35</span>
+  <span class="chapter-title">Nuclear submarines<span class="zh-trans"> · 核潜艇</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">28:35</span>
+  <span class="chapter-title">Nuclear missiles<span class="zh-trans"> · 核导弹</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">35:46</span>
+  <span class="chapter-title">Nuclear football<span class="zh-trans"> · 核足球</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">44:53</span>
+  <span class="chapter-title">Missile interceptor system<span class="zh-trans"> · 导弹拦截系统</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">49:10</span>
+  <span class="chapter-title">North Korea<span class="zh-trans"> · 北朝鲜</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">55:46</span>
+  <span class="chapter-title">Nuclear war scenarios<span class="zh-trans"> · 核战争场景</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:04:38</span>
+  <span class="chapter-title">Warmongers<span class="zh-trans"> · 好战者</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:09:06</span>
+  <span class="chapter-title">President’s cognitive ability<span class="zh-trans"> · 总统的认知能力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:15:19</span>
+  <span class="chapter-title">Refusing orders<span class="zh-trans"> · 拒绝订单</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:23:17</span>
+  <span class="chapter-title">Russia and Putin<span class="zh-trans"> · 俄罗斯和普京</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:28:23</span>
+  <span class="chapter-title">Cyberattack<span class="zh-trans"> · 网络攻击</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:29:45</span>
+  <span class="chapter-title">Ground zero of nuclear war<span class="zh-trans"> · 核战争归零地</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:34:24</span>
+  <span class="chapter-title">Surviving nuclear war<span class="zh-trans"> · 核战争中幸存</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:38:42</span>
+  <span class="chapter-title">Nuclear winter<span class="zh-trans"> · 核冬天</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:49:05</span>
+  <span class="chapter-title">Alien civilizations<span class="zh-trans"> · 外星文明</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">nuclear</span><span class="keyword-tag">annie</span><span class="keyword-tag">jacobsen</span><span class="keyword-tag">war</span><span class="keyword-tag">president</span><span class="keyword-tag">weapons</span><span class="keyword-tag">going</span><span class="keyword-tag">launch</span><span class="keyword-tag">called</span><span class="keyword-tag">said</span><span class="keyword-tag">book</span><span class="keyword-tag">cia</span><span class="keyword-tag">human</span><span class="keyword-tag">united</span><span class="keyword-tag">states</span><span class="keyword-tag">talking</span><span class="keyword-tag">don</span><span class="keyword-tag">russia</span><span class="keyword-tag">systems</span><span class="keyword-tag">intelligence</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"That’s it. Well, but now you’ve raised a great important presentation essentially, because what you’re saying is, “People, be aware.” Be aware of why you’re voting, or why certain individuals are being escalated to even being able to run for president. What does that mean? Why are people in America not more involved? As citizens do we have a responsibility for that? Because you’ve opened up the door for people to understand, okay, the ultimate thing is the nuclear launch decision. So if a person can’t be trusted with that, everything unravels from there."</div>
+  <div class="quote-zh">就是这样。好吧，但现在你本质上已经提出了一个非常重要的演讲，因为你所说的是，“人们，要注意。”请注意您为什么要投票，或者为什么某些人会升级为甚至能够竞选总统。这意味着什么？为什么美国人不更多地参与其中？作为公民，我们对此有责任吗？因为你为人们打开了理解的大门，好吧，最终的事情是核发射决定。因此，如果一个人在这一点上不能被信任，一切都会从那里开始瓦解。</div>
+  <div class="quote-meta">— Annie Jacobsen （01:19:49）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"To really think about this idea, I looked at the oldest known archeological site in the world in Turkey, which is called Gobekli Tepe. It’s really fascinating to me because I interviewed one of the two archeologists who first found this site in the early ’90s. The lead archeologist was a guy named Klaus Schmidt, and Michael Morsch was the young graduate student who was with him. Morsch’s description of coming upon this rumored to be site, there was something called a wishing tree on the site, which I just found so human and perfect, that it was this magical place, and it was Locatable because there was a wishing tree on a hill. It’s where people went to wish and to hope that their wishes came true. I mean, how human is that?"</div>
+  <div class="quote-zh">为了真正思考这个想法，我参观了土耳其世界上已知最古老的考古遗址，它被称为哥贝克力石阵。这对我来说真的很有趣，因为我采访了 20 世纪 90 年代初首次发现这个遗址的两位考古学家之一。首席考古学家是一个名叫克劳斯·施密特的人，迈克尔·莫尔什是和他在一起的年轻研究生。莫尔什（Morsch）对来到这个传闻中的地点的描述是，该地点上有一种叫做许愿树的东西，我刚刚发现它是如此人性化和完美，这是一个神奇的地方，而且它是可定位的，因为山上有一棵许愿树。人们去那里许愿并希望他们的愿望成真。我的意思是，这有多人性？</div>
+  <div class="quote-meta">— Annie Jacobsen （01:44:05）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And then, I really began thinking, well, before science and technology, sort of the supernatural ruled the world. The Oracle of Delphi in Greece exists before the common era rulers to go and beg to learn from the powers that be what was going to happen. All ESP programs, I think, pull from that origin story, the leader’s desire to know. And so, I really found it amazing that many people think these systems, or rather these programs, started in the ’70s. I learned they actually began right after World War II. That was because, and in my reporting, I find all things sort of always circle back to the Third Reich, to the Nazis."</div>
+  <div class="quote-zh">然后，我真的开始思考，在科学技术之前，超自然现象统治了世界。希腊的德尔斐神谕早于公元纪元的统治者就已存在，向当权者乞求将要发生的事情。我认为，所有 ESP 项目都源于这个起源故事，即领导者的求知欲望。因此，令我感到惊讶的是，许多人认为这些系统，或者更确切地说这些程序，始于 70 年代。我了解到它们实际上是在第二次世界大战后开始的。这是因为，在我的报道中，我发现所有的事情总是回到第三帝国，回到纳粹。</div>
+  <div class="quote-meta">— Annie Jacobsen （01:55:40）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And my husband. So what inspires me is this idea of legacy. I think that you always want to have your eye on being a good example to the best that you can and passing on what you know and believing in the next generation. And again, that’s a sentiment echoed by all these cold warriors I’ve been talking to because they also share that idea that, wow, look at what we have done as a civilization and look where we’re going. Whether it’s exoplanetary travel or AI. It’s just that the human factor of the desire to fight, the desire to have conflict, needs to be reconfigured, because with all these new technologies that we have, the peril is growing at an accelerating pace, perhaps faster than the average human can keep up with."</div>
+  <div class="quote-zh">还有我的丈夫。所以激发我灵感的是这种遗产的想法。我认为你总是希望尽你所能成为一个好榜样，并将你所知道的和相信的东西传递给下一代。再说一遍，这是我交谈过的所有这些冷战战士的共鸣，因为他们也有这样的想法，哇，看看我们作为一个文明所做的事情，看看我们要去哪里。无论是外行星旅行还是人工智能。只是战斗欲望、冲突欲望的人为因素需要重新配置，因为随着我们拥有的所有这些新技术，危险正在加速增长，也许比普通人能够跟上的速度更快。</div>
+  <div class="quote-meta">— Annie Jacobsen （03:05:29）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I mean, one of the things I found shocking was how little apparently most presidents know about the responsibility that literally lays at their feet. You may think through this six-minute window, I may think through this six-minute window. But what I learned, for example, former Secretary of Defense, Leon Panetta was really helpful in explaining this to me because before he was SecDef, he served as the director of the CIA. And before that, he was the White House Chief of Staff. And so, he has seen these different roles that have been so close to the President. But he explained to me that when he was the White House Chief of Staff for President Clinton, he noticed how President Clinton didn’t want to ever really deal with the nuclear issue because he had so many other issues to deal with."</div>
+  <div class="quote-zh">我的意思是，我发现令人震惊的一件事是，大多数总统显然对他们脚下的责任知之甚少。你可能会思考这六分钟的窗口，我可能会思考这六分钟的窗口。但我所了解到的，例如，前国防部长莱昂·帕内塔（Leon Panetta）对向我解释这一点确实很有帮助，因为在他担任国防部长之前，他曾担任中央情报局局长。在此之前，他曾担任白宫办公厅主任。因此，他看到了这些与总统如此密切的不同角色。但他向我解释说，当他担任克林顿总统的白宫办公厅主任时，他注意到克林顿总统不想真正处理核问题，因为他还有很多其他问题需要处理。</div>
+  <div class="quote-meta">— Annie Jacobsen （00:10:16）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Annie Jacobsen <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The United States has 1,770 nuclear weapons deployed, meaning those weapons could launch in as little as 60 seconds and up to a couple of minutes. Some of them on the bombers might take an hour or so. Russia has 1,674 deployed nuclear weapons. Same scenario. Their weapons systems are on par with ours. That’s not to mention the 12,500 nuclear weapons amongst the nine nuclear armed nations. The suck...</div>
+  <div class="dialogue-zh">美国部署了 1,770 枚核武器，这意味着这些武器可以在短则 60 秒、长则几分钟的时间内发射。轰炸机上的一些任务可能需要一个小时左右。俄罗斯部署了 1,674 枚核武器。同样的场景。他们的武器系统与我们的不相上下。更不用说九个拥核国家中的12,500件核武器了。太糟糕了</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Annie Jacobsen <span class="dialogue-time">(00:00:58)</span>
+  </div>
+  <div class="dialogue-en">In addition to the Launch on Warning concept, there’s this other insane concept called Sole Presidential Authority. And you might think, in a democracy that’s impossible, right? You can’t just start a war. Well, you can just start a nuclear war if you are the commander in chief, the President of the United States. In fact, you’re the only one who can do that. We are one misunderstanding, one misca...</div>
+  <div class="dialogue-zh">除了“警告后发射”概念之外，还有另一个疯狂的概念，称为“总统独家授权”。你可能会想，在民主国家这是不可能的，对吧？你不能就这样发动战争。好吧，如果你是总司令，美国总统，你就可以发动核战争。事实上，你是唯一能做到这一点的人。我们是一场误会，一场误会</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:36)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Annie Jacobsen, an investigative journalist, Pulitzer price finalist and author of several amazing books on war, weapons, government secrecy, and national security, including the books titled Area 51, Operation Paperclip, The Pentagon’s Brain, Phenomena, Surprise, Kill, Vanish, and her new book, Nuclear War. This is a Lex Fridman podcast. To support it, please ...</div>
+  <div class="dialogue-zh">以下是与调查记者、普利策奖入围者、多本有关战争、武器、政府保密和国家安全的精彩书籍的作者安妮·雅各布森的对话，其中包括《51区》、《回形针行动》、《五角大楼的大脑》、《现象》、《惊奇》、《杀戮》、《消失》以及她的新书《核战争》。这是莱克斯·弗里德曼的播客。为了支持它，请</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:13)</span>
+  </div>
+  <div class="dialogue-en">Let’s start with an immensely dark topic, nuclear war. How many people would a nuclear war between the United States and Russia kill?</div>
+  <div class="dialogue-zh">让我们从一个非常黑暗的话题开始：核战争。美国和俄罗斯之间的核战争会杀死多少人？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Annie Jacobsen <span class="dialogue-time">(00:02:24)</span>
+  </div>
+  <div class="dialogue-en">I’m coming back at you with a very dark answer and a very big number. And that number is 5 billion people.</div>
+  <div class="dialogue-zh">我会用一个非常黑暗的答案和一个非常大的数字来回答你。这个数字是 50 亿人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:37)</span>
+  </div>
+  <div class="dialogue-en">You go second by second, minute by minute, hour by hour what would happen if the nuclear war started? There’s a lot of angles from which I would love to talk to you about this. First, how would the deaths happen in the short term and the long term?</div>
+  <div class="dialogue-zh">你一秒一秒、一分钟一分钟、一小时一小时地走，如果核战争爆发，会发生什么？我很想从很多角度和你谈论这个问题。首先，短期和长期死亡会如何发生？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Annie Jacobsen <span class="dialogue-time">(00:03:00)</span>
+  </div>
+  <div class="dialogue-en">To start off, the reason I wrote the book is so that readers like you could see in appalling detail just how horrific nuclear war would be. And as you said, second by second, minute by minute. The book covers nuclear launch to nuclear winter. I purposely don’t get into the politics that lead up to that or the national security maneuvers or the posturing or any of that. I just want people to know n...</div>
+  <div class="dialogue-zh">首先，我写这本书的原因是为了让像您这样的读者能够以令人震惊的细节看到核战争将是多么可怕。正如你所说，一秒接着一秒，一分钟接着一分钟。这本书涵盖了核发射到核冬​​天。我故意不参与导致该事件的政治、国家安全演习或姿态或任何此类事件。我只是想让人们知道</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Annie Jacobsen <span class="dialogue-time">(00:03:58)</span>
+  </div>
+  <div class="dialogue-en">First millions, then tens of millions, then hundreds of millions of people will die in the first 72 minutes of a nuclear war. And then, comes nuclear winter where the billions happen from starvation. And so, the shock power of all of this is meant for each and every one of us to say, “Wait, what?” This actually exists behind the veil of national security. Most people do not think about nuclear war...</div>
+  <div class="dialogue-zh">首先是数百万人，然后是数千万人，然后是数亿人将在核战争的前72分钟内死亡。然后，核冬天到来，数十亿人陷入饥饿。因此，所有这一切的震撼力意味着我们每个人都会说：“等等，什么？”这实际上存在于国家安全的面纱背后。大多数人不会想到核战争</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:43)</span>
+  </div>
+  <div class="dialogue-en">But it doesn’t take too many people to start one.</div>
+  <div class="dialogue-zh">但启动一项并不需要太多人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Annie Jacobsen <span class="dialogue-time">(00:04:47)</span>
+  </div>
+  <div class="dialogue-en">In the words of Richard Garwin, who was the nuclear weapons engineer who drew the plans for the Ivy Mike thermonuclear bomb, the first thermonuclear bomb ever exploded in 1952. Garwin shared with me his opinion that all it takes is one nihilistic madman with a nuclear arsenal to start a nuclear war. And that’s how I begin the scenario.</div>
+  <div class="dialogue-zh">用核武器工程师理查德·加文（Richard Garwin）的话说，第一颗热核炸弹于 1952 年爆炸。他是绘制艾维·迈克热核弹计划的核武器工程师。加文与我分享了他的观点，即只需一个拥有核武库的虚无主义疯子就可以发动核战争。这就是我开始这个场景的方式。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:16)</span>
+  </div>
+  <div class="dialogue-en">What are the different ways it could start? Literally, who presses a button and what does it take to press a button?</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Annie Jacobsen <span class="dialogue-time">(00:05:25)</span>
+  </div>
+  <div class="dialogue-en">The way it starts is in space, meaning the US Defense Department has a early warning system, and the system in space is called SBIRS. It’s a constellation of satellites that is keeping an eye on all of America’s enemies so that the moment an ICBM launches, the satellite in space… And I’m talking about 1/10 of the way to the moon, that’s how powerful these satellites are in geo-sync. They see the h...</div>
+  <div class="dialogue-zh">它的启动方式是在太空中，也就是说美国国防部有一个预警系统，太空中的系统被称为SBIRS。这是一个密切关注美国所有敌人的卫星群，因此当洲际弹道导弹发射时，卫星就会进入太空……我说的是前往月球的 1/10，这就是这些卫星在地球同步中的威力。他们看到了 h</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Annie Jacobsen <span class="dialogue-time">(00:06:09)</span>
+  </div>
+  <div class="dialogue-en">And so, there begins this horrifying policy called Launch on Warning, right? And that’s the US counterattack. Meaning the reason that the United States is so ferociously watching for a nuclear launch somewhere around the globe is so that the nuclear command and control system in the US can move into action to immediately make a counterstrike. Because we have that policy, Launch on Warning, which i...</div>
+  <div class="dialogue-zh">因此，一项名为“警告后启动”的可怕政策就开始了，对吗？这就是美国的反击。这意味着美国之所以如此凶猛地监视全球某个地方的核发射，就是为了让美国的核指挥和控制系统能够立即采取行动进行反击。因为我们有“警告时启动”政策，我</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:57)</span>
+  </div>
+  <div class="dialogue-en">So the president, as part of the Launch on Warning policy, has six minutes… I guess can’t launch for six minutes, but at six minute mark from that first warning, the president can launch.</div>
+  <div class="dialogue-zh">因此，作为警告发射政策的一部分，总统有六分钟的时间……我想六分钟内不能发射，但在第一次警告后的六分钟内，总统可以发射。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Annie Jacobsen <span class="dialogue-time">(00:07:15)</span>
+  </div>
+  <div class="dialogue-en">And that was one of the most remarkable details to really nail down for this book when I was reporting this book, and talking to Secretary of Defenses, for example, who are the people who advise the president on this matter, right? You say to yourself, ” Wait a minute. How could that possibly be?” So, let’s unpack that. So, in addition to the Launch on Warning concept, there’s this other insane co...</div>
+  <div class="dialogue-zh">这是当我报告这本书并与国防部长交谈时，真正确定这本书的最引人注目的细节之一，例如，谁是在这个问题上为总统提供建议的人，对吗？你对自己说：“等一下。这怎么可能呢？”那么，让我们来解开它。所以，除了“警告时启动”概念之外，还有另一个疯狂的合作</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Annie Jacobsen <span class="dialogue-time">(00:08:08)</span>
+  </div>
+  <div class="dialogue-en">But the idea behind that is that nuclear war will unfold so fast only one person can be in charge. The president. He asks permission of no one. Not the Secretary of Defense, not the chairman of the Joint Chiefs of Staff, not the US Congress. So, built into that is this extraordinary speed you talk about, the six-minute window. And some people say, “That’s ridiculous. How do we know that six minute...</div>
+  <div class="dialogue-zh">但其背后的想法是，核战争将如此迅速地展开，只有一个人可以负责。总统。他没有征求任何人的许可。国防部长不是，参谋长联席会议主席不是，美国国会也不是。因此，其中内置的是您所说的非凡速度，即六分钟窗口。有些人说，“这太荒谬了。我们怎么知道六分钟</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:08)</span>
+  </div>
+  <div class="dialogue-en">Just imagine sitting there, one person, because a president is a human being, sitting there, just got the warning that Russia launched. You have six minutes. I meditate on my immortality every day. And here, you would be sitting and meditating, contemplating not just your own mortality, but the mortality of all the people you know, loved ones. Just imagining. What would be going through my head is...</div>
+  <div class="dialogue-zh">想象一下，一个人坐在那里，因为总统是一个人，坐在那里，刚刚收到俄罗斯发出的警告。 You have six minutes.我每天都沉思我的不朽。在这里，你会坐下来冥想，不仅思考你自己的死亡，还思考所有你认识的人、亲人的死亡。只是想象。我脑子里会想到的是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:55)</span>
+  </div>
+  <div class="dialogue-en">I guess the question that kept coming up is how do we stop this? Is it inevitable that it’s going to be escalated to a full-on nuclear war that destroys everything? And it seems like it will be. It’s inevitable. In the position of the President, it’s almost inevitable that they have to respond.</div>
+  <div class="dialogue-zh">我想不断出现的问题是我们如何阻止这种情况？是否不可避免地会升级为一场毁灭一切的全面核战争？看起来确实如此。这是不可避免的。作为总统，他们几乎不可避免地要做出回应。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Annie Jacobsen <span class="dialogue-time">(00:10:16)</span>
+  </div>
+  <div class="dialogue-en">I mean, one of the things I found shocking was how little apparently most presidents know about the responsibility that literally lays at their feet. You may think through this six-minute window, I may think through this six-minute window. But what I learned, for example, former Secretary of Defense, Leon Panetta was really helpful in explaining this to me because before he was SecDef, he served a...</div>
+  <div class="dialogue-zh">我的意思是，我发现令人震惊的一件事是，大多数总统显然对他们脚下的责任知之甚少。你可能会思考这六分钟的窗口，我可能会思考这六分钟的窗口。但我所了解到的，例如，前国防部长莱昂·帕内塔（Leon Panetta）对向我解释这一点确实很有帮助，因为在他担任国防部长之前，他曾担任过国防部长</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Annie Jacobsen <span class="dialogue-time">(00:11:15)</span>
+  </div>
+  <div class="dialogue-en">And that only when Panetta became Secretary of Defense, he told me, did he really realize the weight of all of this, because he knew he would be the person that the president would turn to were he to be notified of a nuclear attack. And by the way, the Launch on Warning, it’s the ballistic missile seen from outer space by the satellite. And then, there also must be a second confirmation from a gro...</div>
+  <div class="dialogue-zh">他告诉我，只有当帕内塔成为国防部长时，他才真正意识到这一切的重要性，因为他知道，如果总统收到核袭击通知，他会向他求助。顺便说一句，“警告发射”是卫星从外太空看到的弹道导弹。然后，还必须有来自 gro 的第二次确认</div>
+</div>
+    <a href="https://lexfridman.com/annie-jacobsen-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="david-fravor.html" class="card" style="text-decoration:none">
+  <div class="card-title">David Fravor: UFOs, Aliens, Fighter Jets, and Aerospace Engineering</div>
+  <div class="card-meta">David Fravor</div>
+</a>
+<a href="elon-musk-3.html" class="card" style="text-decoration:none">
+  <div class="card-title">Elon Musk: SpaceX, Mars, Tesla Autopilot, Self-Driving, Robotics, and AI</div>
+  <div class="card-meta">Elon Musk</div>
+</a>
+<a href="keoki-jackson.html" class="card" style="text-decoration:none">
+  <div class="card-title">Keoki Jackson: Lockheed Martin</div>
+  <div class="card-meta">Keoki Jackson</div>
+</a>
+<a href="alex-gladstein.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alex Gladstein: Bitcoin, Authoritarianism, and Human Rights</div>
+  <div class="card-meta">Alex Gladstein</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

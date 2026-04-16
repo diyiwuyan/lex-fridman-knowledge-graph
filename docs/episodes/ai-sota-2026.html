@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI SOTA 2026 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>AI SOTA 2026</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">AI SOTA 2026</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/sebastian-raschka.html" style="font-size:16px;color:#818cf8;font-weight:600">Sebastian Raschka</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">47,575 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/ai-sota-2026-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#f9731622;color:#f97316;border:1px solid #f9731644;font-size:13px;padding:4px 12px">体育与武术</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:57</span>
+  <span class="chapter-title">China vs US: Who wins the AI race?<span class="zh-trans"> · 中国 vs 美国：谁赢得了人工智能竞赛？</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">10:38</span>
+  <span class="chapter-title">ChatGPT vs Claude vs Gemini vs Grok: Who is winning?<span class="zh-trans"> · ChatGPT vs Claude vs Gemini vs Grok：谁赢了？</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">21:38</span>
+  <span class="chapter-title">Best AI for coding<span class="zh-trans"> · 最佳人工智能编码</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">28:29</span>
+  <span class="chapter-title">Open Source vs Closed Source LLMs<span class="zh-trans"> · 开源法学硕士与闭源法学硕士</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:08</span>
+  <span class="chapter-title">Transformers: Evolution of LLMs since 2019<span class="zh-trans"> · 变形金刚：2019 年以来法学硕士的演变</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">48:05</span>
+  <span class="chapter-title">AI Scaling Laws: Are they dead or still holding?<span class="zh-trans"> · 人工智能扩展法则：它们是死了还是仍然存在？</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:04:12</span>
+  <span class="chapter-title">How AI is trained: Pre-training, Mid-training, and Post-training<span class="zh-trans"> · AI 的训练方式：训练前、训练中、训练后</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:37:18</span>
+  <span class="chapter-title">Post-training explained: Exciting new research directions in LLMs<span class="zh-trans"> · 培训后解释：法学硕士令人兴奋的新研究方向</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:58:11</span>
+  <span class="chapter-title">Advice for beginners on how to get into AI development &amp; research<span class="zh-trans"> · 为初学者提供有关如何进入人工智能开发和研究的建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:21:03</span>
+  <span class="chapter-title">Work culture in AI (72+ hour weeks)<span class="zh-trans"> · AI 的工作文化（每周 72 小时以上）</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:24:49</span>
+  <span class="chapter-title">Silicon Valley bubble<span class="zh-trans"> · 硅谷泡沫</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:28:46</span>
+  <span class="chapter-title">Text diffusion models and other new research directions<span class="zh-trans"> · 文本扩散模型和其他新的研究方向</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:34:28</span>
+  <span class="chapter-title">Tool use<span class="zh-trans"> · 工具使用</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:38:44</span>
+  <span class="chapter-title">Continual learning<span class="zh-trans"> · 持续学习</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:44:06</span>
+  <span class="chapter-title">Long context<span class="zh-trans"> · 长上下文</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:50:21</span>
+  <span class="chapter-title">Robotics<span class="zh-trans"> · 机器人技术</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:59:31</span>
+  <span class="chapter-title">Timeline to AGI<span class="zh-trans"> · AGI 时间表</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:06:47</span>
+  <span class="chapter-title">Will AI replace programmers?<span class="zh-trans"> · AI会取代程序员吗？</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:25:18</span>
+  <span class="chapter-title">Is the dream of AGI dying?<span class="zh-trans"> · AGI 的梦想正在破灭吗？</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">nathan</span><span class="keyword-tag">lambert</span><span class="keyword-tag">models</span><span class="keyword-tag">model</span><span class="keyword-tag">sebastian</span><span class="keyword-tag">training</span><span class="keyword-tag">raschka</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">data</span><span class="keyword-tag">better</span><span class="keyword-tag">learning</span><span class="keyword-tag">llm</span><span class="keyword-tag">pre</span><span class="keyword-tag">code</span><span class="keyword-tag">compute</span><span class="keyword-tag">scaling</span><span class="keyword-tag">companies</span><span class="keyword-tag">human</span><span class="keyword-tag">llms</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I think we will. I’m definitely a worrier both about AI and non-AI things, but humans do tend to find a way. I think that’s what humans are built for—to have community and find a way to figure out problems. And that’s what has gotten us to this point. I think the AI opportunity and related technologies is really big. I think that there are big social and political problems to help everybody understand that. I think that’s what we’re staring at a lot of right now; the world is a scary place, and AI is a very uncertain thing. And it takes a lot of work that is not necessarily building things. It’s like telling people and understanding people, things that the people building AI are historically not motivated or wanting to do."</div>
+  <div class="quote-zh">我想我们会的。我绝对是人工智能和非人工智能事物的担忧者，但人类确实倾向于找到一种方法。我认为这就是人类生来的目的——建立社区并找到解决问题的方法。这就是我们走到这一步的原因。我认为人工智能和相关技术的机会确实很大。我认为有一些重大的社会和政治问题可以帮助每个人理解这一点。我认为这就是我们现在所关注的问题；世界是一个可怕的地方，而人工智能是一个非常不确定的东西。这需要大量的工作，但不一定是建造东西。这就像告诉人们和理解人们，构建人工智能的人们历来没有动力或不想做的事情。</div>
+  <div class="quote-meta">— Nathan Lambert （04:20:59）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But if you think of big industries like pharmaceuticals, law, or finance, I do think they at some point will hire people from other frontier labs to build their in-house models on their proprietary data, which will be another unlock with pre-training that is currently not there. Because even if you wanted to, you can’t get that data—you can’t get access to clinical trials most of the time and these types of things. So I do think scaling in that sense might still be pretty much alive if you look at domain-specific applications, because right now we are just looking at general-purpose LLMs like ChatGPT, Anthropic, and so forth. They are just general purpose. They’re not even scratching the surface of what an LLM can do if it is really specifically trained and designed for a specific task."</div>
+  <div class="quote-zh">但如果你想到像制药、法律或金融这样的大行业，我确实认为他们在某个时候会雇佣其他前沿实验室的人员在他们的专有数据上构建他们的内部模型，这将是目前尚不存在的预训练的另一个解锁。因为即使你想，你也无法获得这些数据——大多数时候你无法获得临床试验和此类信息。因此，我确实认为，如果您关注特定领域的应用程序，那么这种意义上的扩展可能仍然存在，因为现在我们只关注通用的 LLM，如 ChatGPT、Anthropic 等。它们只是通用目的。如果法学硕士确实是针对特定任务经过专门培训和设计的，那么他们甚至没有触及法学硕士可以做什么的表面。</div>
+  <div class="quote-meta">— Sebastian Raschka （01:16:00）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And the model also self-corrects, and that was, I think, the aha moment in the DeepSeek R1 paper. They called it the ‘aha moment’ because the model itself recognized it made a mistake and then said, “Ah, I did something wrong, let me try again.” I think that’s just so cool that this falls out of just giving it the correct answer and having it figure out how to do it—that it kind of does, in a sense, what a human would do. Although LLMs don’t think like humans, it’s a kind of interesting coincidence. And the nice side effect is it’s great for us humans to see these steps. It builds trust, and we can learn or double-check things."</div>
+  <div class="quote-zh">而且该模型还会自我修正，我认为这就是 DeepSeek R1 论文中的顿悟时刻。他们称之为“顿悟时刻”，因为模型本身意识到它犯了一个错误，然后说：“啊，我做错了，让我再试一次。”我认为这太酷了，只要给它正确的答案并让它弄清楚如何去做，从某种意义上说，它就可以做人类会做的事情。虽然法学硕士不像人类那样思考，但这确实是一种有趣的巧合。好的副作用是，看到这些步骤对我们人类来说是件好事。它建立了信任，我们可以学习或仔细检查事情。</div>
+  <div class="quote-meta">— Sebastian Raschka （01:43:03）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But I do think there’s certainly an aspect where the GPU trajectory was all planned. But on the other end, it’s also a lot of lucky coincidences or good intuition. Like the investment into, let’s say, biophysical simulations. I mean, I think it started with video games and then it just happened to be good at linear algebra because video games require a lot of linear algebra. And then you have the biophysical simulations. But still, I don’t think the master plan was AI. I think it just happened to be Alex Krizhevsky. So someone took these GPUs and said, “Hey, let’s try to train a neural network on that.” It happened to work really well and… …I think it only happened because you could purchase those GPUs."</div>
+  <div class="quote-zh">但我确实认为 GPU 轨迹肯定有一个方面是经过规划的。但另一方面，这也有很多幸运的巧合或良好的直觉。就像对生物物理模拟的投资一样。我的意思是，我认为它是从视频游戏开始的，然后它恰好擅长线性代数，因为视频游戏需要大量的线性代数。然后进行生物物理模拟。但我仍然不认为总体规划是人工智能。我认为这恰好是亚历克斯·克里热夫斯基（Alex Krizhevsky）。于是有人拿着这些 GPU 说：“嘿，让我们尝试用它来训练神经网络。”它碰巧工作得很好而且……我认为这只是因为你可以购买这些 GPU。</div>
+  <div class="quote-meta">— Sebastian Raschka （04:05:48）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So winning is a very broad term. I would say you mentioned the DeepSeek moment, and I do think DeepSeek is definitely winning the hearts of the people who work on open weight models because they share these as open models. Winning, I think, has multiple timescales to it. We have today, we have next year, we have in ten years. One thing I know for sure is that I don’t think nowadays, in 2026, that there will be any company having access to a technology that no other company has access to. And that is mainly because researchers are frequently changing jobs, changing labs. They rotate. So I don’t think there will be a clear winner in terms of technology access."</div>
+  <div class="quote-zh">所以获胜是一个非常广泛的术语。我想说你提到了 DeepSeek 时刻，我确实认为 DeepSeek 绝对赢得了开放权重模型研究人员的心，因为他们将这些模型作为开放模型进行共享。我认为，胜利有多个时间尺度。我们有今天，我们有明年，我们有十年。我确信的一件事是，我认为现在到 2026 年，不会有任何公司能够获得其他公司无法获得的技术。这主要是因为研究人员经常更换工作、更换实验室。他们旋转。因此，我认为在技术获取方面不会有明显的赢家。</div>
+  <div class="quote-meta">— Sebastian Raschka （00:02:53）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation all about the state of the art in artificial intelligence, including some of the exciting technical breakthroughs and developments in AI that happened over the past year, and some of the interesting things we think might happen this upcoming year. At times, it does get super technical, but we do try to make sure that it remains accessible to folks outside the field ...</div>
+  <div class="dialogue-zh">以下是关于人工智能最新技术的对话，包括过去一年中人工智能领域发生的一些令人兴奋的技术突破和发展，以及我们认为明年可能会发生的一些有趣的事情。有时，它确实变得非常技术性，但我们确实尽力确保该领域之外的人员仍然可以访问它</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:51)</span>
+  </div>
+  <div class="dialogue-en">Sebastian is the author of two books I highly recommend for beginners and experts alike. First is Build a Large Language Model from Scratch, and Build a Reasoning Model from Scratch. I truly believe in the machine learning and computer science world, the best way to learn and understand something is to build it yourself from scratch. Nathan is the post-training lead at the Allen Institute for AI, ...</div>
+  <div class="dialogue-zh">塞巴斯蒂安是我强烈推荐给初学者和专家的两本书的作者。首先是从头开始构建大型语言模型，然后从头开始构建推理模型。我坚信在机器学习和计算机科学世界中，学习和理解某些东西的最好方法就是从头开始自己构建它。 Nathan 是艾伦人工智能研究所的培训后负责人，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:40)</span>
+  </div>
+  <div class="dialogue-en">To support it, please check out our sponsors in the description, where you can also find links to contact me, ask questions, get feedback, and so on. And now, dear friends, here’s Sebastian Raschka and Nathan Lambert. China vs US: Who wins the AI race?</div>
+  <div class="dialogue-zh">为了支持它，请在描述中查看我们的赞助商，您还可以在其中找到联系我、提出问题、获取反馈等的链接。现在，亲爱的朋友们，这是塞巴斯蒂安·拉斯卡和内森·兰伯特。中国 vs 美国：谁赢得了人工智能竞赛？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:57)</span>
+  </div>
+  <div class="dialogue-en">So I think one useful lens to look at all this through is the so-called DeepSeek moment. This happened about a year ago in January 2025, when the open weight Chinese company DeepSeek released DeepSeek R1 that I think it’s fair to say surprised everyone with near or at state-of-the-art performance, with allegedly much less compute for much cheaper. And from then to today, the AI competition has got...</div>
+  <div class="dialogue-zh">因此，我认为观察这一切的一个有用的镜头就是所谓的 DeepSeek 时刻。这发生在大约一年前的 2025 年 1 月，当时开放权重的中国公司 DeepSeek 发布了 DeepSeek R1，我认为可以公平地说，它以接近或达到最先进的性能让所有人感到惊讶，据称计算量要少得多，而且价格要便宜得多。从那时到今天，人工智能竞赛已经</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:32)</span>
+  </div>
+  <div class="dialogue-en">Let’s discuss all of this today, and maybe let’s start with some spicy questions if we can. Who’s winning at the international level? Would you say it’s the set of companies in China or the set of companies in the United States? Sebastian, Nathan, it’s good to see you guys. So Sebastian, who do you think is winning?</div>
+  <div class="dialogue-zh">今天让我们讨论所有这些，如果可以的话，也许我们可以从一些尖锐的问题开始。谁在国际层面获胜？你说是中国的公司集合还是美国的公司集合？塞巴斯蒂安，内森，很高兴见到你们。那么塞巴斯蒂安，你认为谁会获胜？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sebastian Raschka <span class="dialogue-time">(00:02:53)</span>
+  </div>
+  <div class="dialogue-en">So winning is a very broad term. I would say you mentioned the DeepSeek moment, and I do think DeepSeek is definitely winning the hearts of the people who work on open weight models because they share these as open models. Winning, I think, has multiple timescales to it. We have today, we have next year, we have in ten years. One thing I know for sure is that I don’t think nowadays, in 2026, that ...</div>
+  <div class="dialogue-zh">所以获胜是一个非常广泛的术语。我想说你提到了 DeepSeek 时刻，我确实认为 DeepSeek 绝对赢得了开放权重模型研究人员的心，因为他们将这些模型作为开放模型进行共享。我认为，胜利有多个时间尺度。我们有今天，我们有明年，我们有十年。我确信的一件事是，我不认为现在，即 2026 年，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sebastian Raschka <span class="dialogue-time">(00:03:37)</span>
+  </div>
+  <div class="dialogue-en">However, I do think the differentiating factor will be budget and hardware constraints. I don’t think the ideas will be proprietary, but rather the resources that are needed to implement them. And so I don’t currently see a winner-takes-all scenario. I can’t see that at the moment.</div>
+  <div class="dialogue-zh">然而，我确实认为差异化因素将是预算和硬件限制。我不认为这些想法是专有的，而是实现它们所需的资源。因此，我目前没有看到赢家通吃的情况。我现在看不到。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:59)</span>
+  </div>
+  <div class="dialogue-en">Nathan, what do you think?</div>
+  <div class="dialogue-zh">内森，你觉得怎么样？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:04:00)</span>
+  </div>
+  <div class="dialogue-en">You see the labs put different energy into what they’re trying to do. To demarcate the point in time when we’re recording this, the hype over Anthropic’s Claude Opus 4.5 model has been absolutely insane. I’ve used it and built stuff in the last few weeks, and it’s almost gotten to the point where it feels like a bit of a meme in terms of the hype. It’s kind of funny because this is very organic, a...</div>
+  <div class="dialogue-zh">你会看到实验室在他们想做的事情上投入了不同的精力。为了界定我们记录这一点的时间点，对 Anthropic 的 Claude Opus 4.5 模型的炒作绝对是疯狂的。在过去的几周里，我已经使用了它并构建了一些东西，就炒作而言，它几乎已经达到了一种模因的程度。这有点有趣，因为这是非常有机的，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:04:44)</span>
+  </div>
+  <div class="dialogue-en">And it kind of feels like people don’t really talk about it as much, even though when it came out, everybody was like, this is Gemini’s moment to retake Google’s structural advantages in AI. Gemini 3 is a fantastic model, and I still use it. It’s just that differentiation is lower. I agree with what you’re saying, Sebastian, that the idea space is very fluid, but culturally Anthropic is known for ...</div>
+  <div class="dialogue-zh">感觉人们并没有真正谈论它，尽管当它问世时，每个人都在想，这是双子座重新夺回谷歌在人工智能领域结构性优势的时刻。 Gemini 3 是一款很棒的型号，我仍然在使用它。只是差异化较低。我同意你的说法，塞巴斯蒂安，思想空间非常流动，但文化上的人择法以</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:05:23)</span>
+  </div>
+  <div class="dialogue-en">It’s a bit of an advantage if they can keep doing that for a while. But on the other side of things, there’s a lot of ominous technology from China where there are way more labs than DeepSeek. DeepSeek kicked off a movement within China similar to how ChatGPT kicked off a movement in the US where everything had a chatbot. There are now tons of tech companies in China that are releasing very strong...</div>
+  <div class="dialogue-zh">如果他们能继续这样做一段时间，这会是一个优势。但另一方面，中国有很多不祥的技术，中国的实验室比 DeepSeek 多得多。 DeepSeek 在中国掀起了一场运动，类似于 ChatGPT 在美国掀起了一场运动，在美国，一切都有聊天机器人。中国现在有很多科技公司正在发布非常强大的产品</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:06:04)</span>
+  </div>
+  <div class="dialogue-en">The new DeepSeek models are still very strong, but that could be looked back on as a big narrative point where in 2025 DeepSeek came and provided this platform for way more Chinese companies that are releasing these fantastic models to have this new type of operation. These models from these Chinese companies are open weight, and depending on this trajectory, the business models that these America...</div>
+  <div class="dialogue-zh">新的 DeepSeek 模型仍然非常强大，但这可以看作是一个重要的叙事点，2025 年 DeepSeek 的出现为更多中国公司提供了这个平台，这些公司正在发布这些出色的模型来进行这种新型运营。这些中国公司的商业模式是开放式的，根据这个轨迹，这些美国公司的商业模式</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:37)</span>
+  </div>
+  <div class="dialogue-en">So some of these models like DeepSeek have the love of the people because they are open weight. How long do you think the Chinese companies keep releasing open weight models?</div>
+  <div class="dialogue-zh">因此，像 DeepSeek 这样的一些模型因其开放权重而受到人们的喜爱。您认为中国公司持续发布开放重量模型多久了？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:06:47)</span>
+  </div>
+  <div class="dialogue-en">I would say for a few years. I think that, like in the US, there’s not a clear business model for it. I have been writing about open models for a while, and these Chinese companies have realized it. I get inbound from some of them. They’re smart and realize the same constraints, which is that a lot of top US tech companies and other IT companies won’t pay for an API subscription to Chinese compani...</div>
+  <div class="dialogue-zh">我想说几年。我认为，就像在美国一样，没有明确的商业模式。我写开放模式已经有一段时间了，这些中国公司已经意识到了这一点。我从其中一些人那里入境。他们很聪明，意识到同样的限制，即许多美国顶级科技公司和其他 IT 公司不会向中国公司支付 API 订阅费用。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:07:24)</span>
+  </div>
+  <div class="dialogue-en">And I think the government will see that that is building a lot of influence internationally in terms of uptake of the technology, so there’s going to be a lot of incentives to keep it going. But building these models and doing the research is very expensive, so at some point, I expect consolidation. But I don’t expect that to be a story of 2026; there will be more open model builders throughout 2...</div>
+  <div class="dialogue-zh">我认为政府会看到这在技术的采用方面正在国际上产生很大的影响力，因此将会有很多激励措施来保持它的发展。但构建这些模型并进行研究非常昂贵，因此在某些时候，我预计会进行整合。但我不认为这会成为 2026 年的故事。整个2中将会有更多的开放模型构建器</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:50)</span>
+  </div>
+  <div class="dialogue-en">You were going to say something?</div>
+  <div class="dialogue-zh">你本来想说点什么吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sebastian Raschka <span class="dialogue-time">(00:07:51)</span>
+  </div>
+  <div class="dialogue-en">Yes. You mentioned DeepSeek losing its crown. I do think to some extent, yes, but we also have to consider that they are still slightly ahead. It’s not that DeepSeek got worse, it’s just like the other ones are using the ideas from DeepSeek. For example, you mentioned Kimi, same architecture, they’re training it. And then again, we have this leapfrogging where they might be at some point in time a...</div>
+  <div class="dialogue-zh">是的。您提到 DeepSeek 失去了王冠。我确实认为在某种程度上是的，但我们也必须考虑到他们仍然稍微领先。并不是 DeepSeek 变得更糟，只是其他人都在使用 DeepSeek 的想法。例如，你提到 Kimi，同样的架构，他们正在训练它。再说一次，我们有这种跨越式的发展，他们可能在某个时间点成为</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Nathan Lambert <span class="dialogue-time">(00:08:30)</span>
+  </div>
+  <div class="dialogue-en">Yeah. We’ll also see the Chinese companies have different incentives. DeepSeek is very secretive, whereas some of these startups are like the MiniMaxes and Z.ais of the world. Those two literally have filed IPO paperwork, and they’re trying to get Western mindshare and do a lot of outreach there. So I don’t know if these incentives will change the model development, because DeepSeek famously is bu...</div>
+  <div class="dialogue-zh">是的。我们还将看到中国公司有不同的激励措施。 DeepSeek 非常神秘，而其中一些初创公司就像世界上的 MiniMaxes 和 Z.ais 一样。这两家公司实际上已经提交了 IPO 文件，他们正试图获得西方的关注并在那里进行大量的宣传。所以我不知道这些激励措施是否会改变模型开发，因为 DeepSeek 众所周知的是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:59)</span>
+  </div>
+  <div class="dialogue-en">They’re secretive in terms of communication, but they’re not secretive in terms of the technical reports that describe how their models work. They’re still open on that front. And we should also say on the Claude Opus 4.5 hype, there’s the layer of something being the darling of the X echo chamber, the Twitter echo chamber, and the actual amount of people that are using the model. I think it’s pro...</div>
+  <div class="dialogue-zh">他们在沟通方面是保密的，但在描述其模型如何工作的技术报告方面却并不保密。他们在这方面仍然开放。我们还应该说，关于 Claude Opus 4.5 的炒作，有一层是 X 回声室、Twitter 回声室的宠儿，以及使用该模型的实际人数。我认为这是专业版</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sebastian Raschka <span class="dialogue-time">(00:09:38)</span>
+  </div>
+  <div class="dialogue-en">I would say also a lot of the usage patterns are name recognition and brand, but also almost muscle memory, where ChatGPT has been around for a long time. People just got used to using it, and it’s almost like a flywheel where they recommend it to other users. One interesting point is also the customization of LLMs. For example, ChatGPT has a memory feature. So you may have a subscription and you ...</div>
+  <div class="dialogue-zh">我想说，很多使用模式都是名称识别和品牌，但也几乎是肌肉记忆，ChatGPT 已经存在很长时间了。人们刚刚习惯了使用它，它几乎就像一个飞轮，他们将其推荐给其他用户。一个有趣的一点是法学硕士的定制。例如，ChatGPT 具有记忆功能。所以你可能有订阅并且你</div>
+</div>
+    <a href="https://lexfridman.com/ai-sota-2026-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="jimmy-pedro.html" class="card" style="text-decoration:none">
+  <div class="card-title">Jimmy Pedro: Judo and the Forging of Champions</div>
+  <div class="card-meta">Jimmy Pedro</div>
+</a>
+<a href="travis-stevens.html" class="card" style="text-decoration:none">
+  <div class="card-title">Travis Stevens: Judo, Olympics, and Mental Toughness</div>
+  <div class="card-meta">Travis Stevens</div>
+</a>
+<a href="ben-askren.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ben Askren: Wrestling and MMA</div>
+  <div class="card-meta">Ben Askren</div>
+</a>
+<a href="brendan-eich.html" class="card" style="text-decoration:none">
+  <div class="card-title">Brendan Eich: JavaScript, Firefox, Mozilla, and Brave</div>
+  <div class="card-meta">Brendan Eich</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

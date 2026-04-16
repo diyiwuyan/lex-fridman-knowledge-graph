@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ben Shapiro Destiny Debate - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Ben Shapiro Destiny Debate</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Ben Shapiro Destiny Debate</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/ben-shapiro.html" style="font-size:16px;color:#818cf8;font-weight:600">Ben Shapiro</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">33,608 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/ben-shapiro-destiny-debate-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:36</span>
+  <span class="chapter-title">Liberalism vs Conservatism<span class="zh-trans"> · 自由主义与保守主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">6:49</span>
+  <span class="chapter-title">Education<span class="zh-trans"> · 教育</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">23:06</span>
+  <span class="chapter-title">Trump vs Biden<span class="zh-trans"> · 特朗普 vs 拜登</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">43:31</span>
+  <span class="chapter-title">Foreign policy<span class="zh-trans"> · 对外政策</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">56:28</span>
+  <span class="chapter-title">Israel-Palestine<span class="zh-trans"> · 以色列-巴勒斯坦</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:11:25</span>
+  <span class="chapter-title">Russia-Ukraine<span class="zh-trans"> · 俄罗斯-乌克兰</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:23:04</span>
+  <span class="chapter-title">January 6<span class="zh-trans"> · 1月6日</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:39:03</span>
+  <span class="chapter-title">Abuse of power<span class="zh-trans"> · 滥用权力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:49:01</span>
+  <span class="chapter-title">Wokeism<span class="zh-trans"> · 觉醒主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:55:42</span>
+  <span class="chapter-title">Institutional capture<span class="zh-trans"> · 制度捕获</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:09:36</span>
+  <span class="chapter-title">Monogamy vs open relationships<span class="zh-trans"> · 一夫一妻制与开放式关系</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:14:29</span>
+  <span class="chapter-title">Rapid fire questions<span class="zh-trans"> · 快速提问</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">ben</span><span class="keyword-tag">destiny</span><span class="keyword-tag">shapiro</span><span class="keyword-tag">trump</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">biden</span><span class="keyword-tag">israel</span><span class="keyword-tag">sure</span><span class="keyword-tag">government</span><span class="keyword-tag">states</span><span class="keyword-tag">donald</span><span class="keyword-tag">agree</span><span class="keyword-tag">inaudible</span><span class="keyword-tag">president</span><span class="keyword-tag">policy</span><span class="keyword-tag">terms</span><span class="keyword-tag">united</span><span class="keyword-tag">iran</span><span class="keyword-tag">ukraine</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"However, one area where I’ll break with, Ben, is I think that minimizing civilian casualties and everything is very, very, very important I think on the Israeli side. I don’t think it’s important so that the US will stay with them because I think the US is probably going to stick with Israel as long as they’re not doing anything crazy, and I don’t even think it matters for the international community. It definitely doesn’t matter for the UN because Jesus Christ. However, I think it’s really, really, really important that… I think that in the Middle East, broadly speaking, I think that leadership, especially in the Gulf, has gotten over the Palestinian issue."</div>
+  <div class="quote-zh">然而，本，我要反对的一个领域是，我认为最大程度地减少平民伤亡，我认为对以色列方面来说，一切都非常、非常、非常重要。我认为美国与他们呆在一起并不重要，因为我认为只要他们不做任何疯狂的事情，美国可能就会坚持与以色列在一起，而且我什至认为这对国际社会来说并不重要。这对联合国来说绝对不重要，因为耶稣基督。然而，我认为这真的非常非常重要……我认为在中东，从广义上讲，我认为领导层，特别是在海湾地区，已经解决了巴勒斯坦问题。</div>
+  <div class="quote-meta">— Destiny （00:59:51）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think that the issue with Trump too though is I think he’s even a threat to the Republican party in which I think… I think you would mostly agree with me, maybe not overall, but on every individual point. Trump picks bad candidates. He has no concern for the future of the Republican Party. For instance, I think there is a chance… I don’t think it’ll happen because of the polling looks now, but if Trump didn’t get the nomination, I think Trump would say, screw it and run as an independent because he thinks he can win or whatever."</div>
+  <div class="quote-zh">我认为特朗普的问题也在于我认为他甚至对共和党构成威胁，我认为……我认为你大多会同意我的观点，也许不是总体上，而是在每个单独的观点上。特朗普挑选了糟糕的候选人。他不关心共和党的未来。例如，我认为有机会......我认为这不会发生，因为现在的民意调查看起来，但如果特朗普没有获得提名，我认为特朗普会说，搞砸了，以独立人士身份参选，因为他认为自己可以获胜或其他什么。</div>
+  <div class="quote-meta">— Destiny （01:39:19）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So for example, I think right now, when Biden is taught, I think that what Biden just did, the United States as we speak, is striking the Houthis. I think that that’s a really, really good thing. I think that’s a necessary thing, and I think American people should understand why that is happening. It’s not because of, quote, unquote, “ideology”. It is, I mean, on a very root level, but really, it’s because you’re screwing up the straits. I mean, you can’t do that. You can’t screw up free trade, and Americans have an interest in not seeing all of our prices at the grocery store double and triple because a bunch of ragtag pirates akin to the Barbary pirates from 1800 are bothering everyone. Right?"</div>
+  <div class="quote-zh">例如，我认为现在，当拜登被教导时，我认为拜登刚才所做的事情，正如我们所说的美国，正在打击胡塞武装。我认为这是一件非常非常好的事情。我认为这是一件必要的事情，我认为美国人民应该理解为什么会发生这种情况。这不是因为，引用，不引用，“意识形态”。我的意思是，从根本上来说，这是因为你把海峡搞砸了。我的意思是，你不能那样做。你不能搞砸自由贸易，美国人不想看到我们所有的杂货店价格翻倍或三倍，因为一群类似于 1800 年巴巴里海盗的乌合之众海盗正在困扰着每个人。正确的？</div>
+  <div class="quote-meta">— Ben Shapiro （01:16:26）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"In any case, Yoav Galant was urging in the very early days of the war that Israel should turn North and instead of hitting Hamas, they should actually take the opportunity to knock Hezbollah out because Hezbollah is significantly more dangerous to the existence of the state of Israel than Hamas. I actually agree with that. As far as what Israel has been doing wrong in the actual war, I mean, I think that, again, from an American perspective, I think that Israel is doing pretty well from an Israeli perspective via Israeli. I would actually want Israel to be less loose about sending its soldiers in on the ground level. So Israel’s attempting to minimize civilian casualties, and the cost of that has been the high."</div>
+  <div class="quote-zh">无论如何，约夫·加兰特在战争初期就敦促以色列应该转向北方，而不是攻击哈马斯，他们实际上应该抓住机会消灭真主党，因为真主党对以色列国家的存在比哈马斯更危险。我其实同意这一点。至于以色列在实际战争中做错了什么，我的意思是，我认为，从美国的角度来看，我认为从以色列的角度来看，以色列通过以色列做得很好。我实际上希望以色列在派遣士兵到地面方面不要那么宽松。因此，以色列试图尽量减少平民伤亡，但其代价却很高。</div>
+  <div class="quote-meta">— Ben Shapiro （00:57:27）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So obviously I’m going to say it’s a huge threat. The reason that I think this is a huge threat… I want to give a definition of wokeism because people are very often accused of not using wokeism properly or believing that it’s sort of a catchall phrase. I don’t think it’s a catchall term. I think that wokeism has its roots in postmodernism, which essentially suggests that every principle is a reflection of underlying structures of power, and that therefore any inequality that emerges under such a system is a reflection, again, of that structure of power."</div>
+  <div class="quote-zh">显然我会说这是一个巨大的威胁。我之所以认为这是一个巨大的威胁……我想给觉醒主义下一个定义，因为人们经常被指责没有正确使用觉醒主义，或者认为这是一个包罗万象的短语。 I don’t think it’s a catchall term.我认为唤醒主义根源于后现代主义，后现代主义本质上表明每一项原则都是潜在权力结构的反映，因此在这种制度下出现的任何不平等都是该权力结构的反映。</div>
+  <div class="quote-meta">— Ben Shapiro （01:49:30）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Destiny <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">Something has to happen with Iran. There has to be some diplomatic bilateral communication there.</div>
+  
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:00:04)</span>
+  </div>
+  <div class="dialogue-en">No. What has to happen is the containment of Iran.</div>
+  <div class="dialogue-zh">不，必须要做的是遏制伊朗。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Destiny <span class="dialogue-time">(00:00:06)</span>
+  </div>
+  <div class="dialogue-en">History moves in one direction.</div>
+  <div class="dialogue-zh">历史朝一个方向发展。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:00:07)</span>
+  </div>
+  <div class="dialogue-en">Why?</div>
+  <div class="dialogue-zh">为什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Destiny <span class="dialogue-time">(00:00:09)</span>
+  </div>
+  <div class="dialogue-en">Because of time.</div>
+  <div class="dialogue-zh">因为时间。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:00:10)</span>
+  </div>
+  <div class="dialogue-en">Communism, Nazism, all of that was a regression from what was happening at, for example, the beginning of the 19th century into the 20th century.</div>
+  <div class="dialogue-zh">共产主义、纳粹主义，所有这些都是从十九世纪初到二十世纪初所发生的事情的倒退。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Destiny <span class="dialogue-time">(00:00:16)</span>
+  </div>
+  <div class="dialogue-en">In what way?</div>
+  <div class="dialogue-zh">以什么方式？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:00:17)</span>
+  </div>
+  <div class="dialogue-en">Do you think that today Donald Trump knows that he lost the election?</div>
+  <div class="dialogue-zh">您认为唐纳德·特朗普今天知道他输掉了选举吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Destiny <span class="dialogue-time">(00:00:20)</span>
+  </div>
+  <div class="dialogue-en">Absolutely.</div>
+  <div class="dialogue-zh">绝对地。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:00:21)</span>
+  </div>
+  <div class="dialogue-en">I don’t.</div>
+  <div class="dialogue-zh">我不知道。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Destiny <span class="dialogue-time">(00:00:22)</span>
+  </div>
+  <div class="dialogue-en">This is one of the areas where we get into this, I don’t understand if there’s brain-breaking happening or what’s going on. I don’t know what world we can ever live in where we say that Trump is less divisive for the country than Biden.</div>
+  <div class="dialogue-zh">这是我们进入的领域之一，我不明白是否发生了脑残或发生了什么。我不知道我们能生活在什么样的世界里，我们说特朗普对国家的分裂程度比拜登小。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:00:33)</span>
+  </div>
+  <div class="dialogue-en">Joe Biden literally used the Occupational Safety and Hazard Administration to try to cram down vax mandates on 80 million Americans. That’s insane.</div>
+  <div class="dialogue-zh">乔·拜登确实利用职业安全与危害管理局试图强制 8000 万美国人接受疫苗接种。这太疯狂了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Destiny <span class="dialogue-time">(00:00:41)</span>
+  </div>
+  <div class="dialogue-en">What about supercalifragilisticexpialidocious?</div>
+  <div class="dialogue-zh">那么 supercalifragilisticexpialidocious 又如何呢？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:00:43)</span>
+  </div>
+  <div class="dialogue-en">What about pneumonoultramicroscopicsilicovolcanoconiosis?</div>
+  <div class="dialogue-zh">肺炎超微硅火山沉着症怎么样？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Destiny <span class="dialogue-time">(00:00:45)</span>
+  </div>
+  <div class="dialogue-en">Yeah, or the science terms.</div>
+  <div class="dialogue-zh">是的，或者科学术语。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:00:45)</span>
+  </div>
+  <div class="dialogue-en">Yeah, exactly.</div>
+  <div class="dialogue-zh">是的，完全正确。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Destiny <span class="dialogue-time">(00:00:46)</span>
+  </div>
+  <div class="dialogue-en">Or what about the 7,000 letter thing that’s from part of a biochem.</div>
+  <div class="dialogue-zh">或者来自生物化学部分的 7,000 个字母怎么样？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:49)</span>
+  </div>
+  <div class="dialogue-en">I got my education in the Soviet Union. So we just did math. We didn’t run any of this.</div>
+  <div class="dialogue-zh">我在苏联接受教育。所以我们只做了数学。我们没有运行任何这些。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:00:53)</span>
+  </div>
+  <div class="dialogue-en">That’s why you’re a useful person.</div>
+  <div class="dialogue-zh">这就是为什么你是一个有用的人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:54)</span>
+  </div>
+  <div class="dialogue-en">Does body count matter? The following is a debate between Ben Shapiro and Destiny. Each arguably representing the right and left of American politics respectively. They are two of the most influential and skilled political debaters in the world. This debate has been a long time coming for many years. It’s about 2.5 hours and we could have easily gone for many more. And I’m sure we will. It is only...</div>
+  <div class="dialogue-zh">身材重要吗？以下是本·夏皮罗和命运之间的一场辩论。每个人都可以说分别代表了美国政治的右翼和左翼。他们是世界上最具影响力和技巧的两位政治辩论家。这场争论已经持续了很多年了。大约需要 2.5 小时，我们可以轻松地花更多时间。我相信我们会的。这只是</div>
+</div>
+    <a href="https://lexfridman.com/ben-shapiro-destiny-debate-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="bernie-sanders.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bernie Sanders</div>
+  <div class="card-meta">Bernie Sanders</div>
+</a>
+<a href="douglas-murray-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Douglas Murray #2</div>
+  <div class="card-meta">Douglas Murray</div>
+</a>
+<a href="eric-weinstein-4.html" class="card" style="text-decoration:none">
+  <div class="card-title">Eric Weinstein: Difficult Conversations, Freedom of Speech, and Physics</div>
+  <div class="card-meta">Eric Weinstein</div>
+</a>
+<a href="eric-weinstein.html" class="card" style="text-decoration:none">
+  <div class="card-title">Eric Weinstein: Revolutionary Ideas in Science, Math, and Society</div>
+  <div class="card-meta">Eric Weinstein</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

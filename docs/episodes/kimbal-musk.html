@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kimbal Musk - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Kimbal Musk</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Kimbal Musk</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/kimbal-musk.html" style="font-size:16px;color:#818cf8;font-weight:600">Kimbal Musk</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">19,017 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/kimbal-musk-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:02</span>
+  <span class="chapter-title">Growing up in South Africa<span class="zh-trans"> · 在南非长大</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">13:32</span>
+  <span class="chapter-title">Cooking<span class="zh-trans"> · 烹饪</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">36:18</span>
+  <span class="chapter-title">Ingredients<span class="zh-trans"> · 原料</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">43:23</span>
+  <span class="chapter-title">Anthony Bourdain<span class="zh-trans"> · 安东尼·波登</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">45:38</span>
+  <span class="chapter-title">Cooking school<span class="zh-trans"> · 烹饪学校</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:01:58</span>
+  <span class="chapter-title">Life-threatening accident<span class="zh-trans"> · 危及生命的事故</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:16:02</span>
+  <span class="chapter-title">Road trip across US<span class="zh-trans"> · 穿越美国的公路旅行</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:27:45</span>
+  <span class="chapter-title">Zip2<span class="zh-trans"> · 邮编2</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:32:28</span>
+  <span class="chapter-title">Tesla<span class="zh-trans"> · 特斯拉</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:39:53</span>
+  <span class="chapter-title">SpaceX<span class="zh-trans"> · 太空探索技术公司</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:43:36</span>
+  <span class="chapter-title">Hope for the future<span class="zh-trans"> · 对未来的希望</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">kimbal</span><span class="keyword-tag">musk</span><span class="keyword-tag">going</span><span class="keyword-tag">don</span><span class="keyword-tag">got</span><span class="keyword-tag">restaurant</span><span class="keyword-tag">food</span><span class="keyword-tag">said</span><span class="keyword-tag">didn</span><span class="keyword-tag">salt</span><span class="keyword-tag">put</span><span class="keyword-tag">doing</span><span class="keyword-tag">cooking</span><span class="keyword-tag">went</span><span class="keyword-tag">experience</span><span class="keyword-tag">human</span><span class="keyword-tag">doesn</span><span class="keyword-tag">moment</span><span class="keyword-tag">talk</span><span class="keyword-tag">eggs</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I always say to people who have an opinion about America that this is a really bad country or whatever, and I say, “Look, please go try another country before you say that. Not to say that America can’t get better, but please go try another country,” because not having that perspective or having a perspective that, I don’t know, they’ll catch up on their shoulder about the country that they’re in. Okay, go try another country and then come back and tell me, pick any country. It doesn’t have to be some very violent country. You go pick any country and you just realize that actually the world doesn’t think the same way that America thinks, and you are going to just learn a perspective that I think gives you a better way to critique where we live in America."</div>
+  <div class="quote-zh">我总是对那些对美国有看法的人说，这是一个非常糟糕的国家或其他什么，我说，“听着，在你这么说之前，请先去尝试另一个国家。并不是说美国不能变得更好，而是请去尝试另一个国家，”因为没有这种观点，或者有一种观点，我不知道，他们会赶上他们所在国家的步伐。好吧，去尝试另一个国家，然后回来告诉我，选择任何国家。它不一定是某个非常暴力的国家。你去选择任何一个国家，你就会意识到，实际上世界的思维方式与美国的思维方式不同，你只会学到一种观点，我认为这种观点可以让你更好地批评我们在美国生活的地方。</div>
+  <div class="quote-meta">— Kimbal Musk （00:08:22）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"You can really enjoy life. I mean, I think that’s actually quite a nice insight. I’ve never really put it that way, but I think that’s right actually. I think you just chill out a bit, takes things a little less seriously."</div>
+  <div class="quote-zh">你可以真正享受生活。我的意思是，我认为这实际上是一个很好的见解。我从来没有这么说过，但我认为实际上是对的。我觉得你只是冷静一点，把事情看得不那么严肃。</div>
+  <div class="quote-meta">— Kimbal Musk （00:05:24）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"There’s a critique that my friends give me, which is when they’re talking to me, I kind of just drift away. That just, I’m still looking at them, I’m still nodding, might even respond to them in their conversation, but I’m actually not there. And I’ve realized that actually that grew up because my father would just, verbal abuse is one way to say it. It is abuse, but it’s more just verbal diarrhea for you for hours and constantly saying, “Do you understand?” He wants to make sure that I’m paying attention. So, I trained myself to look like I’m paying attention, but I’m not."</div>
+  <div class="quote-zh">我的朋友们对我有一个批评，那就是当他们和我说话时，我就有点走神了。只是，我还在看着他们，我还在点头，甚至可能会在他们的谈话中回应他们，但我实际上并不在那儿。我意识到，实际上，这种成长是因为我的父亲只是口头辱骂是一种表达方式。这是虐待，但更多的是你几个小时的口头腹泻，不断地说：“你明白吗？”他想确保我在注意。所以，我训练自己让自己看起来很专心，但其实我并没有。</div>
+  <div class="quote-meta">— Kimbal Musk （00:10:50）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Didn’t make money. When we got acquired, it was a bittersweet moment because Compact that owned AltaVista wanted to merge so that sort of regular search with the best search engine at the time, pre-Google with Zip2, which would be the best local search, and it would be a Yahoo killer. And the Compact just wanted to make money by taking the company public but they wouldn’t give us any stock. They paid us cash return out, actually very well for us, but because the whole internet bubble burst, we didn’t know that at the time. And so it was bittersweet because they essentially wanted our company and we were welcome to stay but you don’t have to. And that feeling, that was a pretty rough feeling. Yeah."</div>
+  <div class="quote-zh">没赚到钱。当我们被收购时，那是一个苦乐参半的时刻，因为拥有 AltaVista 的 Compact 想要将这种常规搜索与当时最好的搜索引擎（Pre-Google 与 Zip2）合并，这将是最好的本地搜索，并且它将成为雅虎杀手。契约只是想通过公司上市来赚钱，但他们不给我们任何股票。他们向我们支付了现金回报，实际上对我们来说非常好，但由于整个互联网泡沫破裂，我们当时并不知道这一点。所以这是苦乐参半，因为他们本质上想要我们的公司，欢迎我们留下来，但你不必这样做。而那种感觉，那是一种相当粗糙的感觉。是的。</div>
+  <div class="quote-meta">— Kimbal Musk （01:31:31）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I’ve heard this before, which I think I agree with, is when someone is killed, someone is taken from our lives. The vacuum that it creates, the social vacuum is extraordinarily painful and it truly is true. I mean, if someone in my community passes away, it’s very, very sad for me. And when you go to a place where, or live, grow up in a place where that human life is not valued, there’s something about, there’s a little bit less of the social vacuum created because everyone is kind of expecting everyone to potentially be taken out at any moment. But then there’s also a beauty to it because there’s a much more of a celebratory element."</div>
+  <div class="quote-zh">我以前听过这样的说法，我想我同意这一点：当有人被杀时，有人就从我们的生活中被夺走。它造成的真空、社会真空是极其痛苦的，这确实是事实。我的意思是，如果我社区中有人去世，我会非常非常难过。当你去一个地方，或者生活在一个人的生命不被重视的地方时，就会产生一些社会真空，因为每个人都希望每个人都可能随时被带走。但它也有一个美丽之处，因为它有更多的庆祝元素。</div>
+  <div class="quote-meta">— Kimbal Musk （00:03:56）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kimbal Musk <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">For me, cooking is an art.</div>
+  <div class="dialogue-zh">对我来说，烹饪是一门艺术。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:01)</span>
+  </div>
+  <div class="dialogue-en">What’s your favorite ingredient to cook with?</div>
+  <div class="dialogue-zh">你最喜欢用什么食材来烹饪？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kimbal Musk <span class="dialogue-time">(00:00:03)</span>
+  </div>
+  <div class="dialogue-en">There isn’t one. It’s more like when there is one, it really is one. There’s peaches on the cover of this cookbook. Those peaches, those were in August, Colorado peaches. It just doesn’t get any better than that.</div>
+  <div class="dialogue-zh">没有一个。更像是当有一个时，它确实是一个。这本食谱的封面上有桃子。那些桃子，那些是八月的科罗拉多桃子。没有比这更好的了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:16)</span>
+  </div>
+  <div class="dialogue-en">On that day, at that moment, that was best ingredient?</div>
+  <div class="dialogue-zh">在那一天，那一刻，那是最好的食材？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kimbal Musk <span class="dialogue-time">(00:00:17)</span>
+  </div>
+  <div class="dialogue-en">That was the best, but that only lasts for a week and then they don’t taste so great, but damn are they so good in that moment and you just can’t stop wanting to use that ingredient.</div>
+  <div class="dialogue-zh">那是最好的，但只能持续一周，然后它们的味道就不那么好了，但该死的，它们在那一刻真是太好了，你就是无法停止想要使用这种成分。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:33)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Kimbal Musk, a long time entrepreneur and chef and author of a new cookbook called The Kitchen Cookbook, Cooking for Your Community. You should check it out. It is in fact the first cookbook I’ve ever owned. I’ve already made stuff from it and it’s delicious. This is the Lex Fridman podcast. To support it, please check out our sponsors in the description. And n...</div>
+  <div class="dialogue-zh">以下是与金巴尔·马斯克 (Kimbal Musk) 的对话，他是一位长期企业家和厨师，也是一本名为《厨房食谱》(The Kitchen Cookbook) 的新食谱的作者，为您的社区烹饪。你应该检查一下。事实上，这是我拥有的第一本食谱。我已经用它做了东西而且很好吃。这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。和n</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:02)</span>
+  </div>
+  <div class="dialogue-en">Growing up in South Africa, you said it was a violent place. What are some formative moments that you remember from that time?</div>
+  <div class="dialogue-zh">你在南非长大，说那是一个暴力的地方。从那时起，您还记得哪些对您形成影响的时刻？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kimbal Musk <span class="dialogue-time">(00:01:09)</span>
+  </div>
+  <div class="dialogue-en">South Africa was, so I grew up in apartheid South Africa, but more specifically the fall of apartheid. I was a teenager in the ’80s and our community would, part of our social life frankly, was the anti-apartheid protests and to go be with white people, Black people, kind of mixing it all altogether. The most formative experiences, frankly, how much I appreciate a place like America where we have ...</div>
+  <div class="dialogue-zh">南非是，所以我是在种族隔离的南非长大的，但更具体地说是种族隔离制度的垮台。我是 80 年代的一个青少年，坦率地说，我们的社区是我们社会生活的一部分，就是反种族隔离抗议活动，以及与白人、黑人在一起，有点将这一切混合在一起。坦率地说，最有影响力的经历是我非常欣赏像美国这样的地方，我们拥有</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kimbal Musk <span class="dialogue-time">(00:02:05)</span>
+  </div>
+  <div class="dialogue-en">In South Africa, people died, or people were killed. I saw someone killed in front of me. I was getting off a train and it’s a very violent train known for violence. We were stupid kids. We didn’t really listen to our parents. We went on this train and the doors opened and I had people trying to get off the train and in front of me, two Black people, one Black guy just stabbed this knife in the si...</div>
+  <div class="dialogue-zh">在南非，有人死亡，或者有人被杀。我看到有人在我面前被杀了。我当时正在下火车，这是一列以暴力闻名的非常暴力的火车。我们曾是愚蠢的孩子。我们并没有真正听父母的话。我们上了这列火车，门打开了，有人试图下车，在我面前，有两个黑人，一个黑人刚刚在车里刺了一把刀</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:44)</span>
+  </div>
+  <div class="dialogue-en">How old were you at this time?</div>
+  <div class="dialogue-zh">此时你几岁？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kimbal Musk <span class="dialogue-time">(00:02:45)</span>
+  </div>
+  <div class="dialogue-en">Probably 16 or 17. And I got to get off the train and everyone is trying to get me to get off because they’re all behind me. So, I step off and I step into the pool of blood one foot, and then I just walk for about a hundred paces while the stickiness of the blood just kind of for my sneakers just on one foot just leaves a footprint behind me. And you just walk on. You just walk on.</div>
+  <div class="dialogue-zh">大概 16 或 17 岁。我必须下车，每个人都试图让我下车，因为他们都在我身后。于是，我下车，一只脚踩进了血泊中，然后我走了大约一百步，而血液的粘稠程度就在我一只脚上的运动鞋上留下了一个脚印。你就继续走吧。你就继续走吧。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:12)</span>
+  </div>
+  <div class="dialogue-en">Did the others walk on as well?</div>
+  <div class="dialogue-zh">其他人也跟着走吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:12)</span>
+  </div>
+  <div class="dialogue-en">Go to the concert.</div>
+  <div class="dialogue-zh">去听音乐会。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kimbal Musk <span class="dialogue-time">(00:03:13)</span>
+  </div>
+  <div class="dialogue-en">Everyone walked on.</div>
+  <div class="dialogue-zh">大家继续前行。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:15)</span>
+  </div>
+  <div class="dialogue-en">That’s an interesting point you make. Underlying the violence is a kind of philosophy that human life is disposable, the individual life is disposable. I mean, that underlies many ideologies. I grew up in the Soviet Union, the value of human life was lower there than in the United States. The value of the individual in the United States is really high. There’s probably an index you can put togethe...</div>
+  <div class="dialogue-zh">这是你提出的一个有趣的观点。暴力的背后是一种哲学：人的生命是可以随意处置的，个体生命是可以随意处置的。我的意思是，这是许多意识形态的基础。我在苏联长大，那里人的生命价值比美国低。美国的个人价值确实很高。可能有一个索引可以放在一起</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kimbal Musk <span class="dialogue-time">(00:03:39)</span>
+  </div>
+  <div class="dialogue-en">Yeah, right, exactly.</div>
+  <div class="dialogue-zh">是的，没错，完全正确。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:41)</span>
+  </div>
+  <div class="dialogue-en">Per nation, that’s a really interesting way to put it because violence is much easier on a mass scale. Suffering, causing suffering on a mass scale is much easier when you don’t value the human life.</div>
+  <div class="dialogue-zh">对于每个国家来说，这是一种非常有趣的表达方式，因为大规模暴力更容易发生。当你不珍惜人的生命时，痛苦、造成大规模痛苦就会容易得多。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kimbal Musk <span class="dialogue-time">(00:03:56)</span>
+  </div>
+  <div class="dialogue-en">I’ve heard this before, which I think I agree with, is when someone is killed, someone is taken from our lives. The vacuum that it creates, the social vacuum is extraordinarily painful and it truly is true. I mean, if someone in my community passes away, it’s very, very sad for me. And when you go to a place where, or live, grow up in a place where that human life is not valued, there’s something ...</div>
+  <div class="dialogue-zh">我以前听过这样的说法，我想我同意这一点：当有人被杀时，有人就从我们的生活中被夺走。它造成的真空、社会真空是极其痛苦的，这确实是事实。我的意思是，如果我社区中有人去世，我会非常非常难过。当你去一个地方，或者生活在一个人的生命不被重视的地方时，就会有一些东西</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kimbal Musk <span class="dialogue-time">(00:04:45)</span>
+  </div>
+  <div class="dialogue-en">When my cousin, Russ and I, again, we’re stupid kids, we shouldn’t be doing this, but we go into the townships where a lot of the violence would be happening, and we really didn’t see most of the violence there. It was in these more protests and so forth. But there’s a joy that also comes from lower value of human life. There’s a real joy. Everyone was like, well, I mean it’s beautiful. We’d have ...</div>
+  <div class="dialogue-zh">当我的表弟拉斯和我再次成为愚蠢的孩子时，我们不应该这样做，但我们进入了会发生很多暴力事件的乡镇，而我们确实没有看到那里的大部分暴力事件。正是在这些更多的抗议活动中。但降低人类生命的价值也能带来快乐。有一种真正的快乐。每个人都说，好吧，我的意思是它很漂亮。我们会有</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:21)</span>
+  </div>
+  <div class="dialogue-en">When you accept mortality, you can really enjoy life.</div>
+  <div class="dialogue-zh">当你接受死亡时，你才能真正享受生活。</div>
+</div>
+    <a href="https://lexfridman.com/kimbal-musk-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="anya-fernald.html" class="card" style="text-decoration:none">
+  <div class="card-title">Anya Fernald: Regenerative Farming and the Art of Cooking Meat</div>
+  <div class="card-meta">Anya Fernald</div>
+</a>
+<a href="neri-oxman.html" class="card" style="text-decoration:none">
+  <div class="card-title">Neri Oxman</div>
+  <div class="card-meta">Neri Oxman</div>
+</a>
+<a href="andrew-huberman-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Sleep, Dreams, Creativity &amp; the Limits of the Human Mind</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="andrew-huberman-3.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Focus, Stress, Relationships, and Friendship</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

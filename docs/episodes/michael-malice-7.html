@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Michael Malice #7 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Michael Malice #7</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Michael Malice #7</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/michael-malice.html" style="font-size:16px;color:#818cf8;font-weight:600">Michael Malice</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">19,110 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/michael-malice-7-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:28</span>
+  <span class="chapter-title">Beauty and mantis shrimp<span class="zh-trans"> · 美女与螳螂虾</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">6:02</span>
+  <span class="chapter-title">Parrots, Pirates, and Monty Python<span class="zh-trans"> · 鹦鹉、海盗和巨蟒剧团</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">12:14</span>
+  <span class="chapter-title">Humor and absurdity<span class="zh-trans"> · 幽默与荒诞</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">19:35</span>
+  <span class="chapter-title">Thanksgiving<span class="zh-trans"> · 感恩</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">48:15</span>
+  <span class="chapter-title">Unboxing the mystery box<span class="zh-trans"> · 拆开神秘盒子</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:04:13</span>
+  <span class="chapter-title">Karl Marx and religion<span class="zh-trans"> · 卡尔·马克思与宗教</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:12:30</span>
+  <span class="chapter-title">Art<span class="zh-trans"> · 艺术</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:16:44</span>
+  <span class="chapter-title">Books<span class="zh-trans"> · 图书</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:29:21</span>
+  <span class="chapter-title">How to be happy<span class="zh-trans"> · 如何快乐</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:31:31</span>
+  <span class="chapter-title">Depression<span class="zh-trans"> · 沮丧</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:32:35</span>
+  <span class="chapter-title">Fear<span class="zh-trans"> · 害怕</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:34:01</span>
+  <span class="chapter-title">Betrayal<span class="zh-trans"> · 背叛</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">michael</span><span class="keyword-tag">malice</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">got</span><span class="keyword-tag">goes</span><span class="keyword-tag">funny</span><span class="keyword-tag">beautiful</span><span class="keyword-tag">called</span><span class="keyword-tag">joke</span><span class="keyword-tag">person</span><span class="keyword-tag">thankful</span><span class="keyword-tag">didn</span><span class="keyword-tag">made</span><span class="keyword-tag">guy</span><span class="keyword-tag">humor</span><span class="keyword-tag">talking</span><span class="keyword-tag">especially</span><span class="keyword-tag">human</span><span class="keyword-tag">hate</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"And as for humans being essentially good, I think humans are essentially to each other, you said, I think they’re essentially civil and amiable, but that’s not really being good."</div>
+  <div class="quote-zh">至于人性本善，我认为人性本善，你说，我认为人性本善，和蔼可亲，但这并不是真正的善。</div>
+  <div class="quote-meta">— Michael Malice （00:46:59）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And I think comparisons between Putin and Stalin, although there is a Venn diagram, I think are a bit much, because I think it’s very hard to claim that if Putin conquered Ukraine, that there’d be a genocide. I think that’s a very hard argument to make."</div>
+  <div class="quote-zh">我认为普京和斯大林之间的比较，虽然有维恩图，但我认为有点太多了，因为我认为很难说如果普京征服了乌克兰，就会发生种族灭绝。我认为这是一个很难提出的论点。</div>
+  <div class="quote-meta">— Michael Malice （00:41:02）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And if something is not working in your life… Let’s suppose you don’t have friends. Right? There’s the internet. How do people make friends? Try things out? What’s the worst that’s going to happen? Things will blow up in your face. Well, you’ll learn something at least. Don’t be afraid of making mistakes. When I was a kid, I was so scared of having things under control, so like I would never have to get hit in the face metaphorically. And then I realized, and you realized this as well, everyone who’s important gets hit in the face. Look at the president, whoever the president is. It becomes a matter of being strong enough that you could take getting hit in the face. So that is a big important switch in your thinking."</div>
+  <div class="quote-zh">如果你的生活中有些事情不起作用……假设你没有朋友。正确的？有互联网。人们如何交朋友？尝试一下？最坏的情况会发生什么？事情会在你面前爆炸。好吧，你至少会学到一些东西。不要害怕犯错误。当我还是个孩子的时候，我非常害怕事情能得到控制，所以就像我永远不会被打到脸上一样。然后我意识到，你也意识到了这一点，每个重要的人都会受到打击。看看总统，无论总统是谁。问题在于你是否足够坚强，可以承受脸部被击中的情况。所以这是你思想上的一个重大转变。</div>
+  <div class="quote-meta">— Michael Malice （01:30:25）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Look, I honestly feel like if I died tomorrow, I did pretty good with what I had. I think I did things that matter to me. I think I moved the needle on things that matter to me. I think I’ve been a good friend to the people I care about. I’ve saved a couple of lives. So I think it’s a very low bar for someone to be able to grow their grave and say, “I left the world a better place than I found it.” I don’t think it’s that hard."</div>
+  <div class="quote-zh">听着，老实说，我觉得如果我明天就死了，我已经用我所拥有的一切做得很好了。我想我做了对我来说很重要的事情。我想我在对我来说重要的事情上取得了进展。我想我一直是我关心的人的好朋友。我救了几个人的命。所以我认为，对于一个人来说，在自己的坟墓上说“我给世界留下了一个比我发现时更好的地方”的门槛很低。我认为这并不难。</div>
+  <div class="quote-meta">— Michael Malice （01:33:24）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah. But I think if you look at African Americans, Jewish Americans, gay Americans, they are all disproportionate in terms of attributing to comedy. It’s not because these groups have some kind of magic to them., It’s that when you are on the outside looking in, A, you’re going to have different perspective than the people who are in the middle of the bell curve. But also, when you don’t have anything to lose, at the very least, you can make each other laugh and find happiness that way. So that is something that I think is an important thing to recognize. Humor and absurdity"</div>
+  <div class="quote-zh">是的。但我认为，如果你看看非裔美国人、犹太裔美国人、同性恋美国人，他们在喜剧方面的表现都是不成比例的。这并不是因为这些群体对他们有某种魔力，而是当你从外面往内看时，A，你将拥有与钟形曲线中间的人不同的视角。而且，当你们没有什么可失去的时候，至少，你们可以让彼此开怀大笑，这样就能找到幸福。所以我认为认识到这一点很重要。幽默与荒诞</div>
+  <div class="quote-meta">— Michael Malice （00:11:43）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">What’s your opinion on my bird here, Mr. Parrot?</div>
+  <div class="dialogue-zh">鹦鹉先生，你对我这里的鸟有什么看法？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Malice <span class="dialogue-time">(00:00:04)</span>
+  </div>
+  <div class="dialogue-en">It’s a Macaw. Scarlet Macaw.</div>
+  <div class="dialogue-zh">这是金刚鹦鹉。猩红色金刚鹦鹉。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:07)</span>
+  </div>
+  <div class="dialogue-en">What?</div>
+  <div class="dialogue-zh">什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Malice <span class="dialogue-time">(00:00:08)</span>
+  </div>
+  <div class="dialogue-en">It is a Scarlet Macaw.</div>
+  <div class="dialogue-zh">这是猩红金刚鹦鹉。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:10)</span>
+  </div>
+  <div class="dialogue-en">Oh, you know birds?</div>
+  <div class="dialogue-zh">哦，你认识鸟吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Malice <span class="dialogue-time">(00:00:11)</span>
+  </div>
+  <div class="dialogue-en">Yeah. And that’s actually not life-sized.</div>
+  <div class="dialogue-zh">是的。这实际上不是真人大小的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:15)</span>
+  </div>
+  <div class="dialogue-en">Are you saying he’s not real?</div>
+  <div class="dialogue-zh">你说他不是真的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Malice <span class="dialogue-time">(00:00:17)</span>
+  </div>
+  <div class="dialogue-en">I’m saying it’s not to scale.</div>
+  <div class="dialogue-zh">我是说这不是按比例的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:19)</span>
+  </div>
+  <div class="dialogue-en">Okay. But he’s real.</div>
+  <div class="dialogue-zh">好的。但他是真实的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Malice <span class="dialogue-time">(00:00:21)</span>
+  </div>
+  <div class="dialogue-en">Are we doing that Monty Python sketch?</div>
+  <div class="dialogue-zh">我们在画 Monty Python 的素描吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:25)</span>
+  </div>
+  <div class="dialogue-en">Everything is a Monty Python sketch.</div>
+  <div class="dialogue-zh">一切都是 Monty Python 的草图。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Malice <span class="dialogue-time">(00:00:26)</span>
+  </div>
+  <div class="dialogue-en">I don’t think Monty Python’s funny.</div>
+  <div class="dialogue-zh">我不认为巨蟒剧团很有趣。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:28)</span>
+  </div>
+  <div class="dialogue-en">You don’t?</div>
+  <div class="dialogue-zh">你不知道吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Malice <span class="dialogue-time">(00:00:29)</span>
+  </div>
+  <div class="dialogue-en">At all. Not once.</div>
+  <div class="dialogue-zh">完全没有。一次也没有。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:29)</span>
+  </div>
+  <div class="dialogue-en">That explains so much.</div>
+  <div class="dialogue-zh">这就解释了这么多。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Malice <span class="dialogue-time">(00:00:31)</span>
+  </div>
+  <div class="dialogue-en">Does it? What does it explain?</div>
+  <div class="dialogue-zh">是吗？它解释了什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:32)</span>
+  </div>
+  <div class="dialogue-en">What do you think is funny?</div>
+  <div class="dialogue-zh">你觉得什么好笑？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Malice <span class="dialogue-time">(00:00:35)</span>
+  </div>
+  <div class="dialogue-en">You not answering that question is pretty funny.</div>
+  <div class="dialogue-zh">你不回答这个问题真是太好笑了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:38)</span>
+  </div>
+  <div class="dialogue-en">Yeah. What do you think is funny, having a mantis shrimp?</div>
+  <div class="dialogue-zh">是的。你觉得螳螂虾有什么好笑的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Malice <span class="dialogue-time">(00:00:41)</span>
+  </div>
+  <div class="dialogue-en">No.</div>
+  <div class="dialogue-zh">不。</div>
+</div>
+    <a href="https://lexfridman.com/michael-malice-7-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a>
+<a href="cenk-uygur.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cenk Uygur</div>
+  <div class="card-meta">Cenk Uygur</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

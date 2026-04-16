@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ivanka Trump - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Ivanka Trump</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Ivanka Trump</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/ivanka-trump.html" style="font-size:16px;color:#818cf8;font-weight:600">Ivanka Trump</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">29,769 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/ivanka-trump-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:57</span>
+  <span class="chapter-title">Architecture<span class="zh-trans"> · 建筑学</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:12</span>
+  <span class="chapter-title">Modern architecture<span class="zh-trans"> · 现代建筑</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">21:45</span>
+  <span class="chapter-title">Philosophy of design<span class="zh-trans"> · 设计理念</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:01</span>
+  <span class="chapter-title">Lessons from mother<span class="zh-trans"> · 母亲的教训</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">53:07</span>
+  <span class="chapter-title">Lessons from father<span class="zh-trans"> · 父亲的教训</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:01:39</span>
+  <span class="chapter-title">Fashion<span class="zh-trans"> · 时尚</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:12:35</span>
+  <span class="chapter-title">Hotel design<span class="zh-trans"> · 酒店设计</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:23:44</span>
+  <span class="chapter-title">Self-doubt<span class="zh-trans"> · 自我怀疑</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:26:07</span>
+  <span class="chapter-title">Intuition<span class="zh-trans"> · 直觉</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:29:17</span>
+  <span class="chapter-title">The Apprentice<span class="zh-trans"> · 学徒</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:33:51</span>
+  <span class="chapter-title">Michael Jackson<span class="zh-trans"> · 迈克尔·杰克逊</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:35:26</span>
+  <span class="chapter-title">Nature<span class="zh-trans"> · 自然</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:40:20</span>
+  <span class="chapter-title">Surfing<span class="zh-trans"> · 冲浪</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:42:31</span>
+  <span class="chapter-title">Donald Trump<span class="zh-trans"> · 唐纳德·特朗普</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:56:53</span>
+  <span class="chapter-title">Politics<span class="zh-trans"> · 政治</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:13:05</span>
+  <span class="chapter-title">Work-life balance<span class="zh-trans"> · 工作与生活的平衡</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:19:33</span>
+  <span class="chapter-title">Parenting<span class="zh-trans"> · 育儿</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:34:40</span>
+  <span class="chapter-title">2024 presidential campaign<span class="zh-trans"> · 2024 年总统竞选</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:38:17</span>
+  <span class="chapter-title">Dolly Parton<span class="zh-trans"> · 多莉·帕顿</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">trump</span><span class="keyword-tag">ivanka</span><span class="keyword-tag">building</span><span class="keyword-tag">going</span><span class="keyword-tag">experience</span><span class="keyword-tag">don</span><span class="keyword-tag">got</span><span class="keyword-tag">beautiful</span><span class="keyword-tag">kids</span><span class="keyword-tag">able</span><span class="keyword-tag">real</span><span class="keyword-tag">amazing</span><span class="keyword-tag">architecture</span><span class="keyword-tag">super</span><span class="keyword-tag">design</span><span class="keyword-tag">hard</span><span class="keyword-tag">human</span><span class="keyword-tag">hope</span><span class="keyword-tag">together</span><span class="keyword-tag">father</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"And I think part of me also internalized, there’s a concept in Judaism called Lashon hara, which is translated into I think quite literally evil speech. And the idea that speaking poorly of another is almost the moral equivalent to murder because you can’t really repair it. You can apologize, but you can’t repair it. Another component of that is that it does as much damage to the person saying the words than it does to the person receiving them. And I think about that a lot. I talk about this concept with my kids a lot, and I’m not willing to pay the price of that fleeting and momentary satisfaction of sort of swinging back because I think it would be too expensive for my soul. And that’s how I made peace with it, because I think that feels more true for me."</div>
+  <div class="quote-zh">我认为我的一部分也内化了，犹太教中有一个概念叫做 Lashon hara，我认为它的字面意思是邪恶的言论。说别人坏话在道德上几乎等同于谋杀，因为你无法真正修复它。你可以道歉，但你无法修复它。其中的另一个组成部分是，它对说这些话的人造成的伤害与对接受这些话的人造成的伤害一样大。我对此思考了很多。我和我的孩子们经常谈论这个概念，我不愿意为那种转瞬即逝、短暂的满足感付出代价，因为我认为这对我的灵魂来说太昂贵了。这就是我如何接受它的，因为我认为这对我来说更真实。</div>
+  <div class="quote-meta">— Ivanka Trump （02:29:33）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think first and foremost, it was a decision rooted in me being a parent, really thinking about what they need from me now. Politics is a rough, rough business and I think it’s one that you also can’t dabble in. I think you have to either be all in or all out. And I know today, the cost they would pay for me being all in, emotionally in terms of my absence at such a formative point in their life. And I’m not willing to make them bear that cost. I served for four years and feel so privileged to have done it, but as their mom, I think it’s really important that I do what’s right for them. And I think there are a lot of ways you can serve."</div>
+  <div class="quote-zh">我认为首先也是最重要的是，这是我作为父母做出的决定，真正考虑了他们现在需要我做什么。政治是一个很艰难很艰难的行业，我认为也是一个你不能涉足的行业。我认为你要么全力以赴，要么全力以赴。今天我知道，在他们人生的这个关键阶段，如果我缺席，他们会为我的全力以赴付出情感上的代价。我不愿意让他们承担这个代价。我服务了四年，很荣幸能做到这一点，但作为他们的妈妈，我认为我做对他们正确的事情非常重要。我认为您可以通过多种方式提供服务。</div>
+  <div class="quote-meta">— Ivanka Trump （02:35:19）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think because she was this unbelievable, formidable athlete and because of the discipline she had as a child, I think it made her value those moments more as an adult. I think she was a great balance of the two that we all hope to find, and she was able to find both incredibly serious and formidable. I remember as a little girl, I used to literally traipse behind her at the Plaza Hotel, which she oversaw and actually was her old post office. It was this unbelievable historic hotel in New York City, and I’d follow her around at construction meetings and on job sites. And there she is, dancing. See? That’s funny that that’s the picture you pull up."</div>
+  <div class="quote-zh">我想，因为她是一位令人难以置信、令人敬畏的运动员，也因为她小时候所受的纪律，我认为这让她作为一个成年人更加珍惜这些时刻。我认为她是我们都希望找到的两者的完美平衡，她能够同时发现令人难以置信的严肃和强大。我记得当我还是个小女孩的时候，在广场酒店里，我常常跟在她后面，那是她管理的，实际上是她以前的邮局。这是纽约市这座令人难以置信的历史悠久的酒店，我会在建筑会议和工作现场跟随她。她就在那里跳舞。看？有趣的是，这就是你调出的照片。</div>
+  <div class="quote-meta">— Ivanka Trump （00:31:51）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Viktor Frankl, that book and just his philosophy in general is so inspiring to me. But I think so many people, they say they want happiness, but they want conditional happiness. When this and this a thing happens or under these circumstances, then I’ll be happy. And I think what he showed is that we can cultivate these virtues within ourselves regardless of the situation we find ourselves in. And in some ways, I think the meaning of life is the search for meaning in life. It’s the relationships we have and we form. It’s the experience we have. It’s how we deal with the suffering that life inevitably presents to us. And Viktor Frankl does an amazing job highlighting that under the most horrific circumstances, and I think it’s just super inspiring to me."</div>
+  <div class="quote-zh">维克多·弗兰克尔（Viktor Frankl），那本书和他的哲学总体上对我来说非常鼓舞人心。但我认为很多人，他们说他们想要幸福，但他们想要有条件的幸福。当这样那样的事情发生或者在这种情况下，我就会很高兴。 And I think what he showed is that we can cultivate these virtues within ourselves regardless of the situation we find ourselves in. And in some ways, I think the meaning of life is the search for meaning in life.这是我们拥有和形成的关系。这是我们的经验。这就是我们如何应对生活不可避免地呈现给我们的痛苦。维克多·弗兰克尔（Viktor Frankl）做得非常出色，强调了在最可怕的情况下这一点，我认为这对我来说非常鼓舞人心。</div>
+  <div class="quote-meta">— Ivanka Trump （00:40:18）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And I think somehow early on I learned to kind of harness the fear of not being good enough, not being competent enough, and I harnessed it to make me better and to push me outside of my comfort zone. So I think that’s always lived with me, and I think it probably always will. I think you have to have humility in anything you do that you could be better and strive for that. I think as you get older, it softens a little bit as you have more reps, as you have more examples of having been thrown in the deep end and figured out how to swim. You get a little bit more comfortable in your abstract competency. But if that fear is not in you, I think you’re not challenging yourself enough."</div>
+  <div class="quote-zh">我想，不知何故，我很早就学会了如何驾驭对自己不够好、能力不够的恐惧，我利用它来让自己变得更好，并把我推出自己的舒适区。所以我认为这一直伴随着我，而且我想它可能永远都会。我认为你必须对所做的任何事情保持谦逊，这样你才能做得更好并为此努力。我认为，随着年龄的增长，随着次数的增多，你有更多被扔进深水区并学会如何游泳的例子，这种情况会有所缓解。你会对自己的抽象能力感到更加自在。但如果你内心没有这种恐惧，我认为你对自己的挑战还不够。</div>
+  <div class="quote-meta">— Ivanka Trump （01:25:04）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Ivanka Trump, businesswoman, real estate developer, and former senior advisor to the president of the United States. I’ve gotten to know Ivanka well over the past two years. We’ve become good friends, hitting it off right away over our mutual love of reading, especially philosophical writings from Marcus Aurelius, Joseph Campbell, Alan Watts, Victor Franco, and...</div>
+  <div class="dialogue-zh">以下是与女商人、房地产开发商、美国总统前高级顾问伊万卡·特朗普的对话。在过去的两年里，我对伊万卡有了一定的了解。我们成了好朋友，一拍即合，因为我们都热爱阅读，尤其是马库斯·奥勒留、约瑟夫·坎贝尔、艾伦·瓦茨、维克多·弗朗哥和</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:27)</span>
+  </div>
+  <div class="dialogue-en">She is a truly kind, compassionate, and thoughtful human being. In the past, people have attacked her, in my view, to get indirectly at her dad, Donald Trump, as part of a dirty game of politics and clickbait journalism. These attacks obscured many projects and efforts, often bipartisan, that she helped get done, and they obscured the truth of who she is as a human being. Through all that, she nev...</div>
+  <div class="dialogue-zh">她是一个真正善良、富有同情心、有思想的人。在我看来，过去人们攻击她是为了间接攻击她的父亲唐纳德·特朗普，这是肮脏的政治游戏和标题党新闻的一部分。这些攻击掩盖了她帮助完成的许多项目和努力（通常是两党合作），也掩盖了她作为一个人的真相。经过这一切，她从未</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:12)</span>
+  </div>
+  <div class="dialogue-en">Oh, and for those living in the United States, happy upcoming 4th of July. It’s both an anniversary of this country’s Declaration of Independence and an anniversary of my immigrating here to the U.S. I’m forever grateful for this amazing country, for this amazing life, for all of you who have given a chance to a silly kid like me. From the bottom of my heart, thank you. I love you all.</div>
+  <div class="dialogue-zh">哦，对于那些居住在美国的人来说，即将到来的 7 月 4 日快乐。这既是这个国家《独立宣言》的周年纪念日，也是我移民到美国的周年纪念日。我永远感激这个神奇的国家，感激这种神奇的生活，感谢所有给我这样一个傻孩子机会的人。我从心底里感谢你们。我爱你们。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:46)</span>
+  </div>
+  <div class="dialogue-en">This is the Lex Fridman Podcast. To support it, please check out our sponsors in the description. And now, dear friends, here’s Ivanka Trump.</div>
+  <div class="dialogue-zh">这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是伊万卡·特朗普。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Architecture <span class="dialogue-time">(00:01:57)</span>
+  </div>
+  <div class="dialogue-en">You said that ever since you were young, you wanted to be a builder, that you loved the idea of designing beautiful city skylines, especially in New York City. I love the New York City skyline. So, describe the origins of that love of building.</div>
+  <div class="dialogue-zh">你说，从年轻的时候起，你就想成为一名建筑商，你喜欢设计美丽的城市天际线的想法，尤其是在纽约市。我喜欢纽约市的天际线。那么，请描述一下对建筑的热爱的起源。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ivanka Trump <span class="dialogue-time">(00:02:11)</span>
+  </div>
+  <div class="dialogue-en">I think there’s both an incredible confidence and a total insecurity that comes with youth. So, I remember at 15, I would look out over the city skyline from my bedroom window in New York and imagine where I could contribute and add value, in a way that I look back on and completely laugh at how confident I was. But I’ve known since some of my earliest memories, it’s something I’ve wanted to do. A...</div>
+  <div class="dialogue-zh">我认为年轻人既有令人难以置信的自信，也有完全的不安全感。所以，我记得 15 岁时，我会从纽约卧室的窗户眺望城市天际线，想象我可以在哪些方面做出贡献并增加价值，当我回顾过去时，我会完全嘲笑自己是多么自信。但从我最早的记忆开始，我就知道这是我想做的事情。一个</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ivanka Trump <span class="dialogue-time">(00:02:52)</span>
+  </div>
+  <div class="dialogue-en">With architecture, there’s the tangible, and I think that marriage of function and something that exists beyond yourself is very compelling. I also grew up in a family where my mother was in the real estate business, working alongside my father. My father was in the business. And I saw the joy that it brought to them. So, I think I had these natural positive associations. They used to send me as a...</div>
+  <div class="dialogue-zh">建筑是有形的，我认为功能与超越自身的东西的结合是非常引人注目的。我也在一个家庭中长大，我的母亲从事房地产行业，与父亲一起工作。我父亲是做生意的。我看到了它给他们带来的快乐。所以，我认为我有这些自然的积极联想。他们曾经派我作为</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ivanka Trump <span class="dialogue-time">(00:03:27)</span>
+  </div>
+  <div class="dialogue-en">So, I had these positive associations, but it came from something within myself. I think that as I got older and as I got involved in real estate, I realized that it was so multidisciplinary. You have, of course, the design, but you also have engineering, the brass tacks of construction. There’s time management, there’s project planning. Just the duration of time to complete one of these iconic st...</div>
+  <div class="dialogue-zh">所以，我有这些积极的联想，但它来自我内心的某些东西。我认为，随着年龄的增长，当我涉足房地产行业时，我意识到它是跨学科的。当然，你有设计，但你也有工程，即施工的大头钉。有时间管理，有项目规划。只是完成这些标志性作品之一所需的时间</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:10)</span>
+  </div>
+  <div class="dialogue-en">I love that confidence of youth.</div>
+  <div class="dialogue-zh">我喜欢青春的那种自信。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ivanka Trump <span class="dialogue-time">(00:04:13)</span>
+  </div>
+  <div class="dialogue-en">It’s funny because we’re all so insecure, right? In the most basic interactions, but yet, our ambitions are so unbridled in a way that kind of makes you blush as an adult. And I think it’s fun. It’s fun to tap into that energy.</div>
+  <div class="dialogue-zh">这很有趣，因为我们都很没有安全感，对吧？然而，在最基本的互动中，我们的野心是如此肆无忌惮，以至于让作为成年人的你脸红。我认为这很有趣。利用这种能量很有趣。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:28)</span>
+  </div>
+  <div class="dialogue-en">Yeah, where everything is possible. I think some of the greatest builders I’ve ever met, kind of always have that little flame of everything is possible, still burning. That is a silly notion from youth, but it’s not so silly. Everybody tells you something is impossible, but if you continue believing that it’s possible and to have that sort of naive notion that you could do it, even if it’s except...</div>
+  <div class="dialogue-zh">是的，一切皆有可能。我认为我见过的一些最伟大的建设者总是拥有一切皆有可能的小火焰，并且仍在燃烧。这是年轻人的愚蠢想法，但其实并不那么愚蠢。每个人都告诉你某件事是不可能的，但如果你继续相信这是可能的，并且有那种天真的想法，认为你可以做到，即使它是例外</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ivanka Trump <span class="dialogue-time">(00:04:56)</span>
+  </div>
+  <div class="dialogue-en">A hundred percent.</div>
+  <div class="dialogue-zh">百分之一百。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:56)</span>
+  </div>
+  <div class="dialogue-en">Going out to space or building a new company where like everybody said, it’s impossible, taking on that gigantic company and disrupting them and revolutionizing how stuff is done, or doing huge building projects where, like you said, so many people are involved in making that happen.</div>
+  <div class="dialogue-zh">进入太空或建立一家新公司，就像每个人都说的那样，这是不可能的，挑战那家大公司并颠覆它们并彻底改变工作方式，或者进行大型建筑项目，就像你说的，有这么多人参与实现这一目标。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ivanka Trump <span class="dialogue-time">(00:05:14)</span>
+  </div>
+  <div class="dialogue-en">We get conditioned out of that feeling.</div>
+  <div class="dialogue-zh">我们会因这种感觉而受到制约。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:16)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ivanka Trump <span class="dialogue-time">(00:05:16)</span>
+  </div>
+  <div class="dialogue-en">We start to become insecure, and we start to rely on the input or validation of others, and it takes us away from that core drive and ambition. So, it’s fun to reflect on that and also to smile, right? Because whether you can execute or not, time will tell. But yeah, no, that was very much my childhood.</div>
+  <div class="dialogue-zh">我们开始变得不安全，我们开始依赖他人的意见或认可，这让我们远离了核心动力和野心。所以，反思这一点并微笑是很有趣的，对吧？因为执行与否，时间会证明一切。但是，是的，不，那是我的童年。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:42)</span>
+  </div>
+  <div class="dialogue-en">Yeah, of course, it’s important to also have the humility of once you get humbled and realize that it’s actually a lot of work to build.</div>
+  <div class="dialogue-zh">是的，当然，当你感到谦卑并意识到这实际上需要做很多工作时，保持谦逊也很重要。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ivanka Trump <span class="dialogue-time">(00:05:49)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:50)</span>
+  </div>
+  <div class="dialogue-en">I still am amazed just looking at big buildings, big bridges, that human beings are able to get together and build those things. That’s one of my favorite things about architecture is just like, wow. It’s a manifestation of the fact that humans can collaborate and do something epic, much bigger than themselves, and it’s like a statue that represents that and it can be there for a long time.</div>
+  <div class="dialogue-zh">光是看到大型建筑、桥梁，我仍然感到惊讶，人类能够聚集在一起建造这些东西。这是关于建筑我最喜欢的事情之一，就像，哇。它体现了人类可以合作并做一些比他们自己更大的史诗般的事情，它就像代表这一点的雕像，并且可以长期存在。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ivanka Trump <span class="dialogue-time">(00:06:15)</span>
+  </div>
+  <div class="dialogue-en">Yeah. I think, in some ways, you look out at different city skylines and it’s almost like a visual depiction of ambition realized, right?</div>
+  <div class="dialogue-zh">是的。我认为，在某些方面，你看到不同的城市天际线，这几乎就像是实现雄心壮志的视觉描绘，对吧？</div>
+</div>
+    <a href="https://lexfridman.com/ivanka-trump-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-huberman-3.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Focus, Stress, Relationships, and Friendship</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="andrew-huberman-5.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman #5</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="carl-hart.html" class="card" style="text-decoration:none">
+  <div class="card-title">Carl Hart: Heroin, Cocaine, MDMA, Alcohol &amp; the Role of Drugs in Society</div>
+  <div class="card-meta">Carl Hart</div>
+</a>
+<a href="dave-hone.html" class="card" style="text-decoration:none">
+  <div class="card-title">Dave Hone</div>
+  <div class="card-meta">Dave Hone</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

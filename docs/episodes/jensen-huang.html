@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jensen Huang - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Jensen Huang</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Jensen Huang</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/jensen-huang.html" style="font-size:16px;color:#818cf8;font-weight:600">Jensen Huang</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">23,765 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/jensen-huang-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:33</span>
+  <span class="chapter-title">Extreme co-design and rack-scale engineering<span class="zh-trans"> · 极端协同设计和机架规模工程</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:18</span>
+  <span class="chapter-title">How Jensen runs NVIDIA<span class="zh-trans"> · Jensen 如何运行 NVIDIA</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">22:40</span>
+  <span class="chapter-title">AI scaling laws<span class="zh-trans"> · 人工智能缩放法则</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">37:40</span>
+  <span class="chapter-title">Biggest blockers to AI scaling laws<span class="zh-trans"> · 人工智能扩展法则的最大障碍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">39:23</span>
+  <span class="chapter-title">Supply chain<span class="zh-trans"> · 供应链</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">41:18</span>
+  <span class="chapter-title">Memory<span class="zh-trans"> · 记忆</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">47:24</span>
+  <span class="chapter-title">Power<span class="zh-trans"> · 力量</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">52:43</span>
+  <span class="chapter-title">Elon and Colossus<span class="zh-trans"> · 伊隆与巨像</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">56:11</span>
+  <span class="chapter-title">Jensen’s approach to engineering and leadership<span class="zh-trans"> · Jensen 的工程和领导方法</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:01:37</span>
+  <span class="chapter-title">China<span class="zh-trans"> · 中国</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:09:50</span>
+  <span class="chapter-title">TSMC and Taiwan<span class="zh-trans"> · 台积电和台湾</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:15:04</span>
+  <span class="chapter-title">NVIDIA’s moat<span class="zh-trans"> · NVIDIA 的护城河</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:20:41</span>
+  <span class="chapter-title">AI data centers in space<span class="zh-trans"> · 太空人工智能数据中心</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:24:30</span>
+  <span class="chapter-title">Will NVIDIA be worth $10 trillion?<span class="zh-trans"> · NVIDIA 的市值会达到 10 万亿美元吗？</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:34:39</span>
+  <span class="chapter-title">Leadership under pressure<span class="zh-trans"> · 压力下的领导力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:48:25</span>
+  <span class="chapter-title">Video games<span class="zh-trans"> · 电子游戏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:55:16</span>
+  <span class="chapter-title">AGI timeline<span class="zh-trans"> · 通用人工智能时间表</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:57:29</span>
+  <span class="chapter-title">Future of programming<span class="zh-trans"> · 编程的未来</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:11:01</span>
+  <span class="chapter-title">Consciousness<span class="zh-trans"> · 意识</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">jensen</span><span class="keyword-tag">huang</span><span class="keyword-tag">company</span><span class="keyword-tag">nvidia</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">future</span><span class="keyword-tag">data</span><span class="keyword-tag">computing</span><span class="keyword-tag">incredible</span><span class="keyword-tag">everybody</span><span class="keyword-tag">scale</span><span class="keyword-tag">doing</span><span class="keyword-tag">cuda</span><span class="keyword-tag">engineering</span><span class="keyword-tag">technology</span><span class="keyword-tag">design</span><span class="keyword-tag">important</span><span class="keyword-tag">put</span><span class="keyword-tag">job</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Okay? And so it’s been a long time since computer vision has been superhuman. And so the prediction was radiologists would go away because studying radiology scans was a thing of the past. AI will do that. Well, they were absolutely right. Computer vision is completely superhuman. Every radiology platform and package today is driven by AI, and yet the number of radiologists grew. And so the question is why? And we now have a shortage of radiologists in the world. And so, one, the alarmist warning went too far and it scared people from doing this profession that is so important to society. And so it did harm. Now, why was it wrong? The reason why is because the purpose of a radiologist, the purpose is to diagnose disease and help patients and doctors diagnose disease."</div>
+  <div class="quote-zh">好的？因此，计算机视觉成为超人类已经有很长一段时间了。因此，预测放射科医生将会离开，因为研究放射扫描已成为过去。人工智能会做到这一点。嗯，他们是绝对正确的。计算机视觉完全是超人的。如今，每个放射学平台和软件包都是由人工智能驱动的，但放射科医生的数量却在增加。所以问题是为什么？现在世界上放射科医生短缺。因此，第一，危言耸听的警告太过分了，它吓坏了人们从事这个对社会如此重要的职业。所以它确实有害。现在，为什么错了？之所以是因为放射科医生的目的，目的就是诊断疾病，帮助患者和医生诊断疾病。</div>
+  <div class="quote-meta">— Jensen Huang （01:59:39）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I don’t know if the chip will ever get nervous. And that’s the, you know, of course, the conditions by which that causes anxiety or nervousness or whatever emotion. I believe that AI will be able to recognize those and understand those. I don’t think my chips will feel those. And therefore, the… How that anxiety, how that feeling, how that excitement, how that, how that, you know… All of those feelings manifest in human performance. For example, extremely amazing human performance, athletic performance, you know, average or lesser than average. That entire spectrum of human performance that comes out of exactly the same circumstances for different people, manifesting a different outcome, manifesting a different performance."</div>
+  <div class="quote-zh">我不知道芯片是否会紧张。当然，这就是导致焦虑、紧张或其他情绪的条件。我相信人工智能将能够识别并理解这些。我不认为我的芯片会感觉到这些。因此，……那种焦虑、那种感觉、那种兴奋、那种、那种感觉，你知道……所有这些感觉都体现在人类的表现中。例如，极其惊人的人类表现，运动表现，你知道，平均或低于平均水平。对于不同的人来说，在完全相同的环境下产生的整个人类表现，表现出不同的结果，表现出不同的表现。</div>
+  <div class="quote-meta">— Jensen Huang （02:11:18）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And it’s a system that… You know, it’s something that we do that includes perception and understanding and reasoning and the ability to do plan. And, you know, that loop, that loop, is the… Fundamentally what intelligence is. Intelligence is not one word that is exactly equal to humanity. And that’s, I think it’s really important to separate the two. We have two words for that. I’m not… I don’t over-fantasize about, and I don’t over-romanticize about intelligence. Intelligence is… And people have heard me say it before, I actually think intelligence is a commodity. I’m surrounded by intelligent people. And I’m surrounded by intelligent people more intelligent than I am in each one of the spaces that they’re in."</div>
+  <div class="quote-zh">这是一个系统……你知道，这是我们所做的事情，包括感知、理解、推理以及制定计划的能力。而且，你知道，那个循环，那个循环，就是……从根本上来说，智力是什么。智能这个词并不完全等同于人类。也就是说，我认为将两者分开非常重要。我们有两个词来形容。我不是……我不会对智力过度幻想，也不会过度浪漫化智力。智力是……人们以前听我说过，我实际上认为智力是一种商品。我周围都是聪明人。我周围都是聪明人，他们所在的每一个空间都比我更聪明。</div>
+  <div class="quote-meta">— Jensen Huang （02:13:46）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, it turned out to have been a good decision. I think the… So, here’s the way it went. So, we invented this thing called CUDA, and it expanded the aperture of applications that we can accelerate with our accelerator. The question is, how do we attract developers to CUDA? Because a computing platform is all about developers. And developers don’t come to a computing platform just because, you know, it could perform something interesting. They come to a computing platform because the install base is large. Because a developer, like anybody else, wants to develop software that reaches a lot of people. So, the install base is, in fact, the single most important part of an architecture. The architecture could attract enormous amounts of criticism."</div>
+  <div class="quote-zh">是的，事实证明这是一个很好的决定。我认为……所以，事情是这样的。因此，我们发明了这种称为 CUDA 的东西，它扩大了我们可以使用加速器加速的应用程序的范围。问题是，我们如何吸引开发者使用 CUDA？因为计算平台的核心就是开发人员。开发人员来到计算平台并不仅仅是因为它可以执行一些有趣的事情。他们之所以选择计算平台，是因为安装基数很大。因为开发人员和其他人一样，希望开发出能够惠及很多人的软件。因此，安装基础实际上是架构中最重要的部分。该架构可能会招致大量批评。</div>
+  <div class="quote-meta">— Jensen Huang （00:11:27）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, first of all, I’m informed by a lot of curiosity. At some point, there’s a reasoning system that convinces me so clearly this outcome will happen. That this will happen. And so I believe it in my mind, and when I believe it in my mind, you know how it is. You manifest a future and that future is so convincing, there’s no way it won’t happen. There’s a lot of suffering in between, but you’ve gotta believe what you believe."</div>
+  <div class="quote-zh">嗯，首先，我充满好奇心。在某些时候，有一个推理系统让我清楚地相信这个结果将会发生。这将会发生。所以我心里相信它，当我心里相信它时，你就知道它是怎么回事。你展现了一个未来，而这个未来是如此令人信服，它不可能不会发生。中间有很多痛苦，但你必须相信你所相信的。</div>
+  <div class="quote-meta">— Jensen Huang （00:17:14）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Jensen Huang, CEO of NVIDIA, one of the most important and influential companies in the history of human civilization. NVIDIA is the engine powering the AI revolution, and a lot of its success can be directly attributed to Jensen’s sheer force of will and his many brilliant bets and decisions as a leader, engineer, and innovator. This is Lex Fridman Podcast. An...</div>
+  <div class="dialogue-zh">以下是与人类文明史上最重要、最具影响力的公司之一英伟达首席执行官黄仁勋的对话。 NVIDIA 是人工智能革命的引擎，它的成功在很大程度上可以直接归功于 Jensen 的坚定意志力以及他作为领导者、工程师和创新者的许多出色的赌注和决策。这是莱克斯·弗里德曼播客。一个</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:33)</span>
+  </div>
+  <div class="dialogue-en">You’ve propelled NVIDIA into a new era in AI, moving beyond his focus on chip scale design to now rack scale design.</div>
+  <div class="dialogue-zh">你们推动 NVIDIA 进入了 AI 的新时代，从专注于芯片级设计转向了现在的机架级设计。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:42)</span>
+  </div>
+  <div class="dialogue-en">And I think it’s fair to say that winning for NVIDIA for a long time used to be about building the best GPU possible, and you still do, but now you’ve expanded that to extreme co-design of GPU, CPU memory, networking, storage, power cooling, software, the rack itself, the pod that you’ve announced, and even the data center. So let’s talk about extreme co-design. What is the hardest part of co-desi...</div>
+  <div class="dialogue-zh">我认为可以公平地说，长期以来 NVIDIA 的胜利在于构建尽可能最好的 GPU，现在仍然如此，但现在您已将其扩展到 GPU、CPU 内存、网络、存储、电源冷却、软件、机架本身、您宣布的 Pod 甚至数据中心的极端协同设计。那么我们来谈谈极限协同设计。协同设计最难的部分是什么</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jensen Huang <span class="dialogue-time">(00:01:11)</span>
+  </div>
+  <div class="dialogue-en">Yeah, thanks for that question. So first of all, the reason why extreme co-design is necessary is because the problem no longer fits inside one computer to be accelerated by one GPU. The problem that you’re trying to solve is you would like to go faster than the number of computers that you add. So you added 10,000 computers, but you would like it to go a million times faster. Then all of a sudden...</div>
+  <div class="dialogue-zh">是的，谢谢你提出这个问题。首先，极端协同设计之所以必要，是因为这个问题不再适合在一台计算机内由一个 GPU 加速。您试图解决的问题是您希望运行速度比您添加的计算机数量更快。因此，您添加了 10,000 台计算机，但您希望它的运行速度快一百万倍。然后突然之间</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jensen Huang <span class="dialogue-time">(00:02:03)</span>
+  </div>
+  <div class="dialogue-en">This is the Amdahl’s law problem where the amount of speed up you have for something depends on how much of the total workload it is. And so if computation represents 50% of the problem, and I sped up computation infinitely like a million times, you know, I only sped up the total workload by a factor of two. Now all of a sudden, not only do you have to distribute a computation, you have to shard t...</div>
+  <div class="dialogue-zh">这是阿姆达尔定律问题，其中某件事的加速量取决于它占总工作量的多少。因此，如果计算占问题的 50%，并且我将计算速度无限加快了一百万倍，你知道，我只将总工作负载速度加快了两倍。现在突然之间，您不仅必须分配计算，还必须对 t 进行分片</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jensen Huang <span class="dialogue-time">(00:02:57)</span>
+  </div>
+  <div class="dialogue-en">It’s just a massively complex computer science problem. And so we just gotta bring every technology to bear. Otherwise, we scale up linearly or we scale up based on the capabilities of Moore’s Law, which has largely slowed because Dennard scaling has slowed. How Jensen runs NVIDIA</div>
+  <div class="dialogue-zh">这只是一个非常复杂的计算机科学问题。因此，我们必须运用所有技术。否则，我们会线性扩大规模，或者根据摩尔定律的能力扩大规模，摩尔定律的速度在很大程度上已经放缓，因为登纳德缩放速度已经放缓。 Jensen 如何运行 NVIDIA</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:16)</span>
+  </div>
+  <div class="dialogue-en">I’m sure there’s trade-offs there. Plus you have a complete disparate disciplines here. I’m sure you have specialists in each one of these high bandwidth memory, the network and the NVLink, the NICs, the optics and the copper that you’re doing, the power delivery, the cooling, all of that. I mean, there’s like world experts in each of those. How do you get ’em in a room together to figure out-</div>
+  <div class="dialogue-zh">我确信这其中存在权衡。另外，这里有完全不同的学科。我确信你们在这些高带宽内存、网络和 NVLink、NIC、光学和铜缆、电力传输、冷却等方面都有专家。我的意思是，每一个领域都有世界专家。你如何让他们一起在一个房间里弄清楚-</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jensen Huang <span class="dialogue-time">(00:03:34)</span>
+  </div>
+  <div class="dialogue-en">That’s why my staff is so large. Yeah.</div>
+  <div class="dialogue-zh">这就是为什么我的员工如此庞大。是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:37)</span>
+  </div>
+  <div class="dialogue-en">What’s the pro- can you take me through the process of the specialists and the generalists? Like how do you put together the rack when you know the s- the set of things you have to shove into a rack together? Like what does that process look like of designing it all together?</div>
+  <div class="dialogue-zh">有什么问题-你能带我了解一下专家和通才的过程吗？就像当您知道必须将一组东西一起推入架子时，如何将架子组装在一起？一起设计的过程是什么样的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jensen Huang <span class="dialogue-time">(00:03:51)</span>
+  </div>
+  <div class="dialogue-en">Yeah. There’s the first question, which is: what is extreme co-design? We’re optimizing across the entire stack of software from architectures to chips, to systems, to system software, to the algorithms, to the applications. That’s one layer. The second thing that you and I just talked about goes beyond CPUs and GPUs and networking chips and scale up switches and scale out switches. And then of co...</div>
+  <div class="dialogue-zh">是的。第一个问题是：什么是极限协同设计？我们正在优化整个软件堆栈，从架构到芯片、系统、系统软件、算法和应用程序。这是一层。你和我刚才谈到的第二件事超出了 CPU、GPU 和网络芯片以及纵向扩展交换机和横向扩展交换机的范围。然后是co</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jensen Huang <span class="dialogue-time">(00:04:34)</span>
+  </div>
+  <div class="dialogue-en">The second question is, why is it, and we just spoke about the reason, you know you want to distribute the workload so that you can exceed the benefit of just increasing the number of computers. And the, and then the third question is, how is it, how do you do it?</div>
+  <div class="dialogue-zh">第二个问题是，为什么会这样，我们刚才谈到了原因，你知道你想要分配工作负载，这样你就可以超越仅仅增加计算机数量所带来的好处。然后第三个问题是，怎么样，你是怎么做到的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jensen Huang <span class="dialogue-time">(00:04:51)</span>
+  </div>
+  <div class="dialogue-en">And, and that’s the, that’s kind of the miracle of this company. You know, when you’re designing a computer, you have to have an operating system of computers. When you’re designing a company, you should first think about what is it that you want the company to produce. You know, I see a lot of companies’ organization charts, and they all look the same. Hamburger organization charts, soft organiza...</div>
+  <div class="dialogue-zh">这就是这家公司的奇迹。你知道，当你设计一台计算机时，你必须有一个计算机操作系统。当你设计一家公司时，你应该首先考虑你希望公司生产什么。你知道，我看过很多公司的组织结构图，它们看起来都一样。汉堡组织结构图，软组织</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jensen Huang <span class="dialogue-time">(00:05:36)</span>
+  </div>
+  <div class="dialogue-en">It almost directly says what you should do with the organization. My direct staff is 60 people. You know, I don’t have one-on-ones with ’em because it’s impossible. You can’t have 60 people on your staff if you’re, you know, gonna get work done and-</div>
+  <div class="dialogue-zh">它几乎直接说明了你应该对组织做什么。我的直接员工有 60 人。你知道，我不会与他们进行一对一的交流，因为这是不可能的。如果你要完成工作，你就不可能拥有 60 名员工，而且——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:51)</span>
+  </div>
+  <div class="dialogue-en">So you still have 60 reports. You still have across-</div>
+  <div class="dialogue-zh">所以您还有 60 份报告。你还有跨-</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jensen Huang <span class="dialogue-time">(00:05:53)</span>
+  </div>
+  <div class="dialogue-en">More, yeah.</div>
+  <div class="dialogue-zh">更多，是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:54)</span>
+  </div>
+  <div class="dialogue-en">More. And most stars at least have a foot in engineering.</div>
+  <div class="dialogue-zh">更多的。大多数明星至少都涉足工程学领域。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jensen Huang <span class="dialogue-time">(00:05:59)</span>
+  </div>
+  <div class="dialogue-en">Almost all of them. There’s experts in memory, there’s experts in CPUs, there’s experts in optical. All-</div>
+  <div class="dialogue-zh">几乎全部。有内存专家、CPU 专家、光学专家。全部-</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:06)</span>
+  </div>
+  <div class="dialogue-en">That’s incredible.</div>
+  <div class="dialogue-zh">那真是难以置信。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jensen Huang <span class="dialogue-time">(00:06:06)</span>
+  </div>
+  <div class="dialogue-en">Yeah, GPUs and- Architecture, algorithms, design-</div>
+  <div class="dialogue-zh">是的，GPU 和——架构、算法、设计——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:11)</span>
+  </div>
+  <div class="dialogue-en">So, you constantly have an eye on the entire stack, and you’re having to have, like, intense discussions about the design of the entire stack?</div>
+  <div class="dialogue-zh">那么，您需要不断关注整个堆栈，并且必须对整个堆栈的设计进行激烈的讨论？</div>
+</div>
+    <a href="https://lexfridman.com/jensen-huang-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="brendan-eich.html" class="card" style="text-decoration:none">
+  <div class="card-title">Brendan Eich: JavaScript, Firefox, Mozilla, and Brave</div>
+  <div class="card-meta">Brendan Eich</div>
+</a>
+<a href="chris-urmson.html" class="card" style="text-decoration:none">
+  <div class="card-title">Chris Urmson: Self-Driving Cars at Aurora, Google, CMU, and DARPA</div>
+  <div class="card-meta">Chris Urmson</div>
+</a>
+<a href="kai-fu-lee.html" class="card" style="text-decoration:none">
+  <div class="card-title">Kai-Fu Lee: AI Superpowers – China and Silicon Valley</div>
+  <div class="card-meta">Kai-Fu Lee</div>
+</a>
+<a href="kevin-scott.html" class="card" style="text-decoration:none">
+  <div class="card-title">Kevin Scott: Microsoft CTO</div>
+  <div class="card-meta">Kevin Scott</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

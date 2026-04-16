@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yuval Noah Harari - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Yuval Noah Harari</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Yuval Noah Harari</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/yuval-noah-harari.html" style="font-size:16px;color:#818cf8;font-weight:600">Yuval Noah Harari</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">24,978 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/yuval-noah-harari-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:24</span>
+  <span class="chapter-title">Intelligence<span class="zh-trans"> · 智力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">20:19</span>
+  <span class="chapter-title">Origin of humans<span class="zh-trans"> · 人类的起源</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:41</span>
+  <span class="chapter-title">Suffering<span class="zh-trans"> · 痛苦</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">51:22</span>
+  <span class="chapter-title">Hitler<span class="zh-trans"> · 希特勒</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:09:54</span>
+  <span class="chapter-title">Benjamin Netanyahu<span class="zh-trans"> · 本杰明·内塔尼亚胡</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:28:17</span>
+  <span class="chapter-title">Peace in Ukraine<span class="zh-trans"> · 乌克兰的和平</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:45:07</span>
+  <span class="chapter-title">Conspiracy theories<span class="zh-trans"> · 阴谋论</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:59:46</span>
+  <span class="chapter-title">AI safety<span class="zh-trans"> · 人工智能安全</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:14:04</span>
+  <span class="chapter-title">How to think<span class="zh-trans"> · 如何思考</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:23:47</span>
+  <span class="chapter-title">Advice for young people<span class="zh-trans"> · 给年轻人的建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:26:28</span>
+  <span class="chapter-title">Love<span class="zh-trans"> · 爱</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:36:38</span>
+  <span class="chapter-title">Mortality<span class="zh-trans"> · 死亡</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:41:02</span>
+  <span class="chapter-title">Meaning of life<span class="zh-trans"> · 生命的意义</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">don</span><span class="keyword-tag">yuval</span><span class="keyword-tag">noah</span><span class="keyword-tag">harari</span><span class="keyword-tag">stories</span><span class="keyword-tag">human</span><span class="keyword-tag">history</span><span class="keyword-tag">humans</span><span class="keyword-tag">story</span><span class="keyword-tag">intelligence</span><span class="keyword-tag">israel</span><span class="keyword-tag">war</span><span class="keyword-tag">consciousness</span><span class="keyword-tag">ideas</span><span class="keyword-tag">suffering</span><span class="keyword-tag">small</span><span class="keyword-tag">social</span><span class="keyword-tag">difficult</span><span class="keyword-tag">conspiracy</span><span class="keyword-tag">important</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I think one of the big differences between those who believe in conspiracy theories and people who warn about the dangers of AI, the dangers of climate change, we don’t see certain humans as evil and hateful. The problem isn’t humans, the problem is something outside humanity. Yes, humans are contributing to the problem, but ultimately the enemy is external to humanity. Whereas conspiracy theorists usually claim that a certain part of humanity is the source of all evil, which leads them to eventually think in terms of exterminating this part of humanity, which leads sometimes to historical disasters like Nazism."</div>
+  <div class="quote-zh">我认为那些相信阴谋论的人和那些警告人工智能的危险、气候变化的危险的人之间的巨大区别之一是，我们不认为某些人类是邪恶的和可恨的。问题不在于人类，问题在于人类之外的事物。是的，人类正在造成这个问题，但最终的敌人是人类外部的。而阴谋论者通常声称人类的某一部分是万恶之源，这导致他们最终想到消灭这部分人类，这有时会导致像纳粹主义这样的历史灾难。</div>
+  <div class="quote-meta">— Yuval Noah Harari （01:54:46）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think it’s an extremely dangerous development. And the chances that this will go wrong, that people will use the new technologies trying to upgrade humans, but actually downgrading them, this is a very, very big danger. If you let corporations and armies and ruthless politicians change humans using tools like AI and bioengineering, it’s very likely that they will try to enhance a few human qualities that they need, like intelligence and discipline, while neglecting what are potentially more important human qualities, like compassion, like artistic sensitivity, like spirituality …"</div>
+  <div class="quote-zh">我认为这是一个极其危险的发展。这很可能会出错，人们会使用新技术试图升级人类，但实际上却降低了人类的等级，这是一个非常非常大的危险。如果你让企业、军队和无情的政客使用人工智能和生物工程等工具来改变人类，他们很可能会试图增强他们需要的一些人类品质，比如智力和纪律，而忽略了潜在的更重要的人类品质，比如同情心、艺术敏感性、灵性……</div>
+  <div class="quote-meta">— Yuval Noah Harari （01:41:24）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"If we now find ourselves inside this kind of world of illusions created by an alien intelligence, that we don’t understand, but it understands us, this is a kind of spiritual enslavement that we won’t be able to break out of, because it understands us, it understands how to manipulate us, but we don’t understand what is behind this screen of stories and images and songs."</div>
+  <div class="quote-zh">如果我们现在发现自己处于这种由外星智慧创造的幻象世界中，我们不理解，但它理解我们，这是一种我们无法摆脱的精神奴役，因为它理解我们，它理解如何操纵我们，但我们不理解这个故事、图像和歌曲的屏幕背后是什么。</div>
+  <div class="quote-meta">— Yuval Noah Harari （00:00:00）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"We are better than anything that we can intentionally design at present. Like any intentionally designed humans at the present moment is going to be much, much worse than us. Because basically, we don’t understand ourselves. I mean, as long as we don’t understand our brain, our body, our mind, it’s a very, very bad idea to start manipulating a system that you don’t understand deeply. And we don’t understand ourselves. Conspiracy theories"</div>
+  <div class="quote-zh">我们比目前我们可以有意设计的任何东西都更好。就像目前任何被有意设计的人类一样，它们都会比我们糟糕得多。因为基本上，我们不了解自己。我的意思是，只要我们不了解我们的大脑、我们的身体、我们的思想，那么开始操纵一个你不深入了解的系统就是一个非常非常糟糕的主意。而我们并不了解自己。阴谋论</div>
+  <div class="quote-meta">— Yuval Noah Harari （01:44:40）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think to keep your sanity in this situation, first of all, it’s important to understand that most of these people are not evil. They are not doing it on purpose. Many of them really believe that there is some very nefarious, powerful conspiracy which is causing a lot of harm in the world, and they’re doing a good thing by exposing it and making people aware of it and trying to stop it. If you think that you are surrounded by evil, you are falling into the same rabbit hole, you’re falling into the same paranoid state of mind, “Oh, the world is full of these evil people that … ” No. Most of them are good people."</div>
+  <div class="quote-zh">我认为在这种情况下要保持理智，首先重要的是要了解这些人中的大多数人并不是邪恶的。他们不是故意的。他们中的许多人确实相信，存在一些非常邪恶、强大的阴谋，正在给世界造成很大的伤害，他们通过揭露它、让人们意识到它并试图阻止它来做一件好事。如果你认为自己被邪恶包围，那么你就掉进了同一个兔子洞，你就陷入了同样的偏执心态，“哦，世界上到处都是这些邪恶的人……”不。他们大多数都是好人。</div>
+  <div class="quote-meta">— Yuval Noah Harari （01:57:56）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Yuval Noah Harari <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">If we now find ourselves inside this kind of world of illusions created by an alien intelligence, that we don’t understand, but it understands us, this is a kind of spiritual enslavement that we won’t be able to break out of, because it understands us, it understands how to manipulate us, but we don’t understand what is behind this screen of stories and images and songs.</div>
+  <div class="dialogue-zh">如果我们现在发现自己处于这种由外星智慧创造的幻象世界中，我们不理解，但它理解我们，这是一种我们无法摆脱的精神奴役，因为它理解我们，它理解如何操纵我们，但我们不理解这个故事、图像和歌曲的屏幕背后是什么。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:36)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Yuval Noah Harari, a historian, philosopher, and author of several highly acclaimed, highly influential books, including Sapiens, Homo Deus and 21 Lessons for the 21st Century. He is also an outspoken critic of Benjamin Netanyahu and the current right-wing government in Israel. While much of this conversation is about the history and future of human civilizatio...</div>
+  <div class="dialogue-zh">以下是与历史学家、哲学家尤瓦尔·诺亚·哈拉里 (Yuval Noah Harari) 的对话，他是几本广受好评、极具影响力的书籍的作者，其中包括《智人》、《神人》和《21 世纪的 21 堂课》。他也是本杰明·内塔尼亚胡和以色列现任右翼政府的直言不讳的批评者。虽然大部分对话都是关于人类文明的历史和未来</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:14)</span>
+  </div>
+  <div class="dialogue-en">This is the Lex Friedman podcast. To support it, please check out our sponsors in the description. Now, dear friends, here’s Yuval Noah Harari.</div>
+  <div class="dialogue-zh">这是莱克斯·弗里德曼的播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是尤瓦尔·诺亚·赫拉利。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Intelligence <span class="dialogue-time">(00:01:24)</span>
+  </div>
+  <div class="dialogue-en">13.8 billion years ago is the origin of our universe. 3.8 billion years ago is the origin of life here on our little planet, the one we call earth. Let’s say 200,000 years ago, is the appearance of early homo sapiens. Let me ask you this question. How rare are these events in the vastness of space and time? Or put it in a more fun way, how many intelligent alien civilizations do you think are out ...</div>
+  <div class="dialogue-zh">138亿年前是我们宇宙的起源。 38 亿年前是我们这个小小的星球（我们称之为地球）上生命的起源。假设20万年前，是早期智人的出现。让我问你这个问题。在浩瀚的时空中，这些事件有多罕见？或者换个更好玩的方式来说，你认为有多少智慧外星文明出来了</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Yuval Noah Harari <span class="dialogue-time">(00:01:53)</span>
+  </div>
+  <div class="dialogue-en">I suppose there should be some, statistically, but we don’t have any evidence. I do think that intelligence, in any way, it’s a bit overvalued. We are the most intelligent entities on this planet, and look what you’re doing. So intelligence also tends to be self-destructive, which implies that if there are, or were, intelligent life forms elsewhere, maybe they don’t survive for long.</div>
+  <div class="dialogue-zh">我想从统计上来说应该有一些，但我们没有任何证据。我确实认为智力无论如何都被高估了。我们是这个星球上最聪明的实体，看看你在做什么。因此，智慧也往往具有自我毁灭性，这意味着，如果其他地方存在或曾经存在智慧生命形式，它们也许不会生存太久。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:22)</span>
+  </div>
+  <div class="dialogue-en">You think there’s a tension between happiness and intelligence?</div>
+  <div class="dialogue-zh">你认为幸福和智力之间存在紧张关系吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Yuval Noah Harari <span class="dialogue-time">(00:02:26)</span>
+  </div>
+  <div class="dialogue-en">Absolutely. Intelligence is definitely not something that is directed towards amplifying happiness. I would also emphasize the huge, huge difference between intelligence and consciousness, which many people, certainly in the tech industry and in the AI industry, tend to miss. Intelligence is simply the ability to solve problems, to attain goals, and to win at chess, to win a struggle for survival,...</div>
+  <div class="dialogue-zh">绝对地。智力绝对不是用来增强幸福感的东西。我还要强调智能和意识之间巨大的差异，许多人，尤其是科技行业和人工智能行业的人，往往会忽视这一点。智力只是解决问题、实现目标、赢得国际象棋、赢得生存斗争的能力，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:59)</span>
+  </div>
+  <div class="dialogue-en">Can you steer me on the case that consciousness and intelligence are intricately connected? Not just in humans, but anywhere else. They have to go hand in hand. Is it possible for you to imagine such a universe?</div>
+  <div class="dialogue-zh">你能告诉我意识和智力是错综复杂地联系在一起的吗？不仅在人类身上，而且在其他任何地方。他们必须齐头并进。你能想象这样一个宇宙吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Yuval Noah Harari <span class="dialogue-time">(00:04:12)</span>
+  </div>
+  <div class="dialogue-en">It could be, but we don’t know yet. Again, we have examples. Certainly, we know of examples of high intelligence without consciousness. Computers are one example. As far as we know, plants are not conscious, yet, they are intelligent. They can solve problems, they can attain goals in very sophisticated ways. The other way around, to have consciousness without any intelligence, this is probably imp...</div>
+  <div class="dialogue-zh">有可能，但我们还不知道。同样，我们有例子。当然，我们知道一些没有意识的高智力的例子。计算机就是一个例子。据我们所知，植物没有意识，但它们是有智慧的。他们可以解决问题，可以以非常复杂的方式实现目标。反过来说，有意识却没有任何智能，这大概就是小鬼吧。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Yuval Noah Harari <span class="dialogue-time">(00:04:48)</span>
+  </div>
+  <div class="dialogue-en">A bigger question is whether any of that is tied to organic biochemistry. We know, on this planet, only about carbon-based life forms, whether you are an amoeba, a dinosaur, a tree, a human being, you are based on organic biochemistry. Is there an essential connection between organic biochemistry and consciousness? Do all conscious entities, everywhere in the universe or in the future on planet ea...</div>
+  <div class="dialogue-zh">一个更大的问题是这是否与有机生物化学有关。我们知道，在这个星球上，只有碳基生命形式，无论你是阿米巴原虫、恐龙、树木、人类，你都是基于有机生物化学的。有机生物化学和意识之间是否存在本质联系？宇宙中的任何地方或未来地球上的所有有意识实体吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:48)</span>
+  </div>
+  <div class="dialogue-en">Well, a big part of that is do you think we humans would be able to detect other intelligent beings, other conscious beings? Another way to ask that, is it possible that the aliens are already here and we don’t see them? Meaning are we very human-centric in our understanding of, one, the definition of life, two, the definition of intelligence, and three, the definition of consciousness?</div>
+  <div class="dialogue-zh">嗯，其中很大一部分是你认为我们人类能够探测到其他智慧生物、其他有意识的生物吗？换句话说，有没有可能外星人已经在这里了，而我们却没有看到他们？这意味着我们在理解第一、生命的定义、第二、智力的定义、第三、意识的定义时是否非常以人为中心？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Yuval Noah Harari <span class="dialogue-time">(00:06:13)</span>
+  </div>
+  <div class="dialogue-en">The aliens are here, they are just not from outer space. AI, which usually stands for artificial intelligence. I think it stands for alien intelligence because AI is an alien type of intelligence. It solves problems, attains goals in a very, very different way, in an alien way from human beings. I’m not implying that AI came from outer space, it came from Silicon Valley, but it is alien to us. If ...</div>
+  <div class="dialogue-zh">外星人就在这里，他们只是不是来自外太空。 AI，通常代表人工智能。我认为它代表外星智能，因为人工智能是一种外星智能。它解决问题、实现目标的方式非常非常不同，与人类截然不同。我并不是说人工智能来自外太空，它来自硅谷，但它对我们来说是陌生的。如果</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:56)</span>
+  </div>
+  <div class="dialogue-en">Well, I mean, I guess, instructive there is just having the humility to look around, to think about living beings that operate at different timescale, at different spatial scale. I think that’s all useful when starting to analyze artificial intelligence. It’s possible that even the larger language models we have today are already conscious.</div>
+  <div class="dialogue-zh">嗯，我的意思是，我想，有启发性的是谦虚地环顾四周，思考在不同时间尺度、不同空间尺度上运作的生物。我认为这在开始分析人工智能时很有用。即使我们今天拥有的更大的语言模型也可能已经有意识了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Yuval Noah Harari <span class="dialogue-time">(00:07:19)</span>
+  </div>
+  <div class="dialogue-en">I highly doubt it, but I think consciousness, in the end, it’s a question of social norms. Because we cannot prove consciousness in anybody except ourselves. We know that we are conscious, because we are feeling it. We have direct access to our subjective consciousness. We cannot have any proof that any other entity in the world, any other human being, our parents, our best friends, we don’t have ...</div>
+  <div class="dialogue-zh">我对此非常怀疑，但我认为意识归根结底是一个社会规范的问题。因为除了我们自己之外，我们无法证明任何人都有意识。我们知道我们是有意识的，因为我们能感觉到它。我们可以直接接触到我们的主观意识。我们无法有任何证据证明世界上任何其他实体、任何其他人类、我们的父母、我们最好的朋友，我们没有</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Yuval Noah Harari <span class="dialogue-time">(00:08:15)</span>
+  </div>
+  <div class="dialogue-en">Now, pigs are far more intelligent than dogs and cats, and according to many measures, yet, when you go to the supermarket and buy a piece of frozen pig meat, you don’t think about it as a conscious entity. Why do you think of your dog as conscious, but not of the bacon that you buy? Because you’ve built a relationship with the dog and you don’t have a relationship with the bacon.</div>
+  <div class="dialogue-zh">现在，猪比狗和猫聪明得多，而且根据许多衡量标准，然而，当你去超市买一块冷冻猪肉时，你并不认为它是一个有意识的实体。为什么你认为你的狗有意识，但你买的培根却没有？因为你已经和狗建立了关系，但你和培根没有关系。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Yuval Noah Harari <span class="dialogue-time">(00:08:42)</span>
+  </div>
+  <div class="dialogue-en">Now, relationships, they don’t constitute a logical proof for consciousness, they’re a social test. The Turing test is a social test, it’s not a logical proof. Now, if you establish a mutual relationship with an entity and you are invested in it, emotionally, you are almost compelled to feel that the other side is also conscious. When it comes again to AI and computers, I think, again, I don’t thi...</div>
+  <div class="dialogue-zh">现在，关系并不构成意识的逻辑证明，而是一种社会测试。图灵测试是社会测试，不是逻辑证明。现在，如果你与一个实体建立了相互关系，并且你在情感上投入其中，你几乎会被迫感觉到对方也是有意识的。当再次谈到人工智能和计算机时，我再次认为，我不认为</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:56)</span>
+  </div>
+  <div class="dialogue-en">To you is a social convention, just a funny little side effect, a little artifact, or is it fundamental to what consciousness is? Because if it is fundamental, then it seems like AI is very good at forming these kinds of deep relationships with humans, and therefore it’ll be able to be a nice catalyst for integrating itself into these social conventions of ours.</div>
+  <div class="dialogue-zh">对你来说这是一种社会习俗，只是一个有趣的小副作用，一个小人工制品，或者它是意识的基础？因为如果它是基础性的，那么人工智能似乎非常擅长与人类建立这种深厚的关系，因此它将能够成为将自己融入我们这些社会习俗的良好催化剂。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Yuval Noah Harari <span class="dialogue-time">(00:10:21)</span>
+  </div>
+  <div class="dialogue-en">It was built to accomplish that. Again, all this argument between natural select selection and creationism, intelligent design. As far as the past go, all entities evolve by natural selection. The funny thing is, when you look to the future, more and more entities will come out of intelligent design, not of some God above the clouds, but of our intelligent design and the intelligent design of our ...</div>
+  <div class="dialogue-zh">它的建立就是为了实现这一目标。再次，自然选择与神创论、智能设计之间的所有争论。就过去而言，所有实体都是通过自然选择进化的。有趣的是，当你展望未来时，越来越多的实体将来自智能设计，不是云端之上的某个上帝，而是我们的智能设计和我们的智能设计。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Yuval Noah Harari <span class="dialogue-time">(00:11:13)</span>
+  </div>
+  <div class="dialogue-en">When two people talk with one another, one of the things that makes the conversation more difficult is our own emotions. You are saying something and I’m not really listening to you, because there is something I want to say, and I’m just waiting until you finish I can put in a word, or I’m so obsessed with my anger or irritation or whatever, that I don’t pay attention to what you are feeling. This...</div>
+  <div class="dialogue-zh">当两个人互相交谈时，让谈话变得更加困难的因素之一就是我们自己的情绪。你在说什么，但我并没有真正听你说，因为我有话想说，而我只是在等你说完我才能插话，或者我太沉迷于我的愤怒或恼怒或其他什么，以至于我没有注意到你的感受。这</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Yuval Noah Harari <span class="dialogue-time">(00:11:51)</span>
+  </div>
+  <div class="dialogue-en">When a computer is talking to you, it can focus 100% of its attention is on what you’re saying and what you’re feeling because it has no feelings of its own. Paradoxically, this means that computers can fool people into feeling that, oh, there is a conscious entity on the other side, an empathic entity on the other side, because the one thing everybody wants, almost more than anything in the world...</div>
+  <div class="dialogue-zh">当计算机与你交谈时，它可以将 100% 的注意力集中在你所说的话和你的感受上，因为它没有自己的感受。矛盾的是，这意味着计算机可以欺骗人们，让他们感觉，哦，另一边有一个有意识的实体，另一边有一个有同理心的实体，因为每个人都想要的东西，几乎比世界上任何东西都重要</div>
+</div>
+    <a href="https://lexfridman.com/yuval-noah-harari-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="gregory-aldrete.html" class="card" style="text-decoration:none">
+  <div class="card-title">Gregory Aldrete</div>
+  <div class="card-meta">Gregory Aldrete</div>
+</a>
+<a href="jordan-peterson-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Jordan Peterson #2</div>
+  <div class="card-meta">Jordan Peterson</div>
+</a>
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

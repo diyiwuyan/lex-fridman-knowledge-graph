@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book 1984 George Orwell - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Book 1984 George Orwell</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Book 1984 George Orwell</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/book-1984-george-orwell.html" style="font-size:16px;color:#818cf8;font-weight:600">Book 1984 George Orwell</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">8,476 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/book-1984-george-orwell-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Intro<span class="zh-trans"> · 简介</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:02</span>
+  <span class="chapter-title">World of 1984<span class="zh-trans"> · 1984年的世界</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:19</span>
+  <span class="chapter-title">Love<span class="zh-trans"> · 爱</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">12:42</span>
+  <span class="chapter-title">Hate<span class="zh-trans"> · 恨</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">17:21</span>
+  <span class="chapter-title">Power<span class="zh-trans"> · 力量</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">25:56</span>
+  <span class="chapter-title">Orwell<span class="zh-trans"> · 奥威尔</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">28:49</span>
+  <span class="chapter-title">Technology<span class="zh-trans"> · 技术</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">47:14</span>
+  <span class="chapter-title">Reading list controversy<span class="zh-trans"> · 阅读清单争议</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">state</span><span class="keyword-tag">book</span><span class="keyword-tag">human</span><span class="keyword-tag">torture</span><span class="keyword-tag">party</span><span class="keyword-tag">totalitarian</span><span class="keyword-tag">society</span><span class="keyword-tag">reading</span><span class="keyword-tag">don</span><span class="keyword-tag">books</span><span class="keyword-tag">winston</span><span class="keyword-tag">thought</span><span class="keyword-tag">hope</span><span class="keyword-tag">hate</span><span class="keyword-tag">control</span><span class="keyword-tag">freedom</span><span class="keyword-tag">sex</span><span class="keyword-tag">orwell</span><span class="keyword-tag">said</span><span class="keyword-tag">brien</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Host of Lex Fridman Podcast. Research Scientist at MIT, working on human-AI interaction, robotics, and machine learning. View all posts by Lex Fridman →"</div>
+  <div class="quote-zh">莱克斯·弗里德曼播客的主持人。麻省理工学院的研究科学家，致力于人机交互、机器人和机器学习。查看莱克斯·弗里德曼发表的所有帖子 →</div>
+  <div class="quote-meta">— About Lex Fridman </div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">“There was truth, and there was untruth. And if you clung to the truth, even against the whole world, you were not mad.” 1984 by George Orwell is one of the most impactful books ever written. It has been widely used and misused in political discourse by all kinds of ideologues. Into that discourse, it entered terms like Big Brother, thoughtcrime, Doublethink, Newspeak, Thought Police, and Orwellia...</div>
+  <div class="dialogue-zh">“有真理，也有谎言。如果你坚持真理，即使反对整个世界，你也没有疯。”乔治·奥威尔的《1984》是有史以来最具影响力的书籍之一。它已被各种理论家在政治话语中广泛使用和误用。在该话语中，它输入了诸如“老大哥”、“思想犯罪”、“双重思想”、“新话”、“思想警察”和“奥韦利亚”等术语</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:55)</span>
+  </div>
+  <div class="dialogue-en">I’d like to try to make it somewhat interesting to people who both have and have not read the book. Let’s see how it goes. The world in the book 1984 is a dystopian future society, a nation, maybe you can say superstate named Oceania. It’s fully controlled by a totalitarian political party called Ingsoc. It’s led by Big Brother who, as we might discuss, may or may not be a real person. He might ju...</div>
+  <div class="dialogue-zh">我想尝试让读过和没读过这本书的人都对它感兴趣。让我们看看进展如何。 《1984》中的世界是一个反乌托邦的未来社会，一个国家，也许你可以说是一个名为大洋洲的超级国家。它完全由一个名为 Ingsoc 的极权主义政党控制。它由老大哥领导，正如我们可能讨论的那样，他可能是也可能不是一个真实的人。他可能会</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:38)</span>
+  </div>
+  <div class="dialogue-en">It uses Doublethink to control thought by, perhaps you could say, forcing you to hold contradictory beliefs and accept them as true. If not, the Thought Police arrest you for committing a thoughtcrime. Examples of Doublethink are “War is peace,” “Freedom is slavery,” and “Ignorance is strength.” And finally, the party constantly rewrites history. As the quote goes, “Who controls the past controls ...</div>
+  <div class="dialogue-zh">也许你可以说，它利用双重思想来控制思想，迫使你持有相互矛盾的信念并接受它们为真。如果没有，思想警察就会以犯有思想罪的罪名逮捕你。双重思想的例子有“战争就是和平”、“自由就是奴役”和“无知就是力量”。最后，党不断改写历史。正如那句话所说，“谁控制了过去</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:27)</span>
+  </div>
+  <div class="dialogue-en">And the Ministry of Peace, of course, is responsible for maintaining a constant state of war. Society is divided into three levels: the Inner Party, the Outer Party, and the Proles. The term stands for, I guess, proletariats; it’s the working class. The Inner Party’s tiny. The Outer Party’s a little bit bigger, and the majority of the people—I forget what the percentage is, maybe 80%—are the Prole...</div>
+  <div class="dialogue-zh">当然，和平部负责维持持续的战争状态。社会分为三个阶层：核心党、外围党、无产者。我想，这个词代表的是无产阶级。这是工人阶级。核心党很小。外围党稍微大一点，大多数人——我忘了​​比例是多少，可能是80%——是无产阶级</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:11)</span>
+  </div>
+  <div class="dialogue-en">They have sex, and this is maybe a good place to mention that love and passionate sex are forbidden in this society. “Goodsex” I think is a term under Newspeak; it’s the kind of sex that leads to procreation, which is the only kind allowed and the only kind that’s “good.” O’Brien is another central character. He’s the member of the Inner Party that convinces Winston he’s part of the Brotherhood, w...</div>
+  <div class="dialogue-zh">他们发生性行为，这也许是一个很好的地方来提一下，爱情和激情的性行为在这个社会是被禁止的。 “Goodsex”我认为是新话下的一个术语；这是一种能够繁衍后代的性行为，是唯一被允许的性行为，也是唯一一种“好的”性行为。奥布莱恩是另一个中心人物。他是核心党的成员，让温斯顿相信他是兄弟会的一员，w</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:59)</span>
+  </div>
+  <div class="dialogue-en">Big Brother is the head of the party Ingsoc, and Emmanuel Goldstein is the leader of the so-called Brotherhood, which is this mysterious group that lurks in the shadows and works to overthrow the party. Again, they may or may not exist. We’ll maybe talk about the importance of that in a totalitarian state. So, a few key takeaways. I’ll try to do my best—I have disparate notes that I took for mysel...</div>
+  <div class="dialogue-zh">老大哥是英社党的领袖，伊曼纽尔·戈尔茨坦是所谓兄弟会的领袖，这个神秘组织潜伏在暗处，致力于推翻该党。同样，它们可能存在也可能不存在。我们也许会讨论这一点在极权国家中的重要性。因此，有一些关键要点。我会尽力做到最好——我自己做了不同的笔记</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:52)</span>
+  </div>
+  <div class="dialogue-en">I just take the journey and let the thoughts wander around in the background as I live my life. I wanted to put them on paper and maybe share them with others to see what they think my concrete takeaways are from the book, if I could try to convert them into words. So the first one for me, especially later in life as I’ve been reading this book, is that when everything else or most things that mak...</div>
+  <div class="dialogue-zh">我只是踏上旅程，让思绪在我的生活中徘徊。我想把它们写在纸上，也许可以与其他人分享，看看他们认为我从书中得到的具体收获是什么，如果我可以尝试将它们转换成文字的话。所以对我来说，第一个，尤其是在我读这本书的后来的生活中，是当其他一切或大多数事情</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:49)</span>
+  </div>
+  <div class="dialogue-en">So when the ability to speak is taken away, when the ability to think rational thoughts is taken away, the last thing that’s left, and the thing that ultimately gives hope, is love. That’s a big takeaway for me. The note that Julia gives to Winston reading “I love you” is the kind of revolutionary act that leads to a society beyond the one they exist in. I think a lot of the book has an interestin...</div>
+  <div class="dialogue-zh">因此，当说话的能力被剥夺，当理性思考的能力被剥夺时，最后剩下的东西，也是最终给人希望的东西，就是爱。这对我来说是一个很大的收获。朱莉娅在读“我爱你”时给温斯顿的便条是一种革命性的行为，它导致了一个超越他们所处社会的社会。我认为这本书的很多内容都感兴趣</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:51)</span>
+  </div>
+  <div class="dialogue-en">I think you have to be careful as a revolutionary not to obsess 100% with destruction. Because beyond destruction, there could be chaos that leads to something much worse. I think love is the basic human thing that connects all of us, the messy thing that connects all of us, that allows you to build a better society after the totalitarian one is overthrown. What else did I want to say? There’s an ...</div>
+  <div class="dialogue-zh">我认为作为一名革命者必须小心，不要百分百沉迷于破坏。因为除了破坏之外，混乱还可能导致更糟糕的情况。我认为爱是连接我们所有人的基本人类事物，是连接我们所有人的混乱事物，它可以让你在极权主义被推翻后建立一个更好的社会。我还想说什么？有一个</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:44)</span>
+  </div>
+  <div class="dialogue-en">And there was an interesting question raised by the book, both by Winston and Julia: what is ultimately the most powerful act of rebellion? Is it between us humans when everything is forbidden? Is it animalistic like sex? Just lust for another human? Or is it love? The kind of love you have for a romantic partner, but even love for family and love for friends. I don’t know. I think the book almost...</div>
+  <div class="dialogue-zh">温斯顿和朱莉娅在书中提出了一个有趣的问题：最终最有力的反叛行为是什么？当一切都被禁止时，我们人类之间是这样吗？是像性一样的动物性吗？只是对另一个人的欲望？还是爱？你对浪漫伴侣的爱，甚至是对家人的爱和对朋友的爱。我不知道。我觉得这本书差不多</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:42)</span>
+  </div>
+  <div class="dialogue-en">“The more men you’ve had sex with…” Julia admitted to having sex with quite a lot of people. He says, “The more men you’ve had sex with, the more I love you. I hate purity. I hate virtue. I want everyone to be corrupt to the bone.” This kind of rubbed me the wrong way because, again, this seems to be obsessed with the hatred towards the state versus a longing and a hope—which I think hope is reall...</div>
+  <div class="dialogue-zh">“你和越多的男人发生过性关系……”朱莉娅承认和很多人发生过性关系。他说：“你和越多的男人发生性关系，我就越爱你。我讨厌纯洁。我讨厌美德。我希望每个人都腐败到骨子里。”这让我感到不舒服，因为这似乎又痴迷于对国家的仇恨，而不是渴望和希望——我认为希望是真实的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:31)</span>
+  </div>
+  <div class="dialogue-en">The deeply human thing is, again, the act of love. It’s a source of hope; it’s the catalyst for building a better future beyond the revolution. An interesting side note here—and there could be a million interesting side notes, and I’m desperately trying not to go on a million tangents, to hold myself together and stay focused—is on family. There’s all kinds of love, and I think family love is a re...</div>
+  <div class="dialogue-zh">人类最深层次的东西就是爱的行为。这是希望的源泉；它是在革命之外建设更美好未来的催化剂。这里有一个有趣的旁注——可能有一百万个有趣的旁注，我拼命地试图不要继续一百万个切线，让自己保持冷静并保持专注——是关于家庭。爱有很多种，我认为亲情是一种爱</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:06)</span>
+  </div>
+  <div class="dialogue-en">And I should mention, I’m loosely using the terms authoritarian and totalitarian here. To me, authoritarian means there’s a government with complete centralized control of political affairs. A totalitarian state is beyond that; it is complete control of not just politics but also social, economic, everything. Nazi Germany is an example of that, I think, where there’s just complete control of every...</div>
+  <div class="dialogue-zh">我应该提到，我在这里宽松地使用了威权主义和极权主义这两个术语。对我来说，独裁意味着有一个政府对政治事务完全集中控制。极权国家远不止于此。它不仅完全控制政治，而且还完全控制社会、经济等一切。我认为纳粹德国就是一个例子，那里的一切都被完全控制。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:57)</span>
+  </div>
+  <div class="dialogue-en">So I think this book is more about, at least in my definition of the term, totalitarianism. Anyway, as I was saying about family, I think the way they destroy family is, one, of course with your romantic partner by forbidding passion—passionate sex, but really just passion and longing for another human being in that romantic way. And they also really reward and encourage children at a young age; t...</div>
+  <div class="dialogue-zh">所以我认为这本书更多的是关于极权主义，至少在我对这个词的定义上是如此。不管怎样，正如我所说的关于家庭的那样，我认为他们破坏家庭的方式当然是通过禁止激情——激情的性爱——来破坏你的浪漫伴侣，但实际上只是以那种浪漫的方式对另一个人的激情和渴望。他们也确实在孩子很小的时候奖励和鼓励他们； t</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:11:43)</span>
+  </div>
+  <div class="dialogue-en">And I should also have mentioned on the topic of love that I think the goal of the Party, the final destination as described by O’Brien through the process of torture, is to break your mind, heart, and soul completely so that the only love you can have—and it could be felt as a pure love—is for Big Brother. This is the kind of thing you see in North Korea, where the only love you’re allowed to hav...</div>
+  <div class="dialogue-zh">我还应该在爱的话题上提到，我认为党的目标，正如奥布莱恩所描述的通过酷刑过程的最终目的地，是彻底打破你的思想、心灵和灵魂，这样你就能拥有的唯一的爱——而且可以被感觉到是一种纯粹的爱——就是对老大哥的爱。这就是你在朝鲜看到的那种事情，在那里你唯一可以拥有的爱</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:12:32)</span>
+  </div>
+  <div class="dialogue-en">In all cases, that figure, while there is a human associated with it, is really much bigger than the human, and that’s the only love you’re allowed to have. So the other takeaway I have is on the topic of hate. I think all humans have the capacity, almost an animalistic craving, for hate of the “other,” the enemy. Whether it’s individuals like Emmanuel Goldstein or nations like Eurasia and East As...</div>
+  <div class="dialogue-zh">在所有情况下，这个人物虽然有一个人类与之相关，但实际上比人类大得多，这是你被允许拥有的唯一的爱。所以我的另一个收获是关于仇恨的话题。我认为所有人类都有能力，几乎是一种动物性的渴望，憎恨“他者”，即敌人。无论是像伊曼纽尔·戈尔茨坦这样的个人，还是像欧亚大陆和东亚这样的国家</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:13:28)</span>
+  </div>
+  <div class="dialogue-en">And that, I think, is the point. When you don’t really know, there’s no steady footing on which to construct a worldview from which you can have hope for a better future. This animalistic craving for hate, especially when we’re in crowds, is most powerfully illustrated in the “Two Minutes of Hate” practiced by that society. The quote is, “The horrible thing about the Two Minutes of Hate was not th...</div>
+  <div class="dialogue-zh">我认为这就是重点。当你不真正了解时，就没有稳固的基础来构建你对更美好未来抱有希望的世界观。这种对仇恨的兽性渴望，尤其是当我们身处人群中时，在该社会实行的“两分钟仇恨”中得到了最有力的体现。引用是，“两分钟仇恨的可怕之处不在于</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:14:13)</span>
+  </div>
+  <div class="dialogue-en">A hideous ecstasy of fear and vindictiveness, a desire to kill, to torture, to smash faces in with a sledge-hammer, seemed to flow through the whole group of people like an electric current, turning one even against one’s will into a grimacing, screaming lunatic. And yet the rage that one felt was an abstract, undirected emotion which could be switched from one object to another like the flame of ...</div>
+  <div class="dialogue-zh">一种可怕的恐惧和报复的狂喜，一种杀人的欲望，一种折磨的欲望，一种用大锤把脸砸碎的欲望，似乎像电流一样流遍了整个人群，让一个人甚至不情愿地变成一个鬼脸、尖叫的疯子。然而，人们感受到的愤怒是一种抽象的、无方向的情感，它可以像火焰一样从一个物体切换到另一个物体。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:15:02)</span>
+  </div>
+  <div class="dialogue-en">And because you have complete control of history, you can direct it on a day-by-day basis towards any target. As long as the hate is catalyzed through these kinds of rituals, it can overpower the individualistic feeling of love we have for each other. So that hate is a more animalistic desire. I don’t know what to make of it. And of course, it’s also important to say that this book was intended or...</div>
+  <div class="dialogue-zh">而且由于您可以完全控制历史记录，因此您可以每天将其引导至任何目标。只要通过这些仪式催化仇恨，它就可以压倒我们对彼此的个人主义爱的感觉。因此，仇恨是一种更加兽性的欲望。我不知道该怎么办。当然，同样重要的是要说这本书的目的或目的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:15:53)</span>
+  </div>
+  <div class="dialogue-en">Because a lot of things, like the Two Minutes of Hate, are almost a caricature of what hate looks like in a mass gathering. But if you take it as a caricature, it can reveal some of the elements that already exist in human nature that we should be very cautious about. It reveals the very thing that, if not monitored by ourselves, can result in a slippery slope that leads to tribalism, the destruct...</div>
+  <div class="dialogue-zh">因为很多事情，比如《两分钟仇恨》，几乎都是大规模集会中仇恨的讽刺画。但如果你把它当作一幅漫画，它可以揭示人性中已经存在的一些我们应该非常谨慎的元素。它揭示了这样一个事实，如果我们不加以监控，可能会导致滑坡，导致部落主义、破坏</div>
+</div>
+    <a href="https://lexfridman.com/book-1984-george-orwell-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="daniel-schmachtenberger.html" class="card" style="text-decoration:none">
+  <div class="card-title">Daniel Schmachtenberger: Steering Civilization Away from Self-Destruction</div>
+  <div class="card-meta">Daniel Schmachtenberger</div>
+</a>
+<a href="douglas-murray.html" class="card" style="text-decoration:none">
+  <div class="card-title">Douglas Murray: Racism, Marxism, and the War on the West</div>
+  <div class="card-meta">Douglas Murray</div>
+</a>
+<a href="glenn-loury.html" class="card" style="text-decoration:none">
+  <div class="card-title">Glenn Loury: Race, Racism, Identity Politics, and Cancel Culture</div>
+  <div class="card-meta">Glenn Loury</div>
+</a>
+<a href="javier-milei.html" class="card" style="text-decoration:none">
+  <div class="card-title">Javier Milei</div>
+  <div class="card-meta">Javier Milei</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

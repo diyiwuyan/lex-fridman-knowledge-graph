@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cursor Team - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Cursor Team</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Cursor Team</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/cursor-team.html" style="font-size:16px;color:#818cf8;font-weight:600">Cursor Team</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">26,475 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/cursor-team-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:59</span>
+  <span class="chapter-title">Code editor basics<span class="zh-trans"> · 代码编辑器基础知识</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:09</span>
+  <span class="chapter-title">GitHub Copilot<span class="zh-trans"> · GitHub 副驾驶</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">10:27</span>
+  <span class="chapter-title">Cursor<span class="zh-trans"> · 光标</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">16:54</span>
+  <span class="chapter-title">Cursor Tab<span class="zh-trans"> · 光标选项卡</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">23:08</span>
+  <span class="chapter-title">Code diff<span class="zh-trans"> · 代码差异</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">31:20</span>
+  <span class="chapter-title">ML details<span class="zh-trans"> · 机器学习详细信息</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">36:54</span>
+  <span class="chapter-title">GPT vs Claude<span class="zh-trans"> · GPT VS 克劳德</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">43:28</span>
+  <span class="chapter-title">Prompt engineering<span class="zh-trans"> · 及时工程</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">50:54</span>
+  <span class="chapter-title">AI agents<span class="zh-trans"> · 人工智能代理</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:04:51</span>
+  <span class="chapter-title">Running code in background<span class="zh-trans"> · 在后台运行代码</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:09:31</span>
+  <span class="chapter-title">Debugging<span class="zh-trans"> · 调试</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:14:58</span>
+  <span class="chapter-title">Dangerous code<span class="zh-trans"> · 危险代码</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:26:09</span>
+  <span class="chapter-title">Branching file systems<span class="zh-trans"> · 分支文件系统</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:29:20</span>
+  <span class="chapter-title">Scaling challenges<span class="zh-trans"> · 扩展挑战</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:43:32</span>
+  <span class="chapter-title">Context<span class="zh-trans"> · 语境</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:48:39</span>
+  <span class="chapter-title">OpenAI o1<span class="zh-trans"> · OpenAI o1</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:00:01</span>
+  <span class="chapter-title">Synthetic data<span class="zh-trans"> · 综合数据</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:03:48</span>
+  <span class="chapter-title">RLHF vs RLAIF<span class="zh-trans"> · RLHF vs RLAIF</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:05:34</span>
+  <span class="chapter-title">Fields Medal for AI<span class="zh-trans"> · 人工智能菲尔兹奖</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">code</span><span class="keyword-tag">model</span><span class="keyword-tag">models</span><span class="keyword-tag">aman</span><span class="keyword-tag">going</span><span class="keyword-tag">arvid</span><span class="keyword-tag">sualeh</span><span class="keyword-tag">don</span><span class="keyword-tag">cursor</span><span class="keyword-tag">programming</span><span class="keyword-tag">data</span><span class="keyword-tag">language</span><span class="keyword-tag">michael</span><span class="keyword-tag">doing</span><span class="keyword-tag">better</span><span class="keyword-tag">tokens</span><span class="keyword-tag">context</span><span class="keyword-tag">bug</span><span class="keyword-tag">using</span><span class="keyword-tag">hard</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I think agents, it’s like resembles like a human… You can feel that you’re getting closer to AGI because you see a demo where it acts as a human would and it’s really, really cool. I think agents are not yet super useful for many things. I think we’re getting close to where they will actually be useful. And so I think there are certain types of tasks where having an agent would be really nice. I would love to have an agent. For example, if we have a bug where you sometimes can’t Command+C and Command+V inside our chat input box, and that’s a task that’s super well specified. I just want to say in two sentences, “This does not work, please fix it.” And then I would love to have an agent that just goes off, does it, and then a day later, I come back and I review the thing."</div>
+  <div class="quote-zh">我认为代理，它就像一个人一样......你可以感觉到你越来越接近 AGI，因为你看到一个演示，它的行为就像人类一样，它真的非常酷。我认为代理对于很多事情来说还不是非常有用。我认为我们已经接近它们真正有用的地方了。所以我认为在某些类型的任务中，有一个代理会非常好。我很想有一个代理。例如，如果我们有一个错误，您有时无法在聊天输入框中使用 Command+C 和 Command+V，那么这就是一个非常明确的任务。我只想用两句话说：“这不起作用，请修复它。”然后我希望有一个代理人能够立即行动，然后一天后，我回来并审查这件事。</div>
+  <div class="quote-meta">— Arvid （00:51:03）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, it finds the right files, it tries to reproduce the bug, it fixes the bug and then it verifies that it’s correct. And this could be a process that takes a long time. And so I think I would love to have that. And then I think a lot of programming, there is often this belief that agents will take over all of programming. I don’t think we think that that’s the case because a lot of programming, a lot of the value is in iterating, or you don’t actually want to specify something upfront because you don’t really know what you want until you have seen an initial version and then you want to iterate on that and then you provide more information."</div>
+  <div class="quote-zh">是的，它找到正确的文件，尝试重现错误，修复错误，然后验证它是否正确。这可能是一个需要很长时间的过程。所以我想我很乐意拥有它。然后我想到很多编程，人们常常相信代理将接管所有编程。我不认为我们认为是这种情况，因为很多编程，很多价值都在于迭代，或者你实际上不想预先指定一些东西，因为你并不真正知道你想要什么，直到你看到初始版本，然后你想要迭代它，然后你提供更多信息。</div>
+  <div class="quote-meta">— Arvid （00:52:05）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Look to be clear, I think they sort of understand code really well. While they’re being pre-trained, the representation that’s being built up almost certainly like somewhere in the stream, the model knows that maybe there’s something sketchy going on. It sort of has some sketchiness but actually eliciting the sketchiness to actually… Part of it is that humans are really calibrated on which bugs are really important. It’s not just actually saying there’s something sketchy. It’s like it’s this sketchy trivial, it’s this sketchy like you’re going to take the server down."</div>
+  <div class="quote-zh">看起来很清楚，我认为他们对代码的理解非常好。当它们正在接受预训练时，几乎可以肯定正在建立的表示就像流中的某个地方一样，模型知道也许正在发生一些粗略的事情。它有点粗略，但实际上引发了粗略……部分原因是人类确实根据哪些错误真正重要进行了校准。这不仅仅是说有一些粗略的东西。就好像这是一件粗略的琐事，就像你要关闭服务器一样。</div>
+  <div class="quote-meta">— Sualeh （01:13:25）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think entire code bases is harder, but that is what I would love to have and I think it should be possible. And because you can even… There’s a lot of work recently where you can prove formally verified down to the hardware, so through the… You formally verify the C code and then you formally verify through the GCC compiler and then through the Verilog down to the hardware. And that’s incredibly big system, but it actually works. And I think big code bases are sort of similar in that and they’re like multi-layered system. And if you can decompose it and formally verify each part, then I think it should be possible. I think this specification problem is a real problem, but…"</div>
+  <div class="quote-zh">我认为整个代码库更难，但这就是我想要的，并且我认为它应该是可能的。因为你甚至可以……最近有很多工作可以证明形式化验证到硬件，所以通过……你形式化验证 C 代码，然后通过 GCC 编译器形式化验证，然后通过 Verilog 形式化验证到硬件。这是一个非常大的系统，但它确实有效。我认为大型代码库在这方面有点相似，它们就像多层系统。而如果你能分解它并形式化地验证每个部分，那么我认为这应该是可能的。我认为这个规范问题是一个真正的问题，但是......</div>
+  <div class="quote-meta">— Arvid （01:19:00）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"RLAIF is interesting because you’re depending on… This is actually, it’s depending on the constraint that verification is actually a decent bit easier than generation. Because it feels like, okay, what are you doing? Are you using this language model to look at the language model outputs and then prove the language model? But no, it actually may work if the language model has a much easier time verifying some solution than it does generating it. Then you actually could perhaps get this kind of recursive loop. But I don’t think it’s going to look exactly like that."</div>
+  <div class="quote-zh">RLAIF 很有趣，因为你依赖于……这实际上取决于验证实际上比生成容易一点的约束。因为感觉就像，好吧，你在做什么？您是否使用该语言模型来查看语言模型输出，然​​后证明该语言模型？但不，如果语言模型验证某些解决方案比生成它更容易，那么它实际上可能会起作用。那么你实际上也许可以得到这种递归循环。但我认为它看起来不会完全像那样。</div>
+  <div class="quote-meta">— Aman （02:04:21）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with the founding members of the Cursor team, Michael Truell, Sualeh Asif, Arvid Lunnemark, and Aman Sanger. Cursor is a code editor based on VS Code that adds a lot of powerful features for AI-assisted coding. It has captivated the attention and excitement of the programming and AI communities. So I thought this is an excellent opportunity to dive deep into the rol...</div>
+  <div class="dialogue-zh">以下是与 Cursor 团队创始成员 Michael Truell、Sualeh Asif、Arvid Lunnemark 和 Aman Sanger 的对话。 Cursor 是一个基于 VS Code 的代码编辑器，为 AI 辅助编码添加了很多强大的功能。它引起了编程和人工智能社区的关注和兴奋。所以我认为这是一个深入了解角色的绝佳机会</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex <span class="dialogue-time">(00:00:59)</span>
+  </div>
+  <div class="dialogue-en">All right, this is awesome. We have Michael, Aman, Sualeh, Arvid here from the Cursor team. First up, big ridiculous question. What’s the point of a code editor?</div>
+  <div class="dialogue-zh">好吧，这太棒了。我们有来自 Cursor 团队的 Michael、Aman、Sualeh、Arvid。首先，一个非常荒谬的问题。代码编辑器有什么意义？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael <span class="dialogue-time">(00:01:10)</span>
+  </div>
+  <div class="dialogue-en">So the code editor is largely the place where you build software and today or for a long time, that’s meant the place where you text edit a formal programming language. And for people who aren’t programmers, the way to think of a code editor is a really souped up word processor for programmers, where the reason it’s souped up is code has a lot of structure. And so the “word processor,” the code ed...</div>
+  <div class="dialogue-zh">因此，代码编辑器主要是您构建软件的地方，而在今天或很长一段时间内，这意味着您对正式编程语言进行文本编辑的地方。对于不是程序员的人来说，可以将代码编辑器视为程序员的一个真正增强的文字处理器，其增强的原因是代码具有很多结构。所以“文字处理器”的代码是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael <span class="dialogue-time">(00:01:42)</span>
+  </div>
+  <div class="dialogue-en">And so that’s everything from giving you visual differentiation of the actual tokens in the code so you can scan it quickly to letting you navigate around the code base, sort of like you’re navigating around the internet with hyperlinks, you’re going to definitions of things you’re using to error checking to catch rudimentary bugs. And so traditionally that’s what a code editor has meant. And I th...</div>
+  <div class="dialogue-zh">因此，这就是一切，从为您提供代码中实际标记的视觉区分，以便您可以快速扫描它，到让您在代码库中导航，有点像您使用超链接在互联网上导航，您将使用错误检查来捕获基本错误的事物的定义。传统上这就是代码编辑器的含义。而我</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex <span class="dialogue-time">(00:02:16)</span>
+  </div>
+  <div class="dialogue-en">I think also a code editor should just be fun.</div>
+  <div class="dialogue-zh">我认为代码编辑器也应该很有趣。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Arvid <span class="dialogue-time">(00:02:19)</span>
+  </div>
+  <div class="dialogue-en">Yes, that is very important. That is very important. And it’s actually sort of an underrated aspect of how we decide what to build. A lot of the things that we build and then we try them out, we do an experiment and then we actually throw them out because they’re not fun. And so a big part of being fun is being fast a lot of the time. Fast is fun.</div>
+  <div class="dialogue-zh">是的，这非常重要。这非常重要。这实际上是我们决定构建什么的一个被低估的方面。我们构建了很多东西，然后我们尝试它们，我们做了实验，然后我们实际上把它们扔掉了，因为它们不好玩。因此，乐趣的一个重要部分就是很多时候速度快。快就是有趣。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex <span class="dialogue-time">(00:02:42)</span>
+  </div>
+  <div class="dialogue-en">Yeah, fast is… That should be a T-shirt.</div>
+  <div class="dialogue-zh">是的，快就是……那应该是一件T恤。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael <span class="dialogue-time">(00:02:48)</span>
+  </div>
+  <div class="dialogue-en">Fundamentally, I think one of the things that draws a lot of people to building stuff on computers is this insane iteration speed, where in other disciplines you might be sort of gate capped by resources or the ability… Even the ability to get a large group together and coding is this amazing thing where it’s you and the computer and that alone, you can build really cool stuff really quickly. GitH...</div>
+  <div class="dialogue-zh">从根本上说，我认为吸引很多人在计算机上构建东西的原因之一就是这种疯狂的迭代速度，在其他学科中，你可能会受到资源或能力的限制……即使是把一大群人聚集在一起并编码的能力也是一件令人惊奇的事情，只有你和计算机，你就可以很快地构建出非常酷的东西。吉特</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex <span class="dialogue-time">(00:03:09)</span>
+  </div>
+  <div class="dialogue-en">So for people who don’t know, Cursor is this super cool new editor that’s a fork of VS Code. It would be interesting to get your explanation of your own journey of editors. I think all of you were big fans of VS Code with Copilot. How did you arrive to VS Code and how did that lead to your journey with Cursor?</div>
+  <div class="dialogue-zh">对于那些不知道的人来说，Cursor 是一个超级酷的新编辑器，它是 VS Code 的一个分支。得到你对你自己的编辑之旅的解释会很有趣。我想你们都是 VS Code with Copilot 的忠实粉丝。您是如何接触 VS Code 的？这又是如何开启您的 Cursor 之旅的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Aman <span class="dialogue-time">(00:03:33)</span>
+  </div>
+  <div class="dialogue-en">Yeah, so I think a lot of us… Well, all of us were originally [inaudible 00:03:39] users.</div>
+  <div class="dialogue-zh">是的，所以我认为我们很多人......好吧，我们所有人最初都是[听不清 00:03:39] 用户。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sualeh <span class="dialogue-time">(00:03:39)</span>
+  </div>
+  <div class="dialogue-en">Pure Vim.</div>
+  <div class="dialogue-zh">纯粹的维姆。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Aman <span class="dialogue-time">(00:03:40)</span>
+  </div>
+  <div class="dialogue-en">Pure Vim. Yeah. No Neovim, just Pure Vim and a terminal. And at least for myself, it was around the time that Copilot came out, so 2021 that I really wanted to try it. So I went into VS Code, the only code editor in which it was available, and even though I really enjoyed using Vim, just the experience of Copilot with VS Code was more than good enough to convince me to switch. And so that kind of ...</div>
+  <div class="dialogue-zh">纯粹的维姆。是的。没有 Neovim，只有 Pure Vim 和一个终端。至少对我自己来说，那是 Copilot 出来的时候，所以 2021 年我真的很想尝试一下。因此，我进入了 VS Code，这是唯一可用的代码编辑器，尽管我真的很喜欢使用 Vim，但 Copilot 使用 VS Code 的体验就足以说服我切换。所以那种</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex <span class="dialogue-time">(00:04:14)</span>
+  </div>
+  <div class="dialogue-en">And maybe we should explain what Copilot does. It’s a really nice auto complete. As you start writing a thing, it suggests one or two or three lines how to complete the thing. And there’s a fun experience in that. You know like when you have a close friendship and your friend completes your sentences? When it’s done well, there’s an intimate feeling. There’s probably a better word than intimate, b...</div>
+  <div class="dialogue-zh">也许我们应该解释一下 Copilot 的作用。这是一个非常好的自动完成功能。当你开始写一篇文章时，它会建议一两行或三行如何完成这篇文章。这其中有一个有趣的经历。你知道当你有亲密的友谊并且你的朋友完成你的句子时吗？做得好的时候，会有一种亲密的感觉。可能有一个比亲密更好的词，b</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Arvid <span class="dialogue-time">(00:04:55)</span>
+  </div>
+  <div class="dialogue-en">And I think actually one of the underrated aspects of Github Copilot is that even when it’s wrong, it’s a little bit annoying, but it’s not that bad because you just type another character and then maybe then it gets you, or you type another character and then it gets you. So even when it’s wrong, it’s not that bad.</div>
+  <div class="dialogue-zh">我认为实际上 Github Copilot 被低估的一个方面是，即使它是错误的，它也有点烦人，但它并没有那么糟糕，因为你只需输入另一个字符，然后它可能会抓住你，或者你键入另一个字符，然后它会抓住你。所以即使是错的，也没有那么糟糕。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sualeh <span class="dialogue-time">(00:05:09)</span>
+  </div>
+  <div class="dialogue-en">You can sort of iterate and fix it. I mean, the other underrated part of Copilot for me was just the first real AI product. So the first language model consumer product.</div>
+  <div class="dialogue-zh">您可以进行迭代并修复它。我的意思是，对我来说，Copilot 的另一个被低估的部分只是第一个真正的人工智能产品。所以第一个语言模型是消费产品。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex <span class="dialogue-time">(00:05:21)</span>
+  </div>
+  <div class="dialogue-en">So Copilot was kind of like the first killer app for LMs.</div>
+  <div class="dialogue-zh">所以 Copilot 有点像 LM 的第一个杀手级应用程序。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael <span class="dialogue-time">(00:05:25)</span>
+  </div>
+  <div class="dialogue-en">Yeah. And the beta was out in 2021.</div>
+  <div class="dialogue-zh">是的。测试版已于 2021 年推出。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex <span class="dialogue-time">(00:05:29)</span>
+  </div>
+  <div class="dialogue-en">Right. Okay. So what’s the origin story of Cursor?</div>
+  <div class="dialogue-zh">正确的。好的。那么 Cursor 的起源故事是什么呢？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael <span class="dialogue-time">(00:05:34)</span>
+  </div>
+  <div class="dialogue-en">So around 2020, the scaling loss papers came out from OpenAI and that was a moment where this looked like clear predictable progress for the field where even if we didn’t have any more ideas, it looked like you could make these models a lot better if you had more compute and more data.</div>
+  <div class="dialogue-zh">因此，在 2020 年左右，OpenAI 发布了缩放损失论文，在这个时刻，该领域看起来明显可预测的进展，即使我们没有更多想法，如果拥有更多计算和更多数据，看起来也可以使这些模型变得更好。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex <span class="dialogue-time">(00:05:49)</span>
+  </div>
+  <div class="dialogue-en">By the way, we’ll probably talk for three to four hours on the topic of scaling loss. But just to summarize, it’s a paper in a set of papers in a set of ideas that say bigger might be better for model size and data size in the realm of machine learning.</div>
+  <div class="dialogue-zh">顺便说一句，我们可能会就缩放损失这个话题讨论三到四个小时。但总而言之，这是一系列论文中的一篇论文，其中的一系列想法表明，机器学习领域的模型大小和数据大小可能越大越好。</div>
+</div>
+    <a href="https://lexfridman.com/cursor-team-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="bret-weinstein.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bret Weinstein: Truth, Science, and Censorship in the Time of a Pandemic</div>
+  <div class="card-meta">Bret Weinstein</div>
+</a>
+<a href="dario-amodei.html" class="card" style="text-decoration:none">
+  <div class="card-title">Dario Amodei</div>
+  <div class="card-meta">Dario Amodei</div>
+</a>
+<a href="dmitry-korkin.html" class="card" style="text-decoration:none">
+  <div class="card-title">Dmitry Korkin: Computational Biology of Coronavirus</div>
+  <div class="card-meta">Dmitry Korkin</div>
+</a>
+<a href="jim-keller.html" class="card" style="text-decoration:none">
+  <div class="card-title">Jim Keller: Moore’s Law, Microprocessors, Abstractions, and First Principles</div>
+  <div class="card-meta">Jim Keller</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

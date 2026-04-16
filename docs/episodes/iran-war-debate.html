@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iran War Debate - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Iran War Debate</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Iran War Debate</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/mark-dubowitz.html" style="font-size:16px;color:#818cf8;font-weight:600">Mark Dubowitz</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">48,505 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/iran-war-debate-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:15</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:18</span>
+  <span class="chapter-title">Iran-Israel War<span class="zh-trans"> · 两伊战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">11:00</span>
+  <span class="chapter-title">Iran’s Nuclear Program<span class="zh-trans"> · 伊朗核计划</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">42:52</span>
+  <span class="chapter-title">Nuclear weapons and uranium<span class="zh-trans"> · 核武器和铀</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">54:55</span>
+  <span class="chapter-title">Nuclear deal<span class="zh-trans"> · 核协议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:20:29</span>
+  <span class="chapter-title">Iran Nuclear Archive<span class="zh-trans"> · 伊朗核档案馆</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:43:06</span>
+  <span class="chapter-title">Best case and worst case near-term future<span class="zh-trans"> · 近期最好情况和最坏情况</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:18:30</span>
+  <span class="chapter-title">US attack on Iran<span class="zh-trans"> · 美国对伊朗的袭击</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:42:04</span>
+  <span class="chapter-title">Nuclear proliferation in the future<span class="zh-trans"> · 未来的核扩散</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:03:02</span>
+  <span class="chapter-title">Libertarianism<span class="zh-trans"> · 自由主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:15:51</span>
+  <span class="chapter-title">Foundation for Defense of Democracies (FDD)<span class="zh-trans"> · 保卫民主基金会（FDD）</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:31:26</span>
+  <span class="chapter-title">Trump and Peacemaking process<span class="zh-trans"> · 特朗普与和平进程</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:36:23</span>
+  <span class="chapter-title">WW2<span class="zh-trans"> · 二战</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:49:23</span>
+  <span class="chapter-title">WW3<span class="zh-trans"> · 二战</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">scott</span><span class="keyword-tag">horton</span><span class="keyword-tag">mark</span><span class="keyword-tag">dubowitz</span><span class="keyword-tag">nuclear</span><span class="keyword-tag">iran</span><span class="keyword-tag">weapons</span><span class="keyword-tag">don</span><span class="keyword-tag">war</span><span class="keyword-tag">said</span><span class="keyword-tag">going</span><span class="keyword-tag">trump</span><span class="keyword-tag">america</span><span class="keyword-tag">program</span><span class="keyword-tag">states</span><span class="keyword-tag">united</span><span class="keyword-tag">israel</span><span class="keyword-tag">american</span><span class="keyword-tag">deal</span><span class="keyword-tag">iranians</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"There’s a lot there. Just couple of things, I think, that are worth your viewers knowing. Because Scott’s right. I mean, the nuclear physics is complicated, and it’s also important. The Iranians have assembled about … They say about 15 to 17 bombs worth of 60% enriched uranium. And I think it’s always important for your listeners to understand, what does this all mean? Enriched to 3.67%, to 20%, to 60%, and then to 90% weapons-grade uranium. What does this actual process mean?"</div>
+  <div class="quote-zh">那里有很多。我认为，有几件事值得观众了解。因为斯科特是对的。我的意思是，核物理很复杂，但也很重要。伊朗人已经集结了大约……他们说大约有 15 到 17 枚炸弹，其中含有 60% 的浓缩铀。我认为让听众理解这一切意味着什么总是很重要的？浓缩到3.67%、20%、60%，然后是90%武器级铀。这个实际过程意味着什么？</div>
+  <div class="quote-meta">— Mark Dubowitz （00:42:51）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But I want to get to the JCPOA because I actually think that’s an interesting discussion for Scott and I to have because I think there’s things that we agree on there and things that we disagree on. This is the 2015 nuclear deal that Obama reaches. It’s negotiated painstakingly over two years between 2013 and 2015, and it follows the interim agreement that the United States negotiated with Iran. And it’s in that interim agreement in 2013 where the United States for the first time actually gives Iran the right to enrich uranium."</div>
+  <div class="quote-zh">但我想谈谈联合全面行动计划，因为我实际上认为这对斯科特和我来说是一次有趣的讨论，因为我认为其中有我们同意的事情，也有我们不同意的事情。这是奥巴马2015年达成的核协议。该协议是在2013年至2015年期间经过两年艰苦谈判达成的，是在美国与伊朗谈判达成临时协议之后达成的。正是在 2013 年的临时协议中，美国第一次真正赋予伊朗浓缩铀的权利。</div>
+  <div class="quote-meta">— Mark Dubowitz （00:54:55）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Actually, can I just say one thing interesting? And again, I think it’s going to be a later topic, and so it’s going to be a provocative statement, but I think let’s put it on the table. I absolutely agree with Scott. I think it was a travesty of the accusations against Donald Trump as a Russian agent. I mean, completely debunked, but it did … I think it paralyzed."</div>
+  <div class="quote-zh">其实我能说一件有趣的事吗？再说一遍，我认为这将是一个稍后的话题，因此这将是一个挑衅性的声明，但我认为让我们把它放在桌面上。我完全同意斯科特的观点。我认为这是对唐纳德·特朗普作为俄罗斯特工指控的嘲讽。我的意思是，完全被揭穿了，但它确实……我认为它瘫痪了。</div>
+  <div class="quote-meta">— Mark Dubowitz （01:01:39）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think it’s an interesting conception. I think let’s talk about it. And I mean, I’m fascinated by the conception because it’s very contrary to mine, obviously. It’s very contrary to I think, decades of overwhelming evidence that the Islamic Republic has been worth the United States since 1979. And I don’t take too much stock in what people say. I take stock in what they do. So “Death to America, Death to Israel” could just be a slogan. It could be just propaganda. But when it’s actually operationalized, then you start to ask, “Well, maybe it’s not just propaganda, maybe it’s intention operationalized into capabilities.”"</div>
+  <div class="quote-zh">我认为这是一个有趣的概念。我想我们来谈谈吧。我的意思是，我对这个概念很着迷，因为它显然与我的想法非常相反。这与我的想法完全相反，几十年来压倒性的证据表明，自 1979 年以来，伊斯兰共和国一直值得美国。而且我不太相信人们的说法。我评估他们所做的事情。因此，“美国去死，以色列去死”可能只是一个口号。这可能只是宣传。但当它真正付诸实施时，你就会开始问：“好吧，也许这不仅仅是宣传，也许是将意图付诸实践的能力。”</div>
+  <div class="quote-meta">— Mark Dubowitz （01:11:56）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"He built a very, very impressive and deadly axis that he turned against the United States and against Israel, which saw its culmination on October 7th. I think after October 7th, that was a huge miscalculation for Khomeini, and we’ve seen the results of what’s happened to his axis of resistance through quite devastating Israeli military capabilities over the past number of months. But he has an ideology, and I think where I agree with Scott is I’m not sure if Khomeini would actually use a nuclear weapon against Israel, the United States, because I don’t think Khomeini is suicidal."</div>
+  <div class="quote-zh">他建立了一个非常非常令人印象深刻和致命的轴心，他反对美国和以色列，并在 10 月 7 日达到顶峰。我认为 10 月 7 日之后，这对霍梅尼来说是一个巨大的误判，我们已经看到了过去几个月里以色列军事能力极具破坏性的情况对他的抵抗轴心所造成的后果。但他有自己的意识形态，我认为我同意斯科特的地方是，我不确定霍梅尼是否真的会对以色列、美国使用核武器，因为我不认为霍梅尼有自杀倾向。</div>
+  <div class="quote-meta">— Mark Dubowitz （01:13:15）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Dubowitz <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">We want to avoid wars, we have to have serious deterrence because our enemies need to understand, we will use selective, focused, overwhelming military power when we are facing threats like an Iranian nuclear weapon.</div>
+  <div class="dialogue-zh">我们想要避免战争，我们必须拥有严重的威慑力，因为我们的敌人需要明白，当我们面临伊朗核武器等威胁时，我们将使用有选择性的、集中的、压倒性的军事力量。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Scott Horton <span class="dialogue-time">(00:00:12)</span>
+  </div>
+  <div class="dialogue-en">I’m not seeing the peace through strength. I’m seeing permanent militarism and permanent war through strength.</div>
+  <div class="dialogue-zh">我没有通过力量看到和平。我看到通过实力实现永久的军国主义和永久的战争。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Dubowitz <span class="dialogue-time">(00:00:16)</span>
+  </div>
+  <div class="dialogue-en">Do you ever hold our adversaries responsible or do you just don’t think we have any adversaries?</div>
+  <div class="dialogue-zh">你是否曾认为我们的对手负有责任，或者你只是认为我们没有对手？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Scott Horton <span class="dialogue-time">(00:00:22)</span>
+  </div>
+  <div class="dialogue-en">The easiest kind of nuke to make out of uranium is a simple gun type nuke.</div>
+  <div class="dialogue-zh">用铀制造的最简单的核武器是简单的枪型核武器。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Dubowitz <span class="dialogue-time">(00:00:26)</span>
+  </div>
+  <div class="dialogue-en">Are you saying that Mossad fabricated it?</div>
+  <div class="dialogue-zh">你是说摩萨德捏造的吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Scott Horton <span class="dialogue-time">(00:00:29)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Dubowitz <span class="dialogue-time">(00:00:30)</span>
+  </div>
+  <div class="dialogue-en">That’s what you’re claiming. Here’s the offer, take it to leave it. Zero enrichment full dismantlement.</div>
+  <div class="dialogue-zh">这就是你所主张的。这是优惠，拿走吧。零浓缩全面拆解。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Scott Horton <span class="dialogue-time">(00:00:34)</span>
+  </div>
+  <div class="dialogue-en">Through the Iranians, told the IAEA, you can inspect any five out 10 facilities here, carte blanche, go ahead and they did and found nothing.</div>
+  <div class="dialogue-zh">伊朗人告诉国际原子能机构，你可以检查这里十个设施中的任何五个，全权委托，他们照做了，但什么也没发现。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Dubowitz <span class="dialogue-time">(00:00:41)</span>
+  </div>
+  <div class="dialogue-en">Experts in Iran’s nuclear program, including David Albright, who actually saw the archive, went in there, wrote a whole book on it, and there’s a lot of detail about how Iran had an active nuclear weapons program called AMAD to build five nuclear weapons.</div>
+  <div class="dialogue-zh">伊朗核计划专家，包括大卫·奥尔布赖特（David Albright），他实际上看到了档案，并在那里写了一整本书，其中有很多关于伊朗如何实施名为 AMAD 的核武器计划来制造五枚核武器的细节。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Scott Horton <span class="dialogue-time">(00:00:55)</span>
+  </div>
+  <div class="dialogue-en">I have to refute virtually everything he just said, which is completely false.</div>
+  <div class="dialogue-zh">我必须反驳他刚才所说的几乎所有内容，这完全是错误的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Dubowitz <span class="dialogue-time">(00:00:58)</span>
+  </div>
+  <div class="dialogue-en">I mean really everything? There was not one thing I said that was true? Just one thing.</div>
+  <div class="dialogue-zh">我的意思是真的一切？我说的没有一件事是真的吗？只是一件事。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Scott Horton <span class="dialogue-time">(00:01:02)</span>
+  </div>
+  <div class="dialogue-en">I mean Iran is a nation over there somewhere. You got that part right.</div>
+  <div class="dialogue-zh">我的意思是伊朗是那里某个地方的一个国家。你说对了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Dubowitz <span class="dialogue-time">(00:01:05)</span>
+  </div>
+  <div class="dialogue-en">22 years of working on Iran and I got that right.</div>
+  <div class="dialogue-zh">我在伊朗问题上工作了 22 年，我做对了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:07)</span>
+  </div>
+  <div class="dialogue-en">But do you know the population of Iran?</div>
+  <div class="dialogue-zh">但你知道伊朗有多少人口吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Dubowitz <span class="dialogue-time">(00:01:09)</span>
+  </div>
+  <div class="dialogue-en">92 million.</div>
+  <div class="dialogue-zh">9200万。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:10)</span>
+  </div>
+  <div class="dialogue-en">Okay.</div>
+  <div class="dialogue-zh">好的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Scott Horton <span class="dialogue-time">(00:01:11)</span>
+  </div>
+  <div class="dialogue-en">Give me a pound, dude.</div>
+  <div class="dialogue-zh">给我一磅，伙计。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:12)</span>
+  </div>
+  <div class="dialogue-en">There we go, agreement.</div>
+  <div class="dialogue-zh">就这样吧，协议。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:16)</span>
+  </div>
+  <div class="dialogue-en">The following is a debate between Scott Horton and Mark Dubowitz on the topic of Iran and Israel. Scott Horton is author and editorial director of Ntwar.com, host of the Scott Horton Show and for the past three decades, a staunch critic of US foreign policy and military interventionism. Mark Dubowitz is a chief executive of the Foundation for Defense of Democracies, host of the Iran Breakdown Podc...</div>
+  <div class="dialogue-zh">以下是斯科特·霍顿和马克·杜博维茨关于伊朗和以色列话题的辩论。斯科特·霍顿 (Scott Horton) 是 Ntwar.com 的作家和编辑总监，也是《斯科特·霍顿秀》的主持人，在过去三十年里，他一直是美国外交政策和军事干预主义的坚定批评者。马克·杜博维茨 (Mark Dubowitz) 是捍卫民主基金会的首席执行官，也是伊朗崩溃 Podc 的主持人</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:18)</span>
+  </div>
+  <div class="dialogue-en">Gentlemen. All right, it’s great to have you here. Let’s try to have a nuanced discussion/debate and maybe even steal man-opposing perspectives as much as possible. All right, as a stands now, there’s a barely stable ceasefire between Iran and Israel. Let’s maybe rewind a little bit. Can we first lay out the context for this Iran-Israel war and try to describe the key events that happened over the...</div>
+  <div class="dialogue-zh">先生们。好吧，很高兴你能来到这里。让我们尝试进行细致入微的讨论/辩论，甚至尽可能地窃取反对人类的观点。好吧，就目前情况而言，伊朗和以色列之间的停火勉强稳定。让我们回顾一下。我们能否先阐述一下这场两以战争的背景，并尝试描述一下这场战争期间发生的关键事件？</div>
+</div>
+    <a href="https://lexfridman.com/iran-war-debate-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a>
+<a href="cenk-uygur.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cenk Uygur</div>
+  <div class="card-meta">Cenk Uygur</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

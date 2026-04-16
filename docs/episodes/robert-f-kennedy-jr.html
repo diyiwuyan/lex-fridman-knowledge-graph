@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robert F Kennedy Jr - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Robert F Kennedy Jr</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Robert F Kennedy Jr</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/robert-f-kennedy-jr.html" style="font-size:16px;color:#818cf8;font-weight:600">Robert F Kennedy Jr</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">21,851 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/robert-f-kennedy-jr-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:18</span>
+  <span class="chapter-title">US history<span class="zh-trans"> · 美国历史</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">7:34</span>
+  <span class="chapter-title">Freedom<span class="zh-trans"> · 自由</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">9:28</span>
+  <span class="chapter-title">Camus<span class="zh-trans"> · 加缪</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">12:51</span>
+  <span class="chapter-title">Hitler and WW2<span class="zh-trans"> · 希特勒和二战</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">22:03</span>
+  <span class="chapter-title">War in Ukraine<span class="zh-trans"> · 乌克兰战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">45:24</span>
+  <span class="chapter-title">JFK and the Cuban Missile Crisis<span class="zh-trans"> · 肯尼迪和古巴导弹危机</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:10:31</span>
+  <span class="chapter-title">JFK assassination conspiracy<span class="zh-trans"> · 肯尼迪刺杀阴谋</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:20:06</span>
+  <span class="chapter-title">CIA influence<span class="zh-trans"> · 中央情报局的影响力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:29:04</span>
+  <span class="chapter-title">2024 elections<span class="zh-trans"> · 2024 年选举</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:40:49</span>
+  <span class="chapter-title">Jordan Peterson<span class="zh-trans"> · 乔丹·彼得森</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:42:30</span>
+  <span class="chapter-title">Anthony Fauci<span class="zh-trans"> · 安东尼·福奇</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:45:57</span>
+  <span class="chapter-title">Big Pharma<span class="zh-trans"> · 大型制药公司</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:05:37</span>
+  <span class="chapter-title">Peter Hotez<span class="zh-trans"> · 彼得·霍特兹</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:11:17</span>
+  <span class="chapter-title">Exercise and diet<span class="zh-trans"> · 运动和饮食</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:13:42</span>
+  <span class="chapter-title">God<span class="zh-trans"> · 上帝</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">said</span><span class="keyword-tag">kennedy</span><span class="keyword-tag">robert</span><span class="keyword-tag">going</span><span class="keyword-tag">war</span><span class="keyword-tag">russians</span><span class="keyword-tag">don</span><span class="keyword-tag">uncle</span><span class="keyword-tag">put</span><span class="keyword-tag">country</span><span class="keyword-tag">khrushchev</span><span class="keyword-tag">cia</span><span class="keyword-tag">god</span><span class="keyword-tag">vaccine</span><span class="keyword-tag">russia</span><span class="keyword-tag">doing</span><span class="keyword-tag">got</span><span class="keyword-tag">ukraine</span><span class="keyword-tag">didn</span><span class="keyword-tag">father</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"It’s not our business to change the Russian government. And anybody who thinks it’s a good idea to do regime change in Russia, which has more nuclear weapons than we do, is I think irresponsible. And Vladimir Putin himself has had… We will not live in a world without Russia and it was clear when he said that, that he was talking about himself and he has his hand on a button that could bring Armageddon to the entire planet. So why are we messing with this? It’s not our job to change that regime, and we should be making friends with the Russians. We shouldn’t be treating him as an enemy. Now we’ve pushed him into the camp with China. That’s not a good thing for our country. And by the way, what we’re doing now does not appear to be weakening Putin at all."</div>
+  <div class="quote-zh">改变俄罗斯政府不是我们的事。我认为，任何认为在俄罗斯进行政权更迭是个好主意的人都是不负责任的，因为俄罗斯拥有比我们更多的核武器。弗拉基米尔·普京本人也经历过……我们不会生活在一个没有俄罗斯的世界里，很明显，当他这么说时，他在谈论他自己，他的手放在一个按钮上，可能会给整个地球带来世界末日。那我们为什么要搞乱这个呢？改变这个政权不是我们的工作，我们应该与俄罗斯人交朋友。我们不应该把他当作敌人。现在我们把他推到了中国阵营。这对于我们国家来说并不是一件好事。顺便说一句，我们现在所做的事情似乎根本没有削弱普京。</div>
+  <div class="quote-meta">— Introduction （00:00:00）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Host of Lex Fridman Podcast. Research Scientist at MIT, working on human-AI interaction, robotics, and machine learning. View all posts by Lex Fridman →"</div>
+  <div class="quote-zh">莱克斯·弗里德曼播客的主持人。麻省理工学院的研究科学家，致力于人机交互、机器人和机器学习。查看莱克斯·弗里德曼发表的所有帖子 →</div>
+  <div class="quote-meta">— About Lex Fridman </div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Introduction
+  </div>
+  <div class="dialogue-en">Robert F. Kennedy Jr</div>
+  <div class="dialogue-zh">小罗伯特·F·肯尼迪</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Introduction <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">It’s not our business to change the Russian government. And anybody who thinks it’s a good idea to do regime change in Russia, which has more nuclear weapons than we do, is I think irresponsible. And Vladimir Putin himself has had… We will not live in a world without Russia and it was clear when he said that, that he was talking about himself and he has his hand on a button that could bring Armage...</div>
+  <div class="dialogue-zh">改变俄罗斯政府不是我们的事。我认为，任何认为在俄罗斯进行政权更迭是个好主意的人都是不负责任的，因为俄罗斯拥有比我们更多的核武器。弗拉基米尔·普京本人也有过……我们不会生活在一个没有俄罗斯的世界里，很明显，当他这么说时，他在谈论他自己，他的手放在一个可以带来阿玛奇的按钮上</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:56)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Robert F. Kennedy Jr, candidate for the President of the United States, running as a Democrat. Robert is an activist, lawyer and author who has challenged some of the world’s most powerful corporations seeking to hold them accountable for the harm they may cause. I love science and engineering. These two pursuits are, to me the most beautiful and powerful in th...</div>
+  <div class="dialogue-zh">以下是与美国民主党总统候选人小罗伯特·F·肯尼迪的对话。罗伯特是一位活动家、律师和作家，他曾向一些世界上最强大的公司发起挑战，试图让他们对可能造成的伤害负责。我热爱科学和工程。对我来说，这两种追求是世界上最美丽、最有力的追求。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:56)</span>
+  </div>
+  <div class="dialogue-en">Agree or disagree, I believe Robert’s voice should be part of the debate. To call him a conspiracy theorist and arrogantly dismiss everything he says without addressing it diminishes the public’s trust in the scientific process. At the same time, dogmatic skepticism of all scientific output on controversial topics like the pandemic is equally, if not more dishonest and destructive. I recommend tha...</div>
+  <div class="dialogue-zh">无论同意还是不同意，我相信罗伯特的声音应该成为辩论的一部分。称他为阴谋论者并傲慢地驳斥他所说的一切而不解决问题，会削弱公众对科学过程的信任。与此同时，对流行病等有争议话题的所有科学成果的教条主义怀疑同样是不诚实和更具破坏性的，甚至是更不诚实的。我推荐你</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:50)</span>
+  </div>
+  <div class="dialogue-en">It is disagreement, not conformity that bends the long arc of humanity toward truth and wisdom. In this process of disagreement, everybody has a lesson to teach you, but we must have the humility to hear it and to learn from it. This is The Lex Fridman podcast. To support it, please check out our sponsors in the description. And now, dear friends, here’s Robert F. Kennedy Jr. US history</div>
+  <div class="dialogue-zh">正是分歧，而不是顺从，使人类的长弧走向真理和智慧。在这个分歧的过程中，每个人都有一个教训可以教给你，但我们必须谦虚地倾听并从中学习。这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是小罗伯特·F·肯尼迪的美国历史</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:18)</span>
+  </div>
+  <div class="dialogue-en">It’s the 4th of July, Independence Day. So simple question, simple, big question. What do you love about this country, the United States of America? Robert F. Kennedy Jr</div>
+  <div class="dialogue-zh">今天是 7 月 4 日，独立日。如此简单的问题，简单而大的问题。你喜欢美利坚合众国这个国家的什么？小罗伯特·F·肯尼迪</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:27)</span>
+  </div>
+  <div class="dialogue-en">I would say there’s so many things that I love about the country, the landscapes and the waterways and the people, et cetera. But on the higher level, people argue about whether we’re an exemplary nation, and that term has been given a bad name, particularly by the neocons, the actions, the neocons in recent decades who have turned that phrase into a justification for forcing people to adopt Ameri...</div>
+  <div class="dialogue-zh">我想说，这个国家、风景、水道和人民等等都有很多我喜欢的地方。但在更高的层面上，人们争论我们是否是一个模范国家，而这个词已经被赋予了一个坏名声，特别是近几十年来的新保守派、行动、新保守派，他们把这句话变成了强迫人们采用美国的理由。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:35)</span>
+  </div>
+  <div class="dialogue-en">Today there’s probably 190, and all of them in one way or another are modeled on the American experience. And it’s extraordinary because our first serious and sustained contact with the European culture and continent was in 1608 when John Winthrop came over with his Puritans in the sloop Arbella and Winthrop gave this famous speech where he said, “This is going to be a city on a hill. This is goin...</div>
+  <div class="dialogue-zh">今天可能有 190 个，而且所有这些都以某种方式模仿了美国的经验。这是非同寻常的，因为我们第一次认真、持续地接触欧洲文化和大陆是在 1608 年，当时约翰·温思罗普 (John Winthrop) 和他的清教徒乘坐单桅帆船阿贝拉 (Arbella) 来到这里，温思罗普发表了这篇著名的演讲，他说：“这将是一座山上的城市。这就是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:13)</span>
+  </div>
+  <div class="dialogue-en">The Framers of the Constitution believe that we were creating something that would be replicated around the world, and that it was an example in democracy. There would be this kind of wisdom from the collective that… And the word wisdom means a knowledge of God’s will, and that somehow God would speak through the collective in a way that he or she could not speak through totalitarian regimes. And ...</div>
+  <div class="dialogue-zh">宪法的制定者相信我们正在创造一些可以在世界各地复制的东西，并且它是民主的典范。集体中会有这种智慧……智慧这个词意味着对上帝旨意的了解，并且上帝会以某种方式通过集体说话，而他或她无法通过极权政权说话。和</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:34)</span>
+  </div>
+  <div class="dialogue-en">Well, I immigrated to this country. And one of the things that really embodies America to me is the ideal of freedom. Hunter S. Thompson said, “Freedom is something that dies unless it’s used.” What does freedom mean to you? Robert F. Kennedy Jr</div>
+  <div class="dialogue-zh">嗯，我移民到这个国家了。对我来说，真正体现美国的东西之一就是自由的理想。亨特·S·汤普森（Hunter S. Thompson）说：“自由是一种不被使用就会消亡的东西。”自由对你来说意味着什么？小罗伯特·F·肯尼迪</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:47)</span>
+  </div>
+  <div class="dialogue-en">To me, freedom does not mean chaos, and it does not mean anarchy. It means that it has to be accompanied by restraint if it’s going to live up to its promise in self-restraint. What it means is the capacity for human beings to exercise and to fulfill their creative energies unrestrained as much as possible by government.</div>
+  <div class="dialogue-zh">对我来说，自由并不意味着混乱，也不意味着无政府状态。这意味着如果要兑现自我克制的承诺，就必须伴随着克制。它意味着人类有能力在不受政府限制的情况下尽可能地发挥和发挥创造力。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:20)</span>
+  </div>
+  <div class="dialogue-en">So this point that Hunter S. Thompson has made is, “Dies unless it’s used.” Do you agree with that? Robert F. Kennedy Jr</div>
+  <div class="dialogue-zh">因此，亨特·S·汤普森提出的这一点是：“除非使用，否则就会死亡。”你同意吗？小罗伯特·F·肯尼迪</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:28)</span>
+  </div>
+  <div class="dialogue-en">Yeah, I do agree with that, and he was not unique in saying that. Thomas Jefferson said that the Tree of Liberty had to be watered with the blood of each generation. And what he meant by that is that we can’t live off the laurels of the American Revolution. That we had a group, we had a generation where between 25,000 and 70,000 Americans died. They gave their lives, they gave their livelihoods, t...</div>
+  <div class="dialogue-zh">是的，我确实同意这一点，而且他并不是唯一这么说的人。托马斯·杰斐逊说过，自由之树必须用每一代人的鲜血来浇灌。他的意思是我们不能靠美国革命的桂冠生活。我们有一个群体，我们这一代人有 25,000 到 70,000 名美国人死亡。他们献出了自己的生命，献出了自己的生计，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:26)</span>
+  </div>
+  <div class="dialogue-en">The blood of each generation. You mentioned your interest, your admiration of Al Albert Camus, of Stoicism, perhaps your interest in existentialism. Camus said, I believe in Myth of Sisyphus, “The only way to deal with an unfree world is to become so absolutely free that your very existence is an act of rebellion.” What do you think he means by that? Robert F. Kennedy Jr</div>
+  <div class="dialogue-zh">每一代人的血脉。你提到了你对阿尔伯特·加缪、斯多葛主义的兴趣和钦佩，也许还有你对存在主义的兴趣。加缪说，我相信西西弗斯神话，“应对不自由世界的唯一方法就是变得绝对自由，以至于你的存在就是一种叛逆行为。”你认为他这话是什么意思？小罗伯特·F·肯尼迪</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:49)</span>
+  </div>
+  <div class="dialogue-en">I suppose the way that Camus viewed the world and the way that the Stoics did and a lot of the existentialists, it was that it was so absurd and that the problems and the tasks that were given just to live a life are so insurmountable that the only way that we can get back the gods for giving us this impossible task of living life was to embrace it and to enjoy it and to do our best at it. To me, ...</div>
+  <div class="dialogue-zh">我想，加缪看待世界的方式、斯多葛学派以及许多存在主义者的方式，就是世界是如此荒谬，仅仅为了过一种生活而被赋予的问题和任务是如此难以克服，以至于我们能够回报诸神赋予我们这一不可能的生活任务的唯一方法就是拥抱它、享受它并尽力而为。大部头书，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:11:01)</span>
+  </div>
+  <div class="dialogue-en">And Sisyphus was the iconic hero of the Stoics, and he was a man because he did something good. He delivered a gift to humanity. He angered the gods and they condemned him to push a rock up the hill every day, and then it would roll down. When he got to the top, it would roll down and he’d spend the night going back down the hill to collect it and then rolling it back up the hill again. And the ta...</div>
+  <div class="dialogue-zh">西西弗斯是斯多葛学派的标志性英雄，他是一个男人，因为他做了一些好事。他向人类送出了一份礼物。他激怒了众神，众神谴责他每天把一块石头推上山，然后石头就会滚下来。当他到达山顶时，它会滚下来，他会花一晚上的时间回到山下收集它，然后再次将它滚回山上。还有ta</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:11:59)</span>
+  </div>
+  <div class="dialogue-en">He took his duty, he embraced the task and the absurdity of life, and he pushed the stone up the hill. And that if we do that, and if we find ways of being service to others, that is the ultimate, that’s the key to the lock, that’s the solution to the puzzle.</div>
+  <div class="dialogue-zh">他承担了自己的责任，接受了任务和生活的荒谬，并把石头推上了山。如果我们这样做，如果我们找到为他人服务的方法，那就是终极目标，那就是打开锁的钥匙，那就是解决这个难题的方法。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:12:21)</span>
+  </div>
+  <div class="dialogue-en">Each individual person in that way can rebel against absurdity by discovering meaning to this whole messy thing. Robert F. Kennedy Jr</div>
+  <div class="dialogue-zh">通过这种方式，每个人都可以通过发现整个混乱事物的意义来反抗荒谬。小罗伯特·F·肯尼迪</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:12:28)</span>
+  </div>
+  <div class="dialogue-en">And we can bring meaning not only to our own lives, but we can bring meaning to the universe as well. We can bring some kind of order to life and the embrace of those tasks and the commitment to service resonates out from us to the rest of humanity in some way. Hitler and WW2</div>
+  <div class="dialogue-zh">我们不仅可以为自己的生活带来意义，也可以为宇宙带来意义。我们可以给生活带来某种秩序，而对这些任务的接受和对服务的承诺会以某种方式与我们的其他人类产生共鸣。希特勒和二战</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:12:51)</span>
+  </div>
+  <div class="dialogue-en">So you mentioned The Plague by Camus. There’s a lot of different ways to read that book, but one of them, especially given how it was written, is that The Plague symbolizes Nazi Germany and the Hitler regime. What do you learn about human nature from a figure like Adolf Hitler, that he’s able to captivate the minds of millions, rise to power and take on, pull in the whole world into a global war? ...</div>
+  <div class="dialogue-zh">所以你提到了加缪的《鼠疫》。阅读这本书有很多不同的方式，但其中之一，特别是考虑到它的写作方式，是鼠疫象征着纳粹德国和希特勒政权。你从阿道夫·希特勒这样的人物身上学到了什么关于人性的知识，他能够吸引数百万人的思想，掌权并承担责任，将整个世界拖入全球战争？</div>
+</div>
+    <a href="https://lexfridman.com/robert-f-kennedy-jr-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="lars-brownworth.html" class="card" style="text-decoration:none">
+  <div class="card-title">Lars Brownworth</div>
+  <div class="card-meta">Lars Brownworth</div>
+</a>
+<a href="omar-suleiman-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Omar Suleiman #2</div>
+  <div class="card-meta">Omar Suleiman</div>
+</a>
+<a href="albert-bourla.html" class="card" style="text-decoration:none">
+  <div class="card-title">Albert Bourla: Pfizer CEO</div>
+  <div class="card-meta">Albert Bourla</div>
+</a>
+<a href="alex-gladstein.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alex Gladstein: Bitcoin, Authoritarianism, and Human Rights</div>
+  <div class="card-meta">Alex Gladstein</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

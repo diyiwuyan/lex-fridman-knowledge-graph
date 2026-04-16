@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Andrew Huberman #4 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Andrew Huberman #4</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Andrew Huberman #4</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/andrew-huberman.html" style="font-size:16px;color:#818cf8;font-weight:600">Andrew Huberman</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">23,659 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/andrew-huberman-4-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:31</span>
+  <span class="chapter-title">Exercise routine<span class="zh-trans"> · 日常锻炼</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">7:42</span>
+  <span class="chapter-title">Advice to younger self<span class="zh-trans"> · 给年轻的自己的建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:56</span>
+  <span class="chapter-title">Jungian shadow<span class="zh-trans"> · 荣格阴影</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">19:42</span>
+  <span class="chapter-title">Betrayal and loyalty<span class="zh-trans"> · 背叛与忠诚</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">39:52</span>
+  <span class="chapter-title">Drama<span class="zh-trans"> · 戏剧</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">57:31</span>
+  <span class="chapter-title">Chimp Empire<span class="zh-trans"> · 黑猩猩帝国</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:02:24</span>
+  <span class="chapter-title">Overt vs covert contracts<span class="zh-trans"> · 显性合同与隐性合同</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:08:31</span>
+  <span class="chapter-title">Age and health<span class="zh-trans"> · 年龄与健康状况</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:14:39</span>
+  <span class="chapter-title">Sexual selection<span class="zh-trans"> · 性选择</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:25:15</span>
+  <span class="chapter-title">Relationships<span class="zh-trans"> · 人际关系</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:37:49</span>
+  <span class="chapter-title">Fertility<span class="zh-trans"> · 生育能力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:48:15</span>
+  <span class="chapter-title">Productivity<span class="zh-trans"> · 生产率</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:05:02</span>
+  <span class="chapter-title">Family<span class="zh-trans"> · 家庭</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">andrew</span><span class="keyword-tag">huberman</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">hard</span><span class="keyword-tag">peace</span><span class="keyword-tag">podcast</span><span class="keyword-tag">got</span><span class="keyword-tag">talking</span><span class="keyword-tag">relationship</span><span class="keyword-tag">doing</span><span class="keyword-tag">relationships</span><span class="keyword-tag">friends</span><span class="keyword-tag">getting</span><span class="keyword-tag">certain</span><span class="keyword-tag">kids</span><span class="keyword-tag">said</span><span class="keyword-tag">stuff</span><span class="keyword-tag">important</span><span class="keyword-tag">talk</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"But he said, and I believe that the subconscious is the supercomputer of the brain. All the stuff working underneath our conscious awareness that’s driving our feelings and what we think are the decisions that we’ve thought through so carefully. And that only by exploring the subconscious and understanding it a little bit, can we actually improve ourselves over time and I agree. I think that so the mistake is to think that thinking can override it all. It’s a certain style of introspection and thinking that allows us to read the signals from our body, read the signals from our brain, integrate the knowledge that we’re collecting about ourselves, and to use all that in ways that are really adaptive and generative for us. Jungian shadow"</div>
+  <div class="quote-zh">但他说，我相信潜意识是大脑的超级计算机。所有在我们的意识之下运作的东西，驱动我们的感受和我们的想法，都是我们经过深思熟虑后做出的决定。只有通过探索潜意识并稍微了解它，我们才能随着时间的推移真正提高自己，我同意。我认为错误在于认为思维可以凌驾于一切之上。这是一种特定的内省和思维方式，使我们能够读取来自身体的信号，读取来自大脑的信号，整合我们收集的有关自己的知识，并以真正适合我们的方式使用所有这些知识。荣格阴影</div>
+  <div class="quote-meta">— Andrew Huberman （00:14:09）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"In fact, he did. He left and he worked on something else, and I realized he has no passion for understanding the brain like I assumed all scientists do, certainly why I went into it. But some people, it’s just raw ambition. It’s about winning. It doesn’t even matter what they win, which to me is crazy. But I think that’s a shadow that some people explore, not one I’ve explored. I think the shadow parts of us are very important to come to understand and look better to understand them and know that they’re there and work with them than to not acknowledge their presence and have them surface in the form of addictions or behaviors that damage us in other people."</div>
+  <div class="quote-zh">事实上，他做到了。他离开后开始从事其他工作，我意识到他并不像我想象的所有科学家那样对理解大脑充满热情，这当然也是我研究这个领域的原因。但有些人，这只是原始的野心。这是关于胜利的。他们赢得什么并不重要，这对我来说太疯狂了。但我认为这是一些人探索的阴影，而不是我探索过的。我认为我们的阴影部分非常重要，我们要了解它们，更好地理解它们，知道它们在那里并与它们一起工作，而不是不承认它们的存在，让它们以成瘾或损害我们他人的行为的形式出现。</div>
+  <div class="quote-meta">— Andrew Huberman （00:16:12）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"The prayer piece, I think I’ve been reluctant to talk about until now because I don’t believe in pushing religion on people. And I think that… And I’m not, it’s a highly individual thing and I do believe that one can be an atheist and still pray or agnostic and still pray. But for me, it really came about through understanding that there are certain aspects of myself that I just couldn’t resolve on my own. And no matter how much therapy, no matter how much… And I haven’t done a lot of it. But no matter how much plant medicine or other forms of medicine or exercise or podcasting or science or friendship or any of that, I was just not going to resolve."</div>
+  <div class="quote-zh">我想到目前为止我一直不愿意谈论祈祷文，因为我不相信将宗教强加给人们。我认为……我不是，这是一件高度个人化的事情，我确实相信一个人可以是无神论者但仍然祈祷，或者是不可知论者仍然祈祷。但对我来说，这确实是通过了解自己的某些方面是我无法独自解决的。无论进行多少治疗，无论进行多少……而且我还没有做过很多治疗。但无论有多少植物药或其他形式的药物或锻炼或播客或科学或友谊或任何其他形式，我就是不打算解决。</div>
+  <div class="quote-meta">— Andrew Huberman （00:48:22）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So I think the answer to your question, do you embrace or do you fight these aspects of self is? I think you get in your subconscious through good work with somebody skilled. And sometimes that involves the tools I just mentioned in various combinations and you figure it out. You figure out if it’s serving you. Obviously it was not bringing me peace. My sense of justice was undermining my sense of peace. And so in understanding this link… Now, I would say, in understanding this link between justice and anger, now I think it’s a little bit more of you know, it’s not like a Twizzler stick bendy, but at least it’s not like an iron rod. When I see somebody wronged, I mean it used to just… Like immediately."</div>
+  <div class="quote-zh">所以我认为你的问题的答案是，你是拥抱还是对抗自我的这些方面？我认为你可以通过与熟练的人一起良好的工作来进入你的潜意识。有时这涉及到我刚才提到的工具的各种组合，然后你就明白了。你弄清楚它是否对你有用。显然这并没有给我带来平静。我的正义感正在破坏我的平安感。因此，在理解这种联系时……现在，我想说，在理解正义与愤怒之间的这种联系时，我认为你知道的更多一点，它不像一根弯曲的 Twizzler 棍子，但至少它不像一根铁棒。当我看到有人受到冤屈时，我的意思是它过去只是……就像立即一样。</div>
+  <div class="quote-meta">— Andrew Huberman （00:32:51）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And it’s powerful in a way that all the other stuff, meditation and all the tools, is not because it’s really operating at a much deeper and bigger level. Yeah. I think that’s all I can talk about it. Mostly because I’m still working out. The scientists in me wants to understand how it works and I want to understand. And the point is to just go, for lack of a better language for it, “There’s a higher power than me and what I can control. I’m giving up control on certain things.” And somehow, that restores a sense of agency for right action and better action."</div>
+  <div class="quote-zh">它的强大之处在于，所有其他东西，冥想和所有工具，并不是因为它真正在更深、更大的层面上运作。是的。我想这就是我能谈论的一切。主要是因为我还在锻炼。我内心的科学家想要了解它是如何运作的，我也想了解。重点是，由于缺乏更好的语言，“有比我更高的力量和我可以控制的东西。我放弃对某些事情的控制。”不知何故，这恢复了采取正确行动和更好行动的代理感。</div>
+  <div class="quote-meta">— Andrew Huberman （00:52:04）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">Listen, when it comes to romantic relationships, if it’s not a 100% in you, it ain’t happening. And I’ve never seen a violation of that statement where it’s like, “Yeah, it’s mostly good.” And this is like the negotiations, already it’s doomed. And that doesn’t mean someone has to be perfect. The relationship has to be perfect, but it’s got to feel a 100% inside, like yes, yes, and yes.</div>
+  <div class="dialogue-zh">听着，当谈到浪漫关系时，如果它不是 100% 在你身上，它就不会发生。我从未见过有人违反这一说法，比如“是的，这基本上是好的。”这就像谈判一样，已经注定了。这并不意味着某人必须是完美的。这段关系必须是完美的，但内心必须有100%的感觉，就像是，是，是。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:29)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with my dear friend Andrew Huberman, his fourth time on this podcast. It’s my birthday, so this is a special birthday episode of sorts. Andrew flew down to Austin just to wish me a happy birthday, and we decided to do a podcast last second. We literally talked for hours beforehand and a long time after late into the night. He’s one of my favorite human beings, brill...</div>
+  <div class="dialogue-zh">以下是我与亲爱的朋友安德鲁·胡伯曼的对话，这是他第四次参加这个播客。今天是我的生日，所以这是一个特殊的生日剧集。安德鲁飞到奥斯汀只是为了祝我生日快乐，我们决定在最后一刻做一个播客。我们实际上在事前聊了几个小时，在深夜后又聊了很长时间。他是我最喜欢的人之一，太棒了</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:01:30)</span>
+  </div>
+  <div class="dialogue-en">I’m trying to run a little bit more.</div>
+  <div class="dialogue-zh">我正在尝试多跑一点。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:34)</span>
+  </div>
+  <div class="dialogue-en">Are you losing weight?</div>
+  <div class="dialogue-zh">你在减肥吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:01:35)</span>
+  </div>
+  <div class="dialogue-en">I’m not trying to lose weight, but I always do the same fitness routine after 30 years. Basically lift three days a week, run three days a week, but one of the runs is the long run, one of them is medium, one of them is a sprint type thing. So what I’ve decided to do this year was just extend the duration of the long run. And I like being mobile. I never want to be so heavy that I can’t move. I wa...</div>
+  <div class="dialogue-zh">我并不是想减肥，但 30 年后我总是做同样的健身计划。基本上每周举重三天，每周跑步三天，但其中一次是长距离跑，其中一次是中距离跑，其中一次是短距离跑。所以我今年决定做的只是延长长期的持续时间。我喜欢移动。我不想太重以至于无法移动。我是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:02:10)</span>
+  </div>
+  <div class="dialogue-en">And lifting in objects feels good. It feels good to train like a lazy bear and just lift heavy objects. But I’ve also started training with lighter weights and higher repetitions and for three month cycles, and it gives your joints a rest. Yeah, so I think it also is interesting to see how training differently changes your cognition. That’s probably hormone related, hormones downstream of training...</div>
+  <div class="dialogue-zh">举起物体的感觉很好。像一只懒熊一样训练并举起重物的感觉很好。但我也开始进行更轻的重量和更高的重复次数，为期三个月的训练，这让你的关节得到了休息。是的，所以我认为看看不同的训练如何改变你的认知也很有趣。这可能与激素有关，训练下游的激素</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:55)</span>
+  </div>
+  <div class="dialogue-en">There’s a lot of angry people listening to this right now.</div>
+  <div class="dialogue-zh">现在有很多愤怒的人在听这个。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:02:57)</span>
+  </div>
+  <div class="dialogue-en">No, no, no. But lifting heavy and then taking three to five minutes rest is far and away a different challenge than running hard for 90 minutes. That’s a tough thing, just like getting in an ice bath. People say, “Oh, well, how is that any different than working out?” Well, there are a lot of differences, but one of them is that it’s very acute stress, within one second you’re stressed. So I think...</div>
+  <div class="dialogue-zh">不，不，不。但举起重物然后休息三到五分钟与努力跑步 90 分钟相比是完全不同的挑战。这是一件很难的事情，就像进入冰浴一样。人们会说：“哦，这和锻炼有什么不同呢？”嗯，有很多差异，但其中之一是压力非常大，在一秒钟之内你就会感到压力。所以我认为</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:30)</span>
+  </div>
+  <div class="dialogue-en">Well, I like long and slow like you said, the impact it has on my cognition.</div>
+  <div class="dialogue-zh">嗯，就像你说的，我喜欢长而慢，它对我认知的影响。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:03:37)</span>
+  </div>
+  <div class="dialogue-en">Yeah, the wordlessness of it, the way it seems to clean out the clutter.</div>
+  <div class="dialogue-zh">是的，它的无言，它似乎清理混乱的方式。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:46)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:03:47)</span>
+  </div>
+  <div class="dialogue-en">It can take away that hyperfocus and put you more in a relaxed focus for sure.</div>
+  <div class="dialogue-zh">它可以消除你的过度专注，让你更加放松地专注。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:53)</span>
+  </div>
+  <div class="dialogue-en">Well, for me, it brings the clutter to the surface at first. Like all these thoughts come in there, and then they dissipate. I got knee barred pretty hard. That’s when somebody tries to break your knee.</div>
+  <div class="dialogue-zh">嗯，对我来说，它首先让混乱浮出水面。就像所有这些想法都出现在那里，然后就消散了。我的膝盖受到了很大的阻碍。那就是有人试图打断你的膝盖的时候。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:04:04)</span>
+  </div>
+  <div class="dialogue-en">What a knee bar? They try and break your knee?</div>
+  <div class="dialogue-zh">什么护膝？他们试图打断你的膝盖？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:04)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:04:06)</span>
+  </div>
+  <div class="dialogue-en">Oh, so you tap so they-</div>
+  <div class="dialogue-zh">哦，所以你点击，他们-</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:07)</span>
+  </div>
+  <div class="dialogue-en">Yeah. Yeah. So it’s hyperextend the knee in that direction, they got knee barred pretty hard. So in ways I don’t understand, it kind of hurts to run. I don’t understand what’s happening behind there. I need to investigate this. Basically the hamstringing flex, like curling, your leg hurts a little bit, and that results in this weird, dull, but sometimes extremely sharp pain in the back of the knee...</div>
+  <div class="dialogue-zh">是的。是的。所以膝盖朝那个方向过度伸展，他们的膝盖受到了很大的限制。所以我不明白，跑步有点疼。我不明白后面发生了什么。我需要调查此事。基本上是腿筋弯曲，就像冰壶一样，你的腿会有点痛，这会导致膝盖后部出现奇怪的、钝的、但有时非常剧烈的疼痛</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:38)</span>
+  </div>
+  <div class="dialogue-en">So I’ve been playing around with walking recently for two hours and thinking because I know a lot of smart people throughout history, I have walked and thought, and you have to play with things that have worked for others, not just to exercise, but to integrate this very light kind of prolonged exercise into a productive life. So they do all their thinking while they walk. It’s like a meditative t...</div>
+  <div class="dialogue-zh">所以我最近玩了两个小时步行并思考，因为我认识历史上很多聪明人，我步行和思考过，你必须玩弄对别人有用的东西，不仅仅是为了锻炼，而是把这种非常轻松的长时间锻炼融入到富有成效的生活中。所以他们边走边思考。这就像一场冥想</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:05:09)</span>
+  </div>
+  <div class="dialogue-en">Yeah. The practice I’ve been doing a lot more of lately is I walk while reading a book in the yard. I’ll just pace back and forth or walk in a circle.</div>
+  <div class="dialogue-zh">是的。我最近经常做的练习是在院子里边走路边看书。我只会来回踱步或绕圈走。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:18)</span>
+  </div>
+  <div class="dialogue-en">Audiobook, or are you talking about anything-</div>
+  <div class="dialogue-zh">有声读物，或者你在谈论什么-</div>
+</div>
+    <a href="https://lexfridman.com/andrew-huberman-4-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="graham-hancock.html" class="card" style="text-decoration:none">
+  <div class="card-title">Graham Hancock</div>
+  <div class="card-meta">Graham Hancock</div>
+</a>
+<a href="grimes.html" class="card" style="text-decoration:none">
+  <div class="card-title">Grimes: Music, AI, and the Future of Humanity</div>
+  <div class="card-meta">Grimes</div>
+</a>
+<a href="julia-shaw.html" class="card" style="text-decoration:none">
+  <div class="card-title">Julia Shaw</div>
+  <div class="card-meta">Julia Shaw</div>
+</a>
+<a href="lisa-feldman-barrett-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Lisa Feldman Barrett: Love, Evolution, and the Human Brain</div>
+  <div class="card-meta">Lisa Feldman Barrett</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

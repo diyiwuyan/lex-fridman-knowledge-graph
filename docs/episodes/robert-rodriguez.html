@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Robert Rodriguez - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Robert Rodriguez</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Robert Rodriguez</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/robert-rodriguez.html" style="font-size:16px;color:#818cf8;font-weight:600">Robert Rodriguez</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">48,118 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/robert-rodriguez-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#f9731622;color:#f97316;border:1px solid #f9731644;font-size:13px;padding:4px 12px">体育与武术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:07</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:06</span>
+  <span class="chapter-title">Explosions and having only one take<span class="zh-trans"> · 爆炸并且只有一次拍摄</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">11:40</span>
+  <span class="chapter-title">Success and failure<span class="zh-trans"> · 成功与失败</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">20:30</span>
+  <span class="chapter-title">Filmmaking on a low budget<span class="zh-trans"> · 低预算的电影制作</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">32:43</span>
+  <span class="chapter-title">El Mariachi<span class="zh-trans"> · 埃尔马里亚奇</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">44:12</span>
+  <span class="chapter-title">Creativity<span class="zh-trans"> · 创造力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:06:07</span>
+  <span class="chapter-title">Limitations<span class="zh-trans"> · 局限性</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:12:24</span>
+  <span class="chapter-title">Handling criticism<span class="zh-trans"> · 处理批评</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:28:33</span>
+  <span class="chapter-title">Action films<span class="zh-trans"> · 动作片</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:39:55</span>
+  <span class="chapter-title">Quentin Tarantino<span class="zh-trans"> · 昆汀·塔伦蒂诺</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:49:54</span>
+  <span class="chapter-title">Desperado<span class="zh-trans"> · 亡命之徒</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:50:56</span>
+  <span class="chapter-title">Salma Hayek<span class="zh-trans"> · 萨尔玛·海耶克</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:55:42</span>
+  <span class="chapter-title">Danny Trejo<span class="zh-trans"> · 丹尼·特乔</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:00:56</span>
+  <span class="chapter-title">Filming in Austin<span class="zh-trans"> · 奥斯汀拍摄</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:07:07</span>
+  <span class="chapter-title">Editing<span class="zh-trans"> · 编辑</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:16:37</span>
+  <span class="chapter-title">Sound design<span class="zh-trans"> · 声音设计</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:21:45</span>
+  <span class="chapter-title">Deadlines<span class="zh-trans"> · 截止日期</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:25:16</span>
+  <span class="chapter-title">Alita: Battle Angel<span class="zh-trans"> · 阿丽塔：战斗天使</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:33:38</span>
+  <span class="chapter-title">James Cameron<span class="zh-trans"> · 詹姆斯·卡梅伦</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">going</span><span class="keyword-tag">robert</span><span class="keyword-tag">rodriguez</span><span class="keyword-tag">movie</span><span class="keyword-tag">don</span><span class="keyword-tag">got</span><span class="keyword-tag">said</span><span class="keyword-tag">doing</span><span class="keyword-tag">didn</span><span class="keyword-tag">guy</span><span class="keyword-tag">film</span><span class="keyword-tag">camera</span><span class="keyword-tag">sound</span><span class="keyword-tag">action</span><span class="keyword-tag">creative</span><span class="keyword-tag">movies</span><span class="keyword-tag">goes</span><span class="keyword-tag">shoot</span><span class="keyword-tag">shot</span><span class="keyword-tag">stuff</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"It draws you in and it makes you go now think of ideas you never would’ve thought of for mainly because it has a filter. Well, now I don’t have to think of all these ideas. I actually have, like me on that set, there’s only very few things I can actually come up with that are just action driven first, when they have a great character. You’ll get to it a lot faster with a filter. That’s the beauty of a filter is that now you’ve just shrunk your target and now you can hit that target and people are coming up with ideas because now they’ve got proximity and they’ve got a reason to come up with the idea and they’ve got a deadline, which is the best thing you can do is have a deadline because when you have a deadline, you can freaking move mountains."</div>
+  <div class="quote-zh">它吸引你，让你现在开始思考你从未想过的想法，主要是因为它有一个过滤器。好吧，现在我不必考虑所有这些想法了。事实上，就像我在片场一样，当他们有一个伟大的角色时，我实际上能想出的东西很少是首先由动作驱动的。使用过滤器你会更快地找到它。过滤器的美妙之处在于，现在你已经缩小了你的目标，现在你可以达到这个目标，人们会提出想法，因为现在他们已经接近了，他们有理由提出这个想法，他们有一个最后期限，这是你能做的最好的事情就是有一个最后期限，因为当你有最后期限时，你可以移山。</div>
+  <div class="quote-meta">— Robert Rodriguez （02:22:02）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And he says, “I can’t even go outside because my own creations are going to eat me.” And he comes up to the camera, he goes, “Do you think God hides in heaven because he too lives in fear of what he created here on Earth?” it’s really just for a moment, this thing. And it’s like, because you feel like that way when you’re creating stuff, you’re creating something and then now it’s taking all life on its own. And it’s like, oh no, now this character has to die. I didn’t want that. This domino effect of creation. And you start thinking, well, this must be what creation, maybe he is hiding up there because look, he didn’t expect all this shit to happen, giving us free will and all that."</div>
+  <div class="quote-zh">他说：“我什至不能出去，因为我自己的创造物会吃掉我。”他走到镜头前，说道：“你认为上帝隐藏在天堂是因为他也生活在对他在地球上创造的事物的恐惧之中吗？”这件事真的只是一瞬间。就像，因为当你创造东西时，你会有这样的感觉，你正在创造一些东西，然后现在它正在独自夺走所有的生命。就像，哦不，现在这个角色必须死。我不想那样。这种创造的多米诺骨牌效应。你开始想，嗯，这一定是创造物，也许他藏在那里，因为看，他没想到所有这些狗屎会发生，给了我们自由意志等等。</div>
+  <div class="quote-meta">— Robert Rodriguez （01:38:47）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And then we’re playing with these little cars, filming ourselves playing with the cars. But then I replaced it with real car sounds [inaudible 02:21:08] and it just, your brain links the reality of the real thing and you realize how unimportant the visual is and how important the sound is actually. Sound is everything. That’s what I was really lucky in Mariachi that my camera didn’t work for sound because then I got really good sound that I would’ve gotten with a shitty mic out of frame. Because that’s the first telltale sign of a low budget movie is bad sound. Bad sound right away, you can already hear all this hiss and all this mic was too far and you’re like low budget movie. Before your eyes even tell you, the sound gives it away. Isn’t that amazing?"</div>
+  <div class="quote-zh">然后我们就玩这些小汽车，拍摄自己玩这些小汽车的过程。但后来我用真实的汽车声音替换了它[听不清02:21:08]，你的大脑将真实事物的现实联系起来，你意识到视觉是多么不重要，而声音实际上是多么重要。声音就是一切。这就是我在《流浪乐队》中真正幸运的地方，因为我的相机不能用于声音，因为这样我就得到了非常好的声音，这是我用一个糟糕的麦克风在画框之外得到的。因为低预算电影的第一个明显迹象就是糟糕的声音。声音马上就很糟糕，你已经可以听到所有这些嘶嘶声，所有这些麦克风都太远了，你就像低预算电影一样。在你的眼睛告诉你之前，声音就已经告诉你了。这不是很神奇吗？</div>
+  <div class="quote-meta">— Robert Rodriguez （02:20:59）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So I just went, “Let’s shoot.” We stop, we come back. Then I send it off to develop, because we’re shooting two weeks consecutively. To get film shipped back and forth from Mexico to see if it came out, you just couldn’t do it. I just had to double down on it, do it. One take everything. I remember one time I was telling the actor, “Man, I told you to run through that shot.” And he goes, “Oh, let me do it again.” “No one take, dude. Just think about it. Next time, do what I say.” I didn’t think anyone was going to see it. And because you don’t think anyone’s going to see it, you end up doing something remarkable, which is, “Well, I’m just going to make something for myself.”"</div>
+  <div class="quote-zh">所以我就说：“我们拍吧。”我们停下来，我们回来。然后我会把它送去冲洗，因为我们要连续拍摄两周。想要从墨西哥来回运送胶卷来看看它是否上映，你就是做不到。我只得加倍努力，去做吧。一人拿走一切。我记得有一次我对演员说：“伙计，我告诉你要演练那个镜头。”他说：“哦，让我再做一次。” “没有人会接受，伙计。想一想。下次，按我说的做。”我不认为有人会看到它。因为你认为没有人会看到它，所以你最终做了一些了不起的事情，那就是，“好吧，我只是要为自己做一些东西。”</div>
+  <div class="quote-meta">— Robert Rodriguez （00:35:56）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Because this guy has his head out and unwarranted. You can’t even fathom it now because you weren’t here at that time. It was crazy. You would never even think of him that way. I’m glad it changed because back then was just, it made people not want to be successful and it made me be worried, maybe I shouldn’t be go making a movie that has his name on it, that’s going to put my head out in a whole different realm of filmmaking at a studio level. Because even if I make a good movie, if I make a great movie, he’s making great movies and he’s getting this dog shit. I don’t know if I could take it."</div>
+  <div class="quote-zh">因为这家伙已经把头伸出来了，毫无根据。你现在甚至无法理解它，因为当时你不在这里。太疯狂了。你永远不会那样想他。我很高兴它发生了变化，因为当时只是，它让人们不想成功，这让我担心，也许我不应该去制作一部有他名字的电影，这会让我在工作室层面上进入一个完全不同的电影制作领域。因为即使我拍了一部好电影，如果我拍了一部很棒的电影，他也在拍很棒的电影，而他却得到了这些狗屎。我不知道我是否能接受。</div>
+  <div class="quote-meta">— Robert Rodriguez （01:14:40）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Robert Rodriguez <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">I write the script in December. January, Josh Arnett, Marley Shelton, come down, fly Frank in. Shooting for 10 hours on my green screen. We shoot that opening sequence, incredible opening sequence and the visual Look, we’ve never seen that. I want to just take this and make it move. I just want the comic to move. Any other studio would just go make it look like any gritty crime movie, and they wou...</div>
+  <div class="dialogue-zh">我十二月写剧本。一月，乔什·阿内特、马利·谢尔顿，下来，让弗兰克飞进来。在我的绿屏上拍摄了 10 个小时。我们拍摄了开场片段，令人难以置信的开场片段和视觉效果，我们从未见过。我只想抓住这个并让它动起来。我只是想让漫画动起来。任何其他工作室都会让它看起来像任何坚韧不拔的犯罪电影，他们会</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Robert Rodriguez <span class="dialogue-time">(00:00:41)</span>
+  </div>
+  <div class="dialogue-en">Jim Cameron was like that. So when I first met him, I was trying to impress the hell out of him because I was such a big fan. I was about to go do Desperado and I went, “Hey, I just took a three-day Steadicam course because I can’t afford a Steadicam operator, so I’m going to operate Steadicam myself on Desperado.” Now if he was just my peer, he’d say, “Oh, I did the same thing,” and I’m going to ...</div>
+  <div class="dialogue-zh">吉姆·卡梅隆就是这样的人。所以当我第一次见到他时，我试图给他留下深刻的印象，因为我是他的忠实粉丝。我正要去拍《亡命之徒》，我说：“嘿，我刚刚参加了为期三天的斯坦尼康课程，因为我买不起斯坦尼康操作员，所以我要自己在《亡命之徒》中操作斯坦尼康。”现在，如果他只是我的同事，他会说，“哦，我做了同样的事情，”我会</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Robert Rodriguez <span class="dialogue-time">(00:01:20)</span>
+  </div>
+  <div class="dialogue-en">We put so much of the world around them. When you see the city, we put a blue screen way in the back to just make the city keep going, but we built the sets there, the town, we built the real set. So everything was very tangible and real, and that way she had to fit into that world and be as real as that because if it was all done in CG, well then now you can fudge everything. But if you put her i...</div>
+  <div class="dialogue-zh">我们把太多的世界放在他们周围。当你看到城市时，我们在后面放了一个蓝屏，让城市继续运转，但我们在那里建造了布景，城镇，我们建造了真实的布景。所以一切都是非常有形和真实的，这样她就必须融入那个世界并变得如此真实，因为如果这一切都是在 CG 中完成的，那么现在你可以捏造一切了。但如果你把她放在我</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:07)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Robert Rodriguez, a legendary filmmaker and creator of Sin City, El Mariachi, Desperado, Spy Kids, Machete from Dust Till Dawn, Alita, Battle Angel, The Faculty, and many more. Robert inspired a generation of independent filmmakers with his first film, El Mariachi, that he famously made for just $7,000. On that film in many sense, he was not only the director, ...</div>
+  <div class="dialogue-zh">以下是与传奇电影制片人和《罪恶之城》、《流浪乐队》、《亡命之徒》、《间谍小子》、《杀出个黎明》中的弯刀、《阿丽塔》、《战斗天使》、《TheFaculty》等作品的创作者罗伯特·罗德里格斯的对话。罗伯特的第一部电影《El Mariachi》激励了一代独立电影制作人，他以仅 7,000 美元的成本制作了这部电影。从很多意义上来说，在那部电影中，他不仅是导演，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:25)</span>
+  </div>
+  <div class="dialogue-en">He’s building a new thing now called Brass Knuckle Films where he’s opening up the filmmaking process so that fans can be a part of it as he creates his next four action films. I’ll probably go hang out at his film studio a bunch as this is all coming to life. His work has inspired a very large number of people, including me to be more creative in whatever pursuit you take on in life and have fun ...</div>
+  <div class="dialogue-zh">He’s building a new thing now called Brass Knuckle Films where he’s opening up the filmmaking process so that fans can be a part of it as he creates his next four action films.我可能会经常去他的电影工作室闲逛，因为这一切都将成为现实。他的作品激励了很多人，包括我，无论你在生活中追求什么并享受乐趣，都变得更有创造力</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:06)</span>
+  </div>
+  <div class="dialogue-en">Has there been a time when there was one take and you only have one take to get it right?</div>
+  <div class="dialogue-zh">是否曾经有过这样的情况：只有一次拍摄，而您只有一次拍摄才能把它做好？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Robert Rodriguez <span class="dialogue-time">(00:04:12)</span>
+  </div>
+  <div class="dialogue-en">Oh, all the time where you’re just like, or just how long it’ll take to reset and you’re just, but then you know what? You got to just work with what you got. You got to work with your results.</div>
+  <div class="dialogue-zh">哦，一直以来，你都只是想，或者只是需要多长时间才能重置，然后你知道吗？ You got to just work with what you got. You got to work with your results.</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:22)</span>
+  </div>
+  <div class="dialogue-en">You get nervous or no in that moment?</div>
+  <div class="dialogue-zh">那一刻你是否紧张？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Robert Rodriguez <span class="dialogue-time">(00:04:25)</span>
+  </div>
+  <div class="dialogue-en">Oh yeah, you’re nervous going just, “I hope it goes off because then to fix it, I’ll have to go do a bunch of other steps, which we don’t have time for.” But a lot of times I’ve just learned that if something happens, it’s just meant to be that way. And I got used to doing things in one take and just living with it. It didn’t bother me.</div>
+  <div class="dialogue-zh">哦，是的，你很紧张，只是说，“我希望它能消失，因为要修复它，我必须去做一些其他步骤，但我们没有时间。”但很多时候我才知道，如果发生了什么事，那就注定是这样的。 And I got used to doing things in one take and just living with it. It didn’t bother me.</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Robert Rodriguez <span class="dialogue-time">(00:04:42)</span>
+  </div>
+  <div class="dialogue-en">One movie, it was even a low budget movie, they had rigged a car to implode because I was going to throw a guy at it, so we needed the car to implode and then we were going to throw them and marry it together. The car guy goes, “Yeah, we’re going to have three cars rigged.” “Three cars? Why you…” “Well in case one doesn’t work, and then we have a second way throwing away.” “We don’t have all night...</div>
+  <div class="dialogue-zh">一部电影，甚至是一部低预算的电影，他们操纵了一辆汽车爆炸，因为我要把一个人扔向它，所以我们需要汽车爆炸，然后我们要把它们扔在一起，然后把它们结合在一起。汽车司机说：“是的，我们要装备三辆车。” “三辆车？为什么你……”“好吧，万一其中一个不起作用，那么我们还有第二种扔掉的方法。” “我们没有整夜的时间</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:19)</span>
+  </div>
+  <div class="dialogue-en">When it all goes to shit, when it fails you just, what’s the next thought?</div>
+  <div class="dialogue-zh">当一切都变得糟糕时，当它让你失败时，下一个想法是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Robert Rodriguez <span class="dialogue-time">(00:05:23)</span>
+  </div>
+  <div class="dialogue-en">So I’ll tell you, two things happen on Dusk Till Dawn. First was, okay, you know how those explosions when somebody walks away in slow motion from an explosion, that’s become kind of even that started with Desperado Desperado’s the first, if you look at all the montages, Desperado’s first. That’s right. That’s right. That is the meme because it was an accident. It was just supposed to be, it was j...</div>
+  <div class="dialogue-zh">So I’ll tell you, two things happen on Dusk Till Dawn.首先，好吧，你知道，当有人以慢动作从爆炸中走开时，这些爆炸就变得有点像从《亡命之徒》开始的《亡命之徒》的第一个，如果你看一下所有的蒙太奇，《亡命之徒》的第一个。这是正确的。这是正确的。这就是模因，因为这是一次意外。这本来就是应该的，这就是 j</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Robert Rodriguez <span class="dialogue-time">(00:05:51)</span>
+  </div>
+  <div class="dialogue-en">We get to there and I go, “Do you have any body parts and stuff we can throw up or something you can shoot up. “I didn’t realize it’s so high to get past that second floor.” And he’s like, “No, I don’t. I can give you a fireball. I can give you a nice fireball with propane, but it burns away really quick.” “Like how fast?” “Like that but it’ll be big and orange.” “Okay, we’ll shoot it in slow moti...</div>
+  <div class="dialogue-zh">我们到了那里，我说：“你有没有身体部位和我们可以吐出来的东西，或者你可以发射的东西。”“我没有意识到穿过二楼有多高。”他说：“不，我不。 I can give you a fireball.我可以用丙烷给你一个很好的火球，但它燃烧得很快。” “比如多快？” “就像那样，但它会很大，而且是橙色的。” “好吧，我们会以慢动作拍摄</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Robert Rodriguez <span class="dialogue-time">(00:06:15)</span>
+  </div>
+  <div class="dialogue-en">So I told the actors, I know how big this fireball is going to be, but just walk really fast and just look real determined and then just keep walking. Don’t stop and turn around because you might get your eyebrows singed. So they take off and it goes, and in slow motion, it looks great, right? I remember showing to Jim Cameron before it came out and his hand went up. He’d never seen that before, s...</div>
+  <div class="dialogue-zh">所以我告诉演员们，我知道这个火球会有多大，但只要走得很快，看起来很坚定，然后继续走。不要停下来转身，因为你的眉毛可能会被烧焦。所以他们起飞了，然后就开始了，慢动作，看起来很棒，对吧？我记得在它出来之前向吉姆·卡梅隆展示过，他举起了手。他以前从没见过这样的事，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Robert Rodriguez <span class="dialogue-time">(00:06:46)</span>
+  </div>
+  <div class="dialogue-en">And so I thought, “How about for the opening of George Clooney and Quentin walking out of the gas station that we have the whole place just blowing up and they just keep talking like it’s not happening. Take it another step further so I’m not just doing the same thing. Okay, that one, it’s like, “Okay, you’re going to walk out and it’s all in one take. So we’re only going to do one take. We’re goi...</div>
+  <div class="dialogue-zh">所以我想，“在乔治·克鲁尼和昆汀走出加油站的开幕式中，我们整个地方都炸了，他们只是继续说话，就像这没有发生一样。再更进一步，这样我就不会只是做同样的事情。好吧，那个，就像是，“好吧，你要走出去，这一切都在一次拍摄中。所以我们只会拍一次。我们去</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Robert Rodriguez <span class="dialogue-time">(00:07:32)</span>
+  </div>
+  <div class="dialogue-en">Well guess what happens? The thing you would not expect, they go in, they come out, they start talking, shoot it perfect, great, we can move on. And the camera guy goes, I don’t know what happened, but just like you had a little snafu here he goes, we have an auto-focus on the Steadicam. We have a focus thing. It just went like this, I felt it go whack all the way out of focus and whack for a seco...</div>
+  <div class="dialogue-zh">那么猜猜会发生什么？你想不到的事情，他们进去，他们出来，他们开始说话，拍得完美，太棒了，我们可以继续前进。摄像师说，我不知道发生了什么，但就像你在这里遇到了一点混乱一样，我们在斯坦尼康上进行了自动对焦。我们有一个重点。事情就是这样，我感觉它一路失去焦点，然后突然消失了</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Robert Rodriguez <span class="dialogue-time">(00:08:26)</span>
+  </div>
+  <div class="dialogue-en">The other thing that happened was the front of the Dusk Till Dawn bar, that same guy that did those explosions, he packed a bunch of explosives behind the actors. When the actors come running out of the bar at the end of the movie and there’s an explosion through the door because all the vampires are blowing up. He didn’t put like 10 times the amount of stuff. It blew out, you see it in the movie....</div>
+  <div class="dialogue-zh">发生的另一件事是在黄昏杀戮黎明酒吧的前面，就是那个制造爆炸的人，他在演员后面装了一堆炸药。电影结束时，当演员们跑出酒吧时，门外发生了爆炸，因为所有的吸血鬼都被炸毁了。他没有放10倍的东西。它爆炸了，你在电影中看到它。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Robert Rodriguez <span class="dialogue-time">(00:09:10)</span>
+  </div>
+  <div class="dialogue-en">So first shot is that, and the set’s ruined, burned to a crisp. The neon lights blew up. So we couldn’t even, Cheech goes, “Well, I guess I’m not doing my speech tonight,” but right away, this is what happens. My first AD, Doug Arnikowski comes over to me and I go over to him. Guys came out with the fire hoses. The fire hoses weren’t even any water. The thing was just scorching. The whole producti...</div>
+  <div class="dialogue-zh">所以第一个镜头就是这样，布景就被毁了，烧得一干二净。霓虹灯炸开了。所以我们甚至不能，奇奇说，“好吧，我想我今晚不会做演讲，”但马上，这就是发生的事情。我的第一个广告人道格·阿尼科夫斯基 (Doug Arnikowski) 向我走来，我也向他走去。 Guys came out with the fire hoses.消防水龙带里连水都没有。那东西简直是灼热的。整个生产过程</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Robert Rodriguez <span class="dialogue-time">(00:09:51)</span>
+  </div>
+  <div class="dialogue-en">Yeah, they’re going to have to come repair it and we’ll have to come back, but it’s all black and charred. That’s why that whole scene with George Clooney and Cheech and the building’s black, we didn’t go over there and touch that up. That’s real flame that burned and it ended up looking great. So then the next week when we came back to shoot that other shot that didn’t work, we came back and they...</div>
+  <div class="dialogue-zh">是的，他们必须来修理它，我们也必须回来，但它全是黑色和烧焦的。这就是为什么乔治克鲁尼和奇奇的整个场景以及建筑物是黑色的，我们没有去那里修改它。那是真正的火焰在燃烧，最终看起来很棒。所以下周，当我们回来拍摄另一个不起作用的镜头时，我们回来了，他们</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:35)</span>
+  </div>
+  <div class="dialogue-en">Just roll with it.</div>
+  <div class="dialogue-zh">随它滚动吧。</div>
+</div>
+    <a href="https://lexfridman.com/robert-rodriguez-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="botez-sisters.html" class="card" style="text-decoration:none">
+  <div class="card-title">Botez Sisters: Chess, Streaming, and Fame</div>
+  <div class="card-meta">Botez Sisters</div>
+</a>
+<a href="georges-st-pierre-john-danaher-gordon-ryan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Georges St-Pierre, John Danaher &amp; Gordon Ryan: The Greatest of All Time</div>
+  <div class="card-meta">Georges St-Pierre, John Danaher &amp; Gordon Ryan</div>
+</a>
+<a href="joe-rogan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Joe Rogan: Conversations, Ideas, Love, Freedom &amp; The Joe Rogan Experience</div>
+  <div class="card-meta">Joe Rogan</div>
+</a>
+<a href="magnus-carlsen.html" class="card" style="text-decoration:none">
+  <div class="card-title">Magnus Carlsen: Greatest Chess Player of All Time</div>
+  <div class="card-meta">Magnus Carlsen</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vivek Ramaswamy - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Vivek Ramaswamy</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Vivek Ramaswamy</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/vivek-ramaswamy.html" style="font-size:16px;color:#818cf8;font-weight:600">Vivek Ramaswamy</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">31,457 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/vivek-ramaswamy-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:02</span>
+  <span class="chapter-title">Conservatism<span class="zh-trans"> · 保守主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">5:18</span>
+  <span class="chapter-title">Progressivism<span class="zh-trans"> · 进步主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">10:52</span>
+  <span class="chapter-title">DEI<span class="zh-trans"> · DEI</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">15:45</span>
+  <span class="chapter-title">Bureaucracy<span class="zh-trans"> · 官僚</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">22:36</span>
+  <span class="chapter-title">Government efficiency<span class="zh-trans"> · 政府效率</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">37:46</span>
+  <span class="chapter-title">Education<span class="zh-trans"> · 教育</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">52:11</span>
+  <span class="chapter-title">Military Industrial Complex<span class="zh-trans"> · 军工综合体</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:14:29</span>
+  <span class="chapter-title">Illegal immigration<span class="zh-trans"> · 非法移民</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:36:03</span>
+  <span class="chapter-title">Donald Trump<span class="zh-trans"> · 唐纳德·特朗普</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:57:29</span>
+  <span class="chapter-title">War in Ukraine<span class="zh-trans"> · 乌克兰战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:08:43</span>
+  <span class="chapter-title">China<span class="zh-trans"> · 中国</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:19:53</span>
+  <span class="chapter-title">Will Vivek run in 2028?<span class="zh-trans"> · Vivek 会在 2028 年参选吗？</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:31:32</span>
+  <span class="chapter-title">Approach to debates<span class="zh-trans"> · 辩论方法</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">states</span><span class="keyword-tag">united</span><span class="keyword-tag">vivek</span><span class="keyword-tag">going</span><span class="keyword-tag">ramaswamy</span><span class="keyword-tag">country</span><span class="keyword-tag">don</span><span class="keyword-tag">government</span><span class="keyword-tag">state</span><span class="keyword-tag">america</span><span class="keyword-tag">russia</span><span class="keyword-tag">china</span><span class="keyword-tag">trump</span><span class="keyword-tag">american</span><span class="keyword-tag">policy</span><span class="keyword-tag">election</span><span class="keyword-tag">national</span><span class="keyword-tag">somebody</span><span class="keyword-tag">donald</span><span class="keyword-tag">federal</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Now, personally, I think most of the conservative movement actually is with me on this, but I think it’s become a very popular counter in the other direction to say that your vision of American identity is far more physical in nature. And to me, I think it is still ideals-based in nature. And I think that that’s a good debate for the future for us to have in the conservative movement. And I think it’s going to be a defining feature of what direction the conservative movement goes in the future."</div>
+  <div class="quote-zh">现在，就我个人而言，我认为大多数保守派运动实际上在这一点上都支持我，但我认为，从另一个方向说，你对美国身份的看法本质上更加物质化，这已经成为一种非常流行的反驳。对我来说，我认为本质上仍然是基于理想的。我认为，对于我们保守派运动的未来来说，这是一场很好的辩论。我认为这将成为保守派运动未来走向的一个决定性特征。</div>
+  <div class="quote-meta">— Vivek Ramaswamy （01:35:35）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think they’d be unifying too. Make election day a national holiday that unites us around our civic purpose one day, single-day voting on election day as a national holiday with paper ballots and government-issued voter ID to match the voter file. Let’s get there as a country, and you have my word, I will lead our movement in whatever way I can to make sure we are done complaining about stolen elections and fake ballots. And I think that fact that you see resistance to that proposal, which is otherwise very practical, very reasonable, nonpartisan proposal, I think the fact of that resistance actually provokes a lot of understandable skepticism, understandable skepticism of what else is actually going on, if not that, what exactly is going on here?"</div>
+  <div class="quote-zh">我认为他们也会统一。将选举日定为全国性假日，让我们有一天能够围绕我们的公民目标团结起来，在选举日作为全国性假日进行单日投票，并使用纸质选票和政府颁发的选民身份证来匹配选民档案。让我们作为一个国家到达那里，我向你保证，我将尽我所能领导我们的运动，以确保我们不再抱怨选举被盗和假选票。我认为事实上你看到了对该提案的抵制，否则该提案是非常实际的、非常合理的、无党派的提案，我认为这种抵制的事实实际上引发了很多可以理解的怀疑，对其他实际发生的事情的怀疑，如果不是这样的话，这里到底发生了什么？</div>
+  <div class="quote-meta">— Vivek Ramaswamy （01:44:04）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think it’s all of us in some ways are hungry for purpose and meaning at a time in our history when the things that used to fill that void in our heart, they’re missing. And I think we need a president who both the right policies for the country seal the border, grow the economy, stay out of World War III, end rampant crime. Yes, we need the right policies, but we also need leaders who in a sustained way revive our national character, revive our sense of pride in this country, revive our identity as Americans, and I think that that need exists as much today as it did when I first ran for president. I don’t think it’s going to be automatically solved in just a few years. I think Donald Trump is the right person to carry that banner forward for the next four years."</div>
+  <div class="quote-zh">我认为，在我们历史上的某个时刻，我们所有人在某种程度上都渴望目标和意义，而那些曾经用来填补我们内心空虚的东西却消失了。我认为我们需要一位总统，他既能对国家采取正确的政策，又能封锁边境、发展经济、远离第三次世界大战、结束猖獗的犯罪。是的，我们需要正确的政策，但我们也需要领导人以持续的方式重振我们的民族性格，重振我们对这个国家的自豪感，重振我们作为美国人的身份，我认为这种需求今天仍然存在，就像我第一次竞选总统时一样。我认为这个问题不会在短短几年内自动解决。我认为唐纳德·特朗普是在未来四年继续弘扬这面旗帜的合适人选。</div>
+  <div class="quote-meta">— Vivek Ramaswamy （02:20:41）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And I think it’s important for two reasons. The less important reason, it’s still an important reason, the less important reason is, it’s still money for us. It’s not like we’re swimming in a cash surplus right now. We’ve got a $34 trillion national debt, and growing, and I think pretty soon the interest payments are going to be the largest line item in our own federal budget."</div>
+  <div class="quote-zh">我认为这很重要，原因有两个。不太重要的原因，它仍然是一个重要的原因，不太重要的原因，它仍然是我们的钱。我们现在并没有现金盈余。我们有 34 万亿美元的国债，而且还在不断增长，我认为利息支付很快将成为我们联邦预算中最大的项目。</div>
+  <div class="quote-meta">— Vivek Ramaswamy （00:53:22）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, I think there’s one other factor. So you’re right to point, the legal backdrop is a valid and understandable excuse and reason. I think there are other factors at play too. So I think there’s something to be said for never having been in government, showing up there the first time, and you’re having to understand the rules of the road as you’re operating within them, and also having to depend on people who actually aren’t aligned with your policy vision, but tell you to your face that they are."</div>
+  <div class="quote-zh">嗯，我认为还有另一个因素。所以你说得对，法律背景是一个有效且可以理解的借口和理由。我认为还有其他因素在起作用。所以我认为，对于从未在政府工作过、第一次出现在政府中的人来说，你必须了解你在其中运作的道路规则，并且还必须依赖那些实际上与你的政策愿景不一致但当面告诉你他们是的人。</div>
+  <div class="quote-meta">— Vivek Ramaswamy （01:09:04）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vivek Ramaswamy <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The way I would do it, 75% headcount reduction across the board in the federal bureaucracy, send them home packing, shut down agencies that shouldn’t exist, rescind every unconstitutional regulation that Congress never passed. In a true self-governing democracy, it should be our elected representatives that make the laws and the rules, not unelected bureaucrats. Merit and equity are actually incom...</div>
+  <div class="dialogue-zh">我的做法是，全面削减联邦官僚机构 75% 的员工人数，让他们打包回家，关闭不应该存在的机构，废除国会从未通过的每一项违宪法规。在真正的自治民主国家中，制定法律和规则的应该是我们选出的代表，而不是未经选举产生的官僚。绩效和公平实际上是可收入的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vivek Ramaswamy <span class="dialogue-time">(00:00:29)</span>
+  </div>
+  <div class="dialogue-en">It’s an assault and a crusade on the nanny state itself. And that nanny state presents itself in several forms. There’s the entitlement state, it’s the welfare state, presents itself in the form of the regulatory state. That’s what we’re talking about. And then there’s the foreign nanny state where effectively we are subsidizing other countries that aren’t paying their fair share of protection or ...</div>
+  <div class="dialogue-zh">这是对保姆国家本身的攻击和十字军东征。这种保姆状态有多种表现形式。有权利国家，即福利国家，以监管国家的形式出现。这就是我们正在谈论的。然后是外国保姆国家，我们实际上正在补贴其他没有支付公平份额保护的国家，或者</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:11)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Vivek Ramaswamy about the future of conservatism in America. He has written many books on this topic, including his latest called Truths: The Future of America First. He ran for president this year in the Republican primary and is considered by many to represent the future of the Republican Party. Before all that, he was a successful biotech entrepreneur and in...</div>
+  <div class="dialogue-zh">以下是与维韦克·拉马斯瓦米关于美国保守主义未来的对话。他写了很多关于这个主题的书，包括他的最新著作《真理：美国优先的未来》。他今年在共和党初选中竞选总统，被许多人认为代表了共和党的未来。在此之前，他是一位成功的生物技术企业家</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:02)</span>
+  </div>
+  <div class="dialogue-en">You are one of the great elucidators of conservative ideas, so you’re the perfect person to ask. What is conservatism? What’s your, let’s say, conservative vision for America?</div>
+  <div class="dialogue-zh">您是保守派思想的伟大阐释者之一，因此您是最合适的人选。什么是保守主义？比方说，你对美国的保守派愿景是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vivek Ramaswamy <span class="dialogue-time">(00:02:14)</span>
+  </div>
+  <div class="dialogue-en">Well, actually this is one of my criticisms of the modern Republican Party and direction of the conservative movement is that we’ve gotten so good at describing what we’re against. There’s a list of things that we could rail against, wokeism, transgender ideology, climate ideology, COVIDism, COVID policies, the radical Biden agenda, the radical Harris agenda, the list goes on. But actually what’s ...</div>
+  <div class="dialogue-zh">好吧，实际上这是我对现代共和党的批评之一，保守派运动的方向是我们非常擅长描述我们所反对的事情。我们可以反对的事情有很多，唤醒主义、变性意识形态、气候意识形态、新冠主义、新冠政策、激进的拜登议程、激进的哈里斯议程，这样的例子不胜枚举。但实际上是什么</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vivek Ramaswamy <span class="dialogue-time">(00:03:17)</span>
+  </div>
+  <div class="dialogue-en">So what do we stand for as conservatives? I think we stand for the ideals that we fought the American Revolution for in 1776. Ideals like merit. That the best person gets the job without regard to their genetics. That you get ahead in this country, not on the color of your skin, but on the content of your character. Free speech, an open debate, not just as some sort of catchphrase, but the idea th...</div>
+  <div class="dialogue-zh">那么，作为保守派，我们代表什么呢？我认为我们代表着我们在 1776 年为美国革命而奋斗的理想。理想就像功绩。最优秀的人得到这份工作与他们的基因无关。你在这个国家取得成功，不是靠肤色，而是靠性格。言论自由，公开辩论，不仅仅是某种口号，而是一种理念</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vivek Ramaswamy <span class="dialogue-time">(00:04:03)</span>
+  </div>
+  <div class="dialogue-en">And then the other ideal that the nation was founded on that I think we need to revive and I think as a north star of the conservative movement is restoring the rule of law in this country. You think about even the abandonment of the rule of law at the southern border. It’s particularly personal to me as the kid of legal immigrants to this country. You and I actually share a couple of aspects in c...</div>
+  <div class="dialogue-zh">然后，我认为我们需要复兴这个国家的另一个理想，我认为作为保守运动的北极星，正在恢复这个国家的法治。你甚至会想到南部边境法治的放弃。作为这个国家的合法移民的孩子，这对我来说尤其个人化。实际上，你和我在 c 方面有几个共同点</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:06)</span>
+  </div>
+  <div class="dialogue-en">Yeah, we’ll talk about each of those issues. Immigration, the growing bureaucracy of government, religion is a really interesting topic, something you’ve spoken about a lot, but you’ve also had a lot of really tense debates. So you’re a perfect person to ask to steel man the other side.</div>
+  <div class="dialogue-zh">是的，我们将讨论每一个问题。移民、日益增长的政府官僚主义、宗教是一个非常有趣的话题，你已经谈论了很多次，但也进行了很多非常紧张的辩论。所以你是向对方询问钢铁侠的最佳人选。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vivek Ramaswamy <span class="dialogue-time">(00:05:24)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:25)</span>
+  </div>
+  <div class="dialogue-en">So let me ask you about progressivism.</div>
+  <div class="dialogue-zh">那么让我问你关于进步主义的问题。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vivek Ramaswamy <span class="dialogue-time">(00:05:27)</span>
+  </div>
+  <div class="dialogue-en">Sure.</div>
+  <div class="dialogue-zh">当然。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:27)</span>
+  </div>
+  <div class="dialogue-en">Can you steel man the case for progressivism and left- wing ideas?</div>
+  <div class="dialogue-zh">你能为进步主义和左翼思想辩护吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vivek Ramaswamy <span class="dialogue-time">(00:05:31)</span>
+  </div>
+  <div class="dialogue-en">Yeah, so look, I think the strongest case, particularly for left-wing ideas in the United States, so in the American context, is that the country has been imperfect in living up to its ideals. So even though our founding fathers preached the importance of life, liberty and the pursuit of happiness and freedom, they didn’t practice those values in terms of many of our founding fathers being slave o...</div>
+  <div class="dialogue-zh">是的，所以看，我认为最有力的例子，特别是对于美国的左翼思想来说，所以在美国的背景下，是这个国家在实现其理想方面并不完美。因此，尽管我们的开国元勋宣扬生命、自由以及追求幸福和自由的重要性，但他们并没有实践这些价值观，因为我们的许多开国元勋都是奴隶制。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vivek Ramaswamy <span class="dialogue-time">(00:06:15)</span>
+  </div>
+  <div class="dialogue-en">That’s the core view of the modern left. I’m not criticizing it right now, I’m steel manning it, I’m trying to give you I think a good of why the left believes they have a compelling case for the government stepping into correct for historical or present inequalities. I can give you my counter rebuttal of that, but the best statement of the left, I think that it’s the fact that we’ve been imperfec...</div>
+  <div class="dialogue-zh">这是现代左派的核心观点。我现在不是在批评它，我是钢铁般的操纵者，我想告诉你为什么左派相信他们有令人信服的理由要求政府纠正历史或当前的不平等现象。我可以对此进行反驳，但左派最好的说法是，我认为事实是我们一直不完美</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:51)</span>
+  </div>
+  <div class="dialogue-en">So what’s your criticism of that?</div>
+  <div class="dialogue-zh">那么你对此有何批评？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vivek Ramaswamy <span class="dialogue-time">(00:06:52)</span>
+  </div>
+  <div class="dialogue-en">So my concern with it is even if that’s well-motivated, I think that it recreates many of the same problems that they were setting out to solve. I’ll give you a really tangible example of that in the present right now. I may be alone amongst prominent conservatives who would say something like this right now, but I think it’s true, so I’m going to say it. I’m actually even in the last year, last y...</div>
+  <div class="dialogue-zh">因此，我对此的担忧是，即使这是有充分动机的，我认为它也会重现他们打算解决的许多相同问题。我现在就给你一个切实可行的例子。在著名的保守派中，我可能是唯一一个现在会说这样的话的人，但我认为这是真的，所以我要这么说。我实际上什至在去年，去年</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vivek Ramaswamy <span class="dialogue-time">(00:07:38)</span>
+  </div>
+  <div class="dialogue-en">Why are we seeing that resurgence? In part, it’s because of I believe that left-wing obsession with racial equity over the course of the last 20 years in this country. And so when you take something away from someone based on their skin color, and that’s what correcting for prior injustice was supposed to do, the left-wing view is you have to correct for prior injustice by saying that whether you’...</div>
+  <div class="dialogue-zh">为什么我们会看到这种复苏？部分原因是我相信过去 20 年来这个国家的左翼对种族平等的痴迷。因此，当你根据某人的肤色从某人身上拿走一些东西时，这就是纠正先前的不公正应该做的事情，左翼观点是，你必须纠正先前的不公正，说无论你是否</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vivek Ramaswamy <span class="dialogue-time">(00:08:28)</span>
+  </div>
+  <div class="dialogue-en">I see that in our context of our immigration policy as well. You think about even what’s going on in, I’m from Ohio, I was born and raised in Ohio and I live there today, the controversy in Springfield, Ohio. I personally don’t blame really any of the people who are in Springfield, either the native people born and raised in Springfield or even the Haitians who have been moved to Springfield. But ...</div>
+  <div class="dialogue-zh">我在我们的移民政策背景下也看到了这一点。你甚至想想正在发生的事情，我来自俄亥俄州，我在俄亥俄州出生和长大，我今天住在那里，俄亥俄州斯普林菲尔德的争议。我个人并不责怪斯普林菲尔德的任何人，无论是在斯普林菲尔德出生和长大的当地人，还是搬到斯普林菲尔德的海地人。但</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vivek Ramaswamy <span class="dialogue-time">(00:09:34)</span>
+  </div>
+  <div class="dialogue-en">Number two is I do believe that merit and equity are actually incompatible. Merit and group quotas are incompatible. You can have one or the other, you can’t have both. And the reason why is no two people, and I think it’s the beautiful things, true between you and I, between you, I and all of our friends or family or strangers or neighbors or colleagues, no two people have the same skillsets. We’...</div>
+  <div class="dialogue-zh">第二，我确实相信优点和公平实际上是不相容的。功绩和团体配额不兼容。你可以选择其中之一，但不能两者兼得。原因是没有两个人，我认为这是美丽的事情，在你和我之间，在你、我和我们所有的朋友、家人、陌生人、邻居或同事之间，没有两个人拥有相同的技能。我们&#39;</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Vivek Ramaswamy <span class="dialogue-time">(00:10:08)</span>
+  </div>
+  <div class="dialogue-en">And a true meritocracy is a system in which you’re able to achieve the maximum of your God-given potential without anybody standing in your way. But that means necessarily there’s going to be differences in outcomes in a wide range of parameters, not just financial, not just money, not just fame or currency or whatever it is. There’s just going to be different outcomes for different people in diff...</div>
+  <div class="dialogue-zh">真正的精英管理是一个让你能够最大限度地发挥上帝赋予的潜力而没有任何人阻碍的系统。但这意味着在很多参数上结果必然会存在差异，不仅仅是财务，不仅仅是金钱，不仅仅是名誉或货币或其他任何东西。不同的人在不同的环境下会有不同的结果</div>
+</div>
+    <a href="https://lexfridman.com/vivek-ramaswamy-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a>
+<a href="cenk-uygur.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cenk Uygur</div>
+  <div class="card-meta">Cenk Uygur</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>
