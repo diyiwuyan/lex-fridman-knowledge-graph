@@ -1,0 +1,21 @@
+{
+  "slug": "bryan-johnson",
+  "guest": "Bryan Johnson",
+  "title_en": "Kernel Brain-Computer Interfaces",
+  "title_zh": "布莱恩·约翰逊谈Kernel脑机接口",
+  "summary_zh": "这是 Lex Fridman 与 Kernel 创始人、连续创业者 Bryan Johnson 的对话。Johnson 分享了他创建 Kernel（脑活动监测设备公司）的愿景、对人类意识的理解，以及他对人类与 AI 融合未来的深刻思考。",
+  "key_points_zh": [
+    "Kernel 的愿景：Johnson 创建 Kernel 是为了开发能够监测和记录大脑活动的设备，目标是让神经科学从实验室走向消费者，使普通人能够了解和优化自己的大脑功能。",
+    "从 Braintree 到 Kernel：Johnson 以 8 亿美元将 Braintree（收购了 Venmo）卖给 PayPal 后，将大部分资金投入到 Kernel，他认为理解大脑是人类面临的最重要挑战。",
+    "意识与身份：Johnson 对意识的本质有深刻的思考，他认为随着脑机接口技术的发展，「自我」的边界将变得模糊——当你的思维与 AI 融合时，哪部分是「你」？",
+    "人类优化的未来：Johnson 是人类优化运动的重要倡导者，他认为通过技术手段优化人类的认知、情感和身体能力，是人类进化的下一步。",
+    "对 AI 的看法：Johnson 认为 AI 不是人类的威胁，而是人类的延伸。他相信人机融合将创造出超越当前人类能力的新形式智能，这是令人兴奋而非恐惧的前景。"
+  ],
+  "topics_zh": ["脑机接口", "Kernel", "意识", "人类优化", "AI融合", "神经科学"],
+  "notable_quotes_zh": [
+    "Johnson：理解大脑是人类面临的最重要挑战——这就是为什么我将 Braintree 的收益投入到 Kernel。",
+    "Johnson：随着脑机接口技术的发展，「自我」的边界将变得模糊——当你的思维与 AI 融合时，哪部分是「你」？",
+    "Johnson：AI 不是人类的威胁，而是人类的延伸——人机融合将创造出超越当前人类能力的新形式智能。"
+  ],
+  "guest_intro_zh": "Bryan Johnson 是美国连续创业者，创立了 Braintree（后收购 Venmo，以 8 亿美元卖给 PayPal）和 Kernel（脑机接口公司），后来以「Blueprint」项目（极端抗衰老实验）而广为人知。"
+}

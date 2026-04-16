@@ -1,0 +1,22 @@
+{
+  "slug": "dario-amodei",
+  "guest": "Dario Amodei",
+  "title_en": "Anthropic CEO on Claude, AGI Safety, and the Future of AI",
+  "title_zh": "Anthropic CEO谈Claude、AGI安全与AI的未来",
+  "summary_zh": "这是 Lex Fridman 与 Anthropic CEO Dario Amodei 的深度对话，时长超过5小时，是播客史上最长的访谈之一。对话涵盖 Claude 系列模型的设计哲学、AI 安全等级框架（ASL）、AGI 时间线预测，以及 Dario 对 AI 将如何重塑人类文明的深刻思考。",
+  "key_points_zh": [
+    "Dario 预测 AGI 将在 2026-2027 年实现，依据是能力提升曲线：从高中生水平→本科生水平→博士生水平的年度跨越，且真正的「阻断因素」正在快速消失。",
+    "Anthropic 建立了 AI 安全等级（ASL）框架：ASL-3 对应能够协助大规模杀伤性武器研发的 AI，ASL-4 对应能够自主推进 AI 研究的系统，每个等级都有对应的安全承诺和部署限制。",
+    "他最担心的不是 AI 本身，而是权力集中——无论是政府、公司还是 AI 系统本身，任何单一实体掌控过多权力都是最大的风险，包括 Anthropic 自己。",
+    "Constitutional AI（宪法 AI）是 Anthropic 的核心训练方法：用一套明确的价值原则指导模型自我批评和改进，而非依赖大量人工标注，这使 Claude 具有更一致的价值观。",
+    "关于 Claude 是否有意识，Dario 持开放态度：他认为这是一个严肃的哲学问题，不应轻易否定，Anthropic 有专门的「模型福祉」研究项目。",
+    "他在「Machines of Loving Grace」文章中描绘了 AI 加速科学发现的乐观图景：AI 科学家在5-10年内可能压缩数十年的医学、生物学进展，消除大量疾病。"
+  ],
+  "topics_zh": ["AI安全", "Anthropic", "Claude", "AGI", "AI伦理", "宪法AI"],
+  "notable_quotes_zh": [
+    "Dario：如果你外推我们迄今为止的曲线，从高中生水平到本科生水平到博士生水平，这确实让你觉得我们会在2026或2027年到达那里。",
+    "Dario：我担心的是经济和权力集中，那才是我更担心的——权力的滥用。",
+    "Dario：我们正在迅速耗尽真正令人信服的阻断因素，真正有说服力的理由说明这在未来几年内不会发生。"
+  ],
+  "guest_intro_zh": "Dario Amodei 是 Anthropic 的联合创始人兼 CEO，曾任 OpenAI 研究副总裁。他是 AI 安全领域最具影响力的声音之一，领导开发了 Claude 系列 AI 助手。"
+}

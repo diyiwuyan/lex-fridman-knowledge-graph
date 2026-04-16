@@ -1,0 +1,21 @@
+{
+  "slug": "stephen-wolfram-3",
+  "guest": "Stephen Wolfram",
+  "title_en": "Complexity and the Fabric of Reality",
+  "title_zh": "沃尔弗拉姆谈复杂性、物理现实与计算宇宙",
+  "summary_zh": "这是 Stephen Wolfram 第三次登上 Lex Fridman 播客，对话是一场关于复杂性、数学、物理和意识的「狂野技术过山车」。Wolfram 分享了他的 Wolfram Physics Project 的最新进展，以及他对宇宙本质是计算的深刻信念。",
+  "key_points_zh": [
+    "Wolfram 的核心主张是「计算等价原则」（Principle of Computational Equivalence）：几乎所有足够复杂的系统都具有相同的计算能力，这意味着简单规则可以产生无限复杂的行为，宇宙本身可能就是一个简单规则运行的计算过程。",
+    "他的 Wolfram Physics Project 试图用超图（hypergraph）重写规则来推导出物理学的基本定律，包括广义相对论和量子力学，认为时空本身是从离散的计算结构中涌现出来的。",
+    "关于复杂性，Wolfram 认为复杂性不是神秘的，而是简单规则迭代的必然结果——就像元胞自动机 Rule 110 这样极简的规则，也能产生图灵完备的复杂行为。",
+    "他对 AI 和 LLM 的看法：ChatGPT 等模型的成功证明了语言中存在深层的数学结构，这与他长期以来关于计算和规律性的研究一脉相承。",
+    "Wolfram 分享了他极度高产的工作方式：每天工作超过12小时，使用 Wolfram Language 作为思考工具，将计算作为探索想法的主要媒介。"
+  ],
+  "topics_zh": ["复杂性理论", "物理学", "计算宇宙", "数学", "Wolfram Physics"],
+  "notable_quotes_zh": [
+    "Wolfram：几乎所有足够复杂的系统都具有相同的计算能力——这就是计算等价原则。",
+    "Wolfram：宇宙可能就是一个简单规则运行的计算过程，时空从离散的计算结构中涌现。",
+    "Wolfram：复杂性不是神秘的，它是简单规则迭代的必然结果。"
+  ],
+  "guest_intro_zh": "Stephen Wolfram 是计算机科学家、数学家和理论物理学家，Wolfram Research 创始人，开发了 Mathematica、Wolfram Alpha 和 Wolfram Language，著有《一种新科学》（A New Kind of Science），现主导 Wolfram Physics Project。"
+}

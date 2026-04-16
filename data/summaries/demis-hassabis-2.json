@@ -1,0 +1,21 @@
+{
+  "slug": "demis-hassabis-2",
+  "guest": "Demis Hassabis",
+  "title_en": "AlphaEvolve, AGI, Consciousness, and the Nobel Prize",
+  "title_zh": "德米斯·哈萨比斯谈AlphaEvolve、AGI与诺贝尔奖",
+  "summary_zh": "这是 Lex Fridman 与 Google DeepMind CEO、诺贝尔化学奖得主 Demis Hassabis 的第二次对话。对话涵盖了 AlphaEvolve 的突破、AGI 的路径、P vs NP 问题、意识与量子计算的关系，以及 Hassabis 对 AI 未来的深刻洞见。",
+  "key_points_zh": [
+    "Hassabis 提出了一个重要猜想：自然界中任何可以生成或发现的模式，都可以被经典学习算法高效地发现和建模。这意味着 AI 可能最终能够理解从流体动力学到生物学的所有自然规律。",
+    "AlphaEvolve 是 DeepMind 最新的 AI 系统，能够自主发现新的数学算法，已经找到了比人类已知更高效的矩阵乘法算法，代表了 AI 在数学推理方面的重大突破。",
+    "关于 AGI 路径：Hassabis 认为我们需要将当前的深度学习与符号推理、规划能力结合，才能达到真正的 AGI。他对 scaling laws 持谨慎态度，认为单纯扩大规模不够。",
+    "关于意识和量子计算：Hassabis 对 Penrose-Hameroff 的量子意识理论持开放态度，认为意识可能涉及我们尚未理解的物理过程，这是 AI 研究中最深刻的未解之谜。",
+    "关于 Google 与 AGI 竞赛：Hassabis 坦诚讨论了 DeepMind 与 OpenAI 的竞争，强调 DeepMind 的优势在于将科学发现与 AI 能力结合，AlphaFold 和 AlphaEvolve 是这一路线的体现。"
+  ],
+  "topics_zh": ["AlphaEvolve", "AGI", "P vs NP", "意识", "量子计算", "DeepMind", "诺贝尔奖"],
+  "notable_quotes_zh": [
+    "Hassabis：自然界中任何可以生成的模式，都可以被经典学习算法高效发现——这是我的核心猜想。",
+    "Hassabis：Veo 能够对液体建模，令人惊讶地好。它从 YouTube 视频中逆向工程出了材料行为的底层结构。",
+    "Hassabis：我们可能非常惊讶于经典学习系统在流体动力学等传统上被认为难以处理的问题上能做什么。"
+  ],
+  "guest_intro_zh": "Demis Hassabis 是 Google DeepMind 的联合创始人兼 CEO，因 AlphaFold 对蛋白质结构预测的革命性贡献获得 2024 年诺贝尔化学奖，是当今世界最重要的 AI 研究领导者之一。"
+}

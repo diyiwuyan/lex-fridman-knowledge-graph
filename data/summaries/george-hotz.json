@@ -1,0 +1,21 @@
+{
+  "slug": "george-hotz",
+  "guest": "George Hotz",
+  "title_en": "Comma.ai, OpenPilot, and Autonomous Vehicles",
+  "title_zh": "乔治·霍兹谈Comma.ai、自动驾驶与黑客精神",
+  "summary_zh": "这是 Lex Fridman 与传奇黑客、Comma.ai 创始人 George Hotz 的对话。Hotz 分享了他对自动驾驶的独特方法、对 AI 行业的犀利批评，以及他作为独立黑客对抗大公司的哲学。",
+  "key_points_zh": [
+    "Comma.ai 的方法论：Hotz 认为自动驾驶不需要高精地图、激光雷达或复杂的规则系统，只需要端到端的深度学习——就像人类驾驶一样，只用眼睛和大脑。OpenPilot 是这一理念的实践。",
+    "对特斯拉 Autopilot 的看法：Hotz 认为特斯拉的方向是正确的（纯视觉方案），但他们的执行速度太慢，官僚主义阻碍了创新。他相信小团队可以比大公司更快地解决问题。",
+    "黑客精神与独立性：Hotz 是第一个破解 iPhone 和 PlayStation 3 的人，他将这种黑客精神带入了自动驾驶领域。他认为真正的创新来自不受约束的个人，而非大型组织。",
+    "对 AI 行业的批评：Hotz 对 AI 安全研究持怀疑态度，认为很多 AI 安全担忧是夸大的，是为了阻止竞争对手。他更关注实际的工程问题而非假设性的存在性风险。",
+    "关于 AGI：Hotz 认为 AGI 会到来，但时间线比大多数人预测的要长。他认为当前的 LLM 是强大的工具，但距离真正的通用智能还有很长的路要走。"
+  ],
+  "topics_zh": ["自动驾驶", "Comma.ai", "OpenPilot", "黑客文化", "AI工程", "特斯拉"],
+  "notable_quotes_zh": [
+    "Hotz：自动驾驶不需要高精地图或激光雷达——人类只用眼睛就能开车，AI 也应该能做到。",
+    "Hotz：我是第一个破解 iPhone 的人，我相信小团队可以比大公司更快地解决问题。",
+    "Hotz：很多 AI 安全担忧是夸大的——它们更多是为了阻止竞争对手，而非真正的安全考虑。"
+  ],
+  "guest_intro_zh": "George Hotz（geohot）是美国传奇黑客，以第一个破解 iPhone 和 PlayStation 3 而闻名，后创立 Comma.ai，开发开源自动驾驶系统 OpenPilot，是硅谷最具个性的技术人物之一。"
+}

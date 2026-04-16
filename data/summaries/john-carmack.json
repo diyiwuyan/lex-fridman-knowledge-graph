@@ -1,0 +1,21 @@
+{
+  "slug": "john-carmack",
+  "guest": "John Carmack",
+  "title_en": "Doom, Quake, VR, AGI, Programming, Video Games, and Rockets",
+  "title_zh": "卡马克谈Doom、VR、AGI与编程哲学",
+  "summary_zh": "这是 Lex Fridman 与传奇程序员 John Carmack 的超长对话，Carmack 是 Doom 和 Quake 的创造者，后来成为 Oculus VR 的 CTO，现在专注于 AGI 研究。对话涵盖了他的编程哲学、游戏开发史、VR 技术的现状与未来，以及他对 AGI 的独特工程师视角。",
+  "key_points_zh": [
+    "Carmack 回忆了 Doom 诞生的历史性时刻：当第一个 3D 第一人称视角演示出现时，玩家几乎从椅子上摔下来——这种沉浸感是前所未有的，彻底改变了游戏行业。",
+    "他对编程有极度务实的哲学：代码的价值在于它能做什么，而不是它有多优雅。他以「火箭科学」类比——最终目标是让火箭飞起来，而不是写出漂亮的代码。",
+    "关于 VR，Carmack 认为当前最大的挑战不是技术，而是「杀手级应用」的缺失——VR 需要一个像 Doom 之于 PC 游戏那样的定义性体验，才能真正普及。",
+    "他对 AGI 持工程师视角：不相信神秘的「涌现」，而是认为 AGI 是可以通过系统性工程方法实现的目标，当前的 LLM 已经展示了令人惊讶的能力，但还缺少关键的推理和规划能力。",
+    "Carmack 分享了他的工作方式：极度专注、长时间深度工作、避免会议和干扰，他认为真正的生产力来自于不被打断的深度思考时间。"
+  ],
+  "topics_zh": ["游戏开发", "编程", "VR", "AGI", "Doom", "工程哲学"],
+  "notable_quotes_zh": [
+    "Carmack：艺术中没有正确答案，我们都在做实验寻找出路。",
+    "Carmack：代码的价值在于它能做什么，而不是它有多优雅——最终目标是让火箭飞起来。",
+    "Carmack：当那个 3D 演示出现时，他几乎从椅子上摔下来——游戏就是不会给你那种震撼感，但那次不同。"
+  ],
+  "guest_intro_zh": "John Carmack 是传奇游戏程序员，id Software 联合创始人，Doom 和 Quake 的技术架构师，后担任 Oculus VR CTO，现专注于 AGI 研究。被认为是有史以来最伟大的程序员之一。"
+}
