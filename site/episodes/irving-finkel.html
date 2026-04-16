@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Irving Finkel - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Irving Finkel</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Irving Finkel</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/irving-finkel.html" style="font-size:16px;color:#818cf8;font-weight:600">Irving Finkel</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">21,633 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/irving-finkel-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:58</span>
+  <span class="chapter-title">Origins of human language<span class="zh-trans"> · 人类语言的起源</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">7:04</span>
+  <span class="chapter-title">Cuneiform<span class="zh-trans"> · 楔形文字</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:17</span>
+  <span class="chapter-title">Controversial theory about Göbekli Tepe<span class="zh-trans"> · 关于哥贝克力石阵有争议的理论</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">25:29</span>
+  <span class="chapter-title">How to write and speak Cuneiform<span class="zh-trans"> · 如何写和说楔形文字</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:48</span>
+  <span class="chapter-title">Primitive human language<span class="zh-trans"> · 原始人类语言</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">32:31</span>
+  <span class="chapter-title">Development of writing systems<span class="zh-trans"> · 书写系统的开发</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">33:25</span>
+  <span class="chapter-title">Decipherment of Cuneiform<span class="zh-trans"> · 楔形文字的破译</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">45:57</span>
+  <span class="chapter-title">Limits of language<span class="zh-trans"> · 语言的限制</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">50:56</span>
+  <span class="chapter-title">Art of translation<span class="zh-trans"> · 翻译的艺术</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">56:06</span>
+  <span class="chapter-title">Gods<span class="zh-trans"> · 众神</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:01:31</span>
+  <span class="chapter-title">Ghosts<span class="zh-trans"> · 鬼魂</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:11:19</span>
+  <span class="chapter-title">Ancient flood stories<span class="zh-trans"> · 古代洪水故事</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:21:26</span>
+  <span class="chapter-title">Noah’s Ark<span class="zh-trans"> · 诺亚方舟</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:32:49</span>
+  <span class="chapter-title">The Royal Game of Ur<span class="zh-trans"> · 乌尔皇家游戏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:45:48</span>
+  <span class="chapter-title">British Museum<span class="zh-trans"> · 大英博物馆</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:53:13</span>
+  <span class="chapter-title">Evolution of human civilization<span class="zh-trans"> · 人类文明的演变</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">irving</span><span class="keyword-tag">finkel</span><span class="keyword-tag">writing</span><span class="keyword-tag">language</span><span class="keyword-tag">don</span><span class="keyword-tag">cuneiform</span><span class="keyword-tag">human</span><span class="keyword-tag">museum</span><span class="keyword-tag">went</span><span class="keyword-tag">got</span><span class="keyword-tag">signs</span><span class="keyword-tag">said</span><span class="keyword-tag">gods</span><span class="keyword-tag">means</span><span class="keyword-tag">stuff</span><span class="keyword-tag">came</span><span class="keyword-tag">flood</span><span class="keyword-tag">game</span><span class="keyword-tag">happened</span><span class="keyword-tag">didn</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Yeah, and they measured them and they made calculations. And when the Greeks went to Babylon, they thought, “Hey man, this is really cool.” And they wrote it all down and went home. Yeah, definitely, definitely. Well, I think it’s a hard question to answer. But one of the things is that they were spared things which have cluttered up the essence of humanity. Because I think that the modern adherence to the electronic universe is disastrous for humans, and because it reduces the vitality of the human component. I think it’s restrictive in a way that people don’t realize until it’s too late. Like drugs, if you take drugs now and again, you think, “Oh, it’s fine, it’s fine.” Then suddenly you realize you’re addicted to heroin. It’s a bit like that."</div>
+  <div class="quote-zh">是的，他们测量了它们并进行了计算。当希腊人前往巴比伦时，他们想：“嘿，伙计，这真的很酷。”他们把这一切都写下来然后回家了。是的，绝对，绝对。嗯，我认为这是一个很难回答的问题。但其中一件事是，他们没有受到那些扰乱人类本质的事情的影响。因为我认为现代对电子宇宙的坚持对人类来说是灾难性的，因为它降低了人类成分的活力。我认为这是一种限制性的方式，人们直到为时已晚才意识到。就像毒品一样，如果你时不时地吸食毒品，你会想：“哦，没关系，没关系。”然后你突然意识到自己对海洛因上瘾了。有点像那样。</div>
+  <div class="quote-meta">— Irving Finkel （01:54:12）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think that’s true, but I think in Mesopotamia it was different in terms of its potency and immediacy because there are no skyscrapers in Iraq. You know, if you live in Southern Iraq and you sleep on the roof, there are no lights at night. You know, you’re under the stars, you can see everything because of no smog and everything like that. And the idea that the gods are there watching, it’s not like a big artifice like it is here. It just doesn’t ring true here. You can’t come to it and really believe in it, whereas these people didn’t have to really believe in it because it was it."</div>
+  <div class="quote-zh">我认为这是事实，但我认为在美索不达米亚，它的效力和直接性是不同的，因为伊拉克没有摩天大楼。你知道，如果你住在伊拉克南部，睡在屋顶上，晚上就没有灯。你知道，你在星空下，你可以看到一切，因为没有烟雾之类的一切。诸神在那里注视的想法，并不像这里那样是一个大诡计。这在这里听起来并不正确。你无法真正相信它，而这些人不必真正相信它，因为它就是它。</div>
+  <div class="quote-meta">— Irving Finkel （01:00:15）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah. But they didn’t believe in ghosts, they took them for granted. And they didn’t believe in the gods, they took them for granted. This is a different mechanism, because nobody here in the world today takes those things for granted, just the opposite. But I think that’s how it worked. So you didn’t have people wrestling with the idea of whether the gods really exist or whether they really care about me. They gave them a nudge when it was necessary, and they might offer this, they might offer that, but it was the system, it was the prevailing system. And I think it’s an important difference."</div>
+  <div class="quote-zh">是的。但他们不相信有鬼，认为鬼是理所当然的。他们不相信神灵，认为神灵是理所当然的。这是一种不同的机制，因为当今世界上没有人认为这些事情是理所当然的，恰恰相反。但我认为这就是它的运作方式。所以你没有让人们思考诸神是否真的存在或者他们是否真的关心我。当有必要时，他们会给他们一个推动，他们可能会提供这个，他们可能会提供那个，但这是制度，这是现行制度。我认为这是一个重要的区别。</div>
+  <div class="quote-meta">— Irving Finkel （01:00:57）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So, they first called them cuneatic or cuneiform, and the word stuck. And of course, growing up in the British Museum and reading these things for a living becomes a kind of lifetime’s work to make sure that everybody in the country knows what cuneiform means. Because once in a while you meet somebody who never heard of the word at all, and this is appalling. So, people do survive, however. But it’s an important mission because such an achievement by man and so much knowledge was encapsulated in these lumps of clay, because they used it for everyday things like letters and business documents and contracts. This is one thing. And then the kings wrote long, elaborate accounts of their campaigns and their military activities."</div>
+  <div class="quote-zh">因此，他们首先称它们为楔形文字或楔形文字，这个词就被沿用下来了。当然，在大英博物馆长大并以阅读这些东西为生成为一种终生的工作，以确保这个国家的每个人都知道楔形文字的含义。因为偶尔你会遇到一个根本没有听说过这个词的人，这是令人震惊的。然而，人们确实生存下来。但这是一项重要的使命，因为人类的如此成就和如此多的知识被封装在这些粘土块中，因为他们将其用于信件、商业文件和合同等日常事务。这是一回事。然后，国王们写下长篇详尽的记述，记录他们的战役和军事活动。</div>
+  <div class="quote-meta">— Irving Finkel （00:08:02）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, I have to say, I find this very hard to believe, because if you had a group of people in an environment where it was compellingly necessary to make a system that you made marks on a surface which everybody could understand and use, why wouldn’t you start out with signs that made sounds? Because everybody speaks the same language, right? So, they didn’t have A, B, C, D, E, F, G, but they could easily work out all the vowels and consonants without naming them as vowels and consonants, but they’re component parts. So, they could have had signs that started out… Because if you decided you had… We have 26, let’s say they had 50 signs that would create the sound, they could write anything without any further trouble."</div>
+  <div class="quote-zh">好吧，我不得不说，我发现这很难相信，因为如果你有一群人在一个环境中，迫切需要制作一个系统，你可以在每个人都能理解和使用的表面上做标记，那么你为什么不从发出声音的标志开始呢？因为每个人都说同一种语言，对吗？所以，他们没有A、B、C、D、E、F、G，但他们可以很容易地算出所有的元音和辅音，而不用将它们命名为元音和辅音，但它们是组成部分。所以，他们可能有开始的迹象……因为如果你决定你有……我们有 26 个，假设他们有 50 个可以发出声音的迹象，他们可以写任何东西，没有任何进一步的麻烦。</div>
+  <div class="quote-meta">— Irving Finkel （00:10:55）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Irving Finkel, a scholar of ancient languages, curator at the British Museum for over 45 years, and a much-admired and respected world expert on cuneiform script. More generally, he’s an expert on ancient languages of Sumerian, Akkadian, and Babylonian, as well as ancient board games and Mesopotamia magic, medicine, literature, and culture. I should also mentio...</div>
+  <div class="dialogue-zh">以下是与欧文·芬克尔（Irving Finkel）的对话，欧文·芬克尔是古代语言学者、大英博物馆馆长超过 45 年，也是一位备受尊敬的世界楔形文字专家。更广泛地说，他是苏美尔语、阿卡德语和巴比伦语等古代语言以及古代棋盘游戏和美索不达米亚魔法、医学、文学和文化的专家。我还应该提到</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:53)</span>
+  </div>
+  <div class="dialogue-en">And now, dear friends, here’s Irving Finkel. Where and when did writing originate in human civilization? Let’s go back a few thousand years.</div>
+  <div class="dialogue-zh">现在，亲爱的朋友们，这是欧文·芬克尔。人类文明的文字起源于何时何地？让我们回到几千年前。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Irving Finkel <span class="dialogue-time">(00:01:05)</span>
+  </div>
+  <div class="dialogue-en">The first attempts at writing that we could call writing go back to the middle of the fourth millennium, say around 3500 BC, something like that. There were people in the Middle East, individuals who lived between the Euphrates and Tigris Rivers, who had clay as their operating material for building and all sorts of other purposes, and eventually as a writing support. They somehow developed the id...</div>
+  <div class="dialogue-zh">我们可以称之为书写的第一次尝试可以追溯到第四个千年中期，比如公元前 3500 年左右，类似的时间。中东有些人，居住在幼发拉底河和底格里斯河之间，他们将粘土作为他们的建筑材料和各种其他用途，并最终作为书写工具。他们以某种方式开发了身份</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Irving Finkel <span class="dialogue-time">(00:01:54)</span>
+  </div>
+  <div class="dialogue-en">So when it really began is a terribly, terribly awkward question for us, because the truth of the matter is, we have no idea when anything began. And all we can say is that the oldest evidence we have is around 3500 BC, but whether that was anywhere near the time or the stage when this started off for the first time seems to me very, very unlikely. So, among these Mesopotamians around 3500, they s...</div>
+  <div class="dialogue-zh">因此，对于我们来说，它什么时候真正开始是一个非常非常尴尬的问题，因为事实是，我们不知道任何事情是什么时候开始的。我们只能说，我们拥有的最古老的证据是在公元前 3500 年左右，但在我看来，这是否是第一次发生的时间或阶段附近的时间或阶段都非常非常不可能。所以，在大约 3500 名美索不达米亚人中，他们是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Irving Finkel <span class="dialogue-time">(00:02:36)</span>
+  </div>
+  <div class="dialogue-en">And then very, very gradually, they had the idea of how you could represent numerals, and then they had the idea that the pictures could also represent signs. And once they had the idea that you could write sounds with pictures, that’s the crucial thing, that a picture of a foot not only meant foot but it meant the sound of the word for foot. Once this happened, some probably very, very imaginativ...</div>
+  <div class="dialogue-zh">然后非常非常逐渐地，他们有了如何表示数字的想法，然后他们有了图片也可以表示符号的想法。一旦他们有了用图片写声音的想法，那就是至关重要的事情，一只脚的图片不仅意味着脚，还意味着脚这个词的声音。一旦发生这种情况，有些人可能非常非常富有想象力</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Irving Finkel <span class="dialogue-time">(00:03:29)</span>
+  </div>
+  <div class="dialogue-en">So it was a pretty gigantic step whenever it was taken, but we really have no idea when it was first taken. But the first evidence we have presents a sort of clear-ish picture. It was simple and it got more complicated, then it became magnificent, so that with all the signs a fluent, well-trained scribe could not only write down the Sumerian language, which was one of the native tongues of Iraq, o...</div>
+  <div class="dialogue-zh">因此，无论何时采取，这都是一个相当巨大的步骤，但我们真的不知道它是什么时候第一次采取的。但我们掌握的第一个证据呈现出一幅清晰的图景。它很简单，然后变得更复杂，然后变得宏伟，因此，一个流利的、训练有素的抄写员不仅可以用所有的符号写下苏美尔语，这是伊拉克的母语之一，还可以写下苏美尔语。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Irving Finkel <span class="dialogue-time">(00:04:10)</span>
+  </div>
+  <div class="dialogue-en">And we have examples of funny languages around the world in the Bronze Age, which were written in cuneiform purely by ear. And often, sometimes the scribes who recorded by dictation or by something, wrote stuff they couldn’t understand, but somebody else could read and understand it. So, what you have is long before the alphabet, when the alphabet was not even a dream, a complex, bewildering-looki...</div>
+  <div class="dialogue-zh">我们在青铜器时代有世界各地有趣的语言的例子，这些语言纯粹是通过耳朵用楔形文字书写的。通常，有时通过听写或其他方式记录的抄写员写下的东西他们无法理解，但其他人可以阅读并理解它。所以，你所拥有的早在字母表出现之前，当时字母表甚至不是一个梦，一个复杂的、令人眼花缭乱的东西</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Irving Finkel <span class="dialogue-time">(00:04:52)</span>
+  </div>
+  <div class="dialogue-en">So it’s one of the major stages of man’s intellect, because quite soon after the writing first took off, the signs began to proliferate, and someone said, “Hey, we haven’t got a sign for this sound,” or, “We haven’t got a sign for this idea.” And so it began to swell out. And at some extremely remarkable stage, one, probably only one person, suddenly realized that if there was no control, they wou...</div>
+  <div class="dialogue-zh">所以这是人类智力的主要阶段之一，因为在文字第一次出现后不久，迹象就开始激增，有人说，“嘿，我们还没有这个声音的迹象”，或者“我们还没有这个想法的迹象”。所以它开始膨胀。在某个极其非凡的阶段，一个人，可能只有一个人，突然意识到，如果没有控制，他们就会</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Irving Finkel <span class="dialogue-time">(00:05:34)</span>
+  </div>
+  <div class="dialogue-en">So they invented not only writing, they invented lexicography, which means that early in the third millennium, they put down all the things that were made of wood, and all the things that were made of reeds, and all the names of colors and of countries and all the gods and everything. They made a systematic attempt to make these signs to standardize them and to make them retrievable, and of course...</div>
+  <div class="dialogue-zh">所以他们不仅发明了文字，还发明了词典编纂，这意味着在第三个千年初期，他们记下了所有用木头制成的东西，所有用芦苇制成的东西，以及所有颜色和国家的名称以及所有神的名称和一切。他们进行了系统的尝试，使这些标志标准化并使其可检索，当然</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Irving Finkel <span class="dialogue-time">(00:06:26)</span>
+  </div>
+  <div class="dialogue-en">So, it means that there were scholars in Babylon in the third century or the second century, when Alexander was there, for example. If somebody dug up a tablet in very early writing, they would have a pretty good idea what it meant. They would recognize the signs even though they were so ancient, and they’d see the relationships between them. So, you have a fantastically strong system where the sp...</div>
+  <div class="dialogue-zh">因此，这意味着在三世纪或二世纪巴比伦就有学者，例如亚历山大在的时候。如果有人在很早的文字中挖出一块泥板，他们就会很清楚它的含义。即使这些标志如此古老，他们也会认出它们，并且会看到它们之间的关系。所以，你有一个非常强大的系统，其中 sp</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:04)</span>
+  </div>
+  <div class="dialogue-en">We should say that the name of that system that lasted for 3,000 years is cuneiform.</div>
+  <div class="dialogue-zh">应该说，这个延续了3000年的系统的名字是楔形文字。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Irving Finkel <span class="dialogue-time">(00:07:10)</span>
+  </div>
+  <div class="dialogue-en">Yeah. So in the 19th century, about 1840, 1850, they started to find these things on excavations in Iraq, the big Assyrian cities and sometimes further south, the Babylonian cities. They found these clay tablets, which in the ground lasted unimaginable lengths of time. And they were all written in what we call cuneiform script. And the cuneiform part of it means wedge-shaped, because “cuneus” in L...</div>
+  <div class="dialogue-zh">是的。因此，在 19 世纪，大约 1840 年、1850 年，他们开始在伊拉克、亚述大城市，有时甚至更南边的巴比伦城市的发掘中发现这些东西。他们发现了这些泥板，它们在地下持续了难以想象的时间。它们都是用我们所说的楔形文字书写的。它的楔形部分意味着楔形，因为L中的“cuneus”</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Irving Finkel <span class="dialogue-time">(00:08:02)</span>
+  </div>
+  <div class="dialogue-en">So, they first called them cuneatic or cuneiform, and the word stuck. And of course, growing up in the British Museum and reading these things for a living becomes a kind of lifetime’s work to make sure that everybody in the country knows what cuneiform means. Because once in a while you meet somebody who never heard of the word at all, and this is appalling. So, people do survive, however. But it...</div>
+  <div class="dialogue-zh">因此，他们首先称它们为楔形文字或楔形文字，这个词就被沿用下来了。当然，在大英博物馆长大并以阅读这些东西为生成为一种终生的工作，以确保这个国家的每个人都知道楔形文字的含义。因为偶尔你会遇到一个根本没有听说过这个词的人，这是令人震惊的。然而，人们确实生存下来。但它</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Irving Finkel <span class="dialogue-time">(00:08:46)</span>
+  </div>
+  <div class="dialogue-en">And then there was proper literature and magic and medicine and all other genres of literature that we would naturally list on a sheet of paper in alphabetic writing, what you would use writing for. They basically did. And it had the unexpected quality that most of these clay things lasted in the ground until now. So, however many hundreds of thousands of tablets are in the world’s museums and col...</div>
+  <div class="dialogue-zh">然后还有适当的文学、魔法、医学以及所有其他类型的文学，我们自然会以字母顺序在一张纸上列出它们，以及您将使用书写的目的。他们基本上做到了。而且它具有意想不到的品质，大多数这些粘土物品一直留在地下直到现在。因此，无论世界各地的博物馆和大学里有数十万台平板电脑，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:26)</span>
+  </div>
+  <div class="dialogue-en">You said that the development of cuneiform, of these tablets, of written language is one of the greatest, probably the greatest invention in human history. How hard do you think it was to come up with this? And we should make clear that that very specific element of encoding sound on the tablet, that’s the genius invention. Drawing a picture makes sense. Okay, here’s, you know, barley. Here’s the ...</div>
+  <div class="dialogue-zh">你说楔形文字、平板电脑和书面语言的发展是人类历史上最伟大的发明之一，也许是最伟大的发明。你认为想出这个有多难？我们应该明确的是，在平板电脑上编码声音的非常具体的元素，这是天才的发明。画一幅画是有道理的。好吧，这是，你知道的，大麦。这是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Irving Finkel <span class="dialogue-time">(00:10:00)</span>
+  </div>
+  <div class="dialogue-en">Exactly.</div>
+  <div class="dialogue-zh">确切地。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:00)</span>
+  </div>
+  <div class="dialogue-en">But to actually write down sound is a genius invention.</div>
+  <div class="dialogue-zh">但真正写下声音是一项天才的发明。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Irving Finkel <span class="dialogue-time">(00:10:05)</span>
+  </div>
+  <div class="dialogue-en">Well, I think it’s rather paradoxical, because the first generation or so of tablets that we have are written in these pictographic signs where each sign means what it looks like. So, this is a very limited method of recording messages, and it doesn’t lend itself to recording grammar. And then the secondary phase, as we understand it from archaeology, is the perception that you could take these si...</div>
+  <div class="dialogue-zh">嗯，我认为这是相当矛盾的，因为我们拥有的第一代左右的平板电脑是用这些象形符号书写的，每个符号都代表它看起来的样子。因此，这是一种非常有限的记录消息的方法，并且不适合记录语法。然后第二阶段，正如我们从考古学中理解的那样，是你可以采取这些 si 的看法。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Irving Finkel <span class="dialogue-time">(00:10:55)</span>
+  </div>
+  <div class="dialogue-en">Well, I have to say, I find this very hard to believe, because if you had a group of people in an environment where it was compellingly necessary to make a system that you made marks on a surface which everybody could understand and use, why wouldn’t you start out with signs that made sounds? Because everybody speaks the same language, right? So, they didn’t have A, B, C, D, E, F, G, but they coul...</div>
+  <div class="dialogue-zh">好吧，我不得不说，我发现这很难相信，因为如果你有一群人在一个环境中，迫切需要制作一个系统，你可以在每个人都能理解和使用的表面上做标记，那么你为什么不从发出声音的标志开始呢？因为每个人都说同一种语言，对吗？所以，他们没有 A、B、C、D、E、F、G，但他们可以</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Irving Finkel <span class="dialogue-time">(00:11:44)</span>
+  </div>
+  <div class="dialogue-en">So, I find it very bewildering that they started off with the least flexible and the least adaptable system of pictographs and then they moved on to the sound. I don’t know why they bothered with it. And my hunch is that the archaeological evidence that we have on this score is ultimately misleading, because I think this: that probably for a very, very long time before the Sumerians, people in the...</div>
+  <div class="dialogue-zh">所以，我觉得非常令人困惑的是，他们从最不灵活、适应性最差的象形文字系统开始，然后转向声音。我不知道他们为什么要为此烦恼。我的预感是，我们在这方面所掌握的考古证据最终是误导性的，因为我认为：在苏美尔人出现之前很长一段时间里，人们就生活在苏美尔人之前。</div>
+</div>
+    <a href="https://lexfridman.com/irving-finkel-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="nick-lane-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Nick Lane: Origin of Life, Evolution, Aliens, Biology, and Consciousness</div>
+  <div class="card-meta">Nick Lane</div>
+</a>
+<a href="nick-lane.html" class="card" style="text-decoration:none">
+  <div class="card-title">Nick Lane</div>
+  <div class="card-meta">Nick Lane</div>
+</a>
+<a href="paul-rosolie-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Paul Rosolie #2</div>
+  <div class="card-meta">Paul Rosolie</div>
+</a>
+<a href="richard-dawkins.html" class="card" style="text-decoration:none">
+  <div class="card-title">Richard Dawkins: Evolution, Intelligence, Simulation, and Memes</div>
+  <div class="card-meta">Richard Dawkins</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

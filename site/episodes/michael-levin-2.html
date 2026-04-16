@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Michael Levin #2 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Michael Levin #2</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Michael Levin #2</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/michael-levin.html" style="font-size:16px;color:#818cf8;font-weight:600">Michael Levin</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">38,844 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/michael-levin-2-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#06b6d422;color:#06b6d4;border:1px solid #06b6d444;font-size:13px;padding:4px 12px">太空与探索</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:44</span>
+  <span class="chapter-title">Biological intelligence<span class="zh-trans"> · 生物智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">9:17</span>
+  <span class="chapter-title">Living vs non-living organisms<span class="zh-trans"> · 生物体与非生物体</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:30</span>
+  <span class="chapter-title">Origin of life</span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">18:15</span>
+  <span class="chapter-title">The search for alien life (on Earth)<span class="zh-trans"> · 寻找外星生命（在地球上）</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">51:19</span>
+  <span class="chapter-title">Creating life in the lab<span class="zh-trans"> · 在实验室里创造生命</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:04:21</span>
+  <span class="chapter-title">Memories and ideas are living organisms<span class="zh-trans"> · 记忆和想法是活的有机体</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:18:02</span>
+  <span class="chapter-title">Reality is an illusion: The brain is an interface to a hidden reality<span class="zh-trans"> · 现实是一种幻觉：大脑是通往隐藏现实的接口</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:03:48</span>
+  <span class="chapter-title">Unexpected intelligence of sorting algorithms<span class="zh-trans"> · 排序算法意想不到的智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:29:26</span>
+  <span class="chapter-title">Can aging be reversed?<span class="zh-trans"> · 衰老可以逆转吗？</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:33:17</span>
+  <span class="chapter-title">Mind uploading<span class="zh-trans"> · 心灵上传</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:51:57</span>
+  <span class="chapter-title">Alien intelligence<span class="zh-trans"> · 外星情报</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:06:52</span>
+  <span class="chapter-title">Advice for young people<span class="zh-trans"> · 给年轻人的建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:13:21</span>
+  <span class="chapter-title">Questions for AGI<span class="zh-trans"> · AGI 问题</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">michael</span><span class="keyword-tag">levin</span><span class="keyword-tag">going</span><span class="keyword-tag">don</span><span class="keyword-tag">space</span><span class="keyword-tag">stuff</span><span class="keyword-tag">cells</span><span class="keyword-tag">physics</span><span class="keyword-tag">kinds</span><span class="keyword-tag">doing</span><span class="keyword-tag">patterns</span><span class="keyword-tag">saying</span><span class="keyword-tag">physical</span><span class="keyword-tag">cognitive</span><span class="keyword-tag">algorithm</span><span class="keyword-tag">systems</span><span class="keyword-tag">biology</span><span class="keyword-tag">interesting</span><span class="keyword-tag">trying</span><span class="keyword-tag">got</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Yeah, let’s talk about it. Well, first of all, of course it can. I mean, it can help, meaning that I’m not saying physics is not helpful. Of course it’s helpful. It’s a very important lens on one slice of what’s going on in any of these systems. But I think the most important thing I can say about that question is I don’t believe in any such line. I don’t believe any of that exists. I think there is a continuum. I think we as humans like to demarcate areas on that continuum and give them names because it makes life easier, and then we have a lot of battles over, you know, so-called category errors when people transgress those categories."</div>
+  <div class="quote-zh">是的，我们来谈谈吧。嗯，首先，当然可以。我的意思是，它可以提供帮助，这意味着我并不是说物理没有帮助。当然有帮助。这是观察这些系统中正在发生的事情的一个非常重要的镜头。但我认为关于这个问题我能说的最重要的是我不相信任何这样的说法。我不相信这些东西存在。我认为存在一个连续体。我认为，作为人类，我们喜欢在连续体上划分区域并给它们命名，因为这让生活更轻松，然后当人们超越这些类别时，我们会因为所谓的类别错误而发生很多争斗。</div>
+  <div class="quote-meta">— Michael Levin （00:12:43）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think the categorical stuff is actually hurting that search. Because if we try to define categories with the kinds of criteria that we’ve gotten used to, we are going to be very poorly set up to recognize life in novel embodiments. I think we have a kind of mind blindness. I think this is really key. To me, the cognitive spectrum is much more interesting than the spectrum of life. I think really what we’re talking about is the spectrum of cognition. And it is… Well, I know it’s weird as a biologist to say, I don’t think life is all that interesting a category. I think the categories of different types of minds, I think, is extremely interesting."</div>
+  <div class="quote-zh">我认为分类的东西实际上损害了搜索。因为如果我们试图用我们已经习惯的标准来定义类别，我们将很难认识新奇的生活。我认为我们有一种心灵盲目性。我认为这真的很关键。对我来说，认知谱比生活谱更有趣。我认为我们真正讨论的是认知范围。它是……嗯，我知道作为一名生物学家，我不认为生命是一个那么有趣的类别，这很奇怪。我认为不同类型思维的分类非常有趣。</div>
+  <div class="quote-meta">— Michael Levin （00:20:27）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And if you say to me, “I care in the linear range, I actively, I’m not just saying it, I can actively care in the linear range about all the living beings on this planet,” I’m going to say, “Well, you’re not a standard human. You must be something else,” because humans, I don’t know, standard humans today, I don’t think can do that. You must be some kind of a bodhisattva or some other thing that has these massive cognitive light cones. So I think what’s scaling from zero, and I do think it goes all the way down. I think we can talk about even particles doing something like this. I think what scales is the size of the cognitive light cone. And so now this is an interesting… here, I’ll try for a definition of life or whatever, for whatever it’s worth."</div>
+  <div class="quote-zh">如果你对我说，“我在线性范围内积极地关心，我不只是说说而已，我可以在线性范围内积极地关心这个星球上的所有生物，”我会说，“好吧，你不是一个标准的人类。你一定是别的东西，”因为人类，我不知道，今天的标准人类，我认为不能做到这一点。你一定是某种菩萨或其他拥有这些巨大认知光锥的东西。所以我认为什么是从零开始的，而且我确实认为它会一路下降。我想我们甚至可以讨论粒子做这样的事情。我认为尺度就是认知光锥的大小。所以现在这是一个有趣的……在这里，我将尝试为生命或其他什么定义，无论它的价值如何。</div>
+  <div class="quote-meta">— Michael Levin （00:27:56）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"The reason I emphasize this is because now what I’m going to… when I amplify this into biology, I don’t think it sort of jumps as a new thing. I think it’s just a much more… I think what we call biology are systems that exploit the hell out of it. I think physics is so constrained by it, but we call biology those things that make use of those kinds of things and run with it. And so, again, I just think it’s a scaling. I don’t think it’s a brand new thing that happens. I think it’s a scaling, right? So what I’m saying is we already know from physics that there are non-physical patterns, and these are generally patterns of form, which is why I call them low agency, because they’re like fractals that stand still, and they’re like prime number distributions."</div>
+  <div class="quote-zh">我之所以强调这一点，是因为现在我要……当我将其放大到生物学中时，我不认为它会成为一个新事物。我认为这只是更多……我认为我们所说的生物学是充分利用它的系统。我认为物理学受到它的限制，但我们将那些利用这些事物并与之运行的事物称为生物学。所以，我再说一遍，我只是认为这是一种缩放。我不认为这是一个全新的事情发生。我认为这是一个缩放，对吗？所以我想说的是，我们已经从物理学中知道存在非物理模式，这些通常是形式模式，这就是为什么我称它们为低能动性，因为它们就像静止的分形，它们就像素数分布。</div>
+  <div class="quote-meta">— Michael Levin （01:41:28）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I don’t think that exists. I think that’s kind of like, you know… And I’ll tell you why. I think it’s like heresy or like other terms that aren’t really a thing. Because if you unpack it, here’s what anthropomorphism means: Humans have a certain magic, and you’re making a category error by attributing that magic somewhere else. My point is we have the same magic that everything has. We have a couple of interesting things besides, the cognitive light cone and some other stuff. And it isn’t that you have to keep the humans separate because there’s some bright line. It’s just… It’s that same old… All I’m arguing for is the scientific method, really. That’s really all this is."</div>
+  <div class="quote-zh">我认为那不存在。我认为这有点像，你知道……我会告诉你原因。我认为这就像异端邪说或其他不真实的术语。因为如果你把它解开，就会发现拟人化的意思是：人类有某种魔力，如果你把这种魔力归因于其他地方，那就犯了类别错误。我的观点是，我们拥有与一切事物相同的魔力。除此之外，我们还有一些有趣的东西，认知光锥和其他一些东西。这并不是说你必须将人类分开，因为存在一些明确的界限。只是……还是老样子……我所争论的只是科学方法，真的。这就是全部。</div>
+  <div class="quote-meta">— Michael Levin （00:34:27）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Michael Levin, his second time on the podcast. He is one of the most fascinating and brilliant biologists and scientists I’ve ever had the pleasure of speaking with. He and his labs at Tufts University study and build biological systems that help us understand the nature of intelligence, agency, memory, consciousness, and life in all of its forms here on Earth ...</div>
+  <div class="dialogue-zh">以下是与迈克尔·莱文的对话，这是他第二次参加播客。他是我有幸交谈过的最迷人、最杰出的生物学家和科学家之一。他和他在塔夫茨大学的实验室研究和构建生物系统，帮助我们理解地球上所有形式的智力、能动性、记忆、意识和生命的本质</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:45)</span>
+  </div>
+  <div class="dialogue-en">You write that the central question at the heart of your work, from biological systems to computational ones, is how do embodied minds arise in the physical world, and what determines the capabilities and properties of those minds? Can you unpack that question for us and maybe begin to answer it?</div>
+  <div class="dialogue-zh">您写道，从生物系统到计算系统，您工作的核心问题是具身思维如何在物理世界中出现，以及是什么决定了这些思维的能力和属性？您能为我们解开这个问题并开始回答吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Levin <span class="dialogue-time">(00:01:04)</span>
+  </div>
+  <div class="dialogue-en">Well, the fundamental tension is in both the first-person, the second-person, and third-person descriptions of mind. So in third-person, we want to understand how do we recognize them, and how do we know looking out into the world what degree of agency there is, and how best to relate to the different systems that we find. And are our intuitions any good when we look at something and it looks real...</div>
+  <div class="dialogue-zh">嗯，基本的张力存在于第一人称、第二人称和第三人称的心灵描述中。因此，在第三人称中，我们想要了解如何识别它们，我们如何知道观察世界的代理程度如何，以及如何最好地与我们发现的不同系统建立联系。当我们看到某样东西并且它看起来很真实时，我们的直觉有用吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Levin <span class="dialogue-time">(00:01:45)</span>
+  </div>
+  <div class="dialogue-en">And this is a major part of my framework, is that all of these kinds of things are operational claims. Are you going to use the tools of hardware rewiring, of control theory and cybernetics, of behavior science, of psychoanalysis and love and friendship? Like, what are the interaction protocols that you bring? And then in first-person, it’s this notion of having an inner perspective and being a sy...</div>
+  <div class="dialogue-zh">这是我的框架的一个主要部分，所有这些东西都是操作声明。你会使用硬件重新布线、控制论和控制论、行为科学、精神分析以及爱情和友谊等工具吗？比如，你带来了什么交互协议？然后在第一人称中，这是拥有内在视角并成为一个系统的概念</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Levin <span class="dialogue-time">(00:02:20)</span>
+  </div>
+  <div class="dialogue-en">So that I find to be maybe the most interesting and the most important mystery for all of us, both on the science and also on the personal level. So that’s what I’m interested in.</div>
+  <div class="dialogue-zh">所以我发现这对我们所有人来说可能是最有趣和最重要的谜团，无论是在科学层面还是在个人层面。这就是我感兴趣的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:30)</span>
+  </div>
+  <div class="dialogue-en">So your work is focused on starting at the physics, going all the way to friendship and love and psychoanalysis.</div>
+  <div class="dialogue-zh">所以你的工作重点是从物理学开始，一直到友谊、爱情和精神分析。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Levin <span class="dialogue-time">(00:02:37)</span>
+  </div>
+  <div class="dialogue-en">Yeah, although actually I would turn that upside down. I think that pyramid is backwards, and I think it’s behavior science at the bottom. I think it’s behavior science all the way. I think in certain ways, even math is the behavior of a certain kind of being that lives in a latent space, and physics is what we call systems that at least look to be amenable to a very simple, low-agency kind of mod...</div>
+  <div class="dialogue-zh">是的，尽管实际上我会把它颠倒过来。我认为金字塔是倒退的，我认为底层是行为科学。我认为这始终是行为科学。我认为在某些方面，即使数学也是生活在潜在空间中的某种存在的行为，而物理学就是我们所说的系统，至少看起来适合一种非常简单的、低代理类型的模式</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Levin <span class="dialogue-time">(00:03:05)</span>
+  </div>
+  <div class="dialogue-en">Because it’s very important to me that what we do is transition deep ideas and philosophy into actual practical applications that not only make it clear whether we’re making any progress or not, but also allow us to relieve suffering and make life better for all sentient beings, and enable us and others to reach their full potential. So these are very practical things, I think.</div>
+  <div class="dialogue-zh">因为对我来说非常重要的是，我们所做的就是将深刻的思想和哲学转化为实际的实际应用，这不仅能让我们清楚地知道我们是否取得了任何进步，而且让我们能够减轻痛苦，让所有众生的生活变得更好，让我们和其他人充分发挥他们的潜力。所以我认为这些都是非常实际的事情。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:28)</span>
+  </div>
+  <div class="dialogue-en">Behavioral science, I suppose, is more subjective, and mathematics and physics is more objective? Would that be the clear difference?</div>
+  <div class="dialogue-zh">我认为行为科学更主观，而数学和物理更客观？这就是明显的区别吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Levin <span class="dialogue-time">(00:03:35)</span>
+  </div>
+  <div class="dialogue-en">The idea basically is that where something is on that spectrum, and I’ve called it the spectrum of persuadability. You could call it the spectrum of intelligence or agency or something like that. I like the notion of the spectrum of persuadability, because it’s an engineering approach. It means that these are not things you can decide or have feelings about from a philosophical armchair. You have ...</div>
+  <div class="dialogue-zh">这个想法基本上是指某个东西在这个范围内，我将其称为说服力范围。你可以称之为情报范围或代理或类似的东西。我喜欢说服力范围的概念，因为它是一种工程方法。这意味着这些不是你可以坐在哲学扶手椅上决定或有感觉的事情。你有</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Levin <span class="dialogue-time">(00:04:14)</span>
+  </div>
+  <div class="dialogue-en">And so I do think that the behavior of certain objects is well-described by specific formal rules, and we call those things the subject of mathematics. And then there are some other things whose behavior really requires the kinds of tools that we use in behavioral cognitive neuroscience, and those are other kinds of minds that we think we study in biology or in psychology or other sciences.</div>
+  <div class="dialogue-zh">因此，我确实认为某些对象的行为可以通过特定的形式规则很好地描述，我们将这些事物称为数学主题。还有一些其他事物的行为确实需要我们在行为认知神经科学中使用的工具，而这些是我们认为在生物学、心理学或其他科学中研究的其他类型的思维。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:39)</span>
+  </div>
+  <div class="dialogue-en">Why are you using the term persuadability? Who are you persuading, and of what?</div>
+  <div class="dialogue-zh">您为什么使用“说服力”一词？你在说服谁，说服什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Levin <span class="dialogue-time">(00:04:43)</span>
+  </div>
+  <div class="dialogue-en">Well-</div>
+  <div class="dialogue-zh">出色地-</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:44)</span>
+  </div>
+  <div class="dialogue-en">In this context.</div>
+  <div class="dialogue-zh">在此背景下。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Levin <span class="dialogue-time">(00:04:45)</span>
+  </div>
+  <div class="dialogue-en">Yeah, the beginning of my work is very much in regenerative medicine, in bioengineering, things like that. So for those kinds of systems, the question is always, how do you get the system to do what you want it to do? So there are cells, there are molecular networks, there are materials, there are organs and tissues and synthetic beings and biobots and whatever. And so the idea is, if I want your ...</div>
+  <div class="dialogue-zh">是的，我的工作主要是在再生医学、生物工程等领域。因此，对于这些类型的系统，问题始终是，如何让系统执行您希望它执行的操作？所以有细胞、有分子网络、有材料、有器官和组织、合成生物和生物机器人等等。所以我的想法是，如果我想要你的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Levin <span class="dialogue-time">(00:05:28)</span>
+  </div>
+  <div class="dialogue-en">Or maybe actually I can give the cells a very high-level prompt that says, “You really should build a limb,” and convince them to do it, right? And so which of those is possible? I mean, clearly people have a lot of intuitions about that. If you ask standard people in regenerative medicine and molecular biology, they’re going to say, “Well, that convincing thing is crazy. What we really should be ...</div>
+  <div class="dialogue-zh">或者实际上我可以给细胞一个非常高级的提示，说“你真的应该建造一个肢体”，并说服它们这样做，对吗？那么其中哪一个是可能的呢？我的意思是，显然人们对此有很多直觉。如果你问再生医学和分子生物学领域的标准人士，他们会说：“嗯，这个令人信服的东西太疯狂了。我们真正应该做什么</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Levin <span class="dialogue-time">(00:06:00)</span>
+  </div>
+  <div class="dialogue-en">The assumption is that going down is where the action’s going to be, going down in scale. And I think that’s wrong. But the thing that we can say for sure is that you can’t guess that. You have to do experiments and you have to see, because you don’t know where any given system is on that spectrum of persuadability. And it turns out that every time we look and we take tools from behavioral science...</div>
+  <div class="dialogue-zh">我们的假设是，行动将会发生，规模会缩小。我认为这是错误的。但我们可以肯定的是，你猜不到这一点。你必须做实验，你必须看看，因为你不知道任何给定的系统在说服力范围内处于什么位置。事实证明，每次我们观察时，我们都会使用行为科学的工具</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Levin <span class="dialogue-time">(00:06:41)</span>
+  </div>
+  <div class="dialogue-en">When we apply them outside the brain to other kinds of living systems, we find novel discoveries and novel capabilities, actually being able to get the material to do new things that nobody had ever found before. And precisely because I think that people didn’t look at it from those perspectives, they assumed that it was a low-level kind of thing. So when I say persuadability, I mean different typ...</div>
+  <div class="dialogue-zh">当我们将它们应用到大脑之外的其他类型的生命系统时，我们会发现新的发现和新的能力，实际上能够获得材料来做以前从未发现过的新事情。正是因为我认为人们没有从这些角度来看待它，所以他们认为这是一种低层次的东西。所以当我说说服力时，我指的是不同类型的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Levin <span class="dialogue-time">(00:07:15)</span>
+  </div>
+  <div class="dialogue-en">If you want to do that same thing to a cell or a thermostat or an animal or a human, you’re going to be using other sets of tools that we’ve given other names to. And so that’s… Now, of course, that spectrum, the important thing is that as you get to the right of that spectrum, whereas the agency of the system goes up, it is no longer just about persuading it to do things. It’s a bidirectional rel...</div>
+  <div class="dialogue-zh">如果你想对细胞、恒温器、动物或人类做同样的事情，你将使用我们赋予其他名称的其他工具集。所以这就是......现在，当然，在这个范围内，重要的是，当你到达该范围的右侧时，虽然系统的代理权上升，但它不再只是说服它做事。这是一个双向关系</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Michael Levin <span class="dialogue-time">(00:07:53)</span>
+  </div>
+  <div class="dialogue-en">You’re still exactly the way you came in. But on the right side of that spectrum, if you’re having interactions with even cells, but certainly, you know, dogs, other animals, maybe other creatures soon, you’re not the same at the end of that interaction as you were going in. It’s a mutual bidirectional relationship. So it’s not just you persuading something else, it’s not you pushing things. It’s ...</div>
+  <div class="dialogue-zh">你仍然是你进来时的样子。但在这个范围的右侧，如果你甚至与细胞发生相互作用，但当然，你知道，狗，其他动物，也许很快还有其他生物，你在相互作用结束时与你进入时不一样。这是一种相互的双向关系。所以，你不只是在说服别人，也不是在推动别人。它是</div>
+</div>
+    <a href="https://lexfridman.com/michael-levin-2-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="alex-filippenko.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alex Filippenko: Supernovae, Dark Energy, Aliens &amp; the Expanding Universe</div>
+  <div class="card-meta">Alex Filippenko</div>
+</a>
+<a href="alien-debate.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alien Debate: Sara Walker and Lee Cronin</div>
+  <div class="card-meta">Alien Debate</div>
+</a>
+<a href="andrew-huberman-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Sleep, Dreams, Creativity &amp; the Limits of the Human Mind</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="andrew-ng.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Ng: Deep Learning, Education, and Real-World AI</div>
+  <div class="card-meta">Andrew Ng</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graham Hancock - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Graham Hancock</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Graham Hancock</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/graham-hancock.html" style="font-size:16px;color:#818cf8;font-weight:600">Graham Hancock</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">25,241 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/graham-hancock-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:34</span>
+  <span class="chapter-title">Lost Ice Age civilization<span class="zh-trans"> · 冰河时代失落的文明</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">8:39</span>
+  <span class="chapter-title">Göbekli Tepe<span class="zh-trans"> · 哥贝克力石阵</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">20:43</span>
+  <span class="chapter-title">Early humans<span class="zh-trans"> · 早期人类</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">25:43</span>
+  <span class="chapter-title">Astronomical symbolism<span class="zh-trans"> · 天文象征意义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">37:11</span>
+  <span class="chapter-title">Younger Dryas impact hypothesis<span class="zh-trans"> · 新仙女木撞击假说</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">55:31</span>
+  <span class="chapter-title">The Great Pyramid and the Sphinx of Giza<span class="zh-trans"> · 吉萨大金字塔和狮身人面像</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:16:04</span>
+  <span class="chapter-title">Sahara Desert and the Amazon rainforest<span class="zh-trans"> · 撒哈拉沙漠和亚马逊雨林</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:25:25</span>
+  <span class="chapter-title">Response to critics<span class="zh-trans"> · 对批评者的回应</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:49:31</span>
+  <span class="chapter-title">Panspermia<span class="zh-trans"> · 有生源论</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:56:58</span>
+  <span class="chapter-title">Shamanism<span class="zh-trans"> · 萨满教</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:20:58</span>
+  <span class="chapter-title">How the Great Pyramid was built<span class="zh-trans"> · 大金字塔是如何建造的</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:28:17</span>
+  <span class="chapter-title">Mortality<span class="zh-trans"> · 死亡</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">graham</span><span class="keyword-tag">hancock</span><span class="keyword-tag">civilization</span><span class="keyword-tag">human</span><span class="keyword-tag">ancient</span><span class="keyword-tag">pyramid</span><span class="keyword-tag">going</span><span class="keyword-tag">younger</span><span class="keyword-tag">dryas</span><span class="keyword-tag">tepe</span><span class="keyword-tag">don</span><span class="keyword-tag">age</span><span class="keyword-tag">earth</span><span class="keyword-tag">found</span><span class="keyword-tag">sphinx</span><span class="keyword-tag">interesting</span><span class="keyword-tag">pyramids</span><span class="keyword-tag">looking</span><span class="keyword-tag">consciousness</span><span class="keyword-tag">humans</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Actually, there’s a nice story from Ancient Egypt about the god Thoth, the god of wisdom, who is very proud of himself because he has invented writing. “Look at this gift,” he says to a mythical pharaoh of that time, “Look at the gift that I’m giving humanity, writing. This is a wonderful thing. It’ll enable you to preserve so much that you would otherwise lose.” And the pharaoh in this story replies to him, “No, you have not given us a wonderful gift. You have destroyed the art of memory. We will forget everything. Words will roam free around the world, not accompanied by any wise advice to set them into context.” And actually that’s a very interesting point. And we do know that cultures that still do have oral traditions are able to preserve information for very long periods of time."</div>
+  <div class="quote-zh">事实上，古埃及有一个关于智慧之神托特的精彩故事，他因为发明了文字而感到非常自豪。 “看看这份礼物，”他对当时的一位神话法老说道，“看看我给予人类的礼物，写作。这是一件美妙的事情。它将使你能够保存很多东西，否则你会失去很多东西。”这个故事中的法老回答他：“不，你没有给我们一份美妙的礼物。你摧毁了记忆的艺术。我们会忘记一切。言语将在世界各地自由漫游，却没有任何明智的建议将它们置于上下文中。”事实上，这是一个非常有趣的点。我们确实知道，仍然有口头传统的文化能够将信息保存很长一段时间。</div>
+  <div class="quote-meta">— Graham Hancock （00:35:37）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"One thing I think is clear in any time, in any period of history, is human beings love stories. We love great stories. And one way to preserve information is to encode it, embed it in a great story. And so carefully done that actually, it doesn’t matter whether the storyteller knows that they’re passing on that information or not. The story itself is the vehicle. And as long as it’s repeated faithfully, the information contained within it will be passed on. And I do think this is part of the story of the preservation of knowledge."</div>
+  <div class="quote-zh">我认为在任何时候、任何历史时期，有一件事都是很清楚的，那就是人类的爱情故事。我们喜欢精彩的故事。保存信息的一种方法是将其编码，将其嵌入到一个精彩的故事中。事实上，只要做得如此仔细，讲故事的人是否知道他们正在传递这些信息并不重要。故事本身就是载体。而只要忠实地重复，其中所包含的信息就会被传承下去。我确实认为这是知识保存故事的一部分。</div>
+  <div class="quote-meta">— Graham Hancock （00:36:27）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think that shamanism is the origin of everything of value in humanity. I think it was the earliest form of science. When I spend time with shamans in the Amazon, I observe people who are constantly experimenting with plants in a very scientific way. They’re always trying a pinch of this and a pinch of that in different forms, for example, of the ayahuasca brew, to see if it enhances it or makes it different in any way. The invention of curare is a remarkable scientific feat, which is entirely down to shamans in the Amazon. They are the scientists of the hunter-forager state of society and they were the ancient leaders of human civilization."</div>
+  <div class="quote-zh">我认为萨满教是人类一切有价值的事物的起源。我认为这是科学的最早形式。当我在亚马逊与萨满相处时，我观察到人们不断以非常科学的方式进行植物实验。他们总是尝试不同形式的一小撮这个和一小撮那个，例如死藤水酿造，看看它是否会增强它或使其在任何方面有所不同。箭毒的发明是一项了不起的科学壮举，这完全归功于亚马逊的萨满巫师。他们是狩猎采集社会的科学家，是人类文明的古代领袖。</div>
+  <div class="quote-meta">— Graham Hancock （01:57:14）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Now this is a theory, the Younger Dryas impact. It’s a hypothesis actually, it’s not even a theory. A theory is, I think, considered a higher level than a hypothesis. That’s why it’s the Younger Dryas impact hypothesis. And of course it has many opponents and there are many who disagree with it. And there have been a series of peer-reviewed papers that have been published supposedly debunking the Younger Dryas impact hypothesis. One, I think was in 2011, it was called a Requiem for the Younger Dryas Impact Hypothesis. And there’s one just been published a few months ago or a year ago called a Complete Refutation of the Younger Dryas Impact Hypothesis, something like that, some lengthy title."</div>
+  <div class="quote-zh">现在这是一个理论，新仙女木期的影响。这实际上是一个假设，甚至不是一个理论。我认为，理论被认为是比假设更高的层次。这就是新仙女木撞击假说的原因。当然，它有很多反对者，也有很多人不同意它。并且已经发表了一系列经过同行评审的论文，据称这些论文揭穿了新仙女木撞击假说。其中一个，我记得是在 2011 年，它被称为“新仙女木影响假说的安魂曲”。几个月前或一年前刚刚发表了一篇文章，名为《全面反驳新仙女木撞击假说》，类似的东西，一些冗长的标题。</div>
+  <div class="quote-meta">— Graham Hancock （00:48:30）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"It wouldn’t make sense if you create an equinoctial marker in the time of Khafre 4,500 years ago, and the Sphinx is an equinoctial marker. I mean, it’s 270 feet long and 70 feet high and it’s looking directly at the rising sun on the equinox. If you create it then, you’d be more likely to create it in the shape of a bull, because that was the age of Taurus, when the constellation of Taurus housed the sun on the spring equinox. So why is it a lion? And again, we think that’s because of that observation of the skies and putting on the ground as above, so below, putting on the ground an image of the sky at a particular time."</div>
+  <div class="quote-zh">如果你在 4500 年前的哈夫拉时代创造了一个春分标记，那是没有意义的，而狮身人面像就是一个春分标记。我的意思是，它长 270 英尺，高 70 英尺，在春分时它可以直视初升的太阳。如果你那时创造它，你更有可能把它创造成公牛的形状，因为那是金牛座的时代，金牛座在春分时安置了太阳。那么为什么是狮子呢？再说一次，我们认为这是因为对天空的观察，并将在上面、下面的地面上放置了特定时间天空的图像。</div>
+  <div class="quote-meta">— Graham Hancock （01:00:50）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Graham Hancock <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The big question for me in that timeline is why didn’t we do it sooner? Why did it take so long? Why did we wait until after 12,000 years ago, really after 10,000 years ago to start seeing the beginnings of civilization?</div>
+  <div class="dialogue-zh">对我来说，在这个时间表中最大的问题是我们为什么不早点做呢？为什么花了这么长时间？为什么我们要等到 12,000 年前，实际上是 10,000 年前才开始看到文明的起源？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:15)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Graham Hancock, a journalist and author who for over 30 years has explored the controversial possibility that there existed a lost civilization during the last ice age and that it was destroyed in a global cataclysm some 12,000 years ago. He is the presenter of the Netflix documentary series, Ancient Apocalypse, the second season of which has just been released...</div>
+  <div class="dialogue-zh">以下是与记者兼作家格雷厄姆·汉考克 (Graham Hancock) 的对话，他 30 多年来一直在探索一种有争议的可能性，即在最后一个冰河世纪期间存在着一个失落的文明，并在大约 12,000 年前的一场全球大灾难中被摧毁。他是 Netflix 纪录片系列《古代启示录》的主持人，第二季刚刚发布</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:46)</span>
+  </div>
+  <div class="dialogue-en">A topic I recently discussed with the archeologist Ed Barnhart. Let me say that Ed represents the kind of archeologist scholar I love talking to on the podcast, extremely knowledgeable, humble, open minded, and respectful in disagreement. I’ll do many more podcasts on history, including ancient history. Our distant past is full of mysteries, and I find it truly exciting to explore those mysteries ...</div>
+  <div class="dialogue-zh">我最近与考古学家埃德·巴恩哈特讨论了一个话题。让我说，埃德代表了我喜欢在播客上与之交谈的那种考古学者，他知识渊博、谦虚、思想开放、尊重不同意见。我会做更多关于历史的播客，包括古代历史。我们遥远的过去充满了谜团，我发现探索这些谜团真的很令人兴奋</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:34)</span>
+  </div>
+  <div class="dialogue-en">Let’s start with a big foundational idea that you have about human history. That there was an advanced Ice Age civilization that came before and perhaps seeded what people now call the sixth cradles of Civilization, Mesopotamia, Egypt, India, China, Indies, and Mesoamerica. So let’s talk about this idea that you have. Can you at the highest possible level describe it?</div>
+  <div class="dialogue-zh">让我们从关于人类历史的一个重要的基本想法开始。之前有一个先进的冰河时代文明，也许播下了人们现在所说的第六个文明摇篮：美索不达米亚、埃及、印度、中国、印度群岛和中美洲。 So let’s talk about this idea that you have.您能以尽可能高的水平来描述它吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Graham Hancock <span class="dialogue-time">(00:01:57)</span>
+  </div>
+  <div class="dialogue-en">It would be better to describe it as a foundational sense of puzzlement and incompleteness in the story that we are taught about our past, which envisages more or less, there have been a few ups and downs, but more or less a straightforward evolutionary progress. We start out as hunter-foragers, then we become agriculturalists. The hunter-forager phase could go back hundreds of thousands of years....</div>
+  <div class="dialogue-zh">最好将其描述为我们在过去被教导的故事中的一种基本的困惑和不完整感，它或多或少地设想了一些起起落落，但或多或​​少是一个简单的进化过程。我们一开始是狩猎采集者，然后成为农业家。狩猎采集阶段可以追溯到数十万年前。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Graham Hancock <span class="dialogue-time">(00:03:08)</span>
+  </div>
+  <div class="dialogue-en">And then we have anatomically modern humans. And I think the earliest anatomically modern human skeletal remains are from Jebel Irhoud in Morocco and date to about 310,000 years ago. So the question is what were our ancestors doing after that? And I think we can include the Neanderthals and the Denisovans in that general picture. And why did it take so long? This is one of the puzzles, one of the ...</div>
+  <div class="dialogue-zh">然后我们就有了解剖学上的现代人类。我认为最早的解剖学现代人类骨骼遗骸来自摩洛哥的 Jebel Irhoud，可以追溯到大约 31 万年前。那么问题来了，我们的祖先在那之后在做什么呢？我认为我们可以将尼安德特人和丹尼索瓦人纳入总体图景中。为什么花了这么长时间？这是谜题之一，也是谜题之一</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Graham Hancock <span class="dialogue-time">(00:04:07)</span>
+  </div>
+  <div class="dialogue-en">Why did it take so long? Why was it such a long time? Even the story of anatomically modern humans has kept on changing. I remember a time when it was said that there hadn’t been anatomically modern humans before 50,000 years ago, and then it became 196,000 years ago with the findings in Ethiopia and then 310,000 years ago. There’s a lot of missing pieces in the puzzle there. But the big question ...</div>
+  <div class="dialogue-zh">为什么花了这么长时间？为什么这么长时间？即使是解剖学上的现代人类的故事也在不断变化。我记得有一次据说5万年前之前没有解剖学上的现代人类，然后随着埃塞俄比亚的发现变成196,000年前，然后是310,000年前。这个谜题中有很多缺失的部分。但最大的问题是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Graham Hancock <span class="dialogue-time">(00:05:21)</span>
+  </div>
+  <div class="dialogue-en">And interestingly round about the same time, you have the Indus Valley civilization popping up out of nowhere. And by the way, the Indus Valley civilization was a lost civilization until the 1920s when railway workers accidentally stumbled across some ruins. I’ve been to Harappa and Mohenjo-Daro, and these are extraordinarily beautifully centrally planned cities. Clearly they’re the work of an alr...</div>
+  <div class="dialogue-zh">有趣的是，大约在同一时间，印度河流域文明突然出现。顺便说一句，印度河谷文明一直是失落的文明，直到 1920 年代铁路工人无意中发现了一些废墟。我去过哈拉帕和摩亨佐-达罗，这些都是非常美丽的中央规划城市。显然，它们是一个alr的作品</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Graham Hancock <span class="dialogue-time">(00:06:24)</span>
+  </div>
+  <div class="dialogue-en">What’s the background to this? China, the Yellow River Civilization again, it’s around about the same period, five to 6,000 years ago. You get these first signs of something happening. So it’s very odd that all around the world we have this sudden upsurge of civilization about 6,000 years ago, preceded by what seems like a natural evolutionary process that would lead to a civilization. And yet cer...</div>
+  <div class="dialogue-zh">这有什么背景呢？中国又是黄河文明，大约是在同一时期，距今五六千年前。您会得到某些事情发生的最初迹象。因此，很奇怪的是，大约 6000 年前，世界各地突然出现了文明的繁荣，在此之前似乎是一个自然的进化过程，最终形成了文明。然而cer</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Graham Hancock <span class="dialogue-time">(00:07:28)</span>
+  </div>
+  <div class="dialogue-en">It’s after that. It’s after event that we start seeing this what had taken to be the beginnings of the first gradual steps towards civilization, we come out of the upper Paleolithic as it’s defined the end of the old Stone Age and into the Neolithic. And that’s when the wheels are supposedly set in motion to start civilization rolling. But what happened before that and why did that suddenly happen...</div>
+  <div class="dialogue-zh">是在那之后。在事件发生之后，我们开始看到这被认为是迈向文明的第一步的开始，我们走出了旧石器时代晚期，因为它定义了旧石器时代的结束，进入了新石器时代。据说，那时轮子就开始转动，文明开始滚动。但之前发生了什么，为什么突然发生</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Graham Hancock <span class="dialogue-time">(00:08:32)</span>
+  </div>
+  <div class="dialogue-en">And it’s strange that just after it we start seeing these first signs. Göbekli Tepe</div>
+  <div class="dialogue-zh">奇怪的是，就在它之后我们开始看到这些最初的迹象。哥贝克力石阵</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:39)</span>
+  </div>
+  <div class="dialogue-en">So the current understanding in mainstream archeology is that after the Younger Dryas is when the civilizations popped up in different places of the globe with a lot of similarities, but they popped up independently.</div>
+  <div class="dialogue-zh">所以目前主流考古学的理解是，新仙女木期之后，全球不同地方出现了很多相似的文明，但它们是独立出现的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Graham Hancock <span class="dialogue-time">(00:08:54)</span>
+  </div>
+  <div class="dialogue-en">Independently. And by coincidence. And by coincidence, those big civilizations that we all remember as the first civilizations, Sumer, Egypt, the Indus Valley Civilization, China, they all pop up at pretty much the same time. That is the mainstream view.</div>
+  <div class="dialogue-zh">独立。而且是巧合。巧合的是，那些我们都记得的最早的文明，苏美尔文明、埃及文明、印度河文明、中国文明，几乎都是在同一时间出现的。这是主流观点。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:10)</span>
+  </div>
+  <div class="dialogue-en">And they don’t just pop up, they kind of build up gradually. First there’s some settlements.</div>
+  <div class="dialogue-zh">它们不是突然出现的，而是逐渐积累起来的。首先有一些定居点。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Graham Hancock <span class="dialogue-time">(00:09:15)</span>
+  </div>
+  <div class="dialogue-en">Oh, definitely, yes.</div>
+  <div class="dialogue-zh">哦，当然，是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:16)</span>
+  </div>
+  <div class="dialogue-en">And then there’s different dynamics of how they build up and the role of agriculture. And that is also non-obvious, but it’s just there’s first a kind of settlement, a stabilization of where the people are living. Then they start using agriculture, then they start getting urban centers and that kind of stuff.</div>
+  <div class="dialogue-zh">然后它们的形成方式和农业的作用也有不同的动态。这也是不明显的，但这只是首先有一种解决办法，人们居住地的稳定。然后他们开始利用农业，然后他们开始建立城市中心之类的东西。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Graham Hancock <span class="dialogue-time">(00:09:33)</span>
+  </div>
+  <div class="dialogue-en">It seems like an entirely reasonable argument. Everything about that makes sense. There is no doubt that you’re seeing evolutionary progress, social evolution taking place in those thousands of years before Sumer emerges. But what’s happening now, really, I spent much of the nineties and the late 1980s investigating this issue of a lost civilization. I wrote a series of books about it. But by 2002...</div>
+  <div class="dialogue-zh">这似乎是一个完全合理的论点。一切都是有道理的。毫无疑问，你看到了进化的进步，社会的进化发生在苏美尔出现之前的几千年里。但现在发生的事情，实际上，我花了九十年代和 80 年代末的大部分时间来调查这个失落文明的问题。我写了一系列关于它的书。但到了2002年</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Graham Hancock <span class="dialogue-time">(00:10:26)</span>
+  </div>
+  <div class="dialogue-en">I really don’t have much more to say about it. And I turned in another direction and I wrote a book called Supernatural Meetings With the Ancient Teachers of Mankind recently retitled Visionary. And that was about the role of fundamentally about the role of psychedelics in the evolution of human culture. And I didn’t think that I would go back to the lost civilization issue, but Göbekli Tepe in Tu...</div>
+  <div class="dialogue-zh">对此我真的没什么可说的。我转向另一个方向，写了一本名为《与人类古代教师的超自然会议》的书，最近更名为《Visionary》。这从根本上讲是关于致幻剂在人类文化进化中的作用。我没想到我会回到失落文明的问题，但图上的哥贝克力石阵</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Graham Hancock <span class="dialogue-time">(00:11:32)</span>
+  </div>
+  <div class="dialogue-en">And this led of course to a huge amount of interest and attention, both from the Turkish government who see the potential tourism potential of having the world’s oldest megalithic site and from archeologists. And this in turn has led to exploration and excavation throughout the region. And what they’re finding throughout that whole region around Göbekli Tepe and going down into Syria and further d...</div>
+  <div class="dialogue-zh">这当然引起了土耳其政府和考古学家的巨大兴趣和关注，土耳其政府看到了世界上最古老的巨石遗址的潜在旅游潜力。这反过来又引发了整个地区的勘探和挖掘。他们在哥贝克力石阵周围的整个地区以及深入叙利亚并进一步发现的东西</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Graham Hancock <span class="dialogue-time">(00:12:33)</span>
+  </div>
+  <div class="dialogue-en">It was the summation of everything that Stone Hills Civilization had achieved. But what is becoming clear is that this is a period between before the foundation of Göbekli Tepe, as far as we know, that date of 11,600 years ago is the oldest date for Göbekli Tepe. But of course there’s a lot of Göbekli Tepe still underground, so we can’t say for sure that that’s the oldest, but it’s the oldest so f...</div>
+  <div class="dialogue-zh">这是石山文明所取得的一切成就的总和。但越来越清楚的是，这是哥贝克力石阵建立之前的一段时期，据我们所知，11,600年前的日期是哥贝克力石阵最古老的日期。当然，还有很多哥贝克力石阵仍在地下，所以我们不能肯定地说那是最古老的，但它是迄今为止最古老的。</div>
+</div>
+    <a href="https://lexfridman.com/graham-hancock-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-huberman-4.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman #4</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="grimes.html" class="card" style="text-decoration:none">
+  <div class="card-title">Grimes: Music, AI, and the Future of Humanity</div>
+  <div class="card-meta">Grimes</div>
+</a>
+<a href="julia-shaw.html" class="card" style="text-decoration:none">
+  <div class="card-title">Julia Shaw</div>
+  <div class="card-meta">Julia Shaw</div>
+</a>
+<a href="lisa-feldman-barrett-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Lisa Feldman Barrett: Love, Evolution, and the Human Brain</div>
+  <div class="card-meta">Lisa Feldman Barrett</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

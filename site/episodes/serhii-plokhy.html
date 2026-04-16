@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Serhii Plokhy - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Serhii Plokhy</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Serhii Plokhy</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/serhii-plokhy.html" style="font-size:16px;color:#818cf8;font-weight:600">Serhii Plokhy</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">25,511 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/serhii-plokhy-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:18</span>
+  <span class="chapter-title">Collapse of the Soviet Union<span class="zh-trans"> · 苏联解体</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">17:27</span>
+  <span class="chapter-title">Origins of Russia and Ukraine<span class="zh-trans"> · 俄罗斯和乌克兰的起源</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:30</span>
+  <span class="chapter-title">Ukrainian nationalism<span class="zh-trans"> · 乌克兰民族主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">38:13</span>
+  <span class="chapter-title">Stepan Bandera<span class="zh-trans"> · 斯捷潘·班德拉</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:07:13</span>
+  <span class="chapter-title">KGB<span class="zh-trans"> · 克格勃</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:22:11</span>
+  <span class="chapter-title">War in Ukraine<span class="zh-trans"> · 乌克兰战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:58:27</span>
+  <span class="chapter-title">NATO and Russia<span class="zh-trans"> · 北约和俄罗斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:09:30</span>
+  <span class="chapter-title">Peace talks<span class="zh-trans"> · 和谈</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:23:17</span>
+  <span class="chapter-title">Ukrainian Army head Valerii Zaluzhnyi<span class="zh-trans"> · 乌克兰陆军司令瓦莱里·扎卢日尼</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:29:54</span>
+  <span class="chapter-title">Power and War<span class="zh-trans"> · 权力与战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:40:45</span>
+  <span class="chapter-title">Holodomor<span class="zh-trans"> · 大饥荒</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:47:17</span>
+  <span class="chapter-title">Chernobyl<span class="zh-trans"> · 切尔诺贝利</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:57:51</span>
+  <span class="chapter-title">Nuclear power<span class="zh-trans"> · 核电</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:07:28</span>
+  <span class="chapter-title">Future of the world<span class="zh-trans"> · 世界的未来</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">ukraine</span><span class="keyword-tag">war</span><span class="keyword-tag">russian</span><span class="keyword-tag">soviet</span><span class="keyword-tag">serhii</span><span class="keyword-tag">plokhy</span><span class="keyword-tag">ukrainian</span><span class="keyword-tag">russia</span><span class="keyword-tag">union</span><span class="keyword-tag">story</span><span class="keyword-tag">empire</span><span class="keyword-tag">history</span><span class="keyword-tag">century</span><span class="keyword-tag">don</span><span class="keyword-tag">ukrainians</span><span class="keyword-tag">nuclear</span><span class="keyword-tag">moscow</span><span class="keyword-tag">terms</span><span class="keyword-tag">collapse</span><span class="keyword-tag">putin</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"So, the KGB was really looking at the party leadership as to a degree, an effective corrupt and who was on their way. And from what I understand, that’s exactly the attitudes that people like Putin and people of his circle brought to power in Kremlin. So, the methods that KGB use they can use now, and there is no party or no other institution actually stopping them from doing that. And they think about, my understanding, the operations abroad about foreign policy in general in terms of the KGB mindset of planning operations and executing particular operations and so on and so forth. I think a lot of culture that came into existence in the Soviet KGB now became part of the culture of the Russian establishment. War in Ukraine"</div>
+  <div class="quote-zh">因此，克格勃确实在某种程度上关注党的领导层、有效的腐败分子以及谁正在上路。据我了解，这正是普京及其圈子里的人在克里姆林宫掌权时采取的态度。因此，克格勃使用的方法他们现在就可以使用，并且没有任何政党或其他机构真正阻止他们这样做。据我了解，他们通常会根据克格勃规划行动和执行特定行动等的思维方式来思考有关外交政策的海外行动。我认为苏联克格勃产生的许多文化现在已经成为俄罗斯政权文化的一部分。乌克兰战争</div>
+  <div class="quote-meta">— Serhii Plokhy （01:21:07）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Because I think he believes in things. One of those things was that if he a president and he is in the presidential office, he is there to play his role to the end. And another thing, my personal, again, I never met Volodymyr Zelensky. My personal understanding of him is that he has talent that helped him in his career before the presidency and then helps now. He feels the audience, and then channels the attitude of the audience and amplifies it. And I think that another reason why he didn’t leave Kiev was that he felt the audience, the audience in that particular context for the Ukrainians."</div>
+  <div class="quote-zh">因为我认为他相信事物。其中一件事是，如果他是总统并且他在青瓦台，他就会在那里发挥他的作用到底。还有一件事，我个人的，我从未见过弗拉基米尔·泽连斯基。我个人对他的理解是，他的天赋在担任总统之前帮助了他的职业生涯，现在也为他提供了帮助。他感受观众，然后引导观众的态度并将其放大。我认为他没有离开基辅的另一个原因是他感受到了观众，乌克兰人在特定背景下的观众。</div>
+  <div class="quote-meta">— Serhii Plokhy （02:06:38）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I was. I was and I think that the mini-series are very truthful on a number of levels and very untruthful on some others. And they got very well the macro and micro levels. So the macro level is the issue of the big truth and the story there is very much built around the theme that I just discussed now. It’s about the cost of lies and the Soviet Union lying to the people. And that’s what the film explores. So that, I call it a big truth about Chernobyl. And they got a lot of minor things really, really very well. Like the curtains on the windows, like how the houses looked from inside and outside. I didn’t see any post-Soviet film or any western film that would be so good at capturing those everyday details."</div>
+  <div class="quote-zh">我是。我曾经并且认为这部迷你剧在很多层面上都非常真实，但在其他一些层面上却非常不真实。他们在宏观和微观层面上都做得很好。因此，宏观层面是大真相的问题，而故事很大程度上是围绕我刚才讨论的主题构建的。这是关于谎言的代价以及苏联对人民撒谎的代价。这就是影片所探讨的内容。因此，我称其为关于切尔诺贝利的大真相。他们在很多小事情上都做得非常非常好。就像窗户上的窗帘，就像房子从里到外的样子。我没有看到任何后苏联电影或任何西方电影能够如此擅长捕捉这些日常细节。</div>
+  <div class="quote-meta">— Serhii Plokhy （02:53:09）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So we have a very, very paradoxical sort of situation. The crisis occurred because of the nuclear weapons, because Khrushchev put them on Cuba, but the crisis was resolved and we didn’t end in the third World War because of the nuclear weapons, because people, leaders were afraid of them. And that’s where I want to put emphasis. It’s not that the nuclear weapons created crisis or solved the crisis, it’s basically our perception of them. And we are now in the age after the Cold War era, with the new generation of voters, with the new generation of politicians. We don’t belong to the generation of bikini atoll. You maybe know what bikini is, but we think that this is something-"</div>
+  <div class="quote-zh">所以我们面临着一种非常非常矛盾的情况。危机的发生是因为核武器，因为赫鲁晓夫把它们放在了古巴，但危机已经解决了，我们并没有因为核武器而结束第三次世界大战，因为人们、领导人都害怕它们。这就是我想强调的地方。这并不是说核武器制造了危机或解决了危机，这基本上是我们对核武器的看法。我们现在正处于冷战时代后的时代，有新一代选民，有新一代政治家。我们不属于比基尼环礁的一代。你也许知道比基尼是什么，但我们认为这是——</div>
+  <div class="quote-meta">— Serhii Plokhy （03:17:50）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And very few people in Ukraine believed what Vladimir Putin was saying that Russians and Ukrainians were one and the same people, but the majority believed that they’re certainly close culturally and historically nations. And from that point of view the bombardment of the Ukrainian cities became such a shock to the Ukrainians. Because deep down they maybe looked at Syria, they looked at Chechnya, and were explaining that through the fact that there was basically such a big cultural gap and difference between Russians and those countries and those nations. But my understanding at least, most of them had difficulty imagining the war of that proportion and that ferocity, and bring that war crimes and on that level."</div>
+  <div class="quote-zh">乌克兰很少有人相信弗拉基米尔·普京所说的俄罗斯人和乌克兰人是同一民族，但大多数人相信他们在文化和历史上肯定是密切的国家。从这个角度来看，对乌克兰城市的轰炸让乌克兰人感到震惊。因为在内心深处，他们可能着眼于叙利亚，他们着眼于车臣，并通过这样的事实来解释这一点：俄罗斯人与这些国家和民族之间基本上存在着巨大的文化鸿沟和差异。但至少我的理解是，他们中的大多数人很难想象战争的规模和凶猛程度，以及战争罪行和程度。</div>
+  <div class="quote-meta">— Serhii Plokhy （01:54:54）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Serhii Plokhy <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">What happened during World War II? Was that once the Germans started to run out of manpower, they created foreign legion groups. But because those people were not Aryans, they couldn’t be trusted. So they were put under the command of Heinrich Himmler and the commando SS, and became known as SS Waffen units, and one of such units was created in Ukraine.</div>
+  <div class="dialogue-zh">第二次世界大战期间发生了什么？一旦德国人开始耗尽人力，他们就创建了外籍军团。但因为这些人不是雅利安人，所以不能信任。因此，他们被置于海因里希·希姆莱和党卫军突击队的指挥之下，并被称为党卫军武装部队，其中一支这样的部队是在乌克兰创建的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:33)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Serhii Plokhy, a historian at Harvard University and the director of the Ukrainian Research Institute, also at Harvard. As a historian, he specializes in the history of Eastern Europe with an emphasis on Ukraine. He wrote a lot of great books on Ukraine and Russia, the Soviet Union, on Slavic peoples in general across centuries, on Chernobyl and nuclear disaste...</div>
+  <div class="dialogue-zh">以下是与哈佛大学历史学家、哈佛大学乌克兰研究所所长 Serhii Plokhy 的对话。作为一名历史学家，他专门研究东欧历史，重点关注乌克兰。他写了很多关于乌克兰、俄罗斯、苏联、几个世纪以来斯拉夫人民、切尔诺贝利和核灾难的伟大著作</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:09)</span>
+  </div>
+  <div class="dialogue-en">This is the Lex Fridman podcast. To support it, please check out our sponsors in the description. And now, dear friends, here’s Serhii Plokhy. What are the major explanations for the collapse of the Soviet Union? Maybe ones you agree with and ones you disagree with. Collapse of the Soviet Union</div>
+  <div class="dialogue-zh">这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是 Serhii Plokhy。苏联解体的主要解释是什么？也许你同意一些，也许你不同意一些。苏联解体</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Serhii Plokhy <span class="dialogue-time">(00:01:25)</span>
+  </div>
+  <div class="dialogue-en">Very often people confuse three different processes that were taking place in the late ’80s and early ’90s, and the one was the collapse of communism as ideology. Another was the end of the Cold War. And the third one was the end of the Soviet Union.</div>
+  <div class="dialogue-zh">人们经常混淆八十年代末和九十年代初发生的三个不同的过程，其中一个是共产主义作为意识形态的崩溃。另一个是冷战的结束。第三个是苏联的解体。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Serhii Plokhy <span class="dialogue-time">(00:01:47)</span>
+  </div>
+  <div class="dialogue-en">All of this processes were interrelated, interconnected, but when people provide ideology as the explanation for all of these processes, that’s where I disagree, because ideological collapse happened on the territory of the Soviet Union in general. The Soviet Union lost the Cold War, whether we’re talking about Moscow, Leningrad, or St. Petersburg now, or Vladivostok. But the fall of the Soviet Un...</div>
+  <div class="dialogue-zh">所有这些过程都是相互关联、相互关联的，但是当人们提供意识形态作为所有这些过程的解释时，这就是我不同意的地方，因为意识形态崩溃总体上发生在苏联领土上。苏联输掉了冷战，无论我们现在谈论的是莫斯科、列宁格勒、圣彼得堡还是符拉迪沃斯托克。但苏联解体</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Serhii Plokhy <span class="dialogue-time">(00:02:28)</span>
+  </div>
+  <div class="dialogue-en">The theories and explanations about how did that happen, for me, this really very helpful theories for understanding the Soviet collapse. So the mobilization from below the collapse of the center, against the background of economic collapse, against the background of ideological implosion, that’s how I look at the fall of the Soviet Union and that’s how I look at the theories that explain that col...</div>
+  <div class="dialogue-zh">关于这是如何发生的理论和解释，对我来说，这对于理解苏联崩溃确实非常有帮助。因此，在中央崩溃的背景下，在经济崩溃的背景下，在意识形态内爆的背景下，自下而上的动员，这就是我如何看待苏联的垮台，这就是我如何看待解释苏联解体的理论。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:03)</span>
+  </div>
+  <div class="dialogue-en">So it’s a story of geography, ideology, economics. Which are the most important to understand of what made the collapse of the Soviet Union happen?</div>
+  <div class="dialogue-zh">所以这是一个关于地理、意识形态、经济的故事。要了解苏联解体的原因，哪些是最重要的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Serhii Plokhy <span class="dialogue-time">(00:03:14)</span>
+  </div>
+  <div class="dialogue-en">The Soviet collapse was unique, but not more unique than collapse of any other empire. What we really witnessed, or the world witnessed back in 1991, and we continue to witness today with the Russian aggression against Ukraine, is a collapse of one of the largest world empires.</div>
+  <div class="dialogue-zh">苏联的崩溃是独一无二的，但并不比任何其他帝国的崩溃更独特。我们真正目睹的，或者说全世界在 1991 年目睹的，以及今天我们继续目睹的俄罗斯对乌克兰的侵略，是世界上最大帝国之一的崩溃。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Serhii Plokhy <span class="dialogue-time">(00:03:36)</span>
+  </div>
+  <div class="dialogue-en">We talked about the Soviet Union, and now talk about Russia, as possessing plus-minus 1/6th of the surface of the Earth. You don’t get in possession of 1/6th of the earth by being a nation state. You get that sort of size as an empire. And the Soviet collapse is continuation of the disintegration of the Russian Empire that started back in 1917, that was arrested for some period of time by the Bols...</div>
+  <div class="dialogue-zh">我们谈论过苏联，现在谈论俄罗斯，因为它拥有地球表面的正负 1/6。作为一个民族国家，你并不能拥有地球的 1/6。你得到了一个帝国的规模。苏联的解体是俄罗斯帝国解体的延续，俄罗斯帝国自1917年开始解体，曾被博尔斯党逮捕过一段时间</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Serhii Plokhy <span class="dialogue-time">(00:04:19)</span>
+  </div>
+  <div class="dialogue-en">So the most important story for me, this is the story of the continuing collapse of the Russian Empire and the rise of not just local nationalism, but also rise of Russian nationalism that turned out to be as a destructive force for the imperial or multi-ethnic, multinational state, as was Ukrainian nationalism or Georgian or Estonian for that matter.</div>
+  <div class="dialogue-zh">所以对我来说最重要的故事是俄罗斯帝国持续崩溃的故事，不仅是当地民族主义的崛起，而且俄罗斯民族主义的崛起最终成为帝国或多民族、多民族国家的破坏性力量，就像乌克兰民族主义、格鲁吉亚或爱沙尼亚民族主义一样。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:49)</span>
+  </div>
+  <div class="dialogue-en">You said a lot of interesting stuff there. In 1917, Bolsheviks, internationalists, how that plays with the idea of Russian Empire and so on. But first, let me ask about US influence on this. One of the ideas is that through the Cold War, that mechanism, US had major interest to weaken the Soviet Union, and therefore the collapse could be attributed to pressure and manipulation from the United Stat...</div>
+  <div class="dialogue-zh">你在那里说了很多有趣的事情。 1917年，布尔什维克、国际主义者、俄罗斯帝国的想法如何发挥作用等等。但首先，让我问一下美国对此的影响。其中一个观点是，通过冷战这一机制，美国的主要利益是削弱苏联，因此苏联的崩溃可能归因于美国的压力和操纵。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Serhii Plokhy <span class="dialogue-time">(00:05:18)</span>
+  </div>
+  <div class="dialogue-en">The pressure from the United States, this is part of the Cold War. And Cold War, part of that story, but it doesn’t explain the Soviet collapse. And the reason is quite simple. The United States of America didn’t want the Soviet Union to collapse and disintegrate. They didn’t want that at the start of the Cold War in 1948. We now have the strategic documents. They were concerned about that, they d...</div>
+  <div class="dialogue-zh">来自美国的压力，这是冷战的一部分。冷战是这个故事的一部分，但它并不能解释苏联的崩溃。原因很简单。美利坚合众国不希望苏联崩溃和解体。 1948 年冷战开始时，他们不希望出现这种情况。我们现在有了战略文件。他们担心这一点，他们</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Serhii Plokhy <span class="dialogue-time">(00:06:16)</span>
+  </div>
+  <div class="dialogue-en">The Soviet collapse was a huge headache for the administration in the White House for a number of reasons. They liked to work with Gorbachev. The Soviet Union was emerging as a junior partner of the United States on the international arena. Collapse was destroying all of that. And on the top of that, there was a question of the nuclear weapons, unaccounted nuclear weapons. So the United States was...</div>
+  <div class="dialogue-zh">出于多种原因，苏联的解体令白宫政府头疼不已。他们喜欢与戈尔巴乔夫一起工作。苏联正在国际舞台上成为美国的小伙伴。崩溃正在摧毁这一切。最重要的是，还有一个核武器问题，下落不明的核武器。所以美国是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Serhii Plokhy <span class="dialogue-time">(00:07:05)</span>
+  </div>
+  <div class="dialogue-en">A few months later, or a year later, there was a presidential campaign and Bush was running for the second term and was looking for achievements. And there were many achievements. I basically treat him with great respect, but destruction of the Soviet Union was not one of those achievements. He was on the other side of that divide. But the politics, the political campaign, of course, have their ow...</div>
+  <div class="dialogue-zh">几个月后，或者一年后，进行了总统竞选，布什正在竞选第二个任期，并寻求政绩。并且取得了很多成就。我基本上非常尊重他，但摧毁苏联并不是这些成就之一。他站在鸿沟的另一边。但政治、政治运动当然有其自身的特点</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:44)</span>
+  </div>
+  <div class="dialogue-en">Gorbachev is an interesting figure in all of this. Is there a possible history where the Soviet Union did not collapse and some of the ideas that Gorbachev had for the future of the Soviet Union came to life?</div>
+  <div class="dialogue-zh">戈尔巴乔夫在这一切中都是一个有趣的人物。是否有可能存在这样的历史：苏联没有解体，戈尔巴乔夫对苏联未来的一些想法得以实现？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Serhii Plokhy <span class="dialogue-time">(00:07:58)</span>
+  </div>
+  <div class="dialogue-en">Of course, history, on the one hand, there is a statement, it doesn’t allow for what-ifs. On the other hand, in my opinion, history is full of what-if. That’s what history is about, and certainly the Russian areas, how the Soviet Union would continue, would continue beyond, let’s say, Gorbachev’s tenure. And the argument has been made that the reforms that he introduced, that they were mismanaged ...</div>
+  <div class="dialogue-zh">当然，历史一方面有一个说法，它不允许假设。另一方面，在我看来，历史充满了假设。这就是历史的意义，当然还有俄罗斯地区，苏联将如何继续，将在戈尔巴乔夫任期之后继续下去。有人认为他推行的改革管理不善</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Serhii Plokhy <span class="dialogue-time">(00:08:36)</span>
+  </div>
+  <div class="dialogue-en">What I think would happen one way or another is the Soviet collapse in a different form, on somebody else’s watch at some later period in time. Because we’re dealing with not just processes that we’re happening in the Soviet Union, we’re dealing with global processes. And the 20th century turned out to be the century of the disintegration of the empires.</div>
+  <div class="dialogue-zh">我认为，无论如何都会发生苏联以另一种形式崩溃，在稍后的某个时期在其他人的注视下崩溃。因为我们不仅处理在苏联发生的进程，而且还处理全球进程。 20世纪竟然是帝国瓦解的世纪。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Serhii Plokhy <span class="dialogue-time">(00:09:03)</span>
+  </div>
+  <div class="dialogue-en">You look at the globe, at the map of the world in 1914, and you compare it to the map at the end of the 20th century in 1991, 1992, and suddenly you realize that there are many candidates for being the most important event, the most important process in the 20th century. But the biggest global thing that happened was redrawing the map of the world and producing dozens, if not hundreds, of new stat...</div>
+  <div class="dialogue-zh">你看看地球仪，看看1914年的世界地图，把它和20世纪末1991年、1992年的地图进行比较，你突然意识到，有很多候选者可以成为20世纪最重要的事件、最重要的进程。但发生的最大的全球性事件是重新绘制世界地图并产生数十个（如果不是数百个）新统计数据</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Serhii Plokhy <span class="dialogue-time">(00:09:55)</span>
+  </div>
+  <div class="dialogue-en">So yeah, the writing was on the wall, whether it would happen under Gorbachev or later, whether it would happen as the result of reforms, or as the result of no reforms. But I think that sooner later that would happen.</div>
+  <div class="dialogue-zh">所以，是的，无论这是否会在戈尔巴乔夫时期或之后发生，无论它是改革的结果还是不改革的结果，这都是不祥之兆。但我认为不久之后就会发生这种情况。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:11)</span>
+  </div>
+  <div class="dialogue-en">Yeah, it’s very possible hundreds of years from now, the way the 20th century is written about, as the century defined by the collapse of empires. You call the Soviet Union “the last empire.” The book is called The Last Empire. So is there something fundamental about the way the world is that means it’s not conducive to the formation of empires?</div>
+  <div class="dialogue-zh">是的，从现在起数百年后，很有可能发生这种情况，就像20世纪的书写方式一样，这个世纪是由帝国崩溃定义的。您称苏联为“最后的帝国”。这本书的名字叫《最后的帝国》。那么，世界的本质是否存在某种不利于帝国形成的因素呢？</div>
+</div>
+    <a href="https://lexfridman.com/serhii-plokhy-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="ben-shapiro-destiny-debate.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ben Shapiro Destiny Debate</div>
+  <div class="card-meta">Ben Shapiro</div>
+</a>
+<a href="bernie-sanders.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bernie Sanders</div>
+  <div class="card-meta">Bernie Sanders</div>
+</a>
+<a href="douglas-murray-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Douglas Murray #2</div>
+  <div class="card-meta">Douglas Murray</div>
+</a>
+<a href="eric-weinstein-4.html" class="card" style="text-decoration:none">
+  <div class="card-title">Eric Weinstein: Difficult Conversations, Freedom of Speech, and Physics</div>
+  <div class="card-meta">Eric Weinstein</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

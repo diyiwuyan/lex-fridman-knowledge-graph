@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yann Lecun #3 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Yann Lecun #3</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Yann Lecun #3</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/marc-andreesen.html" style="font-size:16px;color:#818cf8;font-weight:600">Marc Andreesen</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">26,059 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/yann-lecun-3-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:18</span>
+  <span class="chapter-title">Limits of LLMs<span class="zh-trans"> · 法学硕士的局限性</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">13:54</span>
+  <span class="chapter-title">Bilingualism and thinking<span class="zh-trans"> · 双语与思维</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">17:46</span>
+  <span class="chapter-title">Video prediction<span class="zh-trans"> · 视频预测</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">25:07</span>
+  <span class="chapter-title">JEPA (Joint-Embedding Predictive Architecture)<span class="zh-trans"> · JEPA（联合嵌入预测架构）</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">28:15</span>
+  <span class="chapter-title">JEPA vs LLMs<span class="zh-trans"> · JEPA 与 LLM</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">37:31</span>
+  <span class="chapter-title">DINO and I-JEPA<span class="zh-trans"> · 恐龙和I-JEPA</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">38:51</span>
+  <span class="chapter-title">V-JEPA<span class="zh-trans"> · V-JEPA</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">44:22</span>
+  <span class="chapter-title">Hierarchical planning<span class="zh-trans"> · 分层规划</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">50:40</span>
+  <span class="chapter-title">Autoregressive LLMs<span class="zh-trans"> · 自回归法学硕士</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:06:06</span>
+  <span class="chapter-title">AI hallucination<span class="zh-trans"> · AI幻觉</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:11:30</span>
+  <span class="chapter-title">Reasoning in AI<span class="zh-trans"> · 人工智能中的推理</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:29:02</span>
+  <span class="chapter-title">Reinforcement learning<span class="zh-trans"> · 强化学习</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:34:10</span>
+  <span class="chapter-title">Woke AI<span class="zh-trans"> · 唤醒人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:43:48</span>
+  <span class="chapter-title">Open source<span class="zh-trans"> · 开源</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:47:26</span>
+  <span class="chapter-title">AI and ideology<span class="zh-trans"> · 人工智能与意识形态</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:49:58</span>
+  <span class="chapter-title">Marc Andreesen<span class="zh-trans"> · 马克·安德森</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:57:56</span>
+  <span class="chapter-title">Llama 3<span class="zh-trans"> · 骆驼3</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:04:20</span>
+  <span class="chapter-title">AGI<span class="zh-trans"> · 通用人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:08:48</span>
+  <span class="chapter-title">AI doomers<span class="zh-trans"> · 人工智能厄运</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">going</span><span class="keyword-tag">yann</span><span class="keyword-tag">lecun</span><span class="keyword-tag">systems</span><span class="keyword-tag">model</span><span class="keyword-tag">don</span><span class="keyword-tag">representation</span><span class="keyword-tag">language</span><span class="keyword-tag">video</span><span class="keyword-tag">llms</span><span class="keyword-tag">predict</span><span class="keyword-tag">train</span><span class="keyword-tag">able</span><span class="keyword-tag">planning</span><span class="keyword-tag">source</span><span class="keyword-tag">models</span><span class="keyword-tag">space</span><span class="keyword-tag">llm</span><span class="keyword-tag">text</span><span class="keyword-tag">talking</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I see the danger of this concentration of power through proprietary AI systems as a much bigger danger than everything else. What works against this is people who think that for reasons of security, we should keep AI systems under lock and key because it’s too dangerous to put it in the hands of everybody. That would lead to a very bad future in which all of our information diet is controlled by a small number of companies who proprietary systems."</div>
+  <div class="quote-zh">我认为通过专有人工智能系统进行权力集中的危险比其他任何事情都要大得多。与此相反的是，人们认为出于安全原因，我们应该对人工智能系统进行锁定，因为将其交给每个人都太危险了。这将导致一个非常糟糕的未来，即我们所有的信息饮食都由少数拥有专有系统的公司控制。</div>
+  <div class="quote-meta">— Introduction （00:00:00）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Host of Lex Fridman Podcast. Research Scientist at MIT, working on human-AI interaction, robotics, and machine learning. View all posts by Lex Fridman →"</div>
+  <div class="quote-zh">莱克斯·弗里德曼播客的主持人。麻省理工学院的研究科学家，致力于人机交互、机器人和机器学习。查看莱克斯·弗里德曼发表的所有帖子 →</div>
+  <div class="quote-meta">— About Lex Fridman </div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Introduction
+  </div>
+  <div class="dialogue-en">Yann LeCun</div>
+  <div class="dialogue-zh">严乐存</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Introduction <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">I see the danger of this concentration of power through proprietary AI systems as a much bigger danger than everything else. What works against this is people who think that for reasons of security, we should keep AI systems under lock and key because it’s too dangerous to put it in the hands of everybody. That would lead to a very bad future in which all of our information diet is controlled by a...</div>
+  <div class="dialogue-zh">我认为通过专有人工智能系统进行权力集中的危险比其他任何事情都要大得多。与此相反的是，人们认为出于安全原因，我们应该对人工智能系统进行锁定，因为将其交给每个人都太危险了。这将导致一个非常糟糕的未来，我们所有的信息饮食都由一个</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:32)</span>
+  </div>
+  <div class="dialogue-en">I believe that people are fundamentally good, and so if AI, especially open source AI can make them smarter, it just empowers the goodness in humans. Yann LeCun</div>
+  <div class="dialogue-zh">我相信人性本善，因此如果人工智能，尤其是开源人工智能能够让人变得更聪明，那么它只会增强人类的善良。严乐存</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:44)</span>
+  </div>
+  <div class="dialogue-en">So I share that feeling. Okay. I think people are fundamentally good and in fact, a lot of doomers are doomers because they don’t think that people are fundamentally good.</div>
+  <div class="dialogue-zh">所以我也有这种感觉。好的。我认为人性本善，事实上，很多厄运者之所以是厄运者，是因为他们不认为人性本善。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:57)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Yann LeCun, his third time on this podcast. He is the chief AI scientist at Meta, professor at NYU, Turing Award winner and one of the seminal figures in the history of artificial intelligence. He and Meta AI have been big proponents of open sourcing, AI development and have been walking the walk by open sourcing many of their biggest models, including Llama 2 ...</div>
+  <div class="dialogue-zh">以下是与 Yann LeCun 的对话，这是他第三次参加此播客。他是 Meta 首席人工智能科学家、纽约大学教授、图灵奖获得者、人工智能史上的开创性人物之一。他和 Meta AI 一直是开源和人工智能开发的大力支持者，并且一直在开源他们的许多最大的模型，包括 Llama 2</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:52)</span>
+  </div>
+  <div class="dialogue-en">At this moment of rapid AI development, this happens to be somewhat a controversial position, and so it’s been fun seeing Yann get into a lot of intense and fascinating discussions online as we do in this very conversation. This is the Lex Fridman podcast. To support it, please check out our sponsors in the description. And now, dear friends, here’s Yann LeCun. You’ve had some strong statements, t...</div>
+  <div class="dialogue-zh">在人工智能快速发展的当下，这恰好是一个有争议的立场，因此看到 Yann 在网上进行大量激烈而引人入胜的讨论，就像我们在这次对话中所做的那样，很有趣。这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是 Yann LeCun。你已经发表了一些强有力的声明，t</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:47)</span>
+  </div>
+  <div class="dialogue-en">For a number of reasons. The first is that there is a number of characteristics of intelligent behavior. For example, the capacity to understand the world, understand the physical world, the ability to remember and retrieve things, persistent memory, the ability to reason, and the ability to plan. Those are four essential characteristics of intelligent systems or entities, humans, animals. LLMs ca...</div>
+  <div class="dialogue-zh">出于多种原因。首先，智能行为有许多特征。例如，理解世界的能力、理解物理世界的能力、记忆和检索事物的能力、持久性记忆、推理能力和计划能力。这是智能系统或实体、人类、动物的四个基本特征。法学硕士 ca</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:08)</span>
+  </div>
+  <div class="dialogue-en">And then there is another tidbit or fact that I think is very interesting. Those LLMs are trained on enormous amounts of texts, basically, the entirety of all publicly available texts on the internet, right? That’s typically on the order of 10 to the 13 tokens. Each token is typically two bytes, so that’s two 10 to the 13 bytes as training data. It would take you or me 170,000 years to just read t...</div>
+  <div class="dialogue-zh">还有一个我认为非常有趣的花絮或事实。这些法学硕士接受了大量文本的培训，基本上是互联网上所有公开可用文本的全部，对吗？这通常是 10 到 13 个令牌的数量级。每个令牌通常为两个字节，因此有两个 10 到 13 字节作为训练数据。你或我需要 17 万年才能读到</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:12)</span>
+  </div>
+  <div class="dialogue-en">And you can compute this by estimating that the optical nerve carry about 20 megabytes per second roughly, and so 10 to the 15 bytes for a four-year-old versus two times 10 to the 13 bytes for 170,000 years worth of reading. What that tells you is that through sensory input, we see a lot more information than we do through language, and that despite our intuition, most of what we learn and most of...</div>
+  <div class="dialogue-zh">你可以通过估计视神经每秒大约传输 20 兆字节来计算这一点，因此对于一个四岁的孩子来说，传输的是 10 到 15 字节，而对于 170,000 年的阅读来说，则需要两倍的 10 到 13 字节。这告诉你，通过感官输入，我们看到的信息比通过语言看到的信息多得多，而且尽管我们有直觉，但我们学到的大部分内容和大部分内容</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:57)</span>
+  </div>
+  <div class="dialogue-en">So it would be good to maybe push against some of the intuition behind what you’re saying. So it is true there’s several orders of magnitude more data coming into the human mind much faster, and the human mind is able to learn very quickly from that, filter the data very quickly. Somebody might argue your comparison between sensory data versus language, that language is already very compressed. It...</div>
+  <div class="dialogue-zh">因此，最好反对你所说的话背后的一些直觉。因此，确实有几个数量级的数据更快地进入人类大脑，并且人类大脑能够从中快速学习，快速过滤数据。有人可能会争论你在感官数据与语言之间的比较，那种语言已经非常压缩了。它</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:56)</span>
+  </div>
+  <div class="dialogue-en">So it’s a big debate among philosophers and also cognitive scientists, like whether intelligence needs to be grounded in reality. I’m clearly in the camp that yes, intelligence cannot appear without some grounding in some reality. It doesn’t need to be physical reality. It could be simulated, but the environment is just much richer than what you can express in language. Language is a very approxim...</div>
+  <div class="dialogue-zh">因此，这是哲学家和认知科学家之间的一场大辩论，比如智力是否需要扎根于现实。我显然同意这一点：是的，如果没有某些现实的基础，智能就不可能出现。它不需要是物理现实。它可以是模拟的，但环境比你可以用语言表达的要丰富得多。语言是非常近似的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:13)</span>
+  </div>
+  <div class="dialogue-en">So a lot of my colleagues who are more interested in things like computer vision are really on that camp that AI needs to be embodied essentially. And then other people coming from the NLP side or maybe some other motivation don’t necessarily agree with that, and philosophers are split as well, and the complexity of the world is hard to imagine. It’s hard to represent all the complexities that we ...</div>
+  <div class="dialogue-zh">因此，我的许多对计算机视觉等事物更感兴趣的同事实际上都站在人工智能需要本质上体现的阵营。然后来自 NLP 方面的其他人或者其他动机不一定同意这一点，哲学家也有分歧，世界的复杂性很难想象。很难代表我们所面临的所有复杂性</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:55)</span>
+  </div>
+  <div class="dialogue-en">This is the old Moravec paradox, from the pioneer of robotics, hence Moravec, who said, how is it that with computers, it seems to be easy to do high-level complex tasks like playing chess and solving integrals and doing things like that, whereas the thing we take for granted that we do every day, like, I don’t know, learning to drive a car or grabbing an object, we can’t do with computers, and we...</div>
+  <div class="dialogue-zh">这是古老的莫拉维克悖论，来自机器人学的先驱，因此莫拉维克说，如何使用计算机来完成高级复杂的任务，例如下棋、求解积分等，而我们认为理所当然的每天都会做的事情，例如，我不知道，学习驾驶汽车或抓取物体，我们无法使用计算机完成，而我们</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:00)</span>
+  </div>
+  <div class="dialogue-en">Can a large language model construct a world model that does know how to drive and does know how to fill a dishwasher, but just doesn’t know how to deal with visual data at this time, so it can operate in a space of concepts? Yann LeCun</div>
+  <div class="dialogue-zh">大型语言模型能否构建一个知道如何驾驶、如何给洗碗机装水的世界模型，但只是不知道此时如何处理视觉数据，因此它可以在概念空间中运行？严乐存</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:17)</span>
+  </div>
+  <div class="dialogue-en">So yeah, that’s what a lot of people are working on. So the short answer is no, and the more complex answer is you can use all kinds of tricks to get an LLM to basically digest visual representations of images or video or audio for that matter. And a classical way of doing this is you train a vision system in some way, and we have a number of ways to train vision systems either supervised, semi-su...</div>
+  <div class="dialogue-zh">是的，这就是很多人正在努力的事情。所以简短的答案是否定的，更复杂的答案是你可以使用各种技巧让法学硕士基本上消化图像、视频或音频的视觉表示。一种经典的方法是以某种方式训练视觉系统，我们有多种方法来训练视觉系统，可以是监督式的，也可以是半自动式的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:11:10)</span>
+  </div>
+  <div class="dialogue-en">And then you just feed that to the LLM in addition to the text, and you just expect the LLM, during training, to be able to use those representations to help make decisions. I mean, there’s been work along those lines for quite a long time and now, you see those systems. I mean there are LLMs that have some vision extension, but they’re basically hacks in the sense that those things are not traine...</div>
+  <div class="dialogue-zh">然后，除了文本之外，您只需将其提供给法学硕士，并且您只希望法学硕士在培训期间能够使用这些表示来帮助做出决策。我的意思是，这些方面的工作已经有很长一段时间了，现在，你看到了这些系统。我的意思是有些法学硕士有一定的视野扩展，但他们基本上是黑客，因为这些东西不是训练有素的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:11:51)</span>
+  </div>
+  <div class="dialogue-en">So you don’t think there’s something special to you about intuitive physics, about sort of common sense reasoning about the physical space, about physical reality. That to you is a giant leap that LLMs are just not able to do? Yann LeCun</div>
+  <div class="dialogue-zh">所以你不认为直觉物理学、关于物理空间、关于物理现实的常识推理对你来说没有什么特别之处。对您来说，这是法学硕士无法做到的巨大飞跃？严乐存</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:12:02)</span>
+  </div>
+  <div class="dialogue-en">We’re not going to be able to do this with the type of LLMs that we are working with today, and there’s a number of reasons for this, but the main reason is the way LLMs are trained is that you take a piece of text, you remove some of the words in that text, you mask them, you replace them by blank markers, and you train a genetic neural net to predict the words that are missing. And if you build ...</div>
+  <div class="dialogue-zh">对于我们今天使用的法学硕士类型，我们无法做到这一点，造成这种情况的原因有很多，但主要原因是法学硕士的训练方式是，你获取一段文本，删除该文本中的一些单词，屏蔽它们，用空白标记替换它们，然后训练遗传神经网络来预测丢失的单词。如果你建造</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:12:48)</span>
+  </div>
+  <div class="dialogue-en">So what it’s going to do is produce a probability distribution of all the possible words in a dictionary. In fact, it doesn’t predict words. It predicts tokens that are kind of subword units, and so it’s easy to handle the uncertainty in the prediction there because there is only a finite number of possible words in the dictionary, and you can just compute a distribution over them. Then what the s...</div>
+  <div class="dialogue-zh">所以它要做的就是生成字典中所有可能单词的概率分布。事实上，它并不能预测单词。它预测属于子词单元的标记，因此很容易处理预测中的不确定性，因为字典中可能的单词数量有限，您只需计算它们的分布即可。那么什么是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:13:35)</span>
+  </div>
+  <div class="dialogue-en">That’s called autoregressive prediction, which is why those LLMs should be called autoregressive LLMs, but we just call them LLMs, and there is a difference between this kind of process and a process by which before producing a word… When you and I talk, you and I are bilingual, we think about what we’re going to say, and it’s relatively independent of the language in which we’re going to say. Whe...</div>
+  <div class="dialogue-zh">这就是所谓的自回归预测，这就是为什么那些LLM应该被称为自回归LLM，但我们就叫它们LLM，这种过程和产生一个词之前的过程是有区别的……当你和我说话时，你和我是双语的，我们会思考我们要说的话，它相对独立于我们要说的语言。何</div>
+</div>
+    <a href="https://lexfridman.com/yann-lecun-3-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-huberman-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Sleep, Dreams, Creativity &amp; the Limits of the Human Mind</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="andrew-ng.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Ng: Deep Learning, Education, and Real-World AI</div>
+  <div class="card-meta">Andrew Ng</div>
+</a>
+<a href="ben-goertzel.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ben Goertzel: Artificial General Intelligence</div>
+  <div class="card-meta">Ben Goertzel</div>
+</a>
+<a href="bryan-johnson.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bryan Johnson: Kernel Brain-Computer Interfaces</div>
+  <div class="card-meta">Bryan Johnson</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

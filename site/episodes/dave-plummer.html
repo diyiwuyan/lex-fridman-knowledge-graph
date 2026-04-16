@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dave Plummer - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Dave Plummer</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Dave Plummer</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/dave-plummer.html" style="font-size:16px;color:#818cf8;font-weight:600">Dave Plummer</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">24,677 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/dave-plummer-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:22</span>
+  <span class="chapter-title">First computer<span class="zh-trans"> · 第一台电脑</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">7:00</span>
+  <span class="chapter-title">Dropping out of high-school<span class="zh-trans"> · 高中辍学</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:41</span>
+  <span class="chapter-title">Joining Microsoft<span class="zh-trans"> · 加入微软</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">16:53</span>
+  <span class="chapter-title">MS-DOS<span class="zh-trans"> · 操作系统</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">20:05</span>
+  <span class="chapter-title">Windows 95<span class="zh-trans"> · 视窗95</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">26:52</span>
+  <span class="chapter-title">The man behind Windows<span class="zh-trans"> · Windows 背后的人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">31:48</span>
+  <span class="chapter-title">Debugging<span class="zh-trans"> · 调试</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">37:05</span>
+  <span class="chapter-title">Task Manager<span class="zh-trans"> · 任务管理器</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">42:14</span>
+  <span class="chapter-title">3D Pinball: Space Cadet<span class="zh-trans"> · 3D 弹球：太空学员</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">47:13</span>
+  <span class="chapter-title">Start menu and taskbar<span class="zh-trans"> · 开始菜单和任务栏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">58:12</span>
+  <span class="chapter-title">Blue Screen of Death<span class="zh-trans"> · 蓝屏死机</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:00:21</span>
+  <span class="chapter-title">Best programmers<span class="zh-trans"> · 最佳程序员</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:08:22</span>
+  <span class="chapter-title">Scariest time of Dave’s life<span class="zh-trans"> · 戴夫一生中最可怕的时刻</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:15:50</span>
+  <span class="chapter-title">Best Windows version<span class="zh-trans"> · 最佳 Windows 版本</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:17:40</span>
+  <span class="chapter-title">Slot machines<span class="zh-trans"> · 老虎机</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:21:23</span>
+  <span class="chapter-title">Autism and ADHD<span class="zh-trans"> · 自闭症和多动症</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:40:43</span>
+  <span class="chapter-title">Fastest programming language<span class="zh-trans"> · 最快的编程语言</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:44:48</span>
+  <span class="chapter-title">Future of programming<span class="zh-trans"> · 编程的未来</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">dave</span><span class="keyword-tag">plummer</span><span class="keyword-tag">windows</span><span class="keyword-tag">code</span><span class="keyword-tag">got</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">stuff</span><span class="keyword-tag">doing</span><span class="keyword-tag">microsoft</span><span class="keyword-tag">said</span><span class="keyword-tag">machine</span><span class="keyword-tag">software</span><span class="keyword-tag">game</span><span class="keyword-tag">language</span><span class="keyword-tag">working</span><span class="keyword-tag">programming</span><span class="keyword-tag">didn</span><span class="keyword-tag">computer</span><span class="keyword-tag">able</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"There’s no moment when I dropped out. You just go less and less and less until you realize it’s going to be embarrassing if I show up because I haven’t been there in a long time, and then pretty soon you’re just not going, and that’s how you drop out of high school. So, if you find yourself on that path, stop doing that. But that’s precisely what I did. And so now I’m not at school and I have to get a job, so I’m working at 7-Eleven and a paint warehouse and stuff like that. And 7-Eleven is actually kind of an interesting job because it’s a job I think they keep rotating for people that are smart enough to do the night shift with all the accounting and the administration and stuff they make the night shift do, but that have reasons personally that they need to work at 7-Eleven."</div>
+  <div class="quote-zh">没有一刻我退学了。你去的次数越来越少，直到你意识到如果我出现的话会很尴尬，因为我已经很长时间没去那里了，然后很快你就不再去了，这就是你从高中退学的原因。因此，如果您发现自己正走在这条路上，请停止这样做。但这正是我所做的。所以现在我不在学校，我必须找份工作，所以我在 7-11 和油漆仓库之类的地方工作。 7-11 便利店实际上是一项有趣的工作，因为我认为他们一直在轮换那些足够聪明的人来上夜班，负责所有的会计、行政管理以及他们让夜班做的事情，但就个人而言，他们有理由需要在 7-11 便利店工作。</div>
+  <div class="quote-meta">— Dave Plummer （00:07:21）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think the biggest deficit for me was when I started to manage people, because now you’re concerned about their hopes, dreams, aspirations, what motivates them. They have entire lives that are kind of a mystery to me, because I assume they want to be motivated and led and encouraged and compensated exactly as I would. And that’s not always the case. Some people need a lot more affirmation, some people just want money, some people want to be in the important meetings and make decisions. But I was largely oblivious to that. And so eventually I had to learn that everybody that you’re managing has their own set of incentives and priorities, and they’re completely different from what I think they probably are."</div>
+  <div class="quote-zh">我认为对我来说最大的缺陷是当我开始管理人们时，因为现在你关心他们的希望、梦想、抱负以及激励他们的因素。他们的整个生活对我来说有点神秘，因为我认为他们想要像我一样受到激励、领导、鼓励和补偿。但情况并非总是如此。有些人需要更多的肯定，有些人只是想要钱，有些人想要参加重要的会议并做出决定。但我基本上没有注意到这一点。所以最终我不得不了解到，你所管理的每个人都有自己的一套激励措施和优先事项，而且它们与我认为的可能完全不同。</div>
+  <div class="quote-meta">— Dave Plummer （01:26:36）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"… I think there was two stages for me. I always knew immediately that I was fascinated with these machines, from the TRS-80 Model I. It’s all I wanted to do was ride my bike back there and have more time with it. And I did that, you know, to wear out my welcome as much as I could. And the other revelation came, I think about second or third year of university when I realized, “I love programming, but I have no idea what I’m going to do. Am I going to make the 12 flash on a VCR somewhere? Or am I going to go work on an operating system? I have abso- absolutely no idea what I’m going to do post-graduation. But I love what I do.” And so, I think that was a lot of consolation. It’s like, it doesn’t really matter what I’m doing at this point, ’cause I kind of love doing it, so…"</div>
+  <div class="quote-zh">......我认为对我来说有两个阶段。我总是立刻就知道我对这些来自 TRS-80 Model I 的机器很着迷。我想做的就是骑着自行车回到那里，并有更多时间使用它。你知道，我这样做是为了尽可能地消除我的欢迎。另一个启示出现了，当我想到大学二年级或三年级时，我意识到，“我喜欢编程，但我不知道我要做什么。我是要在录像机上制作 12 闪存吗？还是要在操作系统上工作？我完全不知道毕业后要做什么。但我喜欢我所做的事情。”所以，我认为这是很大的安慰。就像，我现在在做什么并不重要，因为我喜欢这样做，所以……</div>
+  <div class="quote-meta">— Dave Plummer （00:06:18）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"No, I was a terrible student in high school, and even my first semester of college, I still wasn’t taking it quite seriously because I got mercy passed in Geometry 90, which is like the makeup class for the Geometry 12th-grade class that I didn’t have. And that scared me because I realized by 1% or the grace of the professor that let me through, I just about ended my entire university career here. So, fortunately, those marks don’t count on your transcript because they’re remedial classes. So, I got kind of a fresh start the next semester and did it for real, and I did it for me, and that made all the difference."</div>
+  <div class="quote-zh">不，我在高中时是一个很糟糕的学生，甚至在大学的第一个学期，我仍然没有认真对待它，因为我在几何90中得到了怜悯，这就像我没有参加的12年级几何课的化妆课一样。这让我很害怕，因为我意识到，有 1% 的概率，或者说是教授让我通过的恩典，我几乎就在这里结束了我的整个大学生涯。所以，幸运的是，这些分数不会计入你的成绩单，因为它们是补习班。所以，下学期我有了一个全新的开始，并且真正做到了，我为自己做了这件事，这让一切变得不同。</div>
+  <div class="quote-meta">— Dave Plummer （00:10:24）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Because you could take a machine and write a COBOL program for it in 1962, jump in your time machine, go to Poughkeepsie and boot up an IBM z17 mainframe and run it today. And they’ve been doing it for however many years that is. And it’s all on the business side, so we as consumers don’t have much access to it, but I think it was probably as influential in the commercial side as Windows 95 was in the home side. And then probably Linux would be number three for me. I put Linux as bigger than Unix, which doesn’t work because you can’t have one without the other, but the impact of Unix, BSD, and so forth, is largely in the academic space. It’s by programmers for programmers."</div>
+  <div class="quote-zh">因为您可以在 1962 年使用一台机器并为其编写 COBOL 程序，所以今天就跳入您的时间机器，前往波基普西并启动 IBM z17 大型机并运行它。不管他们已经这样做了多少年。而且这一切都是在商业方面，所以我们作为消费者没有太多机会接触到它，但我认为它在商业方面的影响力可能就像 Windows 95 在家庭方面的影响力一样。然后 Linux 对我来说可能会排在第三位。我认为 Linux 比 Unix 更大，这是行不通的，因为缺一不可，但 Unix、BSD 等的影响主要集中在学术领域。它是由程序员为程序员设计的。</div>
+  <div class="quote-meta">— Dave Plummer （00:21:51）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Dave Plummer, programmer and an old-school Microsoft software engineer who helped work on Windows 95, NT, and XP, building a lot of incredible tools, some of which have been continuously used by hundreds of millions of people, like the famed Windows Task Manager. Yes, the Windows Task Manager, and the zip/unzip compression support in Windows. He also ported the...</div>
+  <div class="dialogue-zh">以下是与 Dave Plummer 的对话，Dave Plummer 是一位程序员，也是一位老派的 Microsoft 软件工程师，他帮助开发了 Windows 95、NT 和 XP，构建了许多令人难以置信的工具，其中一些工具已被数亿人持续使用，例如著名的 Windows 任务管理器。是的，Windows 任务管理器以及 Windows 中的 zip/unzip 压缩支持。他还移植了</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:44)</span>
+  </div>
+  <div class="dialogue-en">Also, he wrote a book on autism, and about his life story, called Secrets of the Autistic Millionaire, where he gives really interesting insights about how to navigate relationships, career, and day-to-day life with autism. All this taken together, this was a super fun conversation about the history and future of programming, computing, technology, and just building cool stuff in the proverbial ga...</div>
+  <div class="dialogue-zh">此外，他还写了一本关于自闭症和他的人生故事的书，名为《自闭症百万富翁的秘密》，书中他给出了关于如何处理自闭症患者的人际关系、职业和日常生活的非常有趣的见解。所有这些加在一起，这是一次超级有趣的对话，涉及编程、计算、技术的历史和未来，以及在众所周知的游戏中构建酷炫的东西</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:22)</span>
+  </div>
+  <div class="dialogue-en">Tell me about your first computer. Do you remember?</div>
+  <div class="dialogue-zh">告诉我你的第一台电脑。你是否记得？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Plummer <span class="dialogue-time">(00:01:25)</span>
+  </div>
+  <div class="dialogue-en">I do. I didn’t own my first computer for a long time, but the first computer I ever used was a TRS-80 Model 1, Level 1, 4K machine, and I rode my bike in fifth or sixth grade, so I was about 11, to the local RadioShack. They had the standard component stereo systems, everything else RadioShack had, but they had a stack of boxes that was labeled “computer.” So I was asking the people who worked the...</div>
+  <div class="dialogue-zh">我愿意。我拥有第一台电脑的时间并不长，但我使用的第一台电脑是 TRS-80 Model 1、Level 1、4K 机器，我在五年级或六年级时骑自行车，当时我大约 11 岁，去当地的 RadioShack。他们有标准的组件立体声系统，RadioShack 也有其他一切，但他们有一堆标有“计算机”标签的盒子。所以我问那些工作过的人</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:53)</span>
+  </div>
+  <div class="dialogue-en">Did you know what you were doing?</div>
+  <div class="dialogue-zh">你知道你在做什么吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Plummer <span class="dialogue-time">(00:01:54)</span>
+  </div>
+  <div class="dialogue-en">Absolutely not. I mean, it’s no worse than a component stereo. The only thing is that Tandy, in their infinite wisdom, used the same five-pin DIN connector for power, video, and I think cassette, so they were all identical, and if you plugged them in wrong, you’d blow it up. So I read the label and got it working and wound up playing with it and not knowing anything about computers. So I’m typing ...</div>
+  <div class="dialogue-zh">绝对不是。我的意思是，它并不比组合立体声差。唯一的问题是，Tandy 以他们无限的智慧，使用相同的五针 DIN 连接器来连接电源、视频和盒式磁带，所以它们都是相同的，如果你插错了，你就会把它炸毁。所以我读了标签并让它工作了，然后就开始玩它，但我对计算机一无所知。所以我正在打字</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:23)</span>
+  </div>
+  <div class="dialogue-en">So you’re trying to talk to it in English?</div>
+  <div class="dialogue-zh">那么你想用英语与它交谈吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Plummer <span class="dialogue-time">(00:02:26)</span>
+  </div>
+  <div class="dialogue-en">Didn’t know any better. And I still have an old foolscap that I wrote in sixth grade of a program that’s kind of illogically correct but has no chance of working on any interpreter that existed at the time, so it took me a while to figure out what was actually going on with them. But I rode my bike down there every Thursday and Saturday, and they were gracious to let me use the machine.</div>
+  <div class="dialogue-zh">不知道有什么更好的。我仍然保留着我在六年级时写的一个程序的旧傻瓜纸，该程序有点不合逻辑，但没有机会在当时存在的任何解释器上工作，所以我花了一段时间才弄清楚它们到底发生了什么。但我每周四和周六都会骑自行车去那里，他们很慷慨地让我使用这台机器。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:45)</span>
+  </div>
+  <div class="dialogue-en">When was this?</div>
+  <div class="dialogue-zh">这是什么时候的事？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Plummer <span class="dialogue-time">(00:02:46)</span>
+  </div>
+  <div class="dialogue-en">’79, ’80.</div>
+  <div class="dialogue-zh">’79、’80。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:47)</span>
+  </div>
+  <div class="dialogue-en">Okay. What was the state of the art of computing back then? So what are we talking about?</div>
+  <div class="dialogue-zh">好的。当时的计算技术发展水平如何？那么我们在说什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Plummer <span class="dialogue-time">(00:02:50)</span>
+  </div>
+  <div class="dialogue-en">Well, the big three had come out. There was the TRS-80 Model 1, there was the PET 2001, and the Apple II came out roughly simultaneously.</div>
+  <div class="dialogue-zh">好在，三巨头已经出来了。 TRS-80 Model 1、PET 2001 和 Apple II 几乎同时问世。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:59)</span>
+  </div>
+  <div class="dialogue-en">Apple II. Would you say that’s the greatest computer ever built?</div>
+  <div class="dialogue-zh">苹果二号。你会说这是有史以来最伟大的计算机吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Plummer <span class="dialogue-time">(00:03:02)</span>
+  </div>
+  <div class="dialogue-en">Probably in retrospect. Well, I would probably give that to the Commodore 64.</div>
+  <div class="dialogue-zh">大概是回想起来。好吧，我可能会把它交给 Commodore 64。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:06)</span>
+  </div>
+  <div class="dialogue-en">Yeah. You and I agree on this, that that was my first computer probably many years after it was released, but yeah, Commodore 64’s incredible. But yes, Apple II had a huge impact on the history of personal computers.</div>
+  <div class="dialogue-zh">是的。你和我都同意这一点，那是我的第一台计算机，可能是在它发布很多年后，但是，是的，Commodore 64 令人难以置信。但是，Apple II 确实对个人电脑的历史产生了巨大的影响。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Plummer <span class="dialogue-time">(00:03:18)</span>
+  </div>
+  <div class="dialogue-en">Right. It’s hard to gauge the long-term impact, but I think the 64 itself probably influenced more people, so that’s my reason for picking that one.</div>
+  <div class="dialogue-zh">正确的。很难衡量长期影响，但我认为 64 本身可能影响了更多的人，所以这就是我选择 64 的原因。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:26)</span>
+  </div>
+  <div class="dialogue-en">You think so?</div>
+  <div class="dialogue-zh">你这么认为吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Plummer <span class="dialogue-time">(00:03:26)</span>
+  </div>
+  <div class="dialogue-en">The sales were certainly higher.</div>
+  <div class="dialogue-zh">销量肯定更高。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:28)</span>
+  </div>
+  <div class="dialogue-en">So Commodore 64 sold a lot?</div>
+  <div class="dialogue-zh">那么Commodore 64卖得很多吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Plummer <span class="dialogue-time">(00:03:30)</span>
+  </div>
+  <div class="dialogue-en">Yeah. I mean, the numbers are hard to believe. It depends which numbers you believe, but even the medium estimates were pretty high.</div>
+  <div class="dialogue-zh">是的。我的意思是，这些数字令人难以置信。这取决于您相信哪个数字，但即使是中等估计也相当高。</div>
+</div>
+    <a href="https://lexfridman.com/dave-plummer-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a>
+<a href="cenk-uygur.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cenk Uygur</div>
+  <div class="card-meta">Cenk Uygur</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

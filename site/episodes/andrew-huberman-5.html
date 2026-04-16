@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Andrew Huberman #5 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Andrew Huberman #5</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Andrew Huberman #5</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/andrew-huberman.html" style="font-size:16px;color:#818cf8;font-weight:600">Andrew Huberman</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">20,035 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/andrew-huberman-5-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:50</span>
+  <span class="chapter-title">Quitting and evolving<span class="zh-trans"> · 退出和发展</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">7:48</span>
+  <span class="chapter-title">How to focus and think deeply<span class="zh-trans"> · 如何集中注意力并深入思考</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">10:21</span>
+  <span class="chapter-title">Cannabis drama<span class="zh-trans"> · 大麻剧</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">20:34</span>
+  <span class="chapter-title">Jungian shadow<span class="zh-trans"> · 荣格阴影</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">31:01</span>
+  <span class="chapter-title">Supplements<span class="zh-trans"> · 补充剂</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">34:04</span>
+  <span class="chapter-title">Nicotine<span class="zh-trans"> · 尼古丁</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">38:27</span>
+  <span class="chapter-title">Caffeine<span class="zh-trans"> · 咖啡因</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:14</span>
+  <span class="chapter-title">Math gaffe<span class="zh-trans"> · 数学失误</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">57:16</span>
+  <span class="chapter-title">2024 presidential elections<span class="zh-trans"> · 2024 年总统选举</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:04:13</span>
+  <span class="chapter-title">Great white sharks<span class="zh-trans"> · 大白鲨</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:12:58</span>
+  <span class="chapter-title">Ayahuasca &amp; psychedelics<span class="zh-trans"> · 死藤水和迷幻药</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:27:59</span>
+  <span class="chapter-title">Relationships<span class="zh-trans"> · 人际关系</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:35:34</span>
+  <span class="chapter-title">Productivity<span class="zh-trans"> · 生产率</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:44:23</span>
+  <span class="chapter-title">Friendship<span class="zh-trans"> · 友谊</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">huberman</span><span class="keyword-tag">andrew</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">podcast</span><span class="keyword-tag">said</span><span class="keyword-tag">interesting</span><span class="keyword-tag">doing</span><span class="keyword-tag">got</span><span class="keyword-tag">stuff</span><span class="keyword-tag">done</span><span class="keyword-tag">put</span><span class="keyword-tag">sleep</span><span class="keyword-tag">episode</span><span class="keyword-tag">away</span><span class="keyword-tag">talking</span><span class="keyword-tag">coming</span><span class="keyword-tag">came</span><span class="keyword-tag">guy</span><span class="keyword-tag">amazing</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I offered it as a teaching moment in two ways. One, for people to understand cumulative probability. It was interesting too, the number of people that had come out critiquing the gaffe. Also, like Balaji and folks came out pointing out that they didn’t understand cumulative probability. So there was a lot of posturing. The dogpile, oftentimes people are quick to dogpile. They didn’t understand but a lot of people did understand. There’s some smart people out there obviously. I called my dad and he was just laughing. He goes, “Oh, this is good. This is like the old school way of hammering academics.”"</div>
+  <div class="quote-zh">我通过两种方式将其作为教学时刻。一、让人们了解累积概率。也很有趣的是，有多少人站出来批评这一失态。此外，像巴拉吉和其他人一样指出他们不理解累积概率。所以有很多姿态。狗堆，通常人们很快就会狗堆。他们不明白，但很多人都明白。显然那里有一些聪明人。我给我爸爸打电话，他只是笑。他说：“哦，这很好。这就像传统学校打击学术的方式。”</div>
+  <div class="quote-meta">— Andrew Huberman （00:44:12）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I mean, people commit suicide because they can’t see beyond the time domain they’re in or they think it’s going to go on forever. When we’re happy, we rarely think this is going to last forever, which is an interesting contrast in its own right. But I think that psychedelics, while I have very little experience with them, I have some, and it sounds like they’re just a very interesting window into the different apertures."</div>
+  <div class="quote-zh">我的意思是，人们自杀是因为他们无法超越自己所处的时域，或者他们认为这种情况会永远持续下去。当我们快乐时，我们很少认为这种情况会永远持续下去，这本身就是一个有趣的对比。但我认为迷幻剂，虽然我对它们的经验很少，但我有一些，听起来它们只是了解不同光圈的一个非常有趣的窗口。</div>
+  <div class="quote-meta">— Andrew Huberman （01:17:18）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"[inaudible 00:04:10] or worried. Yeah, I think it’s always a call. The last few years have been tremendous growth. We launched in January, 2021, and even this last year, 2024 has been huge growth in all sorts of ways. It’s been wild. And we have some short form content planned, 30 minute shorter episodes that really distill down the critical elements. We’re also thinking about moving to other venues besides podcasting. So there’s always the thought and the discussion, but when it comes to when to hang up your cleats, it’s like there just comes a natural time where you can do more to mentor the next generation coming in than focusing on self, and so there will come a time for that. And I think it’s critical."</div>
+  <div class="quote-zh">[听不清 00:04:10] 或担心。是的，我认为这总是一个电话。过去几年取得了巨大的增长。我们于 2021 年 1 月推出，即使是去年，即 2024 年，我们在各个方面都取得了巨大的增长。这很疯狂。我们计划了一些简短的内容，30 分钟的短集，真正提炼出关键元素。我们还在考虑转移到播客以外的其他场所。所以总是有想法和讨论，但当谈到何时挂起你的球鞋时，就像一个自然的时刻到来了，你可以做更多的事情来指导下一代的到来，而不是专注于自我，所以总会有这样的时刻。我认为这很关键。</div>
+  <div class="quote-meta">— Andrew Huberman （00:04:09）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think you can get energy and wake yourself up with exercise if you start early. And then, that fuels you all day long. I think that if you wait until you’re feeling at your best to train, sometimes that’s detrimental. Because then in the afternoon when you’re doing the work we get paid for like research, podcasting, etc., then oftentimes your brain isn’t firing as well."</div>
+  <div class="quote-zh">我认为如果你早点开始锻炼，你就能获得能量并让自己清醒。然后，这就会让你一整天都充满活力。我认为，如果你等到感觉最好的时候才训练，有时这是有害的。因为到了下午，当你从事研究、播客等我们获得报酬的工作时，你的大脑通常就不会活跃起来。</div>
+  <div class="quote-meta">— Andrew Huberman （00:39:45）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yes. So for instance, there’s a community of people online that believe that if you consume seed oils or something, that you’re setting up your skin sunburn. And if you don’t… There’s all these theories. So I like to know what the theories are. I like to know what the extremes are but I also like to know what the standard conversation is. But there’s generally more agreement than disagreement. I think where I’ve been bullish actually is… Like supplements. People go, “Oh, supplement-“"</div>
+  <div class="quote-zh">是的。举例来说，网上有一个社区的人认为，如果你食用种子油或其他东西，你的皮肤就会被晒伤。 And if you don’t… There’s all these theories.所以我想知道这些理论是什么。 I like to know what the extremes are but I also like to know what the standard conversation is. But there’s generally more agreement than disagreement. I think where I’ve been bullish actually is… Like supplements.人们会说，“哦，补充——”</div>
+  <div class="quote-meta">— Andrew Huberman （00:53:34）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">Hardship will show you who your real friends are. That’s for sure. Can you read the quote once more?</div>
+  <div class="dialogue-zh">苦难会让你知道谁是你真正的朋友。这是肯定的。你能再读一遍这句话吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:05)</span>
+  </div>
+  <div class="dialogue-en">“Don’t eat with people you wouldn’t starve with.”</div>
+  <div class="dialogue-zh">“不要和不会挨饿的人一起吃饭。”</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:13)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Andrew Huberman, his fifth time on the podcast. He is the host of the Huberman Lab podcast and is an amazing scientist, teacher, human being, and someone I’m grateful to be able to call a close friend. Also, he has a book coming out next year that you should pre-order now, called Protocols: An Operating Manual for the Human Body. This is the Lex Freeman podcast...</div>
+  <div class="dialogue-zh">以下是与安德鲁·胡伯曼的对话，这是他第五次参加播客。他是休伯曼实验室播客的主持人，是一位了不起的科学家、教师、人类，也是我很感激能够称之为亲密朋友的人。此外，他明年还会出版一本书，你应该立即预订，书名叫《协议：人体操作手册》。这是莱克斯·弗里曼播客</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:50)</span>
+  </div>
+  <div class="dialogue-en">You think there’s ever going to be a day when you walk away from podcasting?</div>
+  <div class="dialogue-zh">你认为有一天你会离开播客吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:00:53)</span>
+  </div>
+  <div class="dialogue-en">Definitely. I came up within and then on the periphery of skateboard culture. And for the record, I was not a great skateboarder. I always have to say that because skateboarders are relentless if you call something you didn’t do or whatever. I could do a few things and I loved the community and I still have a lot of friends in that community. Jim Thiebaud at Deluxe, you can look him up. He’s the m...</div>
+  <div class="dialogue-zh">确实。我先是在滑板文化内部，然后又在其外围。郑重声明，我并不是一个出色的滑板手。我总是不得不这么说，因为如果你称某件事是你没有做过的或其他什么的话，滑板运动员会毫不留情。我可以做一些事情，我喜欢这个社区，而且我在那个社区里仍然有很多朋友。 Deluxe 的 Jim Thiebaud，你可以去找他。他是我</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:02:03)</span>
+  </div>
+  <div class="dialogue-en">In fact, the greatest scientists, people like Richard Axel, Catherine Dulac, there are many other labs in neuroscience, Karl Deisseroth. They’re not just known for doing great science. They’re known for mentoring some of the best scientists that then go on to start their own labs. And I think in podcasting, I am very fortunate I got in a fairly early wave, not the earliest wave, but thanks to your...</div>
+  <div class="dialogue-zh">事实上，最伟大的科学家，如理查德·阿克塞尔、凯瑟琳·杜拉克，还有许多其他神经科学实验室，卡尔·戴瑟罗斯。他们不仅因从事伟大的科学研究而闻名。他们以指导一些最优秀的科学家而闻名，这些科学家随后创办了自己的实验室。我认为在播客领域，我很幸运我进入了相当早的浪潮，不是最早的浪潮，但是感谢你</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:02:36)</span>
+  </div>
+  <div class="dialogue-en">My company that I started with, Rob Moore, SciCom Media, there’s a couple other guys in there too. Mike Blabac, our photographer, Ian Mackey, Chris Ray, Martin Phobes. We are a company that produces podcasts right now. That’s Huberman Lab podcast, but we’re launching a new podcast, Perform with Dr. Andy Galpin.</div>
+  <div class="dialogue-zh">我创办的公司是 Rob Moore，SciCom Media，那里还有其他几个人。 Mike Blabac，我们的摄影师，Ian Mackey，Chris Ray，Martin Phobes。我们现在是一家制作播客的公司。这是 Huberman Lab 播客，但我们正在推出一个新的播客，与安迪·加尔平博士一起表演。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:56)</span>
+  </div>
+  <div class="dialogue-en">Nice.</div>
+  <div class="dialogue-zh">好的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:02:57)</span>
+  </div>
+  <div class="dialogue-en">And we want to do more of that kind of thing, finding a really great talent, highly qualified people, credentialed people. And I’ve got a new kind of obsession with scouring the internet, looking for the young talent in science, in health and related fields. And so will there be a final episode of the HLP? Yeah, I mean, [inaudible 00:03:19] cancer aside someday it’ll be the very last, “And thank y...</div>
+  <div class="dialogue-zh">我们想做更多这样的事情，寻找真正优秀的人才、高素质的人才、有资质的人才。我对在互联网上搜索、寻找科学、健康和相关领域的年轻人才产生了一种新的痴迷。那么 HLP 会有最后一集吗？是的，我的意思是，[听不清 00:03:19] 撇开癌症不谈，有一天这将是最后一次，“谢谢你</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:26)</span>
+  </div>
+  <div class="dialogue-en">Yeah, I love the idea of walking away and not be dramatic about it. Right? When it feels right, you can leave and you can come back whenever the fuck you want.</div>
+  <div class="dialogue-zh">是的，我喜欢走开而不是戏剧化的想法。正确的？当感觉合适的时候，你可以离开，你想什么时候回来都可以。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:03:35)</span>
+  </div>
+  <div class="dialogue-en">Right.</div>
+  <div class="dialogue-zh">正确的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:36)</span>
+  </div>
+  <div class="dialogue-en">John Stewart did this well with the Daily Show. I think that was during the 2016 election when everybody wanted him to stay on and he just walked away. Dave Chappelle for different reasons, walked away.</div>
+  <div class="dialogue-zh">约翰·斯图尔特在《每日秀》中就做到了这一点。我想那是在 2016 年大选期间，当时每个人都希望他留下来，但他却离开了。戴夫·查佩尔（Dave Chappelle）出于不同的原因，走开了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:03:48)</span>
+  </div>
+  <div class="dialogue-en">Disappeared, came back.</div>
+  <div class="dialogue-zh">消失了，又回来了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:49)</span>
+  </div>
+  <div class="dialogue-en">Gave away so much money, didn’t care, and then came back and was doing stand up in the park in the middle of nowhere. Genius. You have Habib who, undefeated, walks away at the very top of a sport.</div>
+  <div class="dialogue-zh">捐了那么多钱，不在乎，然后回来在公园里一个不知名的地方站起来。天才。哈比卜保持着不败战绩，在一项运动中名列前茅。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:04:03)</span>
+  </div>
+  <div class="dialogue-en">Is he coming back?</div>
+  <div class="dialogue-zh">他回来了吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:04)</span>
+  </div>
+  <div class="dialogue-en">No, it’s done.</div>
+  <div class="dialogue-zh">不，已经完成了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:04:06)</span>
+  </div>
+  <div class="dialogue-en">[inaudible 00:04:06] we don’t know.</div>
+  <div class="dialogue-zh">[听不清 00:04:06] 我们不知道。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:07)</span>
+  </div>
+  <div class="dialogue-en">Yeah, right. You don’t know. I don’t-</div>
+  <div class="dialogue-zh">是的，对。你不知道。我不-</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:04:09)</span>
+  </div>
+  <div class="dialogue-en">[inaudible 00:04:10] or worried. Yeah, I think it’s always a call. The last few years have been tremendous growth. We launched in January, 2021, and even this last year, 2024 has been huge growth in all sorts of ways. It’s been wild. And we have some short form content planned, 30 minute shorter episodes that really distill down the critical elements. We’re also thinking about moving to other venu...</div>
+  <div class="dialogue-zh">[听不清 00:04:10] 或担心。是的，我认为这总是一个电话。过去几年取得了巨大的增长。我们于 2021 年 1 月推出，即使是去年，即 2024 年，我们在各个方面都取得了巨大的增长。这很疯狂。我们计划了一些简短的内容，30 分钟的短集，真正提炼出关键元素。我们也在考虑搬到其他地点</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Huberman <span class="dialogue-time">(00:04:56)</span>
+  </div>
+  <div class="dialogue-en">I mean, again, I saw this in skateboarding like Danny and Colin and Danny’s brother Damon started DC with Ken Block, the driver who unfortunately passed away a little while ago, rally car driver. And they eventually sold it, I think to Quicksilver or something like that. But they’re all phenomenal talents in their respective areas. But they brought in the next line of amazing riders. The plan B th...</div>
+  <div class="dialogue-zh">我的意思是，我再次在滑板运动中看到了这一点，比如丹尼和科林，以及丹尼的兄弟达蒙和肯·布洛克一起创办了 DC，肯·布洛克是拉力赛车手，不久前不幸去世。他们最终把它卖了，我想是卖给了快银之类的人。但他们都是各自领域的杰出人才。但他们带来了下一批令人惊叹的车手。 B计划</div>
+</div>
+    <a href="https://lexfridman.com/andrew-huberman-5-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-huberman-3.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Focus, Stress, Relationships, and Friendship</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="carl-hart.html" class="card" style="text-decoration:none">
+  <div class="card-title">Carl Hart: Heroin, Cocaine, MDMA, Alcohol &amp; the Role of Drugs in Society</div>
+  <div class="card-meta">Carl Hart</div>
+</a>
+<a href="dave-hone.html" class="card" style="text-decoration:none">
+  <div class="card-title">Dave Hone</div>
+  <div class="card-meta">Dave Hone</div>
+</a>
+<a href="eric-weinstein-3.html" class="card" style="text-decoration:none">
+  <div class="card-title">Eric Weinstein: On the Nature of Good and Evil, Genius and Madness</div>
+  <div class="card-meta">Eric Weinstein</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

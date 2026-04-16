@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jordan Peterson #2 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Jordan Peterson #2</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Jordan Peterson #2</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/jordan-peterson.html" style="font-size:16px;color:#818cf8;font-weight:600">Jordan Peterson</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">23,613 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/jordan-peterson-2-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:08</span>
+  <span class="chapter-title">Nietzsche<span class="zh-trans"> · 尼采</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">7:49</span>
+  <span class="chapter-title">Power and propaganda<span class="zh-trans"> · 权力和宣传</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">12:55</span>
+  <span class="chapter-title">Nazism<span class="zh-trans"> · 纳粹主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">17:55</span>
+  <span class="chapter-title">Religion<span class="zh-trans"> · 宗教</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">34:19</span>
+  <span class="chapter-title">Communism<span class="zh-trans"> · 共产主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:04</span>
+  <span class="chapter-title">Hero myth<span class="zh-trans"> · 英雄神话</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">42:13</span>
+  <span class="chapter-title">Belief in God<span class="zh-trans"> · 信仰上帝</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">52:25</span>
+  <span class="chapter-title">Advice for young people<span class="zh-trans"> · 给年轻人的建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:05:03</span>
+  <span class="chapter-title">Sex<span class="zh-trans"> · 性别</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:25:01</span>
+  <span class="chapter-title">Good and evil<span class="zh-trans"> · 善与恶</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:37:47</span>
+  <span class="chapter-title">Psychopathy<span class="zh-trans"> · 精神病态</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:51:16</span>
+  <span class="chapter-title">Hardship<span class="zh-trans"> · 困难</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:03:32</span>
+  <span class="chapter-title">Pain and gratitude<span class="zh-trans"> · 痛苦与感恩</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:14:33</span>
+  <span class="chapter-title">Truth<span class="zh-trans"> · 真相</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">jordan</span><span class="keyword-tag">peterson</span><span class="keyword-tag">going</span><span class="keyword-tag">don</span><span class="keyword-tag">god</span><span class="keyword-tag">nietzsche</span><span class="keyword-tag">ideas</span><span class="keyword-tag">yourself</span><span class="keyword-tag">human</span><span class="keyword-tag">true</span><span class="keyword-tag">adventure</span><span class="keyword-tag">story</span><span class="keyword-tag">social</span><span class="keyword-tag">possible</span><span class="keyword-tag">young</span><span class="keyword-tag">person</span><span class="keyword-tag">religious</span><span class="keyword-tag">evil</span><span class="keyword-tag">best</span><span class="keyword-tag">truth</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Look, if you’re going to play hard in a conversation to explore, you’re going to say things that are edgy, that are going to cause trouble, and they might be wrong. And that’s another reason why free speech protection is so important. You actually have to protect the right, let’s say, in the optimal circumstance, you have to protect the right of well-meaning people to be wrong. Now, you probably have to go beyond that to truly protect it, you have to even protect the right of people who aren’t meaning well to be wrong. And we also need that because we’re not always well-meaning. The alternative to that protection would be the insistence that people only say what was 100% right all the time."</div>
+  <div class="quote-zh">听着，如果你要在对话中努力探索，你就会说一些尖锐的话，会引起麻烦，而且它们可能是错的。这就是言论自由保护如此重要的另一个原因。你实际上要保护权利，比如说，在最佳情况下，你要保护好心人犯错误的权利。现在，你可能必须超越这一点才能真正保护它，你甚至必须保护那些无意犯错的人的权利。我们也需要这一点，因为我们并不总是善意的。这种保护的替代方案是坚持人们始终只说 100%正确的话。</div>
+  <div class="quote-meta">— Jordan Peterson （02:18:08）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But the truth of the matter is that you can force people to see things your way, let’s say, but it’s nowhere near as good as strategy even practically than the strategy that would be associated with something like voluntary joint agreement of pattern of movement strategy towards a goal. See, this is such an important thing to understand because it helps you start to understand the distinction between a unifying force that’s based on power and compulsion, and one that is much more in keeping, I would say with the ethos that governs western societies, free western societies, there’s really a qualitative difference, and it’s not some morally relativistic illusion."</div>
+  <div class="quote-zh">但问题的真相是，你可以强迫人们以你的方式看待事物，但它远不如策略，甚至实际上比与诸如实现目标的运动策略模式的自愿联合协议相关的策略更好。看，这是一件需要理解的重要事情，因为它可以帮助你开始理解一种基于权力和强制的统一力量与一种更符合西方社会、自由西方社会的精神的统一力量之间的区别，我想说，这确实是一个质的差异，而不是某种道德上的相对主义幻觉。</div>
+  <div class="quote-meta">— Jordan Peterson （00:12:09）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"The rule for me when he was on the stairs was as soon as you’re willing to be a civilized human being, you can get off the stairs. And you might think, well, that’s nothing but arbitrary superego, patriarchal oppressive constraint. Or you could say, “Well, no, what I’m actually doing is facilitating his cortical maturation.” Because when a child misbehaves, it’s usually because they’re under the domination of some primordial emotional or motivational impulse. They’re angry, they’re over-enthusiastic, they’re upset, they’re selfish. It’s narrow self-centeredness expressed in a immature manner."</div>
+  <div class="quote-zh">当他在楼梯上时，我的规则是，只要你愿意成为一个文明人，你就可以下楼梯。你可能会想，好吧，这只不过是任意的超我、父权制的压迫性约束。或者你可以说，“嗯，不，我实际上所做的是促进他的皮质成熟。”因为当孩子行为不端时，通常是因为他们受到某种原始情感或动机冲动的支配。他们生气，他们过度热情，他们心烦意乱，他们自私。这是一种以不成熟的方式表现出来的狭隘的自我中心。</div>
+  <div class="quote-meta">— Jordan Peterson （01:13:56）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"This is why I like the story of Cain and Abel, I would say. Because Cain is mediocre, but that’s because he refuses to do his best. It’s not something intrinsic to him. And I actually think that’s the right formulation because I had people in my clinical practice who were, they were lost in many dimensions from the perspective of comparison. One woman I remember in particular who, man, she had a lot to contend with, she was not educated, she was not intelligent. She had a brutal family, terrible history of psychiatric hospitalization. And when I met her at a hospital, she was an outpatient from the psychiatric ward, and she had been in there with people that she thought were worse off than her, and they were. And that was a long way down."</div>
+  <div class="quote-zh">我想说，这就是为什么我喜欢该隐和亚伯的故事。因为该隐很平庸，但那是因为他拒绝尽力而为。这不是他固有的东西。事实上，我认为这是正确的表述，因为在我的临床实践中，有人从比较的角度来看，他们在很多方面都迷失了。我特别记得一位女士，男人，她有很多事情要面对，她没有受过教育，她也不聪明。她有一个残酷的家庭，有可怕的精神病住院史。当我在医院见到她时，她是精神科病房的一名门诊病人，她和那些她认为比她情况更糟的人一起住在那里，而他们确实是这样。那还有很长的路要走。</div>
+  <div class="quote-meta">— Jordan Peterson （02:09:12）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But given the alignment, let’s say, of the more mainstream Protestant movements with the woke mob, I don’t think it’s an absurd criticism. It’s something like the degeneration of Christianity into the notion that good and harmless are the same thing, or good and empathic are the same thing, which is simply not true and far too simplified. And I also think Nietzsche was extremely wrong in his presumption that human beings should take it to themselves to construct their own values. I think he made a colossal error in that presumption."</div>
+  <div class="quote-zh">但考虑到更主流的新教运动与觉醒暴徒的结盟，我不认为这是一个荒谬的批评。这就像基督教的堕落，认为善良和无害是同一件事，或者善良和同理心是同一件事，这根本不正确，而且过于简单化。我还认为尼采关于人类应该自行构建自己的价值观的假设是极其错误的。我认为他在这个假设中犯了一个巨大的错误。</div>
+  <div class="quote-meta">— Jordan Peterson （00:26:37）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Jordan Peterson. His second time on this, The Lex Fridman Podcast.</div>
+  <div class="dialogue-zh">以下是与乔丹·彼得森的对话。他第二次参加 Lex Fridman 播客。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:08)</span>
+  </div>
+  <div class="dialogue-en">You have given a set of lectures on Nietzsche as part of the new Peterson Academy, and the lectures were powerful. There’s some element of the contradictions, the tensions, the drama, the way you like, lock in on an idea, but then are struggling with that idea, all of that, that feels like it’s a Nietzschean.</div>
+  <div class="dialogue-zh">作为新彼得森学院的一部分，您做了一系列关于尼采的讲座，这些讲座很有影响力。有一些矛盾、紧张、戏剧性的元素，你喜欢的方式，锁定一个想法，但随后又与这个想法作斗争，所有这些，感觉就像是尼采式的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Peterson <span class="dialogue-time">(00:00:26)</span>
+  </div>
+  <div class="dialogue-en">Well, he’s a big influence on me stylistically and in terms of the way I approached writing, and also many of the people that were other influences of mine were very influenced by him. So I was blown away when I first came across his writings. They’re so intellectually dense that I don’t know if there’s anything that approximates that. Dostoevsky maybe, although he’s much more wordy. Nietzsche is ...</div>
+  <div class="dialogue-zh">嗯，他在风格上和我的写作方式上对我产生了很大的影响，而且许多对我有其他影响的人也深受他的影响。所以当我第一次看到他的作品时，我就被震撼了。他们的智力如此之高，以至于我不知道是否有任何东西可以与他们相媲美。也许是陀思妥耶夫斯基，尽管他更啰嗦。尼采是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:40)</span>
+  </div>
+  <div class="dialogue-en">Taking each sentence seriously and deconstructing it and really struggling with it. I think underpinning that approach to writing requires deep respect for the person. I think if we approach writing with that kind of respect, you can take Orwell, you can take a lot of writers and really dig in on singular sentences.</div>
+  <div class="dialogue-zh">认真对待每句话并解构它，并真正与之斗争。我认为支撑这种写作方法需要对人的深深尊重。我认为，如果我们以这种尊重的态度来写作，你可以像奥威尔那样，你可以像很多作家一样，真正深入研究单一的句子。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Peterson <span class="dialogue-time">(00:02:01)</span>
+  </div>
+  <div class="dialogue-en">Yeah, well, those are the great writers because the greatest writers virtually everything they wrote is worth attending to. And I think Nietzsche is in some ways the ultimate exemplar of that because often when I read a book, I’ll mark one way or another, I often fold the corner of the page over to indicate something that I’ve found that’s worth remembering. I couldn’t do that with a book like Bey...</div>
+  <div class="dialogue-zh">是的，这些都是伟大的作家，因为最伟大的作家几乎他们写的所有东西都值得关注。我认为尼采在某种程度上是这方面的终极典范，因为当我读一本书时，我常常会以这种或那种方式进行标记，我经常将书页的一角折叠起来以表明我发现值得记住的东西。我无法通过像 Bey 这样的书做到这一点</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Peterson <span class="dialogue-time">(00:02:53)</span>
+  </div>
+  <div class="dialogue-en">So there’s other people whose thought is of equivalent value. I’ve returned recently, and I’m going to do a course on to the work of this Romanian historian of religions, Mircea Eliade, who’s not nearly as well known as he should be, and whose work, by the way, is a real antidote to the postmodern, nihilistic, Marxist stream of literary interpretation that the universities as a whole have adopted....</div>
+  <div class="dialogue-zh">所以还有其他人的想法具有同等价值。我最近回来了，我要上一门关于罗马尼亚宗教历史学家米尔恰·伊利亚德（Mircea Eliade）的作品的课程，他的知名度远没有他应有的那么高，顺便说一句，他的作品是对整个大学所采用的后现代、虚无主义、马克思主义文学解释流的真正解毒剂。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Peterson <span class="dialogue-time">(00:03:59)</span>
+  </div>
+  <div class="dialogue-en">That’s part of often what distinguishes writing that has a literary end from writing that’s more merely technical. The literary writings have this imagistic and dreamlike reference space around them. It takes a long time to turn a complex image into something semantic. And so if you’re writing evokes deep imagery, it has a depth that can’t be captured merely in words. And the great romantic poetic...</div>
+  <div class="dialogue-zh">这通常是区分具有文学目的的写作和纯粹技术性写作的部分原因。文学作品周围都有这种意象和梦幻般的参考空间。将复杂的图像转化为语义的东西需要很长时间。因此，如果你的写作能唤起深刻的意象，那么它的深度是无法仅用言语来捕捉的。还有伟大的浪漫诗意</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Peterson <span class="dialogue-time">(00:05:00)</span>
+  </div>
+  <div class="dialogue-en">So that’s an embodied issue, but you’re using words which obviously aren’t equivalent to the actions themselves. You can imagine that the words are surrounded by a cloud of images that they evoke and that the images can be translated into actions. And the greatest writing uses words in a manner that evokes images that profoundly affects perception and action. And so I would take the manner in whic...</div>
+  <div class="dialogue-zh">所以这是一个具体的问题，但你使用的词语显然不等同于行动本身。你可以想象这些词语被它们所唤起的一团图像所包围，并且这些图像可以转化为行动。最伟大的作品使用文字的方式会唤起深刻影响感知和行动的图像。所以我会采取这样的方式</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:51)</span>
+  </div>
+  <div class="dialogue-en">So if the words spring to the full visual complexity and then that can then transform itself into action.</div>
+  <div class="dialogue-zh">因此，如果文字充满视觉复杂性，那么它就可以转化为行动。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Peterson <span class="dialogue-time">(00:06:00)</span>
+  </div>
+  <div class="dialogue-en">And change in perception because-</div>
+  <div class="dialogue-zh">观念的改变是因为——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:01)</span>
+  </div>
+  <div class="dialogue-en">Change in perception. Yeah.</div>
+  <div class="dialogue-zh">观念的改变。是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Peterson <span class="dialogue-time">(00:06:02)</span>
+  </div>
+  <div class="dialogue-en">Well, those are both relevant and it’s an important thing to understand because the classic empiricists make the presumption, and it’s an erroneous presumption that perception is a value-free enterprise. And they assume that partly because they think of perception as something passive. You just turn your head and you look at the world and there it is. It’s like perception is not passive. There is ...</div>
+  <div class="dialogue-zh">嗯，这些都是相关的，理解这一点很重要，因为经典经验主义者做出了假设，而感知是一个无价值的企业是一个错误的假设。他们之所以这么认为，部分原因是他们认为感知是被动的。你只要转过头，看看世界，它就在那里。这就像感知不是被动的。有</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Peterson <span class="dialogue-time">(00:06:53)</span>
+  </div>
+  <div class="dialogue-en">You’re sampling and you’re only sampling a small element of the space that’s in front of you, and the element that you choose to sample is dependent on your aims and your goals. So it’s value saturated. And so all your perceptions are action predicated and partly what you’re doing when you’re communicating is therefore not only changing people’s actions, let’s say, but you’re also changing the str...</div>
+  <div class="dialogue-zh">您正在采样，并且您只是对您面前的空间的一小部分进行采样，并且您选择采样的元素取决于您的目的和目标。所以它的价值已经饱和了。因此，你所有的感知都是以行动为基础的，因此，在沟通时你所做的部分不仅改变了人们的行为，而且你也在改变他们的行为。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:49)</span>
+  </div>
+  <div class="dialogue-en">What about not just profound thinkers, but thinkers that deliver a powerful idea, for example, utopian ideas of Marx or utopian ideas, you could say dystopian ideas of Hitler? Those ideas are powerful and they can saturate all your perception with values and they focus you in a way where there’s only a certain set of actions.</div>
+  <div class="dialogue-zh">不仅是深刻的思想家，而且是那些提出强大思想的思想家，例如马克思的乌托邦思想或乌托邦思想，你可以说希特勒的反乌托邦思想？这些想法是强大的，它们可以让你的所有感知都充满价值观，它们让你集中注意力，只需要采取一组特定的行动。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Peterson <span class="dialogue-time">(00:08:16)</span>
+  </div>
+  <div class="dialogue-en">Yeah, right. Even a certain set of emotions as well.</div>
+  <div class="dialogue-zh">是的，对。 Even a certain set of emotions as well.</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:19)</span>
+  </div>
+  <div class="dialogue-en">And it’s intense and it’s direct, and they’re so powerful that they completely altered the perception and the words spring to life.</div>
+  <div class="dialogue-zh">它是强烈的、直接的，它们是如此强大，以至于完全改变了人们的看法，词语变得栩栩如生。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Peterson <span class="dialogue-time">(00:08:27)</span>
+  </div>
+  <div class="dialogue-en">Yeah, it’s like a form of possession. So there’s two things you need to understand to make that clear. The first issue is that as we suggested or implied, that perception is action predicated, but action is goal predicated, the act towards goal. And these propagandistic thinkers that you described, they attempt to unify all possible goals into a coherent singularity. And there’s advantages of that...</div>
+  <div class="dialogue-zh">是的，这就像一种占有形式。因此，您需要了解两件事才能弄清楚这一点。第一个问题是，正如我们所建议或暗示的那样，感知是基于行动的，而行动是基于目标的，是朝着目标而采取的行动。你所描述的这些宣传思想家，他们试图将所有可能的目标统一成一个连贯的奇点。这是有好处的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Peterson <span class="dialogue-time">(00:09:29)</span>
+  </div>
+  <div class="dialogue-en">Now, Nietzsche was very interested in that, and I don’t think he got that exactly right. But the postmodernists, for example, especially the ones, and this is most of them with the Neo-Marxist bent, their presumption is that the fundamental unifying idea is power, that everything’s about compulsion and force essentially, and that that’s the only true unifying ethos of mankind, which is, I don’t kn...</div>
+  <div class="dialogue-zh">现在，尼采对此非常感兴趣，但我认为他的观点并不完全正确。但是后现代主义者，尤其是后现代主义者，他们中的大多数人都具有新马克思主义倾向，他们的假设是，基本的统一思想是权力，一切本质上都是关于强迫和武力，这是人类唯一真正的统一精神，也就是说，我不知道</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Peterson <span class="dialogue-time">(00:10:25)</span>
+  </div>
+  <div class="dialogue-en">And I don’t mean the power Nietzsche talks about. His will to power was more his insistence that a human being is an expression of will rather than a mechanism of self-protection and security. He thought of the life force in human beings as something that strived not to protect itself, but to exhaust itself in being and becoming. It’s like an upward oriented motivational drive even towards meaning...</div>
+  <div class="dialogue-zh">我指的并不是尼采所说的力量。他的权力意志更多地是他坚持认为人类是意志的表达，而不是自我保护和安全的机制。他认为人类的生命力不是努力保护自己，而是在存在和变化中耗尽自己。这就像一种向上的动机，甚至是为了意义</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:11:06)</span>
+  </div>
+  <div class="dialogue-en">So it’s not power like you’re trying to destroy the other. It’s power, full flourishing of a human being, the creative force of a human being in that way.</div>
+  <div class="dialogue-zh">所以这并不是像你试图摧毁对方那样的权力。它是力量，是人类的全面繁荣，是人类的创造力。</div>
+</div>
+    <a href="https://lexfridman.com/jordan-peterson-2-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="gregory-aldrete.html" class="card" style="text-decoration:none">
+  <div class="card-title">Gregory Aldrete</div>
+  <div class="card-meta">Gregory Aldrete</div>
+</a>
+<a href="yuval-noah-harari.html" class="card" style="text-decoration:none">
+  <div class="card-title">Yuval Noah Harari</div>
+  <div class="card-meta">Yuval Noah Harari</div>
+</a>
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Donald Trump - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Donald Trump</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Donald Trump</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/donald-trump.html" style="font-size:16px;color:#818cf8;font-weight:600">Donald Trump</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">11,328 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/donald-trump-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:09</span>
+  <span class="chapter-title">Psychology of winning and losing<span class="zh-trans"> · 输赢心理学</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:51</span>
+  <span class="chapter-title">Politics is a dirty game<span class="zh-trans"> · 政治是肮脏的游戏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">5:28</span>
+  <span class="chapter-title">Business vs politics<span class="zh-trans"> · 商业与政治</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">8:04</span>
+  <span class="chapter-title">War in Ukraine<span class="zh-trans"> · 乌克兰战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">9:53</span>
+  <span class="chapter-title">Kamala Harris interview on CNN<span class="zh-trans"> · 卡玛拉·哈里斯接受 CNN 采访</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">10:36</span>
+  <span class="chapter-title">Trump-Harris debate<span class="zh-trans"> · 特朗普与哈里斯的辩论</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">13:33</span>
+  <span class="chapter-title">China<span class="zh-trans"> · 中国</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">15:47</span>
+  <span class="chapter-title">2020 election<span class="zh-trans"> · 2020 年选举</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">24:03</span>
+  <span class="chapter-title">Project 2025<span class="zh-trans"> · 2025年计划</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">24:52</span>
+  <span class="chapter-title">Marijuana<span class="zh-trans"> · 大麻</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">27:13</span>
+  <span class="chapter-title">Joe Rogan<span class="zh-trans"> · 乔·罗根</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:54</span>
+  <span class="chapter-title">Division<span class="zh-trans"> · 分配</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">38:00</span>
+  <span class="chapter-title">Communism and fascism<span class="zh-trans"> · 共产主义和法西斯主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">41:36</span>
+  <span class="chapter-title">Power<span class="zh-trans"> · 力量</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">43:36</span>
+  <span class="chapter-title">UFOs &amp; JFK<span class="zh-trans"> · 不明飞行物和肯尼迪</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">44:16</span>
+  <span class="chapter-title">Jeffrey Epstein<span class="zh-trans"> · 杰弗里·爱泼斯坦</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">45:55</span>
+  <span class="chapter-title">Mortality and religion<span class="zh-trans"> · 死亡率和宗教</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">47:25</span>
+  <span class="chapter-title">Lex AMA<span class="zh-trans"> · 莱克斯·阿玛</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">trump</span><span class="keyword-tag">donald</span><span class="keyword-tag">don</span><span class="keyword-tag">said</span><span class="keyword-tag">going</span><span class="keyword-tag">country</span><span class="keyword-tag">got</span><span class="keyword-tag">doing</span><span class="keyword-tag">done</span><span class="keyword-tag">election</span><span class="keyword-tag">politics</span><span class="keyword-tag">business</span><span class="keyword-tag">better</span><span class="keyword-tag">went</span><span class="keyword-tag">ever</span><span class="keyword-tag">put</span><span class="keyword-tag">president</span><span class="keyword-tag">war</span><span class="keyword-tag">podcast</span><span class="keyword-tag">game</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"As an example, you interview a lot of people, good people, successful people. Let’s see how you do with this interview versus them. I can tell you right now you’re going to get the highest numbers you’ve ever had by sometimes a factor of 10. But when a Gold Star Family asks me to come in and spend time with them, and then they said, sir… We did a ceremony. And then we went down to the graves, which was quite a distance away. They said, “Sir, would you come to the grave?” And then they said, when we were there… It’s very sad actually because these people shouldn’t have died. They shouldn’t have died. They died because of Biden and because of Kamala, they died because just like if they pulled the trigger. Now, I don’t know if that’s controversial to say, but I don’t think it is."</div>
+  <div class="quote-zh">举个例子，你采访了很多人，好人，成功的人。让我们看看你在这次采访中与他们相比表现如何。我现在可以告诉你，你将获得有史以来最高的数字，有时是十倍。但是当一个金星家庭邀请我进去和他们呆在一起时，然后他们说，先生……我们举行了一个仪式。然后我们就下到坟墓那里去，那里距离很远。他们说：“先生，您愿意到坟墓那里去吗？”然后他们说，当我们在那里时……实际上非常悲伤，因为这些人不应该死。他们不应该死。他们因为拜登而死，因为卡玛拉而死，因为就像他们扣动扳机一样。现在，我不知道这样说是否有争议，但我认为没有。</div>
+  <div class="quote-meta">— Donald Trump （00:34:48）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Nothing. I know nothing about it. And they know that too. Democrats know that. And I purposely haven’t read it, because I want to say to you, I have no idea what it’s all about. It’s easier, than saying I read it and all of the things. No, I purposely haven’t read it and I’ve heard about it. I’ve heard about things that are in there that I don’t like, and there’s some things in there that everybody would like, but there are things that I don’t like at all. And I think it’s unfortunate that they put it out, but it doesn’t mean anything, because it has nothing to do with me. Project 25 has absolutely nothing to do with me."</div>
+  <div class="quote-zh">没有什么。我对此一无所知。他们也知道这一点。民主党人知道这一点。我故意没读它，因为我想对你说，我不知道它在讲什么。这比说我读过它和所有的东西要容易得多。不，我故意没有读过它，但我听说过它。我听说那里有一些我不喜欢的东西，也有一些东西每个人都会喜欢，但也有一些东西我根本不喜欢。我认为他们把它放出来很不幸，但这没有任何意义，因为它与我无关。 Project 25 与我完全无关。</div>
+  <div class="quote-meta">— Donald Trump （00:24:09）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Right. I think the fraud was on the other side. I think the election was a fraud. And many people felt it was that and they wanted answers. And when you can’t challenge an election, you have to be able to challenge it, otherwise it’s going to get worse, not better. And there are lots of ways to solve this problem. Go to paper ballots. Do it easy way, I mean the paper ballots and you have voter ID and you have same day voting and you have proof of citizenship, which is very important because we have people voting that are not citizens. They just came in and they’re loading up the…"</div>
+  <div class="quote-zh">正确的。我认为欺诈是在另一边。我认为这次选举是一场舞弊。许多人都这么认为，他们想要答案。当你无法挑战选举时，你必须能够挑战它，否则情况会变得更糟，而不是更好。并且有很多方法可以解决这个问题。转到纸质选票。简单点，我的意思是纸质选票，你有选民身份证，你有当天投票，你有公民身份证明，这非常重要，因为我们有非公民投票。他们刚刚进来，正在装载……</div>
+  <div class="quote-meta">— Donald Trump （00:16:24）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, I do, but not that often, honestly. I do a lot of re-posting. The ones you get in trouble with are the re-posts, because you find down deep, they’re into some group that you’re not supposed to be re-posting. You don’t even know if those groups are good, bad or indifferent. But the re-posts are the ones that really get you in trouble. When you do your own words, it’s sort of easier. But the re-posts go very, and if you’re going to check every single little symbol, and I don’t know, it’s worked out pretty well for me. I mean, I tell you, truth is very powerful, truth. And it’s my platform and it’s been very powerful, very, very powerful. Goes everywhere. I call it my typewriter. That’s actually my typewriter."</div>
+  <div class="quote-zh">是的，我确实这样做，但老实说，我并不经常这样做。我做了很多转发。你遇到麻烦的是重新发帖，因为你发现内心深处，他们属于某个你不应该重新发帖的群组。你甚至不知道这些群体是好、坏还是冷漠。但转发才是真正给你带来麻烦的。当你自己说话时，事情会变得更容易。但重新发布的内容非常多，如果你要检查每一个小符号，我不知道，这对我来说效果很好。我的意思是，我告诉你，真理是非常强大的，真理。这是我的平台，它非常强大，非常非常强大。无处不在。我称它为我的打字机。那实际上是我的打字机。</div>
+  <div class="quote-meta">— Donald Trump （00:29:04）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But one of the worst was two days ago. I went to Arlington at the request of people that lost their children. They’ll always be children to those people. You understand that. That’s not politically incorrect thing to say. The mother comes up, “I lost my child,” but the child is a soldier. And lost the child, because of Biden and because of Kamala, just as though they had the gun in their hand, because it was so badly handled. It should have been done at Bagram, which is the big air base. It shouldn’t have been done at a small little airport right in the middle of town where people stormed it. It was a true disaster and they asked me if I’d come and celebrate with them. Three years. Three years. They died three years ago."</div>
+  <div class="quote-zh">但最糟糕的一次是两天前。我应失去孩子的人们的请求去了阿灵顿。对于那些人来说，他们永远是孩子。你明白这一点。这并不是政治不正确的话。母亲出现了，“我失去了我的孩子”，但孩子是一名士兵。因为拜登和卡玛拉，他们失去了孩子，就像他们手里拿着枪一样，因为枪的处理方式太糟糕了。它应该在巴格拉姆空军基地完成，这是一个大型空军基地。这不应该在市中心的一个小机场进行，因为人们冲撞了它。这真是一场灾难，他们问我是否愿意来和他们一起庆祝。三年了。三年了。他们三年前去世了。</div>
+  <div class="quote-meta">— Donald Trump （00:32:41）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">I don’t know if you know this, but some people call you a fascist.</div>
+  <div class="dialogue-zh">我不知道你是否知道这一点，有些人称你为法西斯分子。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Donald Trump <span class="dialogue-time">(00:00:03)</span>
+  </div>
+  <div class="dialogue-en">Yeah, they do. So I figure it’s all right to call them a communist. Yeah, they call me a lot worse than I call them.</div>
+  <div class="dialogue-zh">是的，他们确实这么做了。所以我认为称他们为共产主义者是可以的。是的，他们对我的称呼比我对他们的称呼要糟糕得多。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:08)</span>
+  </div>
+  <div class="dialogue-en">A lot of people listening to this, myself included, that doesn’t think that Kamala is a communist.</div>
+  <div class="dialogue-zh">很多人听到这个，包括我自己，并不认为卡马拉是共产主义者。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Donald Trump <span class="dialogue-time">(00:00:15)</span>
+  </div>
+  <div class="dialogue-en">I believe you have to fight fire with fire.</div>
+  <div class="dialogue-zh">我相信你必须以毒攻毒。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:17)</span>
+  </div>
+  <div class="dialogue-en">Politics is a dirty game.</div>
+  <div class="dialogue-zh">政治是一场肮脏的游戏。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Donald Trump <span class="dialogue-time">(00:00:19)</span>
+  </div>
+  <div class="dialogue-en">It is a dirty game. That’s certainly true.</div>
+  <div class="dialogue-zh">这是一场肮脏的游戏。这当然是真的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:21)</span>
+  </div>
+  <div class="dialogue-en">How do you win at that game?</div>
+  <div class="dialogue-zh">你如何在这场比赛中获胜？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Donald Trump <span class="dialogue-time">(00:00:24)</span>
+  </div>
+  <div class="dialogue-en">They suffer from massive Trump derangement syndrome, TDS, and I don’t know if it’s curable from their standpoint.</div>
+  <div class="dialogue-zh">他们患有严重的特朗普精神错乱综合症（TDS），我不知道从他们的角度来看这是否可以治愈。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:35)</span>
+  </div>
+  <div class="dialogue-en">I think we would probably have a better world if everybody in Congress took some mushrooms perhaps?</div>
+  <div class="dialogue-zh">我认为如果国会中的每个人都吃一些蘑菇，我们可能会拥有一个更美好的世界？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Donald Trump <span class="dialogue-time">(00:00:41)</span>
+  </div>
+  <div class="dialogue-en">First of all, medical marijuana has been amazing. I’ve had friends and I’ve had others and doctors telling me that it’s been absolutely amazing.</div>
+  <div class="dialogue-zh">首先，医用大麻令人惊叹。我的朋友、其他人和医生都告诉我，这绝对是令人惊奇的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:53)</span>
+  </div>
+  <div class="dialogue-en">The list of clients that went to the island has not been made public.</div>
+  <div class="dialogue-zh">前往该岛的客户名单尚未公开。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Donald Trump <span class="dialogue-time">(00:00:57)</span>
+  </div>
+  <div class="dialogue-en">Yeah, it’s very interesting, isn’t it?</div>
+  <div class="dialogue-zh">是的，这很有趣，不是吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:03)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Donald Trump on this, the Lex Friedman Podcast. Psychology of winning and losing</div>
+  <div class="dialogue-zh">以下是与唐纳德·特朗普在莱克斯·弗里德曼播客上的对话。输赢心理学</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Donald Trump <span class="dialogue-time">(00:01:09)</span>
+  </div>
+  <div class="dialogue-en">They’re getting smaller and smaller.</div>
+  <div class="dialogue-zh">它们变得越来越小。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:11)</span>
+  </div>
+  <div class="dialogue-en">They’re getting smaller.</div>
+  <div class="dialogue-zh">它们变得越来越小。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Donald Trump <span class="dialogue-time">(00:01:11)</span>
+  </div>
+  <div class="dialogue-en">Right?</div>
+  <div class="dialogue-zh">正确的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:13)</span>
+  </div>
+  <div class="dialogue-en">People do respect you more when you have a big camera for some reason.</div>
+  <div class="dialogue-zh">当你出于某种原因拥有一台大相机时，人们确实会更尊重你。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Donald Trump <span class="dialogue-time">(00:01:15)</span>
+  </div>
+  <div class="dialogue-en">No, it’s cool. And about 20 guys that you pay a fortune to. Right?</div>
+  <div class="dialogue-zh">不，这很酷。还有大约20个你付了一大笔钱的人。正确的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:18)</span>
+  </div>
+  <div class="dialogue-en">All right. Okay. You said that you love winning. And you have won a lot in life, in real estate, in business, in TV and politics. So let me start with a mindset, a psychology question. What drives you more, the love of winning or the hate of losing?</div>
+  <div class="dialogue-zh">好的。好的。你说过你喜欢胜利。你在生活、房地产、商业、电视和政治中赢得了很多。让我从一个心态、一个心理学问题开始。是对胜利的热爱还是对失败的厌恶，什么更能激励你？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Donald Trump <span class="dialogue-time">(00:01:41)</span>
+  </div>
+  <div class="dialogue-en">Maybe equally, maybe both. I don’t like losing and I do like winning. I’ve never thought of it as to which is more of a driving force.</div>
+  <div class="dialogue-zh">也许同等，也许两者兼而有之。我不喜欢失败，我喜欢胜利。我从来没有想过哪个是更大的推动力。</div>
+</div>
+    <a href="https://lexfridman.com/donald-trump-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a>
+<a href="cenk-uygur.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cenk Uygur</div>
+  <div class="card-meta">Cenk Uygur</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Guillaume Verdon - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Guillaume Verdon</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Guillaume Verdon</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/guillaume-verdon.html" style="font-size:16px;color:#818cf8;font-weight:600">Guillaume Verdon</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">24,383 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/guillaume-verdon-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#8b5cf622;color:#8b5cf6;border:1px solid #8b5cf644;font-size:13px;padding:4px 12px">物理与宇宙学</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:23</span>
+  <span class="chapter-title">Beff Jezos<span class="zh-trans"> · 贝夫·杰佐斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">12:21</span>
+  <span class="chapter-title">Thermodynamics<span class="zh-trans"> · 热力学</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">18:36</span>
+  <span class="chapter-title">Doxxing<span class="zh-trans"> · 人肉搜索</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">28:30</span>
+  <span class="chapter-title">Anonymous bots<span class="zh-trans"> · 匿名机器人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">35:58</span>
+  <span class="chapter-title">Power<span class="zh-trans"> · 力量</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">38:29</span>
+  <span class="chapter-title">AI dangers<span class="zh-trans"> · 人工智能的危险</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">42:01</span>
+  <span class="chapter-title">Building AGI<span class="zh-trans"> · 构建通用人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">50:14</span>
+  <span class="chapter-title">Merging with AI<span class="zh-trans"> · 与人工智能融合</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">57:56</span>
+  <span class="chapter-title">p(doom)<span class="zh-trans"> · p（厄运）</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:13:23</span>
+  <span class="chapter-title">Quantum machine learning<span class="zh-trans"> · 量子机器学习</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:26:41</span>
+  <span class="chapter-title">Quantum computer<span class="zh-trans"> · 量子计算机</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:35:15</span>
+  <span class="chapter-title">Aliens<span class="zh-trans"> · 外星人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:40:04</span>
+  <span class="chapter-title">Quantum gravity<span class="zh-trans"> · 量子引力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:45:25</span>
+  <span class="chapter-title">Kardashev scale<span class="zh-trans"> · 卡尔达肖夫量表</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:47:17</span>
+  <span class="chapter-title">Effective accelerationism (e/acc)<span class="zh-trans"> · 有效加速主义 (e/acc)</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:57:47</span>
+  <span class="chapter-title">Humor and memes<span class="zh-trans"> · 幽默和模因</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:00:53</span>
+  <span class="chapter-title">Jeff Bezos<span class="zh-trans"> · 杰夫·贝佐斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:07:25</span>
+  <span class="chapter-title">Elon Musk<span class="zh-trans"> · 埃隆·马斯克</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:13:55</span>
+  <span class="chapter-title">Extropic<span class="zh-trans"> · 外向性</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">quantum</span><span class="keyword-tag">guillaume</span><span class="keyword-tag">verdon</span><span class="keyword-tag">physics</span><span class="keyword-tag">trying</span><span class="keyword-tag">going</span><span class="keyword-tag">learning</span><span class="keyword-tag">don</span><span class="keyword-tag">machine</span><span class="keyword-tag">humans</span><span class="keyword-tag">human</span><span class="keyword-tag">energy</span><span class="keyword-tag">acc</span><span class="keyword-tag">universe</span><span class="keyword-tag">control</span><span class="keyword-tag">thought</span><span class="keyword-tag">space</span><span class="keyword-tag">systems</span><span class="keyword-tag">computing</span><span class="keyword-tag">computer</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I think the same is true for capitalism. Companies, empires, people, everything. Everything must die at some point. I think that we should probably extend our lifespan, because we need a longer period of training, because the world is more and more complex. We have more and more data to really be able to predict and understand the world. And if we have a finite window of higher neuroplasticity, then we have sort of a hard cap in how much we can understand about our world. So, I think I am for death, because again, I think it’s important. If you have a king that would never die, that would be a problem. The system wouldn’t be constantly adapting, right?"</div>
+  <div class="quote-zh">我认为对于资本主义来说也是如此。公司、帝国、人，一切。一切都必须在某个时刻死去。我认为我们或许应该延长我们的寿命，因为我们需要更长的时间的训练，因为世界越来越复杂。我们拥有越来越多的数据来真正能够预测和理解世界。如果我们有一个有限的更高神经可塑性窗口，那么我们对世界的理解程度就会受到限制。所以，我认为我支持死亡，因为我再次认为这很重要。如果你有一个永远不会死的国王，那将是一个问题。该系统不会不断适应，对吧？</div>
+  <div class="quote-meta">— Guillaume Verdon （02:46:17）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think it’s useful to think about. It’s useful to think about because we got to ensure we’re anti-fragile, and we’re trying to increase our capabilities as fast as possible. Because we could get disrupted. There’s no laws of physics against there being life elsewhere that could evolve and become an advanced civilization and eventually come to us. Do I think they’re here now? I’m not sure. I’ve read what most people have read on the topic."</div>
+  <div class="quote-zh">我认为思考一下很有用。思考这一点很有用，因为我们必须确保我们具有反脆弱性，并且我们正在努力尽快提高我们的能力。因为我们可能会受到干扰。没有任何物理定律反对其他地方存在生命，它们可以进化并成为先进的文明并最终来到我们这里。我认为他们现在在这里吗？我不知道。我读过大多数人读过的有关该主题的内容。</div>
+  <div class="quote-meta">— Guillaume Verdon （01:35:36）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Frankly, when I had the idea for the type of computer I’m building now, I think it was eight years ago now, it really felt like it was being beamed from space. I was in bed, just shaking, just thinking it through. I don’t know. But do I believe that legitimately? I don’t think so. But I think that alien life could take many forms, and I think the notion of intelligence and the notion of life needs to be expanded much more broadly to be less anthropocentric or biocentric. Quantum gravity"</div>
+  <div class="quote-zh">坦率地说，当我想到我现在正在建造的计算机类型时，我想那是八年前的事了，感觉真的就像是从太空发射的一样。我躺在床上，浑身发抖，仔细思考着。我不知道。但我相信这一点合理吗？我不这么认为。但我认为外星生命可以采取多种形式，而且我认为智慧和生命的概念需要更广泛地扩展，以减少以人类为中心或以生物为中心的程度。量子引力</div>
+  <div class="quote-meta">— Guillaume Verdon （01:39:25）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Forks, right? Genetic forks, or other, right? I truly believe that. I think there’s a sort of evolutionary-like algorithm happening at every bit, or [inaudible 02:49:03] in the world is sort of adapting through this process that we described in e/acc. And I think maintaining this adaptation malleability is how we have constant optimization of the whole machine. And so, I don’t think I’m particularly an optimum that needs to stick around forever. I think there’s going to be greater optima in many ways. Meaning of life"</div>
+  <div class="quote-zh">叉子，对吧？基因分叉，或者其他，对吧？我真的相信这一点。我认为世界上的每一点都存在一种类似进化的算法，或者说[听不清 02:49:03] 正在通过我们在 e/acc 中描述的这个过程进行适应。我认为保持这种适应延展性就是我们对整机不断优化的方式。所以，我不认为我是一个需要永远坚持下去的最佳人选。我认为在很多方面都会有更大的优化。生命的意义</div>
+  <div class="quote-meta">— Guillaume Verdon （02:48:47）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Right. And to me, out of responsibility to the future humans we could carry, with higher carrying capacity by scaling up civilization. Out of responsibility to those humans, I think we have to make the greater grander future happen."</div>
+  <div class="quote-zh">正确的。对我来说，出于对未来人类的责任，我们可以通过扩大文明规模来提高承载能力。出于对人类的责任，我认为我们必须让更伟大的未来发生。</div>
+  <div class="quote-meta">— Guillaume Verdon （00:56:42）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Guillaume Verdon, the man behind the previously anonymous account @BasedBeffJezos on X. These two identities were merged by a doxxing article in Forbes titled, Who Is @BasedBeffJezos, The Leader Of The Tech Elite’s E/Acc Movement? So let me describe these two identities that coexist in the mind of one human. Identity number one, Guillaume, is a physicist, appli...</div>
+  <div class="dialogue-zh">以下是与 Guillaume Verdon 的对话，Guillaume Verdon 是 X 上之前匿名帐户 @BasedBeffJezos 的幕后黑手。这两个身份被福布斯的一篇人肉搜索文章合并，标题为《谁是 @BasedBeffJezos，科技精英 E/Acc 运动的领导者？那么让我来描述一下共存于一个人头脑中的这两种身份。第一身份Guillaume，是一名物理学家，应用</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:47)</span>
+  </div>
+  <div class="dialogue-en">Identity number two, Beff Jezos on X is the creator of the effective accelerationism movement, often abbreviated as e/acc, that advocates for propelling rapid technological progress as the ethically optimal course of action for humanity. For example, its proponents believe that progress in AI is a great social equalizer, which should be pushed forward. e/acc followers see themselves as a counterwe...</div>
+  <div class="dialogue-zh">第二号人物，X 上的 Beff Jezos 是有效加速主义运动（通常缩写为 e/acc）的创始人，该运动主张推动快速技术进步，将其作为人类道德上最佳的行动方针。例如，其支持者认为人工智能的进步是一个伟大的社会均衡器，应该予以推动。 e/acc 追随者将自己视为反面者</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:37)</span>
+  </div>
+  <div class="dialogue-en">The style of communication of this movement leans always toward the memes and the lols, but there is an intellectual foundation that we explore in this conversation. Now, speaking of the meme, I am to a kind of aspiring connoisseur of the absurd. It is not an accident that I spoke to Jeff Bezos and Beff Jezos back to back. As we talk about Beff admires Jeff as one of the most important humans aliv...</div>
+  <div class="dialogue-zh">这一运动的交流风格总是倾向于模因和哈哈，但我们在这次对话中探索了一个智力基础。现在，说到模因，我是一位有抱负的荒诞鉴赏家。我与杰夫·贝佐斯和贝夫·杰佐斯背靠背交谈并非偶然。当我们谈论贝夫时，贝夫钦佩杰夫，认为他是当今最重要的人类之一</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Beff Jezos <span class="dialogue-time">(00:02:23)</span>
+  </div>
+  <div class="dialogue-en">Let’s get the facts of identity down first. Your name is Guillaume Verdon, Gill, but you’re also behind the anonymous account on X called @BasedBeffJezos. So first, Guillaume Verdon, you’re a quantum computing guy, physicist, applied mathematician, and then @BasedBeffJezos is basically a meme account that started a movement with a philosophy behind it. So maybe just can you linger on who these peo...</div>
+  <div class="dialogue-zh">让我们先了解一下身份事实。你的名字是 Guillaume Verdon，Gill，但你也是 X 上名为 @BasedBeffJezos 的匿名帐户的幕后黑手。首先，Guillaume Verdon，你是一名量子计算专家、物理学家、应用数学家，然后 @BasedBeffJezos 基本上是一个模因帐户，它发起了一场背后有哲学的运动。所以也许你可以留恋这些人是谁</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Guillaume Verdon <span class="dialogue-time">(00:02:58)</span>
+  </div>
+  <div class="dialogue-en">I mean, with my main identity, I guess ever since I was a kid, I wanted to figure out the theory of everything, to understand the universe. And that path led me to theoretical physics, eventually trying to answer the big questions of why are we here? Where are we going? And that led me to study information theory and try to understand physics from the lens of information theory, understand the uni...</div>
+  <div class="dialogue-zh">我的意思是，以我的主要身份，我想我从小就想弄清楚一切的理论，了解宇宙。这条道路将我引向了理论物理学，最终试图回答我们为什么在这里？我们要去哪里？这促使我研究信息论并尝试从信息论的角度理解物理学，理解大学</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Guillaume Verdon <span class="dialogue-time">(00:04:17)</span>
+  </div>
+  <div class="dialogue-en">So if you have AI representations that think like nature, then they’ll be able to more accurately represent it. At least that was the thesis that brought me to be an early player in the field called quantum machine learning. So how to do machine learning on quantum computers and really sort of extend notions of intelligence to the quantum realm. So how do you capture and understand quantum mechani...</div>
+  <div class="dialogue-zh">因此，如果你有像自然一样思考的人工智能表征，那么它们将能够更准确地表征它。至少正是这篇论文让我成为了量子机器学习领域的早期参与者。那么如何在量子计算机上进行机器学习，并真正将智能概念扩展到量子领域。那么如何捕捉和理解量子力学</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Guillaume Verdon <span class="dialogue-time">(00:05:28)</span>
+  </div>
+  <div class="dialogue-en">But eventually I realized that actually augmenting ourselves with machines, augmenting our ability to perceive, predict, and control our world with machines is the path forward. And that’s what got me to leave theoretical physics and go into quantum computing and quantum machine learning. And during those years I thought that there was still a piece missing. There was a piece of our understanding ...</div>
+  <div class="dialogue-zh">但最终我意识到，实际上用机器增强我们自己，增强我们用机器感知、预测和控制世界的能力才是前进的道路。这就是让我离开理论物理学并进入量子计算和量子机器学习的原因。那些年我觉得还缺了一块。有一个我们的理解</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Guillaume Verdon <span class="dialogue-time">(00:06:46)</span>
+  </div>
+  <div class="dialogue-en">And after I guess about eight years and quantum computing and quantum machine learning, I had a realization that I was looking for answers about our universe by studying the very big and the very small. I did a bit of quantum cosmology. So that’s studying the cosmos, where it’s going, where it came from. You study black hole physics, you study the extremes in quantum gravity, you study where the e...</div>
+  <div class="dialogue-zh">经过我猜大约八年的量子计算和量子机器学习之后，我意识到我正在通过研究很大和很小的东西来寻找关于我们宇宙的答案。我研究了一些量子宇宙学。这就是研究宇宙，它要去哪里，从哪里来。你研究黑洞物理学，你研究量子引力的极端，你研究电子在哪里</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Guillaume Verdon <span class="dialogue-time">(00:07:42)</span>
+  </div>
+  <div class="dialogue-en">And really I was studying these extremes to understand how the universe works and where is it going. But I was missing a lot of the meat in the middle, if you will, because day-to-day quantum mechanics is relevant and the cosmos is relevant, but not that relevant actually. We’re on sort of the medium space and timescales. And there the main theory of physics that is most relevant is thermodynamics...</div>
+  <div class="dialogue-zh">事实上，我正在研究这些极端情况，以了解宇宙如何运作以及它将走向何方。但如果你愿意的话，我错过了中间的很多内容，因为日常量子力学是相关的，宇宙是相关的，但实际上并不那么相关。我们处于中等空间和时间尺度上。最相关的主要物理学理论是热力学</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Guillaume Verdon <span class="dialogue-time">(00:08:57)</span>
+  </div>
+  <div class="dialogue-en">But ultimately just by trying to experiment with these ideas applied to society and economies and much of what we see around us, I started an anonymous account just to relieve the pressure that comes from having an account that you’re accountable for everything you say on. And I started an anonymous account just to experiment with ideas originally because I didn’t realize how much I was restrictin...</div>
+  <div class="dialogue-zh">但最终，只是通过尝试将这些想法应用于社会和经济以及我们周围看到的许多事情，我创建了一个匿名帐户，只是为了缓解拥有一个帐户所带来的压力，因为你要对自己所说的一切负责。我创建了一个匿名帐户，最初只是为了尝试一些想法，因为我没有意识到我受到了多少限制</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:00)</span>
+  </div>
+  <div class="dialogue-en">Just a little on that, isn’t that interesting that one of the things that people don’t often talk about is that when there’s pressure and constraints on speech, it somehow leads to constraints on thought even though it doesn’t have to. We can think thoughts inside our head, but somehow it creates these walls around thought.</div>
+  <div class="dialogue-zh">稍微说一点，这不是很有趣吗，人们不常谈论的一件事是，当言论受到压力和限制时，它会以某种方式导致思想受到限制，尽管它不是必须的。我们可以在头脑中思考想法，但不知何故，它在思想周围创造了这些墙壁。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Guillaume Verdon <span class="dialogue-time">(00:10:23)</span>
+  </div>
+  <div class="dialogue-en">Yep. That’s sort of the basis of our movement is we were seeing a tendency towards constraint, reduction or suppression of variants in every aspect of life, whether it’s thought, how to run a company, how to organize humans, how to do AI research. In general, we believe that maintaining variance ensures that the system is adaptive. Maintaining healthy competition in marketplaces of ideas, of compa...</div>
+  <div class="dialogue-zh">是的。这就是我们运动的基础，我们看到生活各个方面都存在限制、减少或抑制变异的趋势，无论是思想、如何经营公司、如何组织人类、如何进行人工智能研究。一般来说，我们认为保持方差可以确保系统具有适应性。保持思想市场、企业市场的良性竞争</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:12:21)</span>
+  </div>
+  <div class="dialogue-en">So the second law of thermodynamics says that the entropy is always increasing in the universe that’s tending towards an equilibrium. And you’re saying there’s these pockets that have complexity and are out of equilibrium. You said that thermodynamics favors the creation of complex life that increases its capability to use energy to offload entropy. To offload entropy. So you have pockets of non-e...</div>
+  <div class="dialogue-zh">因此，热力学第二定律表明，宇宙中的熵总是在增加，并趋于平衡。你是说这些区域很复杂并且不平衡。你说热力学有利于创造复杂的生命，从而提高其利用能量释放熵的能力。卸载熵。所以你有一些非电子的口袋</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Guillaume Verdon <span class="dialogue-time">(00:12:53)</span>
+  </div>
+  <div class="dialogue-en">Well, we’re far more efficient at producing heat than let’s say just a rock with a similar mass as ourselves. We acquire free energy, we acquire food, and we’re using all this electricity for our operation. And so the universe wants to produce more entropy and by having life go on and grow, it’s actually more optimal at producing entropy because it will seek out pockets of free energy and burn it ...</div>
+  <div class="dialogue-zh">嗯，我们产生热量的效率比一块与我们质量相似的岩石要有效得多。我们获得免费能源，我们获得食物，并且我们将所有这些电力用于我们的运营。因此，宇宙想要产生更多的熵，通过让生命继续生长，它实际上更适合产生熵，因为它会寻找自由能并燃烧它</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Guillaume Verdon <span class="dialogue-time">(00:14:08)</span>
+  </div>
+  <div class="dialogue-en">And to me, both from a point of view of designing or engineering devices that harness that physics and trying to understand the world through the lens of thermodynamics has been sort of a synergy between my two identities over the past year and a half now. And so that’s really how the two identities emerged. One was kind of, I’m a decently respected scientist, and I was going towards doing a start...</div>
+  <div class="dialogue-zh">对我来说，无论是从设计或工程设备的角度来看，利用物理原理还是试图通过热力学的视角来理解世界，在过去的一年半里都是我的两种身份之间的协同作用。这就是这两个身份的出现。一种是，我是一位受人尊敬的科学家，我打算开始做一个</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Guillaume Verdon <span class="dialogue-time">(00:14:58)</span>
+  </div>
+  <div class="dialogue-en">And ultimately I think that around that time, it was like late 2021, early 2022, I think there was just a lot of pessimism about the future in general and pessimism about tech. And that pessimism was sort of virally spreading because it was getting algorithmically amplified and people just felt like the future is going to be worse than the present. And to me, that is a very fundamentally destructi...</div>
+  <div class="dialogue-zh">最终我认为，大约在那个时候，就像 2021 年底、2022 年初，我认为人们对总体未来和科技持悲观态度。这种悲观情绪像病毒一样蔓延，因为它在算法上被放大，人们只是觉得未来会比现在更糟糕。对我来说，这是一种非常根本的破坏</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Guillaume Verdon <span class="dialogue-time">(00:16:14)</span>
+  </div>
+  <div class="dialogue-en">And if you believe in it, if you believe that the future would be better and you believe you have agency to make it happen, you’re actually increasing the likelihood of that better future happening. And so I sort of felt a responsibility to sort of engineer a movement of viral optimism about the future, and build a community of people supporting each other to build and do hard things, do the thing...</div>
+  <div class="dialogue-zh">如果你相信这一点，如果你相信未来会更美好，并且你相信你有能力实现它，那么你实际上就增加了更美好未来发生的可能性。因此，我觉得有责任发起一场关于未来的病毒式乐观运动，并建立一个由人们互相支持来建设和做困难事情的社区，做事情</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:17:27)</span>
+  </div>
+  <div class="dialogue-en">You said a lot of really interesting things there. So first, representations of nature, that’s something that first drew you in to try to understand from a quantum computing perspective, how do you understand nature? How do you represent nature in order to understand it, in order to simulate it, in order to do something with it? So it’s a question of representations, and then there’s that leap you...</div>
+  <div class="dialogue-zh">你在那里说了很多非常有趣的事情。首先，自然的表征，这首先吸引你尝试从量子计算的角度来理解，你如何理解自然？你如何表现自然，以便理解它、模拟它、利用它做点什么？所以这是一个表征问题，然后就是你的飞跃</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Doxxing <span class="dialogue-time">(00:18:11)</span>
+  </div>
+  <div class="dialogue-en">Then there’s the word hyperstition. So some ideas as suppose both pessimism and optimism of such ideas that if you internalize them, you in part make that idea reality. So both optimism, pessimism have that property. I would say that probably a lot of ideas have that property, which is one of the interesting things about humans. And you talked about one interesting difference also between the sort...</div>
+  <div class="dialogue-zh">然后就是“迷信”这个词。因此，有些想法假设这些想法既悲观又乐观，如果你将它们内在化，你就可以部分地使该想法成为现实。所以乐观主义和悲观主义都具有这种性质。我想说，可能很多想法都具有这种属性，这是人类有趣的事情之一。你也谈到了这种类型之间的一个有趣的区别</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Guillaume Verdon <span class="dialogue-time">(00:19:47)</span>
+  </div>
+  <div class="dialogue-en">So I wrote the manifesto with my co-founder of e/acc, an account named @bayeslord, still anonymous, luckily and hopefully forever.</div>
+  <div class="dialogue-zh">所以我和 e/acc 的联合创始人一起写了这份宣言，这个账户名为 @bayeslord，仍然是匿名的，幸运的是，希望永远是匿名的。</div>
+</div>
+    <a href="https://lexfridman.com/guillaume-verdon-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="aravind-srinivas.html" class="card" style="text-decoration:none">
+  <div class="card-title">Aravind Srinivas</div>
+  <div class="card-meta">Aravind Srinivas</div>
+</a>
+<a href="ayanna-howard.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ayanna Howard: Human-Robot Interaction and Ethics of Safety-Critical Systems</div>
+  <div class="card-meta">Ayanna Howard</div>
+</a>
+<a href="boris-sofman.html" class="card" style="text-decoration:none">
+  <div class="card-title">Boris Sofman: Waymo, Cozmo, Self-Driving Cars, and the Future of Robotics</div>
+  <div class="card-meta">Boris Sofman</div>
+</a>
+<a href="brendan-eich.html" class="card" style="text-decoration:none">
+  <div class="card-title">Brendan Eich: JavaScript, Firefox, Mozilla, and Brave</div>
+  <div class="card-meta">Brendan Eich</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

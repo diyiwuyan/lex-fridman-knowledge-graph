@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dave Hone - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Dave Hone</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Dave Hone</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/dave-hone.html" style="font-size:16px;color:#818cf8;font-weight:600">Dave Hone</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">41,853 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/dave-hone-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:23</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:56</span>
+  <span class="chapter-title">T-Rex’s size &amp; biomechanics<span class="zh-trans"> · 霸王龙的体型和生物力学</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">25:38</span>
+  <span class="chapter-title">T-Rex’s hunting strategies<span class="zh-trans"> · 霸王龙的狩猎策略</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">38:45</span>
+  <span class="chapter-title">History of dinosaurs on Earth<span class="zh-trans"> · 地球上恐龙的历史</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">59:17</span>
+  <span class="chapter-title">$31.8 million T-Rex fossil<span class="zh-trans"> · 价值 3180 万美元的霸王龙化石</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:12:22</span>
+  <span class="chapter-title">T-Rex’s skull and bone-crushing bite force<span class="zh-trans"> · 霸王龙的头骨和碎骨咬合力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:31:12</span>
+  <span class="chapter-title">What Jurassic Park got wrong<span class="zh-trans"> · 侏罗纪公园出了什么问题</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:49:31</span>
+  <span class="chapter-title">Evolution and sexual selection<span class="zh-trans"> · 进化和性选择</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:10:05</span>
+  <span class="chapter-title">Spinosaurus<span class="zh-trans"> · 棘龙</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:20:40</span>
+  <span class="chapter-title">What Jurassic Park got right<span class="zh-trans"> · 侏罗纪公园做对了什么</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:28:14</span>
+  <span class="chapter-title">T-Rex’s intelligence<span class="zh-trans"> · 霸王龙的智力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:38:12</span>
+  <span class="chapter-title">Cannibalism among T-Rex<span class="zh-trans"> · 霸王龙之间的同类相食行为</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:43:44</span>
+  <span class="chapter-title">Extinction of the dinosaurs<span class="zh-trans"> · 恐龙灭绝</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:00:54</span>
+  <span class="chapter-title">Dragons<span class="zh-trans"> · 龙</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:17:17</span>
+  <span class="chapter-title">Birds are dinosaurs<span class="zh-trans"> · 鸟类是恐龙</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:28:02</span>
+  <span class="chapter-title">Future of paleontology<span class="zh-trans"> · 古生物学的未来</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">dave</span><span class="keyword-tag">hone</span><span class="keyword-tag">got</span><span class="keyword-tag">stuff</span><span class="keyword-tag">going</span><span class="keyword-tag">don</span><span class="keyword-tag">rex</span><span class="keyword-tag">dinosaurs</span><span class="keyword-tag">bone</span><span class="keyword-tag">size</span><span class="keyword-tag">animals</span><span class="keyword-tag">bigger</span><span class="keyword-tag">weird</span><span class="keyword-tag">dinosaur</span><span class="keyword-tag">whole</span><span class="keyword-tag">bones</span><span class="keyword-tag">animal</span><span class="keyword-tag">couple</span><span class="keyword-tag">birds</span><span class="keyword-tag">giant</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Yeah, there are, there are ways in, and maybe we’ve got to get lucky because maybe it’s not the breeding season or maybe that was just happened to be a group of all males, and therefore we’re not going to get the signal we’re looking for. But there’s enough of them, and they’re common enough, and yet, still digging in Mongolia. We keep finding new species. We keep finding new cooler stuff. But I’m like, “Can we, can we dig up some more Protoceratops?” Because actually, however cool these new things are, genuinely if you want to know what dinosaurs are and how they worked, another hundred Protoceratops will actually probably tell us a lot more than 50 new species, however cool 50 new species might be."</div>
+  <div class="quote-zh">是的，有，有办法进入，也许我们必须运气好，因为也许现在不是繁殖季节，或者也许那只是一群雄性，因此我们不会得到我们正在寻找的信号。但它们的数量已经够多了，也够常见了，但仍在蒙古进行挖掘。我们不断寻找新物种。我们不断寻找新的、更酷的东西。但我想，“我们能不能再挖一些原角龙？”因为事实上，无论这些新事物多么酷，如果你真的想知道恐龙是什么以及它们是如何活动的，另外一百个原角龙实际上可能会告诉我们超过 50 个新物种，无论 50 个新物种有多酷。</div>
+  <div class="quote-meta">— Dave Hone （03:34:45）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"…because they’re the primary feathers on the wings. And what it actually does is it makes it harder to fly. So you’re basically going, “Look how tough I am. I’ve grown this big, and I can fly and carry on with my giant curly feathers because I’m really tough and I’m in good shape.” And it’s the same with the lion. The reason you get pale lions in the south is because it’s, or close to the equator, because it’s too hot. So there’s the trade-off, because if you have a really black mane, yeah, all the males know you’re great and all the females know you’re super sexy, but you just die of overheating."</div>
+  <div class="quote-zh">……因为它们是翅膀上的主要羽毛。它实际上的作用是让飞行变得更加困难。所以你基本上会说，“看看我有多坚强。我已经长这么大了，我可以飞翔并继续我巨大的卷曲羽毛，因为我真的很坚强，而且我的身体状况很好。”狮子也是如此。在南方出现苍白狮子的原因是因为那里位于赤道附近，或者说靠近赤道，因为那里太热了。所以这是一个权衡，因为如果你有一头真正的黑色鬃毛，是的，所有的雄性都知道你很棒，所有的雌性都知道你超级性感，但你只是因为过热而死。</div>
+  <div class="quote-meta">— Dave Hone （01:56:24）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And you’re going to see stuff like, you know, it’s the famous one of… I think it was a Neanderthal. There was a famous question of like, “At what point do you think society exists?” And maybe one of the answer was basically this skeleton because it was someone with a properly busted leg and then it fully healed. And it’s like if that person was on their own, just dead, someone had to look after them for months to get that level of healing. You only do that to someone you’re really devoted to and probably a group of people because even one person can’t look after one other person. Right, so that’s your society. And yet you think about the pathology of skeletons in the human race. How many of us have broken a bone?"</div>
+  <div class="quote-zh">你会看到类似的东西，你知道，这是著名的……我认为这是尼安德特人。有一个著名的问题，比如“你认为社会在什么时候存在？”也许答案之一基本上就是这具骷髅，因为它是一个腿被适当破坏的人，然后完全愈合了。就好像那个人孤身一人，刚刚死了，就必须有人照顾他们几个月才能获得那种程度的治愈。你只对你真正忠诚的人（可能是一群人）这样做，因为即使一个人也无法照顾另一个人。是的，这就是你们的社会。然而你想想人类骨骼的病理学。我们有多少人骨折过？</div>
+  <div class="quote-meta">— Dave Hone （02:08:09）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Oh, Dorchester. That’s in England. Yeah, I knew there were a couple of copies of it. Troodon always comes back as the most intelligent dinosaur because it has really quite a big brain for its size. It does have a high encephalization quotient, so it’s always been tagged as a very good candidate for being the smartest dinosaur. And basically, he just hybridized that with a human. But of course, why would these things end up as plantigrade quadrupeds, and why would they go back to five fingers and… Actually, I think he’s only got three, to be fair, but he’s got very human-like feet. Why has it got no tail? Why would those things suddenly disappear? There’s no real reason other than just kind of human exceptionalism."</div>
+  <div class="quote-zh">哦，多切斯特。那是在英国。是的，我知道有几本。伤齿龙总是被认为是最聪明的恐龙，因为相对于它的体型来说，它的大脑确实相当大。它确实具有很高的脑商，因此它一直被标记为最聪明恐龙的最佳候选者。基本上，他只是将其与人类杂交。但是当然，为什么这些东西最终会变成跖行四足动物，为什么它们会回到五个手指……事实上，公平地说，我认为他只有三个，但他有非常像人类的脚。为什么它没有尾巴？为什么那些东西会突然消失？除了人类例外论之外，没有任何真正的原因。</div>
+  <div class="quote-meta">— Dave Hone （02:56:27）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So now if you want to look at, as I do, something like sexual selection and when does growth of the signal kick in and at what size and what evidence for dimorphism, well, suddenly you’ve got a population. You’ve got something you can work with. And that’s why Protoceratops is so important, and I think way more important than even a lot of my fellow paleontologists realize, and I genuinely think we should be pouring a lot more research into them, because they can tell us stuff that pretty much no other dinosaur can."</div>
+  <div class="quote-zh">所以现在如果你像我一样想研究性选择之类的东西，信号的增长何时开始，大小有多大，二态性的证据是什么，那么，突然间你就拥有了一个种群。你有一些可以使用的东西。这就是为什么原角龙如此重要，我认为比我的许多古生物学家同事意识到的还要重要，我真诚地认为我们应该对它们进行更多的研究，因为它们可以告诉我们其他恐龙几乎无法告诉我们的东西。</div>
+  <div class="quote-meta">— Dave Hone （03:30:19）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Hone <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">T. rex is definitely weird, even compared to all the other giant tyrannosaurs that are very closely related to it, because it is by far, ludicrously by far, the largest carnivore in its ecosystem.</div>
+  <div class="dialogue-zh">霸王龙确实很奇怪，即使与所有其他与它关系密切的巨型暴龙相比也是如此，因为它是迄今为止，可笑的，其生态系统中最大的食肉动物。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:14)</span>
+  </div>
+  <div class="dialogue-en">So it doesn’t really have competition, actually.</div>
+  <div class="dialogue-zh">所以实际上它并没有真正的竞争。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Hone <span class="dialogue-time">(00:00:16)</span>
+  </div>
+  <div class="dialogue-en">I mean, this is a Velociraptor skull. There are some carnivores that are a bit bigger than this, but not enormously so, which were knocking around as T. rex. The skull’s the same type, tooth, right? But like, you think about that— and that’s like going to Africa and going, “Okay, there are lions. What’s the next biggest predator?” And it’s like, well, there’s a weasel about this big. Like, it- it’...</div>
+  <div class="dialogue-zh">我的意思是，这是迅猛龙的头骨。有一些食肉动物比这个大一点，但也不是很大，它们像霸王龙一样四处游荡。头骨是同一类型，牙齿，对吧？但是，你想一想，这就像去非洲然后说：“好吧，那里有狮子。下一个最大的掠食者是什么？”就像，嗯，有一只这么大的黄鼠狼。就像，它——它’</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:51)</span>
+  </div>
+  <div class="dialogue-en">It would eat the juveniles of the herbivores, but not—</div>
+  <div class="dialogue-zh">它会吃食草动物的幼体，但不会——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Hone <span class="dialogue-time">(00:00:53)</span>
+  </div>
+  <div class="dialogue-en">Oh yeah, it’s going to be eating Triceratops, Edmontosaurus, and Parasaurolophus. There are even a couple of giant sauropods knocking around—</div>
+  <div class="dialogue-zh">哦，是的，它会吃三角龙、埃德蒙顿龙和副栉龙。甚至还有几只巨型蜥脚类恐龙在附近徘徊——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:59)</span>
+  </div>
+  <div class="dialogue-en">Got it.</div>
+  <div class="dialogue-zh">知道了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Hone <span class="dialogue-time">(00:00:59)</span>
+  </div>
+  <div class="dialogue-en">in some places. It’s going to be hoovering them up, but like, how often is it going to eat… Again, Velociraptor isn’t there, but how often is it going to eat something the size of an adult Velociraptor? I mean, they’re a fraction of our size, and we’re probably too small. This is like lions hunting mice. You’re just not going to, unless one, like, virtually runs into your mouth, you’re not going t...</div>
+  <div class="dialogue-zh">在某些地方。它会把它们吸起来，但是，就像，它多久吃一次……同样，迅猛龙不在那里，但它多久会吃一次成年迅猛龙大小的东西？我的意思是，他们只是我们规模的一小部分，而且我们可能太小了。这就像狮子捕食老鼠一样。你只是不会，除非有一个，比如，几乎跑进你的嘴里，你就不会</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:23)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Dave Hone, a paleontologist, expert on dinosaurs, co-host of the Terrible Lizards podcast, and author of many scientific papers and books on the behavior and ecology of dinosaurs. This was truly a fun and fascinating conversation. This is the Lex Fridman Podcast. To support it, please check out our sponsors in the description and consider subscribing to this ch...</div>
+  <div class="dialogue-zh">以下是与戴夫·霍恩 (Dave Hone) 的对话，戴夫·霍恩是古生物学家、恐龙专家、可怕蜥蜴播客的联合主持人，也是许多有关恐龙行为和生态学的科学论文和书籍的作者。这确实是一次有趣且引人入胜的谈话。这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商并考虑订阅此频道</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:56)</span>
+  </div>
+  <div class="dialogue-en">Let’s start with the T. rex dinosaur, possibly the most iconic predator in the history of Earth. You have deeply studied and written about their evolution, biology, ecology, and behavior, so let’s first maybe put ourselves in the time of the dinosaurs and imagine we’re standing in front of a T. rex. What does it look like? What are the key features of the dinosaur in front of us?</div>
+  <div class="dialogue-zh">让我们从霸王龙开始，它可能是地球历史上最具标志性的掠食者。您已经深入研究并撰写了有关它们的进化、生物学、生态学和行为的文章，所以让我们首先将自己置于恐龙时代，想象我们正站在霸王龙面前。它看起来像什么？我们面前的恐龙有哪些主要特征？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Hone <span class="dialogue-time">(00:02:18)</span>
+  </div>
+  <div class="dialogue-en">It’s gigantic. It’s almost trite now because everyone knows T. rex is massive. But yes, if you actually stand in front of one, you would be seriously impressed just how absolutely vast they are. So I’ve got a copy of a T. rex skull downstairs from my office, and yeah, I could fit comfortably through its mouth. So it would be just about capable of swallowing me whole, and I’m a pretty big guy.</div>
+  <div class="dialogue-zh">这是巨大的。现在这几乎已经是老生常谈了，因为每个人都知道霸王龙体型巨大。但是，是的，如果你真的站在它们面前，你会对它们的巨大程度印象深刻。所以我在办公室楼下有一个霸王龙头骨的复制品，是的，我可以舒服地放进它的嘴里。所以它几乎能够把我整个吞掉，而且我是一个相当大的家伙。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:44)</span>
+  </div>
+  <div class="dialogue-en">Your body, you could fit- … in it’s, its mouth?</div>
+  <div class="dialogue-zh">你的身体，你可以放进——……它的、它的嘴里？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Hone <span class="dialogue-time">(00:02:47)</span>
+  </div>
+  <div class="dialogue-en">I can fit through, I can fit through it.</div>
+  <div class="dialogue-zh">我能闯过去，我能闯过去。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:47)</span>
+  </div>
+  <div class="dialogue-en">Wow.</div>
+  <div class="dialogue-zh">哇。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Hone <span class="dialogue-time">(00:02:48)</span>
+  </div>
+  <div class="dialogue-en">Yeah, yeah, yeah. And it’s not even a particularly big one. It’s a copy of the one that’s in the Smithsonian and they get bigger than that.</div>
+  <div class="dialogue-zh">是啊，是啊，是啊。而且它甚至不是一个特别大的。这是史密森尼博物馆的复制品，而且比那个更大。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:54)</span>
+  </div>
+  <div class="dialogue-en">You have a to-scale copy-</div>
+  <div class="dialogue-zh">你有一个按比例缩放的副本 -</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Hone <span class="dialogue-time">(00:02:58)</span>
+  </div>
+  <div class="dialogue-en">Yeah, it’s a cast, so it’s just a giant mold made, and then—</div>
+  <div class="dialogue-zh">是的，这是一个铸件，所以它只是一个巨大的模具，然后——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:01)</span>
+  </div>
+  <div class="dialogue-en">Nice.</div>
+  <div class="dialogue-zh">好的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Hone <span class="dialogue-time">(00:03:02)</span>
+  </div>
+  <div class="dialogue-en">…pulled out like the dentist does your teeth, but very, very big. So yeah, they are 12-ish meters long. So what’s that? 14 yards. Four and a half, maybe five to the top of the head standing up, so another six yards high and then seven-ish metric tons, what’s that? About eight and a half short tons. So a colleague of mine, Tom Holtz, described them as an orca on land, but that’s it. It is a killer ...</div>
+  <div class="dialogue-zh">……就像牙医拔牙一样，但是非常非常大。是的，它们有 12 米左右长。那是什么？ 14 码。四点半，也许五点到头顶站起来，那么另外六码高，然后七吨左右，那是什么？大约八短吨半。我的一位同事汤姆·霍尔茨（Tom Holtz）将它们描述为陆地上的逆戟鲸，但仅此而已。它是一个杀手</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Hone <span class="dialogue-time">(00:03:40)</span>
+  </div>
+  <div class="dialogue-en">I think people don’t realize how big a lot of animals are, which sounds weird, but I used to work in a few zoos and something I think you notice is when you go and see things like elephants or giraffes or rhinos, everything’s built to the scale of the animal. The elephant house is huge, the doors are huge, the bars are huge, the food is huge, and so you don’t see them in the context of something t...</div>
+  <div class="dialogue-zh">我认为人们没有意识到很多动物有多大，这听起来很奇怪，但我曾经在几家动物园工作过，我想你会注意到，当你去看大象、长颈鹿或犀牛等动物时，一切都是按照动物的大小建造的。大象屋很大，门很大，酒吧很大，食物也很大，所以你看不到它们的背景。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Hone <span class="dialogue-time">(00:04:25)</span>
+  </div>
+  <div class="dialogue-en">I once stood next to an elephant closer than you are to me now and you go, “Oh, oh, they are so much bigger than I thought.” And I think it’s similar in museums, like even when you get up relatively close to a T. rex skeleton, there’s a bit of space between you and it and then some bars, and then it’s usually raised up a little bit on a mount to hold the platform and then you stand back from that ...</div>
+  <div class="dialogue-zh">我曾经站在一头大象旁边，比你现在离我更近，你会说：“哦，哦，它们比我想象的要大得多。”我认为这在博物馆里是相似的，就像即使你站得离霸王龙骨架相对较近，你和它之间也会有一点空间，然后是一些酒吧，然后它通常会在支架上稍微升高一点以支撑平台，然后你从那里站起来</div>
+</div>
+    <a href="https://lexfridman.com/dave-hone-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-huberman-3.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Focus, Stress, Relationships, and Friendship</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="andrew-huberman-5.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman #5</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="carl-hart.html" class="card" style="text-decoration:none">
+  <div class="card-title">Carl Hart: Heroin, Cocaine, MDMA, Alcohol &amp; the Role of Drugs in Society</div>
+  <div class="card-meta">Carl Hart</div>
+</a>
+<a href="eric-weinstein-3.html" class="card" style="text-decoration:none">
+  <div class="card-title">Eric Weinstein: On the Nature of Good and Evil, Genius and Madness</div>
+  <div class="card-meta">Eric Weinstein</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

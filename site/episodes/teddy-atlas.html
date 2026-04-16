@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teddy Atlas - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Teddy Atlas</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Teddy Atlas</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/teddy-atlas.html" style="font-size:16px;color:#818cf8;font-weight:600">Teddy Atlas</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">20,035 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/teddy-atlas-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#f9731622;color:#f97316;border:1px solid #f9731644;font-size:13px;padding:4px 12px">体育与武术</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:25</span>
+  <span class="chapter-title">Lessons from father<span class="zh-trans"> · 父亲的教训</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">13:31</span>
+  <span class="chapter-title">Scar story<span class="zh-trans"> · 伤疤的故事</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">34:09</span>
+  <span class="chapter-title">Cus D’Amato<span class="zh-trans"> · 库斯·达马托</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">44:21</span>
+  <span class="chapter-title">Mike Tyson<span class="zh-trans"> · 迈克·泰森</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:02:17</span>
+  <span class="chapter-title">Forgiveness<span class="zh-trans"> · 饶恕</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">teddy</span><span class="keyword-tag">atlas</span><span class="keyword-tag">cus</span><span class="keyword-tag">got</span><span class="keyword-tag">said</span><span class="keyword-tag">don</span><span class="keyword-tag">didn</span><span class="keyword-tag">going</span><span class="keyword-tag">guy</span><span class="keyword-tag">put</span><span class="keyword-tag">tyson</span><span class="keyword-tag">knew</span><span class="keyword-tag">goes</span><span class="keyword-tag">freaking</span><span class="keyword-tag">fighter</span><span class="keyword-tag">wasn</span><span class="keyword-tag">fear</span><span class="keyword-tag">father</span><span class="keyword-tag">came</span><span class="keyword-tag">better</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"And he had it set up a little bit, whatever. Without getting into it, hey, he did me a favor. I’d like to think he knew he was doing me a favor. And you know what? I do think he was. He was doing himself a little bit one too. But he was doing it for the greater course because he believed in this thing of boxing. He believed that it changed lives. He believed that it was worthwhile. He believed that there was a power to it beyond the left hook."</div>
+  <div class="quote-zh">不管怎样，他已经把它设置了一点。没有深入探讨，嘿，他帮了我一个忙。我想他知道他在帮我一个忙。你知道吗？我确实认为他是。他自己也做了一点点。但他这样做是为了更伟大的事业，因为他相信拳击这件事。他相信这改变了生活。他相信这是值得的。他相信除了左勾拳之外还有一种力量。</div>
+  <div class="quote-meta">— Teddy Atlas （00:47:29）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Without loyalty, we’re dead, we’re vessels. I never understood what a ghost ship was. You know what? As I got older, I know what a ghost ship is. It’s people. It’s people that are empty. They got no loyalty, therefore they got no humanity. Therefore, they got nothing. Therefore, frick them. Frick them. And you know why they don’t have loyalty? Convenience. And you know why? Because it’s hard to be loyal. It’s actually hard. I’ll be a son of a gun. “Yeah. Yeah, it sounds great. Give it to me. Give it to me. Paint me with it. Yeah, it’s great. Yeah, I’m loyal. Yeah, I’m great. Yeah, this is good. I’m ready. I’m on that team. I’m ready. Put me in, Coach. I’m ready.”"</div>
+  <div class="quote-zh">没有忠诚，我们就死了，我们就是船只。我一直不明白什么是幽灵船。你知道吗？随着年龄的增长，我知道了什么是幽灵船。是人。是人都空了。他们没有忠诚，因此他们没有人性。因此，他们一无所获。因此，欺骗他们。弗里克他们。你知道为什么他们没有忠诚度吗？方便。你知道为什么吗？因为忠诚很难。其实很难。我会成为一个枪之子。 “是的。是的，听起来很棒。把它给我。给我。用它来描绘我。是的，这太棒了。是的，我很忠诚。是的，我很棒。是的，这很好。我准备好了。我是那支球队的一员。我准备好了。让我加入，教练。我准备好了。”</div>
+  <div class="quote-meta">— Teddy Atlas （00:42:20）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"“Okay. Now, you’re going to have to get hurt here.” “What do you mean, get hurt?” “Oh, well, it’s going to be painful. I mean, to be loyal, you’re going to be in danger because the person that you committed your loyalty to, for a reason, because obviously you did something in your life, whatever, whatever, you’re actually going to get hurt to be loyal to them. You’re actually going to…” “Hold on a minute. Wait. Hold on a minute, Coach. Hold on. Call time out here. Let me think about this, Coach. I might need more practice. I’m not ready for the game. I’m not ready to go in the game yet. Give me a little more practice, Coach.” It hurts to be loyal. It fricking hurts. But without loyalty, we’re ghost ships. We got no strength. We got nothing. We got nothing. We got nothing."</div>
+  <div class="quote-zh">“好吧。现在，你必须在这里受伤了。” “你说受伤是什么意思？” “哦，好吧，这会很痛苦。我的意思是，要忠诚，你就会处于危险之中，因为你向那个你忠诚的人，是有原因的，因为显然你在生活中做了一些事情，无论如何，无论如何，你实际上会因为忠于他们而受到伤害。你实际上会……”“等一下。等一下。等一下，教练。等一下。在这里暂停。让我考虑一下，教练。我可能需要更多练习。我还没有准备好参加比赛，教练，请给我多一点练习。”忠诚是很痛苦的。真他妈的疼。但如果没有忠诚，我们就是幽灵船。我们没有力气了。我们什么也没得到。我们什么也没得到。我们什么也没得到。</div>
+  <div class="quote-meta">— Teddy Atlas （00:43:09）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So he goes two rounds and he gets a bloody nose. Here’s the weird thing, not weird, very telling. We knew what we were doing. I’m not bragging, but we knew what we were doing because he got a bloody nose because he got hit. After that, he never got another bloody nose. You know why? He didn’t get hit. Because he learned. He was still strong, but he was smarter now. Anyway, he goes two rounds, and I saw, and I’m being responsible because if he goes more, it’s not responsible. I saw what I needed to see. I saw speed, I saw power, I saw athleticism. And I saw, I didn’t believe him. I thought he was lying to me. I’m just telling you. I thought he was lying, trying to act tough when he wasn’t really feeling tough. It didn’t matter."</div>
+  <div class="quote-zh">于是他转了两圈，鼻子就流血了。这就是奇怪的事情，并不奇怪，而是非常有说服力。我们知道我们在做什么。我不是在吹牛，但我们知道我们在做什么，因为他被击中了，鼻子流血了。从那以后，他再也没有流过鼻血。你知道为什么吗？他没有被击中。因为他学会了。他仍然很坚强，但现在他更聪明了。无论如何，他走了两轮，我看到了，我有责任，因为如果他走了更多，那就不负责任了。我看到了我需要看到的东西。我看到了速度，我看到了力量，我看到了运动能力。我看到了，我不相信他。我以为他在骗我。我只是告诉你。我以为他在撒谎，试图在他并不真正感到坚强的时候表现得坚强。没关系。</div>
+  <div class="quote-meta">— Teddy Atlas （00:56:22）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah. But yeah, fear is at the essence of everything, it’s connected with everything. Fear of losing what he was going to lose. But it was more than fear, it was him not believing in the things that he told me he believed in. He didn’t even know that. He believed in me because I was a standup guy. Because I didn’t sell myself. Because I didn’t freaking turn evidence. I didn’t make a deal. I didn’t do… And that’s why he went to court, and that’s why he stood up for me. And I appreciate it. And that was what he lived by. And those were the blocks of being a man. So much for those blocks."</div>
+  <div class="quote-zh">是的。 But yeah, fear is at the essence of everything, it’s connected with everything.害怕失去他将要失去的东西。但这不仅仅是恐惧，而是他不相信他告诉我他相信的事情。他甚至不知道这一点。他相信我，因为我是一个正直的人。因为我没有出卖自己。因为我没有拿出证据。我没有达成协议。我没有这样做……这就是他上法庭的原因，这就是他为我挺身而出的原因。我很感激。这就是他的生存之道。这些就是成为男人的障碍。这些块就这么多了。</div>
+  <div class="quote-meta">— Teddy Atlas （01:59:04）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">That’s all that matters, that he got there, that he got to the place to act like a fighter. To do what we want him to do, to be ready to persevere, to go beyond the comfort level, to do another round. He didn’t want to. Damn right he didn’t want to, but he knew we want him to. And he knew in order to pass the test, he had to do it. He goes, “Now, it’s going to be your job to get him in the gym, ma...</div>
+  <div class="dialogue-zh">这才是最重要的，他到达了那里，他到达了那个地方并表现得像一名战士。做我们希望他做的事情，准备好坚持下去，超越舒适水平，再做一轮。他不想。该死的，他不想这么做，但他知道我们希望他这么做。他知道为了通过测试，他必须这样做。他说：“现在，你的工作就是让他去健身房，妈妈</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:40)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Teddy Atlas, a legendary and, at times, controversial boxing trainer and commentator. When I was going to this conversation with Teddy, I was ready to talk boxing, styles, matches, techniques, tactics, and his analysis of individual fighters, like Mike Tyson, Michael Moorer, Klitschkos, Usyk, Povetkin, Lomachenko, Triple G, Canelo, Muhammad Ali, Sugar Ray Leona...</div>
+  <div class="dialogue-zh">以下是与泰迪·阿特拉斯（Teddy Atlas）的对话，泰迪·阿特拉斯是一位传奇人物，有时也引起争议的拳击教练和评论员。当我准备和泰迪谈话时，我准备谈论拳击、风格、比赛、技术、战术，以及他对个人拳击手的分析，比如迈克·泰森、迈克尔·摩尔、克里琴科斯、乌西克、波维特金、洛马琴科、Triple G、卡内洛、穆罕默德·阿里、舒格·雷·利昂娜</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:23)</span>
+  </div>
+  <div class="dialogue-en">It’s a story about loyalty, betrayal, fear, and greatness. It’s a story where nobody is perfect and everybody is human. To summarize, in the early ’80s, young trainer, Teddy Atlas, worked with his mentor, Cus D’Amato, in training the young boxing protégé, now a boxing legend, Mike Tyson. Mike was a troubled youth, arrested over 40 times, and at age 15, he was sexually inappropriate with Teddy’s 11...</div>
+  <div class="dialogue-zh">这是一个关于忠诚、背叛、恐惧和伟大的故事。在这个故事中，没有人是完美的，每个人都是凡人。总而言之，在 80 年代初，年轻的教练泰迪·阿特拉斯 (Teddy Atlas) 与他的导师库斯·达马托 (Cus D&#39;Amato) 合作，训练年轻的拳击门生、现在的拳击传奇人物迈克·泰森 (Mike Tyson)。迈克是一个问题青年，被捕超过 40 次，15 岁时，他与泰迪的 11 岁孩子发生不恰当的性行为</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:55)</span>
+  </div>
+  <div class="dialogue-en">In response to this, Teddy put a .38 caliber handgun to Tyson’s ear and told him to never touch his family again or he would kill him if he did. For this Cus D’Amato kicked Teddy out. Why? Well, that’s complicated. In part, I think, to help minimize the chance of Mike Tyson, who Cus legally adopted, will be taken away by the state, and with him the dream of developing one of the greatest boxers of...</div>
+  <div class="dialogue-zh">作为回应，泰迪将一把0.38口径手枪放在泰森耳边，并告诉他永远不要再碰他的家人，否则他会杀了他。为此，库斯·达马托将泰迪踢了出去。为什么？嗯，这很复杂。我认为，部分原因是为了最大限度地减少库斯合法收养的迈克·泰森被国家带走的可能性，以及与他一起培养世界上最伟大的拳击手之一的梦想。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:24)</span>
+  </div>
+  <div class="dialogue-en">Of course, that summary doesn’t capture the full complexity of human nature and human drama involved here. For that, you have to listen to this conversation, the things said and the things left unsaid. The pain in Teddy’s voice, the contradictions of love and anger that permeate his stories and his philosophy on life. Like I said, I came to talk about boxing and stayed to talk about life.</div>
+  <div class="dialogue-zh">当然，这个总结并没有完全体现出人性和人类戏剧的全部复杂性。为此，你必须倾听这次谈话，听那些说过的话和那些没说的话。泰迪声音中的痛苦，爱与愤怒的矛盾渗透在他的故事和人生哲学中。就像我说的，我来这里是为了谈论拳击，留下来是为了谈论生活。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:52)</span>
+  </div>
+  <div class="dialogue-en">This conversation will stay with me for a long time. The people close to you, the people you trust, the people you love, are everything. And if they betray you and break your heart, forgive them, forgive yourself and try again. Happy holidays, everyone. I love you all.</div>
+  <div class="dialogue-zh">这次谈话将伴随我很长一段时间。你亲近的人、你信任的人、你爱的人，就是一切。如果他们背叛了你，伤了你的心，原谅他们，原谅你自己，然后再试一次。大家节日快乐。我爱你们。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:15)</span>
+  </div>
+  <div class="dialogue-en">This is a Lex Fridman podcast. To support it, please check out our sponsors in the description. And now, dear friends, here’s Teddy Atlas. Lessons from father</div>
+  <div class="dialogue-zh">这是莱克斯·弗里德曼的播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是泰迪·阿特拉斯。父亲的教训</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:26)</span>
+  </div>
+  <div class="dialogue-en">You wrote in the book that your father had a big influence on your life. What lessons have you learned about life from your father?</div>
+  <div class="dialogue-zh">你在书中写道，你的父亲对你的人生影响很大。你从父亲那里学到了哪些关于人生的教训？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Teddy Atlas <span class="dialogue-time">(00:03:34)</span>
+  </div>
+  <div class="dialogue-en">When you ask that question, I remember Cus D’Amato, when I was with him up in Catskill for all those years. He used to say to me, “Teddy, you learned through osmosis.” I believe there’s truth to that, if I know what osmosis is, but it sounds good. But I learned through osmosis with my father. He wasn’t a big talker. He was a doer. And when you’re around someone who lives a certain kind of life and...</div>
+  <div class="dialogue-zh">当你问这个问题时，我想起了库斯·达马托，那些年我和他一起在卡茨基尔。他常常对我说：“泰迪，你是通过潜移默化学习的。”如果我知道渗透是什么，我相信这是事实，但这听起来不错。但我是在父亲的潜移默化中学会的。他不是一个爱说话的人。他是一个实干家。当你身边的人过着某种特定的生活并且</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:10)</span>
+  </div>
+  <div class="dialogue-en">He was a doctor.</div>
+  <div class="dialogue-zh">他是一名医生。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Teddy Atlas <span class="dialogue-time">(00:04:11)</span>
+  </div>
+  <div class="dialogue-en">I’m going to sound like an idiot right now, because I’m being a son, but he was the greatest diagnostic doctor. I mean, if I say, I ever knew, what does that mean? You know what I mean? Are you a doctor? You know what I mean? What does that mean? But, other people have told me this, just legendary stories.</div>
+  <div class="dialogue-zh">我现在听起来像个白痴，因为我是个儿子，但他是最伟大的诊断医生。我的意思是，如果我说，我曾经知道，那是什么意思？你知道我的意思？你是医生吗？你知道我的意思？这意味着什么？但是，其他人告诉我的这只是传说。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:33)</span>
+  </div>
+  <div class="dialogue-en">He would do house calls and he’d help people, and like you said, a lot of people have spoken about the impact he’s had on their life.</div>
+  <div class="dialogue-zh">他会上门拜访，帮助人们，就像你说的，很多人都谈到了他对他们生活的影响。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Teddy Atlas <span class="dialogue-time">(00:04:38)</span>
+  </div>
+  <div class="dialogue-en">He built two hospitals, and he built a hospital before the Verrazano Bridge in New York, connecting Brooklyn to Staten Island. And he built it so people could get proper hospital care that couldn’t afford it, period. And everybody looked at him as eccentric.</div>
+  <div class="dialogue-zh">他建造了两所医院，并在纽约的维拉扎诺大桥前建造了一座医院，连接布鲁克林和史坦顿岛。他建造它是为了让那些无力承担费用的人们能够得到适当的医院护理。每个人都认为他很古怪。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:58)</span>
+  </div>
+  <div class="dialogue-en">Yeah, nice. [inaudible 00:04:58].</div>
+  <div class="dialogue-zh">是的，很好。 [听不清 00:04:58]。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Teddy Atlas <span class="dialogue-time">(00:04:59)</span>
+  </div>
+  <div class="dialogue-en">Yeah, because, he would literally sneak patients, not sneak them in, he was Dr. Atlas, he could do what he wanted, to a certain extent. But he would bring patients in without administering, putting through administration, so there was no charge, because they didn’t have anything. They were street people. I remember being… My only way to be with my father was to go on house calls or to go to the of...</div>
+  <div class="dialogue-zh">是的，因为，他确实会偷偷溜病人，而不是偷偷溜进去，他是阿特拉斯博士，他可以在某种程度上做他想做的事。但他会在不进行给药的情况下带病人进来，进行给药，所以不收费，因为他们没有任何东西。他们是街头行人。我记得……我和父亲在一起的唯一方式就是出诊或去医院。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Teddy Atlas <span class="dialogue-time">(00:05:27)</span>
+  </div>
+  <div class="dialogue-en">And so I went on house calls with him. And he did house calls, by the way, till he was 80, and $3. I mean, it was better than McDonald’s, you know what I mean? I mean, the deal, $3 and you got medicine, you got everything. But he used to, right around the holidays, there was just certain things that I didn’t understand, but I understood later, where we would just drive certain areas and he just, a...</div>
+  <div class="dialogue-zh">于是我就和他一起出诊。顺便说一句，他还上门拜访，直到 80 岁，工资只有 3 美元。我的意思是，它比麦当劳更好，你知道我的意思吗？我的意思是，这笔交易，3 美元，你就得到了药品，你得到了一切。但他过去常常在假期期间，有些事情我不明白，但后来我明白了，我们只是在某些区域开车，而他只是，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:58)</span>
+  </div>
+  <div class="dialogue-en">Help them.</div>
+  <div class="dialogue-zh">帮助他们。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Teddy Atlas <span class="dialogue-time">(00:05:59)</span>
+  </div>
+  <div class="dialogue-en">… I’m 10 years old, ” Move over.” Move over, you know?</div>
+  <div class="dialogue-zh">……我10岁了，“走过去。”搬过去，你知道吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:02)</span>
+  </div>
+  <div class="dialogue-en">Mm-hmm. It was just you, him, and a homeless guy.</div>
+  <div class="dialogue-zh">嗯嗯。只有你、他和一个无家可归的人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Teddy Atlas <span class="dialogue-time">(00:06:06)</span>
+  </div>
+  <div class="dialogue-en">A couple.</div>
+  <div class="dialogue-zh">一对。</div>
+</div>
+    <a href="https://lexfridman.com/teddy-atlas-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="botez-sisters.html" class="card" style="text-decoration:none">
+  <div class="card-title">Botez Sisters: Chess, Streaming, and Fame</div>
+  <div class="card-meta">Botez Sisters</div>
+</a>
+<a href="georges-st-pierre-john-danaher-gordon-ryan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Georges St-Pierre, John Danaher &amp; Gordon Ryan: The Greatest of All Time</div>
+  <div class="card-meta">Georges St-Pierre, John Danaher &amp; Gordon Ryan</div>
+</a>
+<a href="joe-rogan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Joe Rogan: Conversations, Ideas, Love, Freedom &amp; The Joe Rogan Experience</div>
+  <div class="card-meta">Joe Rogan</div>
+</a>
+<a href="magnus-carlsen.html" class="card" style="text-decoration:none">
+  <div class="card-title">Magnus Carlsen: Greatest Chess Player of All Time</div>
+  <div class="card-meta">Magnus Carlsen</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

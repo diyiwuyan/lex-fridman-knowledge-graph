@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mohammed El Kurd - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Mohammed El Kurd</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Mohammed El Kurd</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/mohammed-el-kurd.html" style="font-size:16px;color:#818cf8;font-weight:600">Mohammed El Kurd</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">20,034 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/mohammed-el-kurd-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:18</span>
+  <span class="chapter-title">Palestine<span class="zh-trans"> · 巴勒斯坦</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">26:47</span>
+  <span class="chapter-title">Hate<span class="zh-trans"> · 恨</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:18</span>
+  <span class="chapter-title">Antisemitism<span class="zh-trans"> · 反犹太主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">48:14</span>
+  <span class="chapter-title">Peace in the Middle East<span class="zh-trans"> · 中东和平</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">55:11</span>
+  <span class="chapter-title">West Bank<span class="zh-trans"> · 约旦河西岸</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:05:20</span>
+  <span class="chapter-title">Hamas<span class="zh-trans"> · 哈马斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:15:08</span>
+  <span class="chapter-title">Two-state solution<span class="zh-trans"> · 两国解决方案</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:30:58</span>
+  <span class="chapter-title">Jerusalem<span class="zh-trans"> · 耶路撒冷</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:37:41</span>
+  <span class="chapter-title">Role of the US<span class="zh-trans"> · 美国的角色</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:39:31</span>
+  <span class="chapter-title">Ghassan Kanafani<span class="zh-trans"> · 加桑·卡纳法​​尼</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:50:16</span>
+  <span class="chapter-title">2024 Elections<span class="zh-trans"> · 2024 年选举</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:51:25</span>
+  <span class="chapter-title">Poetry<span class="zh-trans"> · 诗</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:00:45</span>
+  <span class="chapter-title">Language<span class="zh-trans"> · 语言</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:09:14</span>
+  <span class="chapter-title">Hope<span class="zh-trans"> · 希望</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">mohammed</span><span class="keyword-tag">kurd</span><span class="keyword-tag">israeli</span><span class="keyword-tag">palestinian</span><span class="keyword-tag">don</span><span class="keyword-tag">palestine</span><span class="keyword-tag">israel</span><span class="keyword-tag">palestinians</span><span class="keyword-tag">homes</span><span class="keyword-tag">land</span><span class="keyword-tag">going</span><span class="keyword-tag">jerusalem</span><span class="keyword-tag">said</span><span class="keyword-tag">state</span><span class="keyword-tag">states</span><span class="keyword-tag">violence</span><span class="keyword-tag">west</span><span class="keyword-tag">military</span><span class="keyword-tag">home</span><span class="keyword-tag">talking</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Regardless of whatever was written in these books that were written thousands and thousands of years ago, the fact of the matter is no one has a right to go on slaughtering people, removing them from their homes and then continuing to live in their homes, continuing to drink coffee on their balconies decades and decades later, with no shame, with no introspection, with no reflection. No one has the right to do that. No one has the right to keep an entire population of people in a cage, which is what’s happening to people in the West Bank who have no freedom of movement, which is what’s happening in Gaza, which is blockaded to water, air, and land, and is deemed uninhabitable by human rights organizations like the UN. No one has a right to do that."</div>
+  <div class="quote-zh">不管这些几千年前写的书里写了什么，事实是没有人有权利继续屠杀人民，把他们赶出家园，然后继续住在他们的家里，几十年后继续在阳台上喝咖啡，没有羞耻，没有内省，没有反思。没有人有权这样做。没有人有权将整个人口关在笼子里，这就是约旦河西岸那些没有行动自由的人们所面临的情况，这就是加沙所发生的情况，该地区的水、空气和土地被封锁，并被联合国等人权组织视为不适合居住。没有人有权这样做。</div>
+  <div class="quote-meta">— Introduction （00:00:00）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Host of Lex Fridman Podcast. Research Scientist at MIT, working on human-AI interaction, robotics, and machine learning. View all posts by Lex Fridman →"</div>
+  <div class="quote-zh">莱克斯·弗里德曼播客的主持人。麻省理工学院的研究科学家，致力于人机交互、机器人和机器学习。查看莱克斯·弗里德曼发表的所有帖子 →</div>
+  <div class="quote-meta">— About Lex Fridman </div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Introduction
+  </div>
+  <div class="dialogue-en">Mohammed el-Kurd</div>
+  <div class="dialogue-zh">穆罕默德·库尔德</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Introduction <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">Regardless of whatever was written in these books that were written thousands and thousands of years ago, the fact of the matter is no one has a right to go on slaughtering people, removing them from their homes and then continuing to live in their homes, continuing to drink coffee on their balconies decades and decades later, with no shame, with no introspection, with no reflection. No one has th...</div>
+  <div class="dialogue-zh">不管这些几千年前写的书里写了什么，事实是没有人有权利继续屠杀人民，把他们赶出家园，然后继续住在他们的家里，几十年后继续在阳台上喝咖啡，没有羞耻，没有内省，没有反思。没有人有</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:52)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Mohammed el-Kurd, a world-renowned Palestinian poet, writer, journalist, and an influential voice speaking out and fighting for the Palestinian cause. He provides a very different perspective on Israel and Palestine than my previous two episodes with Benjamin Netanyahu and Yuval Noah Harari. I hope his story and his words add to your understanding of this part ...</div>
+  <div class="dialogue-zh">以下是与世界著名巴勒斯坦诗人、作家、记者穆罕默德·库尔德的对话，他是一位为巴勒斯坦事业发声和奋斗的有影响力的声音。与我之前与本杰明·内塔尼亚胡和尤瓦尔·诺亚·赫拉里的两集节目相比，他对以色列和巴勒斯坦提供了截然不同的视角。我希望他的故事和他的话能增加你对这一部分的理解</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Palestine <span class="dialogue-time">(00:02:18)</span>
+  </div>
+  <div class="dialogue-en">Tell me about Sheikh Jarrah, the neighborhood in East Jerusalem where you grew up. Mohammed el-Kurd</div>
+  <div class="dialogue-zh">告诉我有关谢赫·贾拉 (Sheikh Jarrah) 的事，这是你长大的东耶路撒冷社区。穆罕默德·库尔德</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Palestine <span class="dialogue-time">(00:02:22)</span>
+  </div>
+  <div class="dialogue-en">Sheikh Jarrah has, in a way, a typical neighborhood despite the absurd reality that surrounds it. It’s a typical neighborhood in terms of Palestinian neighborhoods. It’s one that is threatened with colonialism, with settler expansion, and with forced expulsion, and it has been that way since the early ’70s. My family, like all of the other families in Sheikh Jarrah, were expelled from their homes ...</div>
+  <div class="dialogue-zh">从某种程度上来说，谢赫·贾拉（Sheikh Jarrah）拥有一个典型的社区，尽管周围存在着荒谬的现实。这是一个典型的巴勒斯坦社区。它受到殖民主义、定居者扩张和强制驱逐的威胁，自 70 年代初以来一直如此。我的家人和谢赫贾拉的所有其他家庭一样，被驱逐出家门</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Palestine <span class="dialogue-time">(00:03:32)</span>
+  </div>
+  <div class="dialogue-en">And then in the ’70s, you had settler organizations, many of whom were registered here in New York and in the United States, claiming our houses and our lands as their own by divine decree. Obviously, because the judges are Israeli and the laws were written by Israeli settlers and the whole judiciary was established atop the rubble of our homes and villages, we had no real pull in the courts. The ...</div>
+  <div class="dialogue-zh">然后在 70 年代，出现了定居者组织，其中许多人在纽约和美国注册，根据神圣法令声称我们的房屋和土地属于他们自己。显然，因为法官是以色列人，法律是以色列定居者制定的，整个司法机构是在我们家园和村庄的废墟上建立的，所以我们对法院没有真正的影响力。这</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Palestine <span class="dialogue-time">(00:04:37)</span>
+  </div>
+  <div class="dialogue-en">One that is about social engineering, one is about demographics, one that is about removing as many Palestinians as possible from occupied Jerusalem. So we did what all Palestinian families in Jerusalem do when they’re faced with this kind of threat, and we bought time. We pleaded and pleaded and appealed the courts and appealed the cases, and we got over 50 expulsion orders. In 2009, rifle-wieldi...</div>
+  <div class="dialogue-zh">一项是关于社会工程，一项是关于人口统计，一项是关于从被占领的耶路撒冷清除尽可能多的巴勒斯坦人。因此，我们做了耶路撒冷所有巴勒斯坦家庭在面临这种威胁时所做的事情，我们赢得了时间。我们向法院申诉、申诉、上诉，对案件提出上诉，我们收到了 50 多份驱逐令。 2009年，步枪手</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:41)</span>
+  </div>
+  <div class="dialogue-en">Can you linger on that process? 2009, you said 50 expulsion orders. What was happening? Mohammed el-Kurd</div>
+  <div class="dialogue-zh">你能停留在这个过程上吗？ 2009年，你说有50个驱逐令。发生了什么事？穆罕默德·库尔德</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:48)</span>
+  </div>
+  <div class="dialogue-en">Between the ’70s and 2009, there had been many, dozens of expulsions orders against us and against many other families in the neighborhood, 28 other family, 28 families in total actually. And in 2008, 2009, the first wave of expulsions finally happened. It actually began with [inaudible 00:06:09] el-Kurd. We’re not related, but we live on the same street in the same neighborhood. She was thrown ou...</div>
+  <div class="dialogue-zh">从 70 年代到 2009 年，针对我们和附近许多其他家庭的驱逐令有很多、几十个，另外还有 28 个家庭，实际上总共有 28 个家庭。 2008年、2009年，第一波驱逐终于发生了。它实际上是从 [听不清 00:06:09] el-Kurd 开始的。我们没有血缘关系，但我们住在同一个街区的同一条街上。她被扔了</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:47)</span>
+  </div>
+  <div class="dialogue-en">And then by the end of 2009, I had come home from school to find all of my furniture scattered across the length of the street, and I saw the settlers, many of whom had American accents living in our house. And their justification for this, their reasoning for this is divine decree. This is what God wants. This is the promised land. This is so-and-so, as if God is some kind of real estate agent. S...</div>
+  <div class="dialogue-zh">到了 2009 年底，我放学回家，发现我所有的家具散落在街道上，我看到了定居者，其中许多人操着美国口音住在我们的房子里。他们对此的辩解、推理是神圣的法令。这就是神所要的。这是应许之地。这是某某，好像上帝是某种房地产经纪人。 S</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:53)</span>
+  </div>
+  <div class="dialogue-en">Move forward to 2020, I was in New York City studying a master’s degree, getting a master’s degree. And my father calls me and he tells me, “We have yet another expulsion order,” and we decided to launch a campaign. It was quite ambitious at the time, but the whole objective of the campaign was to demystify what is happening because it’s reported on in the news, it’s reported on around the world a...</div>
+  <div class="dialogue-zh">展望2020年，我在纽约攻读硕士学位，获得硕士学位。我父亲打电话给我，他告诉我，“我们又收到了驱逐令”，我们决定发起一场运动。当时这是相当雄心勃勃的，但该活动的整体目标是揭开正在发生的事情的神秘面纱，因为新闻报道了这一点，世界各地都报道了这一点</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:40)</span>
+  </div>
+  <div class="dialogue-en">And I believe it was a global success because, finally, the images on the screen matched the rhetoric that was being said. It wasn’t so confusing or complicated anymore. All of this asymmetry was pronounced and articulated in a way that any of you, be it in Alabama, be it in New York, be it in Egypt, was able to understand the asymmetry of the judicial system and the agenda of colonialism that was...</div>
+  <div class="dialogue-zh">我相信这是全球性的成功，因为最终，屏幕上的图像与所说的言论相符。它不再那么令人困惑或复杂了。所有这些不对称性的表达和表达方式使得你们任何人，无论是在阿拉巴马州，无论是在纽约，还是在埃及，都能够理解司法系统和殖民主义议程的不对称性。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:39)</span>
+  </div>
+  <div class="dialogue-en">But nonetheless, it was something that we haven’t seen before. And the fact that the Supreme Court canceled all of these dozens and dozens of fast eviction orders, it set a precedent. And it also proved that this was a political battle, not a legal one.</div>
+  <div class="dialogue-zh">但尽管如此，这是我们以前从未见过的。最高法院取消了所有这几十个快速驱逐令，这一事实开创了先例。这也证明这是一场政治斗争，而不是法律斗争。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:54)</span>
+  </div>
+  <div class="dialogue-en">So let’s just add a little more detail to the people who are not familiar with the story, with the region, with the evictions, with the courts. So first of all, [inaudible 00:10:07] your eyes in East Jerusalem. Maybe you can say what is Jerusalem, where is it located, what are we talking about in terms of regionally and, second, what kind of people live there. So if you could talk about the Palest...</div>
+  <div class="dialogue-zh">因此，让我们为那些不熟悉这个故事、该地区、驱逐和法院的人添加更多细节。首先，[听不清 00:10:07] 你的眼睛在东耶路撒冷。也许你可以说耶路撒冷是什么，它位于哪里，我们在区域方面谈论什么，第二，那里住着什么样的人。所以如果你能谈谈巴勒斯坦</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:53)</span>
+  </div>
+  <div class="dialogue-en">Yeah, I mean, the most important context here is that oftentimes Americans think that Israel and Palestine are some kind of two neighboring countries that live next to each other, and they are at war. But the fact of the matter is Palestinian cities exist all over the country, and it’s just one country, it’s just one infrastructure, and Israel is literally on top of Palestine. It was established o...</div>
+  <div class="dialogue-zh">是的，我的意思是，这里最重要的背景是，美国人常常认为以色列和巴勒斯坦是某种毗邻的邻国，而且它们处于战争状态。但事实是，巴勒斯坦城市遍布全国各地，它只是一个国家，只是一个基础设施，而以色列实际上位于巴勒斯坦之上。它成立于</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:12:02)</span>
+  </div>
+  <div class="dialogue-en">We’re talking about Sheikh Jarrah, we’re talking about Jerusalem, we’re talking about generations and generations and generations of people who have lived there for the longest time, who now, even though… For example, me, I don’t have a citizenship. I’m a resident, a mere resident, I have a blue ID card even though my grandmother and my grandfather were born in Jerusalem, their grandparents were b...</div>
+  <div class="dialogue-zh">我们谈论的是谢赫贾拉，我们谈论的是耶路撒冷，我们谈论的是世世代代在那里生活了最长时间的人，他们现在，即使……例如，我，我没有公民身份。我是居民，只是居民，我有一张蓝色身份证，尽管我的祖母和祖父出生在耶路撒冷，他们的祖父母是耶路撒冷人</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:13:03)</span>
+  </div>
+  <div class="dialogue-en">I’ll talk to you about something else. Just 10 minutes across from my neighborhood, Sheikh Jarrah, there’s another neighborhood called Silwan. And the people in Silwan are also threatened with expulsion, but not through evictions, but through home demolitions. And if you look at American media or Israeli state media, you would read the headlines, “Palestinians living in homes built illegally are g...</div>
+  <div class="dialogue-zh">我会和你谈谈别的事情。距离我的社区 Sheikh Jarrah 仅 10 分钟路程，还有另一个社区，名叫 Silwan。西尔万的人们也受到驱逐的威胁，但不是通过驱逐，而是通过拆除房屋。如果你看美国媒体或以色列官方媒体，你会读到头条新闻：“居住在非法建造的房屋中的巴勒斯坦人</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:13:53)</span>
+  </div>
+  <div class="dialogue-en">And to make this even more absurd, the guy, the councilman who is responsible for rejecting and accepting building permit applications, his name is Yonatan Yosef, and he’s an activist in the settler movements and he’s a Jerusalem council member, last week, following the expulsion of Sub Laban family in the old city of Jerusalem, he posted to his official Facebook account, “Nakba now,” demanding a ...</div>
+  <div class="dialogue-zh">更荒唐的是，负责拒绝和接受建筑许可申请的议员叫约纳坦·约瑟夫(Yonatan Yosef)，他是定居者运动的积极分子，也是耶路撒冷议会成员。上周，在耶路撒冷老城的苏拉班一家被驱逐后，他在自己的脸书官方账户“Nakba now”上发帖，要求</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:15:11)</span>
+  </div>
+  <div class="dialogue-en">Again, if you’re reading American media, it would say, “Palestinians living in firing zones were removed because they’re living in a military zone.” What these media reports will not tell you that, in the ’80s, the Israeli government purposefully classified many lands in the occupied West Bank as firing zones, as off-limit military zones for the sole purpose of expelling the residents, and this is...</div>
+  <div class="dialogue-zh">再说一次，如果你读美国媒体，它会说，“生活在射击区的巴勒斯坦人被驱逐，因为他们生活在军事区。”这些媒体报道不会告诉你的是，上世纪80年代，以色列政府故意将被占领的约旦河西岸的许多土地划为射击区，划为军事禁区，其唯一目的就是驱逐居民，这就是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:16:20)</span>
+  </div>
+  <div class="dialogue-en">So there’s no representation in the courts for the Palestinian people? Mohammed el-Kurd</div>
+  <div class="dialogue-zh">那么法庭上没有巴勒斯坦人民的代表吗？穆罕默德·库尔德</div>
+</div>
+    <a href="https://lexfridman.com/mohammed-el-kurd-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="ben-shapiro-destiny-debate.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ben Shapiro Destiny Debate</div>
+  <div class="card-meta">Ben Shapiro</div>
+</a>
+<a href="bernie-sanders.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bernie Sanders</div>
+  <div class="card-meta">Bernie Sanders</div>
+</a>
+<a href="douglas-murray-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Douglas Murray #2</div>
+  <div class="card-meta">Douglas Murray</div>
+</a>
+<a href="eric-weinstein-4.html" class="card" style="text-decoration:none">
+  <div class="card-title">Eric Weinstein: Difficult Conversations, Freedom of Speech, and Physics</div>
+  <div class="card-meta">Eric Weinstein</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

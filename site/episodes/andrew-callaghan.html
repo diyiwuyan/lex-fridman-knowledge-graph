@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Andrew Callaghan - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Andrew Callaghan</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Andrew Callaghan</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/andrew-callaghan.html" style="font-size:16px;color:#818cf8;font-weight:600">Andrew Callaghan</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">34,910 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/andrew-callaghan-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:18</span>
+  <span class="chapter-title">Walmart<span class="zh-trans"> · 沃尔玛</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:48</span>
+  <span class="chapter-title">Early life<span class="zh-trans"> · 早期生活</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">21:38</span>
+  <span class="chapter-title">Hitchhiking<span class="zh-trans"> · 搭便车</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">33:14</span>
+  <span class="chapter-title">Couch surfing<span class="zh-trans"> · 沙发冲浪</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">42:14</span>
+  <span class="chapter-title">Quarter Confessions<span class="zh-trans"> · 季度自白</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">59:58</span>
+  <span class="chapter-title">Burning Man<span class="zh-trans"> · 火人节</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:15:08</span>
+  <span class="chapter-title">Protests<span class="zh-trans"> · 抗议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:20:41</span>
+  <span class="chapter-title">Jon Stewart<span class="zh-trans"> · 乔恩·斯图尔特</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:23:37</span>
+  <span class="chapter-title">Fame<span class="zh-trans"> · 名气</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:36:55</span>
+  <span class="chapter-title">Jan 6<span class="zh-trans"> · 1月6日</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:40:39</span>
+  <span class="chapter-title">QAnon<span class="zh-trans"> · QAnon</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:46:24</span>
+  <span class="chapter-title">Alex Jones<span class="zh-trans"> · 亚历克斯·琼斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:03:17</span>
+  <span class="chapter-title">Politics<span class="zh-trans"> · 政治</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:12:53</span>
+  <span class="chapter-title">Response to allegations<span class="zh-trans"> · 对指控的回应</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:29:53</span>
+  <span class="chapter-title">Channel 5<span class="zh-trans"> · 频道5</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:35:28</span>
+  <span class="chapter-title">Rap<span class="zh-trans"> · 说唱</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:37:15</span>
+  <span class="chapter-title">O Block<span class="zh-trans"> · O型块</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:41:11</span>
+  <span class="chapter-title">Crip Mac<span class="zh-trans"> · 跛子麦克</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:44:23</span>
+  <span class="chapter-title">Aliens<span class="zh-trans"> · 外星人</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">andrew</span><span class="keyword-tag">callaghan</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">man</span><span class="keyword-tag">said</span><span class="keyword-tag">got</span><span class="keyword-tag">stuff</span><span class="keyword-tag">didn</span><span class="keyword-tag">doing</span><span class="keyword-tag">guy</span><span class="keyword-tag">sure</span><span class="keyword-tag">called</span><span class="keyword-tag">went</span><span class="keyword-tag">person</span><span class="keyword-tag">thought</span><span class="keyword-tag">shit</span><span class="keyword-tag">street</span><span class="keyword-tag">made</span><span class="keyword-tag">video</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Okay, I’ll put it like this. Most people think they’re doing the best thing for the world. I don’t think anyone, except for maybe a small fraction of sociopaths, wakes up every day and says, “I’m going to fuck somebody’s life up today.” I think the far majority of people are fighting for what they think is right and do want to see America succeed and want us to be in a happy place where no one is subjugated. I just think people have drastically different ideas of what means will get us there. And unfortunately, that’s leading to a lot of misunderstandings between cultures."</div>
+  <div class="quote-zh">好吧，我就这样说。大多数人认为他们正在为世界做最好的事情。我认为除了一小部分反社会者之外，没有人每天醒来都会说：“我今天要搞砸别人的生活。”我认为绝大多数人都在为他们认为正确的事情而奋斗，并且确实希望看到美国成功，希望我们处于一个没有人被征服的幸福之地。我只是认为人们对于如何实现这一目标有着截然不同的想法。不幸的是，这导致了文化之间的许多误解。</div>
+  <div class="quote-meta">— Andrew Callaghan （02:49:01）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"People think like that, man. The word I use is sidekick syndrome. When people are a part of the production, but they’re not integral, they start thinking that the front man doesn’t matter or something, and that the brains of the operation are actually the people on the periphery. And so they start to believe that they can just shift things around and the audience won’t care, not realizing that I was actually the one who created the show and that the lore of the show is connected to my rise outside of their jurisdiction, if that makes sense. The people who watch All Gas No Brake watched Quarter Confessions and read the book."</div>
+  <div class="quote-zh">人们就是这么想的，伙计。我用的词是伙伴综合症。当人们成为制作的一部分，但不是整体时，他们就会开始认为前台人员并不重要或其他什么，而操作的大脑实际上是外围的人。所以他们开始相信他们可以改变事情，观众不会在意，没有意识到我实际上是这个节目的创作者，并且这个节目的传说与我在他们管辖范围之外的崛起有关，如果这有意义的话。观看《All Gas No Brake》的人观看了《Quarter Confessions》并阅读了这本书。</div>
+  <div class="quote-meta">— Andrew Callaghan （01:33:27）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"He’s now facing 23 years in prison. It’s like a trip because I went to his house in Miami maybe two weeks after January 6th. And talking to him, it seemed like he didn’t think anything was going to happen. He was just like, “Yeah, man, that was crazy. I’m glad I wasn’t there. They’re dumb for doing that.” He even told me he doesn’t think the election was stolen, which is just a mindfuck. It’s like, why’d you get everyone so hyped up? It’s just weird to think about how so many people’s lives are drastically altered forever because of that just bizarre moment in time that will always live on. QAnon"</div>
+  <div class="quote-zh">他现在面临 23 年监禁。这就像一次旅行，因为 1 月 6 日后大约两周我去了他在迈阿密的家。和他说话，他似乎不认为会发生什么。他只是说，“是的，伙计，这太疯狂了。我很高兴我不在那儿。他们这样做真是愚蠢。”他甚至告诉我，他不认为选举被窃取，这只是胡思乱想。就像，为什么你让每个人都如此兴奋？想到这么多人的生活会因为那个永远存在的奇异时刻而永远改变，真是很奇怪。 QAnon</div>
+  <div class="quote-meta">— Andrew Callaghan （01:40:03）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"He told me when I met with him, he was like, “I know you think that having me in this movie is a good idea, but you’re going to have some serious backlash because of that.” At the time, I was like, “Man, it’s fine. It’s all good. We’re just hanging out, drinking whiskey, doing bench presses, drinking Jameson. It’s all good.” First of all, I had to campaign to get him in the film because the studios were like, “We don’t…” There was a bizarre time around… I think it was 2018, where deplatforming was the big thing that people were encouraging. It said giving a platform to problematic ideologies will, in turn, expand their reach. And so even extending your platform to someone who’s problematic is helping them, aka destroying humanity, whatever it was. So that was the whole thing."</div>
+  <div class="quote-zh">他告诉我，当我见到他时，他说，“我知道你认为让我出演这部电影是个好主意，但你会因此而受到一些严重的抵制。”当时，我想，“伙计，没关系。一切都很好。我们只是闲逛，喝威士忌，做卧推，喝詹姆森。一切都很好。”首先，我必须努力让他参与电影，因为工作室的反应是，“我们不……”那段时间很奇怪……我想那是 2018 年，去平台化是人们鼓励的大事。报告称，为有问题的意识形态提供平台将反过来扩大其影响范围。因此，即使将你的平台扩展到有问题的人，也是在帮助他们，也就是毁灭人性，无论是什么。这就是整个事情的经过。</div>
+  <div class="quote-meta">— Andrew Callaghan （01:47:49）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So I tried to think of what’s the way I can do it to get the least amount of anger on behalf of the people who would grieve? Because the hanging, someone will discover you. So I figured drinking myself to death would be the way to do it, and I wasn’t able to. Yeah, that was just a dark place. I remember hating the people who loved me because I knew they would grieve, and that made me mad, if that makes sense. I was ready to go. I had no will to live. But their grief was like… I didn’t want to cause that because I didn’t want to hurt them. So I was like, I hated the people who loved me because they were stopping me from taking my own life."</div>
+  <div class="quote-zh">所以我试着想，我怎样才能让那些悲伤的人得到最少的愤怒？因为挂了，就会有人发现你。所以我想把自己喝死是个办法，但我没能做到。是的，那只是一个黑暗的地方。我记得我恨那些爱我的人，因为我知道他们会悲伤，这让我很生气，如果这有道理的话。我准备出发了。我没有活下去的意愿。但他们的悲伤就像……我不想造成这种情况，因为我不想伤害他们。所以我想，我讨厌那些爱我的人，因为他们阻止我结束自己的生命。</div>
+  <div class="quote-meta">— Andrew Callaghan （02:24:49）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Callaghan <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">There’s two people in the back, two of her homegirls wearing sheisty masks. I’m like, “What are we doing? Where are we going?” She goes, “We’re going to go film the riot. We’re going to Lake Street.” We drive down there, Kmart is burning, Target is burning, everything is on fire. She has the Sony a7, she gives me a microphone and she’s like, “Go talk to that guy.” That was the guy with a molotov c...</div>
+  <div class="dialogue-zh">后面有两个人，她的两个女佣戴着神秘的面具。我想，“我们在做什么？我们要去哪里？”她说：“我们要去拍摄骚乱。我们要去湖街。”我们开车去那里，凯马特在燃烧，塔吉特在燃烧，一切都着火了。她有索尼 a7，给了我一个麦克风，然后说：“去和那个人谈谈。”那是那个拿着燃烧弹的家伙</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:36)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Andrew Callaghan, host of Channel 5 on YouTube, where he does Gazelle style interviews with fascinating humans at the edges of society. The so-called vagrants, vagabonds, runaways, outlaws, from QAnon adherence to fish heads, O’Block residents, and much more. He created the documentary that I highly recommend called This Place Rules, on the undercurrents that l...</div>
+  <div class="dialogue-zh">以下是与 YouTube 第五频道主持人安德鲁·卡拉汉 (Andrew Callaghan) 的对话，他对社会边缘的迷人人物进行了瞪羚式的采访。所谓的流浪者、流浪者、逃亡者、亡命之徒、QAnon 坚持者、鱼头、O’Block 居民等等。他创作了我强烈推荐的纪录片《这个地方的规则》，讲述了我所经历的暗流。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Callaghan <span class="dialogue-time">(00:01:18)</span>
+  </div>
+  <div class="dialogue-en">I tried to color match you though. Got the black and white going. I went to Walmart before this and got the Wrangler shirt with the Texas Longhorns Tee and everything.</div>
+  <div class="dialogue-zh">不过我试着让颜色与你匹配。黑白都搞定了在此之前我去了沃尔玛，买了一件牧马人衬衫和德克萨斯长角牛队 T 恤等等。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:25)</span>
+  </div>
+  <div class="dialogue-en">Is that where you shop, Walmart?</div>
+  <div class="dialogue-zh">沃尔玛，那是你购物的地方吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Callaghan <span class="dialogue-time">(00:01:26)</span>
+  </div>
+  <div class="dialogue-en">Generally, yeah.</div>
+  <div class="dialogue-zh">一般来说，是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:27)</span>
+  </div>
+  <div class="dialogue-en">I’m a Target man myself. T.</div>
+  <div class="dialogue-zh">我自己就是塔吉特人。 T。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Callaghan <span class="dialogue-time">(00:01:29)</span>
+  </div>
+  <div class="dialogue-en">Here’s no way you get those suits from Target.</div>
+  <div class="dialogue-zh">你不可能从 Target 那里买到这些套装。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:30)</span>
+  </div>
+  <div class="dialogue-en">See, you’re saying it’s a nice way to complement a suit.</div>
+  <div class="dialogue-zh">看，你是说这是搭配西装的好方法。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Callaghan <span class="dialogue-time">(00:01:33)</span>
+  </div>
+  <div class="dialogue-en">I think you go Men’s Warehouse, if not further.</div>
+  <div class="dialogue-zh">我想你应该去 Men’s Warehouse，如果不是更远的话。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:35)</span>
+  </div>
+  <div class="dialogue-en">I think you would be wrong.</div>
+  <div class="dialogue-zh">我认为你错了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Callaghan <span class="dialogue-time">(00:01:37)</span>
+  </div>
+  <div class="dialogue-en">You go further.</div>
+  <div class="dialogue-zh">你走得更远。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:38)</span>
+  </div>
+  <div class="dialogue-en">No, the other direction.</div>
+  <div class="dialogue-zh">不，是另一个方向。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Callaghan <span class="dialogue-time">(00:01:39)</span>
+  </div>
+  <div class="dialogue-en">You got that from Target?</div>
+  <div class="dialogue-zh">你从塔吉特那里得到的吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:40)</span>
+  </div>
+  <div class="dialogue-en">Not Target. I was joking about Target. I like Walmart better. It just felt like a funny thing to say.</div>
+  <div class="dialogue-zh">不是目标。我在拿塔吉特开玩笑。我更喜欢沃尔玛。这只是感觉说起来很有趣。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Callaghan <span class="dialogue-time">(00:01:45)</span>
+  </div>
+  <div class="dialogue-en">No, it was funny.</div>
+  <div class="dialogue-zh">不，这很有趣。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:46)</span>
+  </div>
+  <div class="dialogue-en">The most expensive thing I own is this watch, and it was given to me as a gift.</div>
+  <div class="dialogue-zh">我拥有的最昂贵的东西是这块手表，它是作为礼物送给我的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Callaghan <span class="dialogue-time">(00:01:50)</span>
+  </div>
+  <div class="dialogue-en">When I was on tour, I had these $2,700 Cartier glasses that I got for a lot of money, $2,700.</div>
+  <div class="dialogue-zh">当我巡演时，我有这副价值 2,700 美元的卡地亚眼镜，那是我花了很多钱买的，2,700 美元。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:58)</span>
+  </div>
+  <div class="dialogue-en">Like sunglasses?</div>
+  <div class="dialogue-zh">比如太阳镜？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Andrew Callaghan <span class="dialogue-time">(00:01:59)</span>
+  </div>
+  <div class="dialogue-en">Yeah, but they’re really embarrassing. I was on tour, so I just felt like I could do anything as far as fashion choices. Looking back at pictures for myself in that era, I’m like, “God, that wasn’t…”</div>
+  <div class="dialogue-zh">是的，但是他们真的很尴尬。我正在巡演，所以我觉得只要时尚选择我就可以做任何事情。回顾那个时代自己的照片，我想，“天啊，那不是……”</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:08)</span>
+  </div>
+  <div class="dialogue-en">That was the symbol of the fame got to your head?</div>
+  <div class="dialogue-zh">这就是你头脑中名气的象征吗？</div>
+</div>
+    <a href="https://lexfridman.com/andrew-callaghan-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a>
+<a href="cenk-uygur.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cenk Uygur</div>
+  <div class="card-meta">Cenk Uygur</div>
+</a>
+<a href="chris-blattman.html" class="card" style="text-decoration:none">
+  <div class="card-title">Chris Blattman: War and Violence</div>
+  <div class="card-meta">Chris Blattman</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

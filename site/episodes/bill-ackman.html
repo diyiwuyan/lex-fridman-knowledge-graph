@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bill Ackman - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Bill Ackman</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Bill Ackman</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/bill-ackman.html" style="font-size:16px;color:#818cf8;font-weight:600">Bill Ackman</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">37,308 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/bill-ackman-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:47</span>
+  <span class="chapter-title">Investing basics<span class="zh-trans"> · 投资基础知识</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">5:39</span>
+  <span class="chapter-title">Investing in music<span class="zh-trans"> · 投资音乐</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:00</span>
+  <span class="chapter-title">Process of researching companies<span class="zh-trans"> · 企业调研流程</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">18:39</span>
+  <span class="chapter-title">Investing in restaurants<span class="zh-trans"> · 投资餐馆</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">24:08</span>
+  <span class="chapter-title">Investing in Google<span class="zh-trans"> · 投资谷歌</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">29:50</span>
+  <span class="chapter-title">AI<span class="zh-trans"> · 人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">35:05</span>
+  <span class="chapter-title">Warren Buffet<span class="zh-trans"> · 沃伦·巴菲特</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">37:14</span>
+  <span class="chapter-title">Psychology of investing<span class="zh-trans"> · 投资心理学</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">46:45</span>
+  <span class="chapter-title">Activist investing<span class="zh-trans"> · 积极投资</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">56:33</span>
+  <span class="chapter-title">General Growth Properties<span class="zh-trans"> · 一般生长特性</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:12:49</span>
+  <span class="chapter-title">Canadian Pacific Railway<span class="zh-trans"> · 加拿大太平洋铁路</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:20:13</span>
+  <span class="chapter-title">OpenAI<span class="zh-trans"> · 开放人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:24:24</span>
+  <span class="chapter-title">Biggest loss and lowest point<span class="zh-trans"> · 最大损失和最低点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:39:13</span>
+  <span class="chapter-title">Herbalife and Carl Icahn<span class="zh-trans"> · 康宝莱和卡尔·伊坎</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:56:03</span>
+  <span class="chapter-title">Oct 7<span class="zh-trans"> · 10 月 7 日</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:02:34</span>
+  <span class="chapter-title">College campus protests<span class="zh-trans"> · 大学校园抗议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:21:01</span>
+  <span class="chapter-title">DEI in universities<span class="zh-trans"> · 大学中的 DEI</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:41:52</span>
+  <span class="chapter-title">Neri Oxman<span class="zh-trans"> · 内里·奥克斯曼</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:07:22</span>
+  <span class="chapter-title">X and free speech<span class="zh-trans"> · X和言论自由</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">bill</span><span class="keyword-tag">ackman</span><span class="keyword-tag">going</span><span class="keyword-tag">business</span><span class="keyword-tag">company</span><span class="keyword-tag">said</span><span class="keyword-tag">got</span><span class="keyword-tag">money</span><span class="keyword-tag">board</span><span class="keyword-tag">president</span><span class="keyword-tag">harvard</span><span class="keyword-tag">don</span><span class="keyword-tag">stock</span><span class="keyword-tag">investing</span><span class="keyword-tag">made</span><span class="keyword-tag">important</span><span class="keyword-tag">short</span><span class="keyword-tag">didn</span><span class="keyword-tag">called</span><span class="keyword-tag">term</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"But I would say I do, and by the way, if anyone’s ever interested in a fund, they should always read the prospectus carefully, including the risk factors. That’s very, very important. But I like the idea of democratizing access to good investors, and I think that’s an interesting trend. So we want to be part of that trend. In terms of financial markets, generally the economy, a lot is going to depend upon the next leader of the country. So we’re kind of right back there. The leadership of the United States is important for the US economy. It’s important for the global economy, it’s important for global peace, and we’ve gone through a really difficult period, and it’s time. We need a break. But look, I think the United States is an incredibly resilient country."</div>
+  <div class="quote-zh">但我想说的是，顺便说一句，如果有人对基金感兴趣，他们应该仔细阅读招股说明书，包括风险因素。这非常非常重要。但我喜欢民主化接触优秀投资者的想法，我认为这是一个有趣的趋势。所以我们希望成为这一趋势的一部分。就金融市场而言，一般来说，就经济而言，很大程度上取决于该国的下一任领导人。所以我们又回到了那里。美国的领导力对美国经济很重要。这对全球经济很重要，对全球和平也很重要，我们已经经历了一段非常困难的时期，现在是时候了。我们需要休息一下。但你看，我认为美国是一个非常有弹性的国家。</div>
+  <div class="quote-meta">— Bill Ackman （03:27:02）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"On the media front, I’m happy about X, and I think Elon’s going to be successful here. I think advertisers will realize it’s a really good platform. The best way to reach me, if you want to sell something to me, I’ve actually bought stuff on some ads in X. I don’t remember the last time I responded to a direct response advertising. In terms of my business, I have an incredible team. It’s tiny. We’re one of the smallest firms relative to the assets we manage. It’s a bit like the Navy SEALs, not the US Army. We have only 40 people at Pershing Square. So it’s a tight team. I think we’ll do great things. I think we’re early on my ambitions investment-wise, I’ve always said I’d like to have a record as good as Warren Buffett’s. The problem is, each year he adds on another year."</div>
+  <div class="quote-zh">在媒体方面，我对 X 很满意，我认为埃隆会在这里取得成功。我认为广告商会意识到这是一个非常好的平台。联系我的最好方式是，如果你想卖东西给我，我实际上在 X 的一些广告上买过东西。我不记得上次回复直接回复广告是什么时候了。就我的业务而言，我拥有一支令人难以置信的团队。它很小。相对于我们管理的资产而言，我们是最小的公司之一。这有点像海豹突击队，而不是美国陆军。我们潘兴广场只有 40 个人。所以这是一个紧密的团队。我想我们会做伟大的事情。我认为我们在投资方面的雄心壮志还很早，我一直说我希望拥有与沃伦·巴菲特一样好的记录。问题是，他每年都会增加一年。</div>
+  <div class="quote-meta">— Bill Ackman （03:28:47）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I even recommend for individual investors to invest in a dozen companies, you don’t get that much more benefit of diversification going from a dozen to 25 or even 50. Most of the benefits of diversification come in the first, call it 10 or 12. And if you’re investing in businesses that don’t have a lot of debt, they’re businesses that you can understand yourself, you understand… Actually individual investors did a much better job analyzing Tesla than the so-called professional investors or analysts, the vast majority of them. So if it’s a business you understand, if you bought a Tesla, you understand the product and its appeal to consumers, it’s a good place to start when you’re analyzing a company."</div>
+  <div class="quote-zh">我什至建议个人投资者投资十几家公司，从十几家到25家甚至50家，你不会从多元化中获得更多好处。多元化的大部分好处都在第一位，称之为10或12。如果你投资的是没有很多债务的企业，它们是你自己可以理解的企业，你明白……实际上，个人投资者比所谓的专业投资者或分析师（绝大多数）对特斯拉的分析做得更好。其中。因此，如果您了解这是一家企业，如果您购买了特斯拉，您就了解该产品及其对消费者的吸引力，那么当您分析一家公司时，这是一个很好的起点。</div>
+  <div class="quote-meta">— Bill Ackman （00:44:05）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So I would invest in things you can understand, that’s kind of a key. You like Chipotle, you understand why they’re successful. You can go there every week and you can monitor. Is anything changing? How’s Chicken al Pastor, is that a good upgrade from the basic chicken? The drink offering is improving. The store is clean. I think you should invest in companies you really understand, simple businesses where you can predict with a high degree of confidence what it’s going to look like over time. And if you do that in a not particularly concentrated fashion and you don’t borrow money against your securities, you’ll probably do much better than your typical mutual fund."</div>
+  <div class="quote-zh">所以我会投资你能理解的东西，这是一个关键。你喜欢 Chipotle，你就明白他们为何成功。你可以每周去那里进行监控。有什么变化吗？ Chicken al Pastor 怎么样，是基本鸡的升级版吗？酒品正在改善。店里很干净。我认为你应该投资于你真正了解的公司，简单的企业，你可以高度自信地预测随着时间的推移它会是什么样子。如果你以一种不是特别集中的方式做到这一点，并且你不以你的证券为抵押借钱，那么你的表现可能会比典型的共同基金好得多。</div>
+  <div class="quote-meta">— Bill Ackman （00:44:47）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, that was an incredible story. Look, governance really matters, and the governance structure of OpenAI, I think leaves something to be desired. I think Sam’s point was, and maybe Elon Musk’s point originally set up as a nonprofit. And it reminds me actually, I invested in a nonprofit run by a former Facebook founder where he was going to create a Facebook-like entity for nonprofits to promote goodness in the world. And the problem was he couldn’t hire the talent he wanted because he couldn’t grant stock options, he couldn’t pay market salaries. And ultimately he ended up selling the business to a for-profit."</div>
+  <div class="quote-zh">是的，那是一个令人难以置信的故事。看，治理确实很重要，我认为 OpenAI 的治理结构还有一些不足之处。我认为山姆的观点是，也许埃隆·马斯克的观点最初是作为非营利组织设立的。事实上，这让我想起，我投资了一家由 Facebook 前创始人运营的非营利组织，他打算为非营利组织创建一个类似 Facebook 的实体，以促进世界的美好。问题是他无法聘用他想要的人才，因为他无法授予股票期权，他无法支付市场工资。最终他将公司卖给了营利组织。</div>
+  <div class="quote-meta">— Bill Ackman （01:20:34）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bill Ackman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The only person who’ll cause you more harm than a thief with a dagger is a journalist with a pen.</div>
+  <div class="dialogue-zh">唯一会给你带来比拿着匕首的小偷更多伤害的人是拿着笔的记者。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:06)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Bill Ackman, a legendary activist investor who has been part of some of the biggest and at times, controversial trades in history. Also, he is fearlessly vocal on X, FKA Twitter, and uses the platform to fight for ideas he believes in. For example, he was a central figure in the resignation of the President of Harvard University, Claudine Gay, the saga of which...</div>
+  <div class="dialogue-zh">以下是与传奇激进投资者比尔·阿克曼 (Bill Ackman) 的对话，他参与了历史上一些规模最大、有时甚至引起争议的交易。此外，他在 X、FKA Twitter 上无所畏惧地发声，并利用该平台为他所信仰的思想而奋斗。例如，他是哈佛大学校长克劳丁·盖伊 (Claudine Gay) 辞职的核心人物，该事件的传奇故事</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:47)</span>
+  </div>
+  <div class="dialogue-en">In your lecture on the basics of finance and investing, you mentioned a book, Intelligent Investor by Benjamin Graham, as being formative in your life. What key lesson do you take away from that book that informs your own investing?</div>
+  <div class="dialogue-zh">在您关于金融和投资基础知识的讲座中，您提到了一本本杰明·格雷厄姆（Benjamin Graham）的《聪明的投资者》（Intelligent Investor）一书，这本书对您的生活产生了影响。您从这本书中学到了什么对您自己的投资有帮助的重要教训？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bill Ackman <span class="dialogue-time">(00:01:00)</span>
+  </div>
+  <div class="dialogue-en">Sure. Actually, it was the first investment book I read, and as such, it was kind of the inspiration for my career and a lot of my life. So important book. Bear in mind, this is sort of after the Great Depression, people lost confidence investing in markets, World War II, and then he writes this book. It’s for the average man, and basically he says that you have to understand the difference betwee...</div>
+  <div class="dialogue-zh">当然。事实上，这是我读过的第一本投资书籍，因此，它对我的​​职业生涯和生活的很多方面都是一种启发。如此重要的书。请记住，这是在大萧条之后，人们对市场投资失去信心，第二次世界大战，然后他写了这本书。这是针对普通人的，基本上他说你必须了解两者之间的区别</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bill Ackman <span class="dialogue-time">(00:01:44)</span>
+  </div>
+  <div class="dialogue-en">And the key is to figure out what something’s worth and you have to kind of weigh it. He talked about the difference between… He said the stock market in the short term is a voting machine. It represents speculative interests, supply and demand of people in the short term. But in the long term, the stock market’s a weighing machine, much more accurate. It’s going to tell you what something’s worth...</div>
+  <div class="dialogue-zh">关键是要弄清楚某样东西的价值，你必须权衡它。他谈到了两者之间的区别……他说短期内的股市是一台投票机。它代表了人们短期内的投机利益、供给和需求。但从长远来看，股市是一台称重机，而且要准确得多。它会告诉你某样东西的价值</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:14)</span>
+  </div>
+  <div class="dialogue-en">In that same way, there’s a kind of difference between speculation and investing.</div>
+  <div class="dialogue-zh">同样，投机和投资之间也存在差异。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bill Ackman <span class="dialogue-time">(00:02:18)</span>
+  </div>
+  <div class="dialogue-en">Yeah, speculation is just a bit like trading crypto, right? You’re-</div>
+  <div class="dialogue-zh">是的，投机有点像加密货币交易，对吧？你是——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:25)</span>
+  </div>
+  <div class="dialogue-en">Strong words.</div>
+  <div class="dialogue-zh">言辞强烈。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bill Ackman <span class="dialogue-time">(00:02:27)</span>
+  </div>
+  <div class="dialogue-en">Well, short-term trading crypto. Maybe in the long run there’s intrinsic value, but many investors in a bubble going into the crash were really just pure speculators. They didn’t know what things were worth, they just knew they were going up. That’s speculation. And investing is doing your homework, digging down, understanding a business, understanding the competitive dynamics of an industry, unde...</div>
+  <div class="dialogue-zh">好吧，短期交易加密货币。也许从长远来看有内在价值，但泡沫中的许多投资者在崩溃时实际上只是纯粹的投机者。他们不知道东西值多少钱，他们只知道它们正在上涨。那是猜测。而投资就是做好功课，深入挖掘，了解一个企业，了解一个行业的竞争动态，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:22)</span>
+  </div>
+  <div class="dialogue-en">So how do you get to that, this idea called value investing? How do you get to the value of a thing? Even philosophically, value of anything really but we can just talk about the things that are on the stock market, companies.</div>
+  <div class="dialogue-zh">那么你如何实现这个价值投资的想法呢？你如何获得一个东西的价值？即使从哲学上讲，任何东西都有价值，但我们只能谈论股票市场上的东西，公司。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bill Ackman <span class="dialogue-time">(00:03:35)</span>
+  </div>
+  <div class="dialogue-en">The value of a security is the present value of the cash you can take out of it over its life. So if you think about a bond, a bond pays a 5% coupon, interest rate. You get that, let’s say, every year or twice a year, split in half, and it’s very predictable. And if it’s a US government bond, you know you’re going to get it. So that’s a pretty easy thing to value. A stock is an interest in a busin...</div>
+  <div class="dialogue-zh">证券的价值是指您在其生命周期内可以提取的现金的现值。因此，如果你考虑一下债券，债券会支付 5% 的票面利率。比如说，每年或一年两次，分成两半，这是非常可预测的。如果它是美国政府债券，你就知道你会得到它。所以这是一件很容易评估的事情。股票是企业的权益</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bill Ackman <span class="dialogue-time">(00:04:22)</span>
+  </div>
+  <div class="dialogue-en">How many widgets are going to sell this year, how many are going to sell next year, what are the costs going to be? How much of the money that they generate? Do they need to reinvest in the business to keep the business going? And that’s more complicated. But what we do is we try to find businesses where, with a very high degree of confidence, we know what those cash flows are going to be for a ve...</div>
+  <div class="dialogue-zh">今年将销售多少小部件，明年将销售多少，成本是多少？他们创造了多少金钱？他们是否需要对业务进行再投资以维持业务运营？这更复杂。但我们所做的是，我们试图找到那些我们非常有信心知道这些现金流在未来一段时间内会是多少的企业。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:01)</span>
+  </div>
+  <div class="dialogue-en">So what are the factors that indicate that a company is going to be something that’s going to make a lot of money, it’s going to have a lot of value, and it’s going to be reliable over a long period of time? And what is your process of figuring out whether a company is or isn’t that? Investing in music</div>
+  <div class="dialogue-zh">那么，哪些因素表明一家公司会赚很多钱，会具有很大的价值，并且会在很长一段时间内可靠呢？您判断一家公司是否是这样的过程是怎样的？投资音乐</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bill Ackman <span class="dialogue-time">(00:05:19)</span>
+  </div>
+  <div class="dialogue-en">So every consumer has a view on different brands and different companies. And what we look for are these non-disruptively businesses, a business where you can close your eyes, stock market shuts for a decade, and you know that 10 years from now it’s going to be a more valuable, more profitable company. So we own a business called Universal Music Group. It’s in the business of helping artists becom...</div>
+  <div class="dialogue-zh">所以每个消费者对不同的品牌和不同的公司都有自己的看法。我们寻找的是这些非破坏性的企业，这样的企业，你可以闭上眼睛，股市关闭十年，你知道十年后它将成为一家更有价值、更赚钱的公司。所以我们拥有一家名为环球音乐集团的公司。它的目的是帮助艺术家成为</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bill Ackman <span class="dialogue-time">(00:06:20)</span>
+  </div>
+  <div class="dialogue-en">They’re the best at taking an artist who’s 18 years old, who’s got a great voice, and has started to get a presence on YouTube and Instagram and helping that artist become a superstar. And that’s a unique talent. And the end result is the best artists in the world want to come work for them, but they also have this incredible library of the Beatles, the Rolling Stone, U2, et cetera. And then if yo...</div>
+  <div class="dialogue-zh">他们最擅长挑选 18 岁、声音优美、已开始在 YouTube 和 Instagram 上崭露头角的艺术家，并帮助该艺术家成为超级巨星。这是一种独特的才能。最终的结果是世界上最好的艺术家都想来为他们工作，但他们也拥有披头士乐队、滚石乐队、U2 等令人难以置信的图书馆。然后如果你</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bill Ackman <span class="dialogue-time">(00:07:12)</span>
+  </div>
+  <div class="dialogue-en">There’s a kind of global penetration over time of smartphones. You pay, call it, 10, 11 bucks a month for a subscription or less for a family plan and you can kind of build a model of what the world looks like and predict the growth of the streaming business, predict what kind of market share Universal is going to have over time. You can’t get to a precise view of value. You can get to an approxim...</div>
+  <div class="dialogue-zh">随着时间的推移，智能手机已经在全球范围内渗透。你每月支付 10、11 美元订阅或更少的家庭计划，你就可以构建一个世界的模型并预测流媒体业务的增长，预测环球影业随着时间的推移将拥有什么样的市场份额。你无法获得精确的价值观。你可以得到一个近似值</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:09)</span>
+  </div>
+  <div class="dialogue-en">Well, music is interesting because yes, music’s been around for a very long time, but the way to make money from music has been evolving. Like you mentioned streaming, there’s a big transition initiated by, I guess, Napster, then created Spotify of how you make money on music with Apple and with all of this. And the question is, how well are companies like UMG able to adjust to such transformation...</div>
+  <div class="dialogue-zh">嗯，音乐很有趣，因为是的，音乐已经存在很长时间了，但从音乐中赚钱的方式一直在发展。就像你提到的流媒体一样，我猜 Napster 发起了一个重大转变，然后创建了 Spotify，告诉你如何通过 Apple 和所有这些通过音乐赚钱。问题是，像环球音乐集团这样的公司能够如何适应这种转型</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bill Ackman <span class="dialogue-time">(00:08:43)</span>
+  </div>
+  <div class="dialogue-en">Sure.</div>
+  <div class="dialogue-zh">当然。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:43)</span>
+  </div>
+  <div class="dialogue-en">There have been a lot of amazing advancements with… So do you have to also think about that. When you close your eyes, all the things you think about, are you imagining the possible ways that the future is completely different from the present and how well this company will be able to surf the wave of that?</div>
+  <div class="dialogue-zh">已经取得了很多惊人的进步……所以你也必须考虑这一点吗？当你闭上眼睛时，你所想到的所有事情，你是否在想象未来与现在完全不同的可能方式，以及这家公司将能够如何驾驭这种浪潮？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bill Ackman <span class="dialogue-time">(00:09:00)</span>
+  </div>
+  <div class="dialogue-en">Sure. And they’ve had to surf a lot of waves. And actually the music business peaked the last time in the late ’90s or 2000 timeframe. And that really innovation, Napster, digitization of music, almost killed the industry. And Universal really led an effort to save the industry and actually made an early deal with Spotify that enabled the industry to really recover. And so by virtue of their marke...</div>
+  <div class="dialogue-zh">当然。他们必须冲浪很多海浪。事实上，音乐行业上一次达到顶峰是在 90 年代末或 2000 年的时间范围内。而真正的创新，Napster，音乐数字化，几乎杀死了这个行业。环球影业确实带头努力拯救这个行业，并且实际上与 Spotify 达成了早期协议，使该行业真正复苏。因此凭借他们的市场</div>
+</div>
+    <a href="https://lexfridman.com/bill-ackman-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="brian-armstrong.html" class="card" style="text-decoration:none">
+  <div class="card-title">Brian Armstrong: Coinbase, Cryptocurrency, and Government Regulation</div>
+  <div class="card-meta">Brian Armstrong</div>
+</a>
+<a href="michael-mina-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Michael Mina: Rapid COVID Testing</div>
+  <div class="card-meta">Michael Mina</div>
+</a>
+<a href="albert-bourla.html" class="card" style="text-decoration:none">
+  <div class="card-title">Albert Bourla: Pfizer CEO</div>
+  <div class="card-meta">Albert Bourla</div>
+</a>
+<a href="alex-gladstein.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alex Gladstein: Bitcoin, Authoritarianism, and Human Rights</div>
+  <div class="card-meta">Alex Gladstein</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

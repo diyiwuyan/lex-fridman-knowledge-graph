@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeff Kaplan - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Jeff Kaplan</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Jeff Kaplan</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/jeff-kaplan.html" style="font-size:16px;color:#818cf8;font-weight:600">Jeff Kaplan</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">49,103 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/jeff-kaplan-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#14b8a622;color:#14b8a6;border:1px solid #14b8a644;font-size:13px;padding:4px 12px">游戏与虚拟世界</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:27</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:07</span>
+  <span class="chapter-title">Early games: Pac-Man, Zork, Doom, Quake<span class="zh-trans"> · 早期游戏：吃豆人、Zork、毁灭战士、雷神之锤</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">18:33</span>
+  <span class="chapter-title">Writing career<span class="zh-trans"> · 写作生涯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">34:06</span>
+  <span class="chapter-title">EverQuest obsession<span class="zh-trans"> · 无尽的任务的痴迷</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">47:04</span>
+  <span class="chapter-title">Getting hired at Blizzard<span class="zh-trans"> · 受聘于暴雪</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:02:32</span>
+  <span class="chapter-title">Lowest point in Jeff’s life<span class="zh-trans"> · 杰夫人生的最低谷</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:08:37</span>
+  <span class="chapter-title">One of Us<span class="zh-trans"> · 我们中的一员</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:12:54</span>
+  <span class="chapter-title">Early Blizzard culture<span class="zh-trans"> · 早期暴雪文化</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:32:36</span>
+  <span class="chapter-title">Building World of Warcraft<span class="zh-trans"> · 构建魔兽世界</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:50:20</span>
+  <span class="chapter-title">How WoW changed video games<span class="zh-trans"> · 魔兽世界如何改变了视频游戏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:07:42</span>
+  <span class="chapter-title">Single-player vs Multi-player<span class="zh-trans"> · 单人游戏 vs 多人游戏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:28:35</span>
+  <span class="chapter-title">How Blizzard made great video games<span class="zh-trans"> · 暴雪如何制作出色的视频游戏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:54:25</span>
+  <span class="chapter-title">Online toxicity<span class="zh-trans"> · 在线毒性</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:01:59</span>
+  <span class="chapter-title">Why Titan failed<span class="zh-trans"> · 泰坦为何失败</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:19:09</span>
+  <span class="chapter-title">Overwatch in six weeks<span class="zh-trans"> · 《守望先锋》六周后</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:46:07</span>
+  <span class="chapter-title">Best Overwatch heroes<span class="zh-trans"> · 最佳《守望先锋》英雄</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:54:37</span>
+  <span class="chapter-title">The challenge of matchmaking<span class="zh-trans"> · 匹配的挑战</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:58:01</span>
+  <span class="chapter-title">Rust<span class="zh-trans"> · 锈</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:08:22</span>
+  <span class="chapter-title">Why Jeff left Blizzard<span class="zh-trans"> · 杰夫为何离开暴雪</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">jeff</span><span class="keyword-tag">kaplan</span><span class="keyword-tag">game</span><span class="keyword-tag">team</span><span class="keyword-tag">games</span><span class="keyword-tag">blizzard</span><span class="keyword-tag">don</span><span class="keyword-tag">overwatch</span><span class="keyword-tag">warcraft</span><span class="keyword-tag">wow</span><span class="keyword-tag">everquest</span><span class="keyword-tag">got</span><span class="keyword-tag">everybody</span><span class="keyword-tag">fun</span><span class="keyword-tag">doing</span><span class="keyword-tag">design</span><span class="keyword-tag">video</span><span class="keyword-tag">making</span><span class="keyword-tag">going</span><span class="keyword-tag">designer</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"There- there’s a very real example, was Jay Wilson, who I think is one of the great design minds, who was the game director of Diablo III. And he took so much heat, it just affected him to the point where he essentially retired from making games. Went and, you know, wrote novels. I was very happy for him because, you know, I’m glad he found his place, and I think he’s getting back into making games now. But we lost, we essentially… Like, think how many people loved Diablo III and played the shit out of Diablo III. And Jay is one of the people you have to thank for that. And yet that community basically removed him from making games for like 10, 15 years, and it feels criminal to me."</div>
+  <div class="quote-zh">有一个非常真实的例子，杰伊·威尔逊（Jay Wilson），我认为他是最伟大的设计思想之一，他是《暗黑破坏神 III》的游戏总监。他承受了如此大的压力，这对他产生了影响，以至于他基本上不再制作游戏了。你知道，去写小说。我为他感到非常高兴，因为，你知道，我很高兴他找到了自己的位置，而且我认为他现在正在重新开始制作游戏。但我们输了，我们基本上……想想有多少人喜欢《暗黑破坏神 III》并玩过《暗黑破坏神 III》。杰伊是你必须为此感谢的人之一。然而，那个社区基本上让他在 10、15 年的时间里不再制作游戏，这对我来说是一种犯罪。</div>
+  <div class="quote-meta">— Jeff Kaplan （02:59:55）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah. But we crunched World of Warcraft, we crunched… The date slipped, so you do this thing. I remember Mark Kern standing the team up and saying, “We’re gonna crunch early so we don’t have to crunch later in the project.” And I really believe he wasn’t manipulating us. Like, I really genuinely believe that he believed in that. But with games, anything can happen, and they’re just… We slip uncontrollably all the time. And we slipped, and it sort of created just this death march, endless death march that… Like to this day, members of the WoW team will remember, like, Newport Rib. If I say that, they’ll have, like, twitches because, like, they would cater the dinner. They’d bring it in at, like, 6:00 or 7:00 at night."</div>
+  <div class="quote-zh">是的。但我们要紧锣密鼓地制作《魔兽世界》，我们要紧锣密鼓……日期推迟了，所以你要做这件事。我记得马克·科恩（Mark Kern）让团队站起来说：“我们会尽早加紧工作，这样我们就不必在项目后期加紧工作。”我真的相信他没有操纵我们。就像，我真的相信他相信这一点。但对于游戏来说，任何事情都有可能发生，而它们只是……我们总是无法控制地滑倒。我们滑倒了，它就创造了这个死亡行军，无尽的死亡行军……直到今天，《魔兽世界》团队的成员都会记得，就像纽波特·里布一样。如果我这么说，他们会抽搐，因为他们会准备晚餐。他们会在晚上 6:00 或 7:00 送来。</div>
+  <div class="quote-meta">— Jeff Kaplan （01:44:47）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"… kind of, which I think is not necessary. I don’t think executives who take off and work 40-hour weeks should be telling anybody to stay late. I think that’s wrong and immoral. But to me as an individual, as long as I’m not telling other people to do it, my life’s work is my passion and I want to do it as much as possible. I find myself, I don’t think I’ve ever worked less than 10 hours in a day. Like that… 10 hours is like a normal-ish day to me."</div>
+  <div class="quote-zh">……有点，我认为没有必要。我认为每周休假并工作 40 小时的高管不应该告诉任何人熬夜。我认为这是错误且不道德的。但对我个人来说，只要我不告诉别人这样做，我一生的工作就是我的热情，我想尽可能地去做。我发现自己从来没有一天工作过少于 10 个小时。就这样……10个小时对我来说就像是正常的一天。</div>
+  <div class="quote-meta">— Jeff Kaplan （01:48:10）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And EverQuest had had, you know, I think four or three expansions at that point in time, and we’re like, “Wow, we have to make all of these quests like EverQuest has.” It’s gonna be a lot of quests, and it’s kind of up to me and Pat to do it all. And we believed all we had to do was match that EverQuest number. And Pat and I started working on, like, the design of the system and how it would interact, and Eric Dodds was really involved in how the interface… You know, like how you were going to interact with the NPCs and all of that. And we split up the world into like two zones. He was gonna take Elwynn Forest, which was the starting area for the humans, and I was gonna take Westfall, which was the sophomore zone after Elwynn for the humans."</div>
+  <div class="quote-zh">《无尽的任务》已经有，你知道，我想当时有四到三个扩展包，我们就像，“哇，我们必须像《无尽的任务》那样制作所有这些任务。”这将会有很多任务，这一切都取决于我和帕特来完成。我们相信我们所要做的就是匹配《无尽的任务》的号码。帕特和我开始研究系统的设计及其交互方式，而埃里克·多兹 (Eric Dodds) 真正参与了界面的设计……你知道，比如如何与 NPC 交互等等。我们把世界分成两个区域。他要占领艾尔文森林，这是人类的起始区域，而我要占领西部荒野，这是人类继艾尔文之后的第二个区域。</div>
+  <div class="quote-meta">— Jeff Kaplan （01:53:03）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Green Hills of Stranglethorn holds a lot of emotional value for me because amongst WoW players back in the day, it was unanimously hated as one of the shittiest, most annoying quests. But it holds a really special place in my heart. First of all, it’s one of the few times that I just, like, wrote a short story that’s actually in the game. It’s me paying homage to Hemingway, and the guy who gives you the quest, his name is Hemet Nesingwary, which is just me rearranging the letters of Hemingway. There’s another quest giver there that’s Kerouac’s name also mixed up. And then it was the typical hubris of a junior game designer who thinks he’s clever but is actually a dipshit. That’s- That’s the Green Hills of Stranglethorn, like, summed up."</div>
+  <div class="quote-zh">《荆棘谷的青山》对我来说具有很大的情感价值，因为在当时的《魔兽世界》玩家中，它被一致认为是最糟糕、最烦人的任务之一。但它在我心中占有非常特殊的位置。首先，这是我为数不多的几次写了一个真正出现在游戏中的短篇故事之一。是我向海明威致敬，给你任务的人，他的名字叫赫米特·奈辛瓦里，只是我重新排列了海明威的字母。还有另一个任务提供者，凯鲁亚克的名字也被搞混了。然后这是一个初级游戏设计师典型的傲慢态度，他认为自己很聪明，但实际上是个笨蛋。这就是——这就是《荆棘谷的青山》的总结。</div>
+  <div class="quote-meta">— Jeff Kaplan （02:23:26）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Kaplan <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">There’s three types of fun, fun for the player, fun for the designer, and fun for the computer.</div>
+  <div class="dialogue-zh">乐趣分为三种类型：玩家的乐趣、设计师的乐趣和计算机的乐趣。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:06)</span>
+  </div>
+  <div class="dialogue-en">Is it PvP?</div>
+  <div class="dialogue-zh">是 PvP 吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Kaplan <span class="dialogue-time">(00:00:07)</span>
+  </div>
+  <div class="dialogue-en">It’s all PvP. In fact, Rust is the most PvP thing in all of PvP.</div>
+  <div class="dialogue-zh">都是 PvP。事实上，Rust 是所有 PvP 中最 PvP 的东西。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:16)</span>
+  </div>
+  <div class="dialogue-en">Well, I don’t know what that means, but-</div>
+  <div class="dialogue-zh">好吧，我不知道这意味着什么，但是——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Kaplan <span class="dialogue-time">(00:00:19)</span>
+  </div>
+  <div class="dialogue-en">Rust players know what that means. My whole career and my family are thanks to EverQuest, so I think I won the game. And we’re idiots. We’re reading the forums, and the forums are just flaming us all the time. Like, “There’s lag on this server,” and, “Can’t log into that ser—” And that’s, that was our perspective of what was happening. And when I showed up at that show, it… One of the most emotion...</div>
+  <div class="dialogue-zh">Rust 玩家知道这意味着什么。我的整个职业生涯和我的家庭都感谢《无尽的任务》，所以我认为我赢得了这场比赛。我们是白痴。我们正在阅读论坛，而论坛一直在攻击我们。比如，“这台服务器有延迟”，“无法登录该服务器——”这就是我们对所发生事情的看法。当我出现在那个节目中时，它......是最激动人心的之一</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:11)</span>
+  </div>
+  <div class="dialogue-en">How painful was it to say goodbye?</div>
+  <div class="dialogue-zh">说再见有多痛苦？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Kaplan <span class="dialogue-time">(00:01:14)</span>
+  </div>
+  <div class="dialogue-en">It broke me.</div>
+  <div class="dialogue-zh">这让我心碎。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:16)</span>
+  </div>
+  <div class="dialogue-en">Now, meanwhile, as far as the outside world is concerned, you’ve disappeared off the face of the earth, but you were actually working on a game. The following is a conversation with Jeff Kaplan, a legendary game designer of World of Warcraft and Overwatch, which are two of the biggest, most influential games ever made. He is genuinely one of the most amazing human beings I’ve ever met. In the many...</div>
+  <div class="dialogue-zh">与此同时，对于外界来说，你已经从地球表面消失了，但你实际上正在开发一款游戏。以下是与《魔兽世界》和《守望先锋》传奇游戏设计师杰夫·卡普兰的对话，这两款游戏是有史以来规模最大、最具影响力的游戏。他确实是我见过的最了不起的人之一。在众多</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:10)</span>
+  </div>
+  <div class="dialogue-en">Blizzard has created some of the greatest games ever made, games that to me personally have brought me thousands of hours of fun, meaning, and happiness, from Warcraft, to StarCraft, to Diablo, WoW, Overwatch and more. So for that, a big thank you to Jeff, to the entire Blizzard team, and to every creative mind in the video game industry, giving their heart and soul to build video game worlds that...</div>
+  <div class="dialogue-zh">暴雪创造了一些有史以来最伟大的游戏，对我个人来说，这些游戏给我带来了数千个小时的乐趣、意义和幸福，从《魔兽争霸》到《星际争霸》，再到《暗黑破坏神》、《魔兽世界》、《守望先锋》等等。因此，非常感谢杰夫、整个暴雪团队以及视频游戏行业中的每一位创意人士，他们全心全意地构建了视频游戏世界</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:59)</span>
+  </div>
+  <div class="dialogue-en">Jeff left Blizzard in 2021, and has been secretly working on a new video game called The Legend of California that I got a chance to play with Jeff. It is incredibly beautiful. Set in the 1800s Gold Rush era of California, it’s an open world online multiplayer game, part adventure and action, part survival. Sometimes creating a feeling of loneliness and desperation, and sometimes just awe watching...</div>
+  <div class="dialogue-zh">Jeff 于 2021 年离开了暴雪，一直在秘密开发一款名为《加州传奇》的新视频游戏，我有机会和 Jeff 一起玩这款游戏。它非常美丽。这是一款以 1800 年代加州淘金热时代为背景的开放世界在线多人游戏，一半是冒险和动作，一半是生存。有时会产生一种孤独和绝望的感觉，有时只是敬畏观看</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:53)</span>
+  </div>
+  <div class="dialogue-en">This is the Lex Fridman Podcast. To support it, please check out our sponsors in the description where you can also find links to contact me, ask questions, give feedback, and so on. And now, dear friends, here’s Jeff Kaplan. Early games: Pac-Man, Zork, Doom, Quake</div>
+  <div class="dialogue-zh">这是莱克斯·弗里德曼播客。为了支持它，请在描述中查看我们的赞助商，您还可以在其中找到联系我、提出问题、提供反馈等的链接。现在，亲爱的朋友们，这是杰夫·卡普兰。早期游戏：吃豆人、Zork、毁灭战士、雷神之锤</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:07)</span>
+  </div>
+  <div class="dialogue-en">You were first a legendary video game player, in particular in EverQuest, before you ever became a legendary video game designer on World of Warcraft and on Overwatch, which I think is a wild journey to go through from gamer to designer. But first, let’s go way back. When did you first fall in love with video games?</div>
+  <div class="dialogue-zh">在你成为《魔兽世界》和《守望先锋》的传奇视频游戏设计师之前，你首先是一名传奇视频游戏玩家，尤其是《无尽的任务》，我认为这是从玩家到设计师的一段疯狂旅程。但首先，让我们回到过去。您什么时候第一次爱上电子游戏？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Kaplan <span class="dialogue-time">(00:04:32)</span>
+  </div>
+  <div class="dialogue-en">I was lucky. I was born in that golden era of coin-op. So, I literally remember the first time seeing Pac-Man. I was with my Uncle Ronnie, and he just kept feeding me quarters. I think he wanted to play, but was too scared to, so he, you know, his little nephew, he was just giving him quarters to play Pac-Man. I remember being at my brother’s graduation in Philadelphia, and they had an Asteroids m...</div>
+  <div class="dialogue-zh">我很幸运。我出生在那个投币式黄金时代。所以，我确实记得第一次看到吃豆人的情景。我和罗尼叔叔在一起，他一直给我吃宿舍。我认为他想玩，但太害怕了，所以他，你知道，他的小侄子，他只是给他宿舍来玩吃豆人。我记得在费城参加我哥哥的毕业典礼时，他们举办了一场小行星活动</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Kaplan <span class="dialogue-time">(00:05:27)</span>
+  </div>
+  <div class="dialogue-en">So, you know, I was a kid with that skateboard BMX culture where we’d ride two towns over. We knew all the pizza parlors and liquor stores and arcades, and we just lived in that coin-op phase. That was, that was where the love started. And then you started to see things like Pong. You’d go over to a friend’s house, they’d have Pong, and it was just mind blowing, like, we’re playing this thing on t...</div>
+  <div class="dialogue-zh">所以，你知道，我小时候就有滑板小轮车文化，我们会骑着自行车穿越两个城镇。我们熟悉所有的披萨店、酒类商店和商场，而且我们只是生活在投币式的阶段。那就是，那就是爱情开始的地方。然后你开始看到像 Pong 这样的东西。你会去朋友家，他们会打乒乓球，这真是令人兴奋，就像我们在电视上玩这个东西一样</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Kaplan <span class="dialogue-time">(00:06:27)</span>
+  </div>
+  <div class="dialogue-en">And the comparison was always like, “Is this game close to what’s in the arcades?” And it was just such a golden era. And I think the, the big moment where it really blew open and kind of hit the next level was when the NES came out. And that, like, NES with Super Mario- … Was kind of gaming at the next level at that point. And I have, like, warm, fuzzy memories even thinking about it to this day....</div>
+  <div class="dialogue-zh">比较总是这样的，“这款游戏接近街机游戏吗？”那正是这样一个黄金时代。我认为，它真正爆发并达到新水平的重要时刻是 NES 推出的时候。就像 NES 和《超级马里奥》一样……当时的游戏水平已经达到了新的高度。直到今天，我仍然有温暖、模糊的回忆。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Kaplan <span class="dialogue-time">(00:07:10)</span>
+  </div>
+  <div class="dialogue-en">… in Super that I didn’t know existed at the time. And it’s… it was like suddenly, the world opened up more and games could be more. And then there was, like, a big PC gaming push that hit me. My parents ran their own business. Like I said, my dad was an executive recruiter, and they bought an IBM. And this is, like, when it was DOS before MS-DOS existed. And I was so disappointed, because, like, ...</div>
+  <div class="dialogue-zh">……在《超级》中，我当时并不知道它的存在。就好像突然之间，世界变得更加开放，游戏也变得更加丰富。然后，一场大型电脑游戏的推动令我震惊。我的父母经营自己的生意。就像我说的，我父亲是一名高管招聘人员，他们买了一家 IBM。这就像 MS-DOS 出现之前的 DOS 一样。我非常失望 因为，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:13)</span>
+  </div>
+  <div class="dialogue-en">It’s a text-based game?</div>
+  <div class="dialogue-zh">这是一款文字游戏？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Kaplan <span class="dialogue-time">(00:08:14)</span>
+  </div>
+  <div class="dialogue-en">Text-based game. You know, you just type in, “Go west. Open mailbox.” You know? And… But it’s that power of imagination. It’s why the book is always better than the movie, you know?</div>
+  <div class="dialogue-zh">基于文本的游戏。你知道，你只需输入：“向西走。打开邮箱。”你知道？而且……但这就是想象力的力量。这就是为什么书总是比电影更好，你知道吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:29)</span>
+  </div>
+  <div class="dialogue-en">Yeah. So, you’re starting to see these creations of worlds that you can navigate. You can step into this world and you can lose yourself in that world.</div>
+  <div class="dialogue-zh">是的。所以，你开始看到这些你可以导航的世界的创造。你可以走进这个世界，也可以在那个世界迷失自我。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jeff Kaplan <span class="dialogue-time">(00:08:38)</span>
+  </div>
+  <div class="dialogue-en">Yeah. You’re transported. You’re living there.</div>
+  <div class="dialogue-zh">是的。你被传送了。你住在那里。</div>
+</div>
+    <a href="https://lexfridman.com/jeff-kaplan-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="andrew-huberman-4.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman #4</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+venv/
+.venv/
+
+# 原始数据（太大，不上传）
+data/transcripts/
+data/raw/
+
+# 临时文件
+*.tmp
+*.log

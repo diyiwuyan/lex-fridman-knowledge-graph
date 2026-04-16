@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bernie Sanders - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Bernie Sanders</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Bernie Sanders</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/bernie-sanders.html" style="font-size:16px;color:#818cf8;font-weight:600">Bernie Sanders</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">11,669 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/bernie-sanders-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:40</span>
+  <span class="chapter-title">MLK Jr<span class="zh-trans"> · 马丁·路德·金</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:33</span>
+  <span class="chapter-title">Corruption in politics<span class="zh-trans"> · 政治腐败</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">15:50</span>
+  <span class="chapter-title">Healthcare in US<span class="zh-trans"> · 美国的医疗保健</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">24:23</span>
+  <span class="chapter-title">2016 election<span class="zh-trans"> · 2016年选举</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:21</span>
+  <span class="chapter-title">Barack Obama<span class="zh-trans"> · 巴拉克·奥巴马</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">36:16</span>
+  <span class="chapter-title">Capitalism<span class="zh-trans"> · 资本主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">44:25</span>
+  <span class="chapter-title">Response to attacks<span class="zh-trans"> · 对攻击的响应</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">49:22</span>
+  <span class="chapter-title">AOC and progressive politics<span class="zh-trans"> · AOC 和进步政治</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">57:13</span>
+  <span class="chapter-title">Mortality<span class="zh-trans"> · 死亡</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">59:20</span>
+  <span class="chapter-title">Hope for the future<span class="zh-trans"> · 对未来的希望</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">bernie</span><span class="keyword-tag">sanders</span><span class="keyword-tag">don</span><span class="keyword-tag">got</span><span class="keyword-tag">money</span><span class="keyword-tag">going</span><span class="keyword-tag">working</span><span class="keyword-tag">country</span><span class="keyword-tag">healthcare</span><span class="keyword-tag">class</span><span class="keyword-tag">president</span><span class="keyword-tag">worry</span><span class="keyword-tag">politics</span><span class="keyword-tag">ideas</span><span class="keyword-tag">said</span><span class="keyword-tag">billionaires</span><span class="keyword-tag">states</span><span class="keyword-tag">united</span><span class="keyword-tag">trump</span><span class="keyword-tag">companies</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I think there is a growing dissatisfaction with corporate media. And not because it’s fake news or the reporters lie all the time, that’s nonsense. They don’t. But I think people want to hear folks really talk about in a calm manner, about some of the very important issues which are not discussed in corporate media. And I think that’s what you and some others are doing. So, I thank you very much. It’s a very important service to the country."</div>
+  <div class="quote-zh">我认为人们对企业媒体越来越不满。并不是因为这是假新闻或记者一直在撒谎，那是无稽之谈。他们不知道。但我认为人们希望听到人们以平静的方式真正谈论一些企业媒体没有讨论的非常重要的问题。我认为这就是你和其他一些人正在做的事情。所以，我非常感谢你。这是对国家非常重要的服务。</div>
+  <div class="quote-meta">— Bernie Sanders （01:01:09）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think we would’ve. I think would’ve. Trump is a very… I think he’s a little bit crazy between you and me, but he is a smart politician. And he’s appealing to a lot of the anger that working class people feel. And you know what? Working class people should feel angry, but they should make sure that their anger is directed in the right direction and not against people who are even worse off the nail, which is what demagogues like Trump always do. So I think we had, as I went around the country then, and now we have a lot of support from working class people who understand that there is something wrong."</div>
+  <div class="quote-zh">我想我们会的。我想会的。特朗普是一个非常……我认为他在你我之间有点疯狂，但他是一个聪明的政治家。他还激起了工人阶级的愤怒。你知道吗？工人阶级应该感到愤怒，但他们应该确保他们的愤怒指向正确的方向，而不是针对那些更糟糕的人，而这正是像特朗普这样的煽动者总是做的事情。所以我认为，当我当时走遍全国时，现在我们得到了工人阶级的大力支持，他们明白出了什么问题。</div>
+  <div class="quote-meta">— Bernie Sanders （00:26:17）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yes, it does. And every place I go, I always speak about the issue, and it always… People understand it. You’re a Republican, you’re a Democrat, you’re progressive, you’re conservative, who really believes that we are a democracy when billionaires can spend tens and tens of millions of dollars to buy elections? So it is a very popular issue. It’s important. You’re right. We need political leaders to be speaking out on that, but we need a grassroots movement to say, when somebody is at a town meeting, you’re running for the Senate, you’re running for the House, what’s your view on Citizens United? Are you prepared to vote to overturn that decision and move to public funding of elections? Extraordinarily important."</div>
+  <div class="quote-zh">是的，确实如此。我去的每一个地方，我总是谈论这个问题，而且总是......人们理解它。你是共和党人，你是民主党人，你是进步派，你是保守派，当亿万富翁可以花费数千万美元购买选举时，谁真的相信我们是民主国家？所以这是一个非常受欢迎的问题。这很重要。你说得对。我们需要政治领导人就此发声，但我们需要一场草根运动来表明，当有人参加城镇会议时，你正在竞选参议院，你正在竞选众议院，你对公民联合运动有何看法？您准备好投票推翻该决定并转向公共资助选举了吗？异常重要。</div>
+  <div class="quote-meta">— Bernie Sanders （00:12:40）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"He did it. And that is a huge accomplishment. And I think he has had some significant achievements in his presidential tenure. He and I did disagree on a number of issues. I think he will tell you, I think his public stance is that, yeah, if you have to start all over again, he would do Medicare for all single payer. But where we are right now, the best he could do is the Affordable Care Act. Well, we disagree on that and we disagree on other things, but I think he deserves an enormous amount of credit for what he has accomplished."</div>
+  <div class="quote-zh">他做到了。这是一项巨大的成就。我认为他在总统任期内取得了一些重大成就。他和我在很多问题上确实存在分歧。我想他会告诉你，我认为他的公开立场是，是的，如果你必须重新开始，他会为所有单一付款人提供医疗保险。但我们现在所处的位置，他能做的最好的事情就是《平价医疗法案》。好吧，我们在这一点上存在分歧，在其他事情上也存在分歧，但我认为他所取得的成就值得获得巨大的赞誉。</div>
+  <div class="quote-meta">— Bernie Sanders （00:35:00）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Some of my European friends, they say Bernie, in the United States, you’re considered to be very radical. If you were here in France or Denmark or someplace, you’d be kind of mainstream left guy. Not all that radical. So this is what I think. I mean, I think the best that we could do right now, where we are right now, it’s the great a society which does two things. It encourages innovation, but at the same time, it makes sure that all people in a wealthy nation have a decent standard of living. And some countries, if you look at Scandinavia, and this shocks people because we don’t talk about this at all. So in Scandinavia it has been the case, Denmark, Finland, Norway for years that people have healthcare. That’s not a big thing. You end up in the hospital. So what? They don’t pay a bill."</div>
+  <div class="quote-zh">我的一些欧洲朋友，他们说伯尼，在美国，你被认为非常激进。如果你在法国、丹麦或其他地方，你就会成为主流左派。并不是那么激进。这就是我的想法。我的意思是，我认为我们现在能做的最好的事情就是我们现在所处的位置，这是一个能做两件事的伟大社会。它鼓励创新，但同时确保富裕国家的所有人都享有体面的生活水平。在一些国家，如果你看看斯堪的纳维亚半岛，你会发现这让人们感到震惊，因为我们根本不谈论这个。因此，在斯堪的纳维亚半岛、丹麦、芬兰、挪威，多年来人们都享有医疗保健。这不是什么大事。你最终进了医院。所以呢？他们不支付账单。</div>
+  <div class="quote-meta">— Bernie Sanders （00:37:09）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bernie Sanders <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The ideas that I am talking about are ideas that are widely supported. Everything that I talk about raising them, minimum wage, health care for all, a tax system which demands the billionaires pay their fair share, those are all popular ideas, but people didn’t know. You got to run for president and have 20,000 people come out to your rallies and win 23 states. They say, “Hmm. Well, maybe those id...</div>
+  <div class="dialogue-zh">我所说的想法是得到广泛支持的想法。我所说的一切关于提高工资、最低工资、全民医疗保健、要求亿万富翁缴纳公平份额的税收制度，这些都是流行的想法，但人们并不知道。你必须竞选总统，并有 20,000 人参加你的集会并赢得 23 个州。他们说，“嗯。好吧，也许那些 id</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bernie Sanders <span class="dialogue-time">(00:00:50)</span>
+  </div>
+  <div class="dialogue-en">And what we showed is, guess what? Running an outsider campaign, we took on the Democratic establishment, we came close to winning it, and we did win 23 states. And the ideas that we’re talking about are the ideas that working class people, young people believe in.</div>
+  <div class="dialogue-zh">我们展示的是，你猜怎么着？我们进行了一场局外人竞选，与民主党建制派展开较量，我们差一点就获胜了，而且我们确实赢得了 23 个州。我们正在谈论的想法是工人阶级、年轻人所相信的想法。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:10)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Bernie Sanders, senator from Vermont and two-time presidential candidate, both times as the underdog who, against the long odds, captivated the support and excitement of millions of people both on the left and the right. This is the Lex Fridman Podcast. To support it, please check out our sponsors in the description. And now, dear friends, here’s Bernie Sanders...</div>
+  <div class="dialogue-zh">以下是与佛蒙特州参议员、两届总统候选人伯尼·桑德斯(Bernie Sanders)的对话，他两次都是失败者，但在艰难的情况下，赢得了数百万左翼和右翼人士的支持和兴奋。这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是伯尼·桑德斯</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:40)</span>
+  </div>
+  <div class="dialogue-en">Growing up, did you ever think you’d be a politician?</div>
+  <div class="dialogue-zh">从小到大，你有没有想过自己会成为一名政治家？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bernie Sanders <span class="dialogue-time">(00:01:43)</span>
+  </div>
+  <div class="dialogue-en">Nope. Not in a million years.</div>
+  <div class="dialogue-zh">没有。一百万年内不会。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:47)</span>
+  </div>
+  <div class="dialogue-en">Yeah. I know that you hate talking about yourself, which is rare for a politician, I would say. What’s your philosophy behind that? You like talking about the issues. You like talking about-</div>
+  <div class="dialogue-zh">是的。我知道你讨厌谈论自己，我想说，这对于政治家来说是很少见的。这背后的理念是什么？你喜欢谈论问题。你喜欢谈论——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bernie Sanders <span class="dialogue-time">(00:01:55)</span>
+  </div>
+  <div class="dialogue-en">Yeah, I do. Everybody talks about themselves. It’s not about me. Nice guy, not a nice guy. What politics should be about? Is the issues facing the people of our country, the people of the world, and how we’re going to address it. That’s what it should be.</div>
+  <div class="dialogue-zh">是的，我愿意。每个人都在谈论自己。这与我无关。好人，不是好人。政治应该关注什么？是我们国家人民、世界人民面临的问题，以及我们将如何解决它。事情应该如此。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:10)</span>
+  </div>
+  <div class="dialogue-en">That said, there’s a interesting aspects to your life story. For example, in 1963, you were very active in the Civil Rights Movement, got arrested even for protesting segregation in Chicago, and you attended the famous March on Washington where MLK gave his I Have a Dream speech. What was that like?</div>
+  <div class="dialogue-zh">也就是说，你的人生故事有一个有趣的方面。例如，1963年，您在民权运动中非常活跃，甚至因为在芝加哥抗议种族隔离而被捕，您还参加了著名的华盛顿游行，MLK在那里发表了他的“我有一个梦想”演讲。那是什么样子的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bernie Sanders <span class="dialogue-time">(00:02:30)</span>
+  </div>
+  <div class="dialogue-en">It was extraordinary. Took a bus ride down with fellow students in the University of Chicago, and there was a zillion people there. I’m not sure if it was the first time I’d ever been in Washington in my life, but it was a very impressive moment. And what he was talking about, people very often forget about that, it was not only racial justice, it was jobs. Jobs and justice, that was the name of t...</div>
+  <div class="dialogue-zh">这是非凡的。和芝加哥大学的同学一起坐公共汽车，那里有无数人。我不确定这是否是我一生中第一次来到华盛顿，但那是一个非常令人印象深刻的时刻。人们常常忘记他所说的，这不仅是种族正义，也是就业机会。就业和正义，这就是我们的名字</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:59)</span>
+  </div>
+  <div class="dialogue-en">What influence did he have on you? What’d you learn about the way he enacted change in the world?</div>
+  <div class="dialogue-zh">他对你有什么影响？关于他改变世界的方式，你学到了什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bernie Sanders <span class="dialogue-time">(00:03:06)</span>
+  </div>
+  <div class="dialogue-en">King was a very impressive guy, more impressive, I think, than people think that he was. And what he did is he created his movement from the bottom on up. So he developed real organization, grassroots organization which put pressure on communities and officials to end segregation, to open up voting patterns. And I think what has to also be remembered about King, which is really quite extraordinary...</div>
+  <div class="dialogue-zh">金是一个非常令人印象深刻的人，我认为，比人们想象的更令人印象深刻。他所做的是自下而上地创造了他的运动。因此，他建立了真正的组织，即草根组织，向社区和官员施加压力，要求结束种族隔离，开放投票模式。我认为有关 King 的事情还必须记住，这确实非常了不起</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bernie Sanders <span class="dialogue-time">(00:04:12)</span>
+  </div>
+  <div class="dialogue-en">Incredible courage to do that. And by the way, when he was assassinated at a fighting for the rights of AFSCME workers, garbage, guys that delivered the garbage who were treated terribly, low wages, bad working conditions. And he went out to support their right to form a union. That’s when he got killed. Corruption in politics</div>
+  <div class="dialogue-zh">这样做的勇气令人难以置信。顺便说一句，当他在为 AFSCME 工人、垃圾、运送垃圾的权利而奋斗时被暗杀时，他们受到了恶劣的对待，工资低，工作条件恶劣。他出去支持他们组建工会的权利。就在那时他被杀了。政治腐败</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:33)</span>
+  </div>
+  <div class="dialogue-en">So on the war front, one of the things that people don’t often talk about, your work in politics. You gave what I think is a truly brave speech on the Iraq War in 2002, I believe. You voted no on the Iraq Resolution, you voted no on the Patriot Act, and you basically predicted very accurately what would happen if we go into Iraq. What was your thinking at the time behind those speeches, behind vot...</div>
+  <div class="dialogue-zh">因此，在战争前线，人们不常谈论的事情之一，就是你在政治上的工作。我相信，你在 2002 年的伊拉克战争问题上发表了一次我认为非常勇敢的演讲。你对伊拉克决议投了反对票，你对爱国者法案投了反对票，你基本上非常准确地预测了如果我们进入伊拉克会发生什么。在这些演讲背后、投票背后，你当时的想法是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bernie Sanders <span class="dialogue-time">(00:05:09)</span>
+  </div>
+  <div class="dialogue-en">It maybe ironically came out of maybe the war in Vietnam and the ease and lies that people told. We went into Vietnam under a lie. We lost close to 60,000 Americans. Millions of people in the Vietnam and Cambodia died as a result of that. So I think twice about it. And then the war in Iraq, you had people like Dick Cheney and others telling us, “Oh, they have nuclear weapons and all that stuff. It...</div>
+  <div class="dialogue-zh">具有讽刺意味的是，这可能是由于越南战争以及人们所说的轻松和谎言而产生的。我们在谎言下进入了越南。我们失去了近 60,000 名美国人。越南和柬埔寨数百万人因此死亡。所以我三思而后行。然后是伊拉克战争，迪克·切尼等人告诉我们，“哦，他们拥有核武器和所有这些东西。它</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:46)</span>
+  </div>
+  <div class="dialogue-en">What’s the way to fight this thing that Martin Luther King tried to fight, which is the military industrial complex?</div>
+  <div class="dialogue-zh">用什么方法来对抗马丁·路德·金试图对抗的军工联合体这个东西？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bernie Sanders <span class="dialogue-time">(00:05:54)</span>
+  </div>
+  <div class="dialogue-en">It’s huge. It gets to the broader issue of where we are as a nation. And what I almost uniquely in Congress talk about is the fact that we are moving, Lex, to an oligarchic form of society. And not a lot of people are familiar with that term, but what it means… We talk about oligarchy in Russia. Oh, Putin is surrounded by the oligarchs. Well, guess what? What do you think is happening in the Unite...</div>
+  <div class="dialogue-zh">这是巨大的。它涉及到我们作为一个国家所处的位置这一更广泛的问题。我在国会几乎唯一谈论的是这样一个事实，莱克斯，我们正在走向寡头政治形式的社会。并不是很多人熟悉这个词，但它意味着什么……我们谈论俄罗斯的寡头政治。哦，普京被寡头包围了。嗯，你猜怎么着？你认为Unite正在发生什么</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bernie Sanders <span class="dialogue-time">(00:06:55)</span>
+  </div>
+  <div class="dialogue-en">But at the end of the day, billionaires play an enormous role in terms of electing politicians and in Washington in determining what legislation gets seen and not seen.</div>
+  <div class="dialogue-zh">但归根结底，亿万富翁在选举政客以及在华盛顿决定哪些立法会被看到和不被看到方面发挥着巨大作用。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:07)</span>
+  </div>
+  <div class="dialogue-en">But it’s not just single billionaires. It’s companies with lobbyists.</div>
+  <div class="dialogue-zh">但这不仅仅是单身亿万富翁。这是有说客的公司。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Bernie Sanders <span class="dialogue-time">(00:07:10)</span>
+  </div>
+  <div class="dialogue-en">You got it. Let me give you one example, lobbyists. We pay, in the United States, by far the highest prices in the world for prescription drugs. This is an issue I’ve been working hard on with some success. Take a wild and crazy guess how many lobbyists are there from the drug companies in Washington D.C.?</div>
+  <div class="dialogue-zh">你明白了。让我给你们举一个例子，说客们。在美国，我们支付的处方药价格是迄今为止世界上最高的。这是我一直在努力解决的一个问题，并取得了一些成功。疯狂猜测一下，华盛顿特区的制药公司有多少说客？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:28)</span>
+  </div>
+  <div class="dialogue-en">Over a thousand.</div>
+  <div class="dialogue-zh">一千多。</div>
+</div>
+    <a href="https://lexfridman.com/bernie-sanders-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="ben-shapiro-destiny-debate.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ben Shapiro Destiny Debate</div>
+  <div class="card-meta">Ben Shapiro</div>
+</a>
+<a href="douglas-murray-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Douglas Murray #2</div>
+  <div class="card-meta">Douglas Murray</div>
+</a>
+<a href="eric-weinstein-4.html" class="card" style="text-decoration:none">
+  <div class="card-title">Eric Weinstein: Difficult Conversations, Freedom of Speech, and Physics</div>
+  <div class="card-meta">Eric Weinstein</div>
+</a>
+<a href="eric-weinstein.html" class="card" style="text-decoration:none">
+  <div class="card-title">Eric Weinstein: Revolutionary Ideas in Science, Math, and Society</div>
+  <div class="card-meta">Eric Weinstein</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

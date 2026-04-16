@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marc Raibert - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Marc Raibert</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Marc Raibert</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/marc-raibert.html" style="font-size:16px;color:#818cf8;font-weight:600">Marc Raibert</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">17,890 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/marc-raibert-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:43</span>
+  <span class="chapter-title">Early robots<span class="zh-trans"> · 早期机器人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">6:47</span>
+  <span class="chapter-title">Legged robots<span class="zh-trans"> · 有腿机器人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">25:27</span>
+  <span class="chapter-title">Boston Dynamics<span class="zh-trans"> · 波士顿动力公司</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">28:45</span>
+  <span class="chapter-title">BigDog<span class="zh-trans"> · 大狗</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">36:52</span>
+  <span class="chapter-title">Hydraulic actuation<span class="zh-trans"> · 液压驱动</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">38:44</span>
+  <span class="chapter-title">Natural movement<span class="zh-trans"> · 自然运动</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">44:31</span>
+  <span class="chapter-title">Leg Lab<span class="zh-trans"> · 腿部实验室</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">51:23</span>
+  <span class="chapter-title">AI Institute<span class="zh-trans"> · 人工智能研究所</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">54:41</span>
+  <span class="chapter-title">Athletic intelligence<span class="zh-trans"> · 运动智力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:02:35</span>
+  <span class="chapter-title">Building a team<span class="zh-trans"> · 建立团队</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:05:37</span>
+  <span class="chapter-title">Videos<span class="zh-trans"> · 视频</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:13:25</span>
+  <span class="chapter-title">Engineering<span class="zh-trans"> · 工程</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:16:53</span>
+  <span class="chapter-title">Dancing robots<span class="zh-trans"> · 跳舞机器人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:21:40</span>
+  <span class="chapter-title">Hiring<span class="zh-trans"> · 招聘</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:25:32</span>
+  <span class="chapter-title">Optimus robot<span class="zh-trans"> · 擎天柱机器人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:34:02</span>
+  <span class="chapter-title">Future of robotics<span class="zh-trans"> · 机器人技术的未来</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:38:56</span>
+  <span class="chapter-title">Advice for young people<span class="zh-trans"> · 给年轻人的建议</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">marc</span><span class="keyword-tag">raibert</span><span class="keyword-tag">robot</span><span class="keyword-tag">robots</span><span class="keyword-tag">don</span><span class="keyword-tag">doing</span><span class="keyword-tag">going</span><span class="keyword-tag">stuff</span><span class="keyword-tag">dynamics</span><span class="keyword-tag">boston</span><span class="keyword-tag">robotics</span><span class="keyword-tag">working</span><span class="keyword-tag">got</span><span class="keyword-tag">human</span><span class="keyword-tag">spot</span><span class="keyword-tag">intelligence</span><span class="keyword-tag">fun</span><span class="keyword-tag">made</span><span class="keyword-tag">bigdog</span><span class="keyword-tag">lab</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I think there’s a huge way to go. I don’t think we’ve seen the bottom of it, the bottom in terms of its lower prices. I think you should be totally optimistic that, at asymptote, things don’t have to be anything as expensive as they are now. Back to competition, I wanted to say one thing. I think in the quadruped space, having other people selling quadruped’s is a great thing for Boston Dynamics because I believe the question in the user’s minds is, “Which quadruped do I want?” It’s not, “Do I want a quadruped?” “Can a quadruped do my job?” It’s much more like that, which is a great place for it to be. Then you’re just doing the things you normally do to make your product better and compete, selling and all that stuff. And that’ll be the way it is with humanoids at some point."</div>
+  <div class="quote-zh">我认为还有很长的路要走。我认为我们还没有看到它的底部，即价格较低的底部。我认为你应该完全乐观地认为，在渐近线，事情不必像现在一样昂贵。回到比赛，我想说一件事。我认为在四足动物领域，让其他人销售四足动物对于波士顿动力来说是一件很棒的事情，因为我相信用户心中的问题是“我想要哪个四足动物？”这不是“我想要四足动物吗？” “四足动物能做我的工作吗？”它更像是这样，这是一个很棒的地方。然后你就做你通常做的事情来让你的产品更好、竞争、销售等等。在某些时候，类人生物也会如此。</div>
+  <div class="quote-meta">— Marc Raibert （01:30:47）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, I think having good hardware is part of the story and people who think you don’t need to innovate hardware anymore are wrong, in my opinion. So I think one of the things, certainly in the early years for me, taking a dynamic approach where you think about what’s the evolution of the motion of the thing going to be in the future and having a prediction of that that’s used at the time that you’re giving signals to it, as opposed to it all being sing, which is sing is sort of backward looking. It says, okay, where am I now? I’m going to try and adjust for that. But you really need to think about what’s coming."</div>
+  <div class="quote-zh">嗯，我认为拥有好的硬件是故事的一部分，在我看来，那些认为不需要再创新硬件的人是错误的。所以我认为其中一件事，当然是在我的早年，采取一种动态的方法，你思考未来事物的运动的演变是什么，并对你向它发出信号时所使用的进行预测，而不是一切都在唱歌，这是一种向后看。它说，好吧，我现在在哪里？我将尝试对此进行调整。但你确实需要考虑即将发生的事情。</div>
+  <div class="quote-meta">— Marc Raibert （00:39:02）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"At first, I wasn’t an enthusiast for the humanoids. Again, it goes back to saying “what’s the functionality?” And the form wasn’t as important as the functionality. And also, there’s an aspect to humanoid robots that’s about about the cosmetics, where there isn’t really other functionality, and that kind of is off putting for me. As a roboticist, I think the functionality really matters. So probably that’s why I avoided the humanoid robots to start with."</div>
+  <div class="quote-zh">起初，我对人形机器人并不热衷。再次，它又回到了“功能是什么？”的问题。形式并不像功能那么重要。而且，人形机器人的一个方面与化妆品有关，没有真正的其他功能，这对我来说是令人反感的。作为一名机器人专家，我认为功能非常重要。所以这可能就是我一开始就避开人形机器人的原因。</div>
+  <div class="quote-meta">— Marc Raibert （00:22:19）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"People have criticized, especially the Big Dog videos, where there’s a human driving the robot. And I understand the criticism now. At the time we wanted to just show, “Look, this thing’s using its legs to get up the hill.” So we focused on showing that, which was, we thought, the story. The fact that there was a human… So they were thinking about autonomy, whereas we were thinking about the mobility. So we’ve adjusted to a lot of things that we see that people care about, trying to be honest. We’ve always tried to be honest."</div>
+  <div class="quote-zh">人们批评了，尤其是大狗视频，其中有人驾驶机器人。我现在理解了这些批评。当时我们只想展示，“看，这东西正在用它的腿爬上山。”所以我们专注于展示这个，我们认为这就是故事。事实上，有一个人……所以他们正在考虑自主性，而我们正在考虑移动性。因此，我们已经调整了很多我们看到人们关心的事情，并努力诚实。我们一直试图诚实。</div>
+  <div class="quote-meta">— Marc Raibert （01:09:03）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think it’s both being a scientist, or getting to use science, at the same time as being an artist or a creator. Scientists only get to study what’s out there, and engineers get to make stuff that didn’t exist before. So it’s really, I think, a higher calling, even though I think most the public out there thinks science is top and engineering is somehow secondary, but I think it’s the other way around."</div>
+  <div class="quote-zh">我认为这既是一名科学家，又是运用科学，同时也是一名艺术家或创造者。科学家只能研究现有的东西，而工程师则可以制造以前不存在的东西。所以，我认为，这确实是一个更高的使命，尽管我认为大多数公众认为科学是最重要的，工程在某种程度上是次要的，但我认为事实恰恰相反。</div>
+  <div class="quote-meta">— Marc Raibert （01:15:00）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Marc Raibert <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">BigDog became LS3, which is the big load carrying one.</div>
+  <div class="dialogue-zh">BigDog 变成了 LS3，这是一种大负载型。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:04)</span>
+  </div>
+  <div class="dialogue-en">Just a quick pause. It can carry 400 pounds.</div>
+  <div class="dialogue-zh">只是短暂的停顿。它可以承载 400 磅的重量。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Marc Raibert <span class="dialogue-time">(00:00:08)</span>
+  </div>
+  <div class="dialogue-en">It was designed to carry 400, but we had it carrying about 1,000 pounds at one time.</div>
+  <div class="dialogue-zh">它设计可承载 400 人，但我们让它一次承载约 1,000 磅。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:12)</span>
+  </div>
+  <div class="dialogue-en">Of course you did. Just to make sure.</div>
+  <div class="dialogue-zh">当然，你做到了。只是为了确定一下。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Marc Raibert <span class="dialogue-time">(00:00:15)</span>
+  </div>
+  <div class="dialogue-en">We had one carrying the other one. We had two of them, so we had one carrying the other one.</div>
+  <div class="dialogue-zh">我们一个人扛着另一个人。我们有两个，所以我们一个带着另一个。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:19)</span>
+  </div>
+  <div class="dialogue-en">So one of the things that stands out about the robots Boston Dynamics have created is how beautiful the movement is, how natural the walking is and running is, even flipping, it’s throwing is, so maybe you can talk about what’s involved in making it look natural.</div>
+  <div class="dialogue-zh">因此，波士顿动力公司创造的机器人的突出特点之一就是动作是多么优美，行走和跑步是多么自然，甚至翻转、投掷也是如此，所以也许你可以谈谈如何让它看起来很自然。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Marc Raibert <span class="dialogue-time">(00:00:37)</span>
+  </div>
+  <div class="dialogue-en">Well, I think having good hardware is part of the story, and people who think you don’t need to innovate hardware anymore are wrong.</div>
+  <div class="dialogue-zh">嗯，我认为拥有好的硬件是故事的一部分，那些认为不需要再创新硬件的人是错误的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:49)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Marc Raibert, a legendary roboticist, founder and longtime CEO of Boston Dynamics, and recently the Executive Director of the newly created Boston Dynamics AI Institute, that focuses on research and the cutting edge, on creating future generations of robots that are far better than anything that exists today. He has been leading the creation of incredible legge...</div>
+  <div class="dialogue-zh">以下是与传奇机器人专家、波士顿动力公司创始人兼长期首席执行官、最近担任新成立的波士顿动力人工智能研究所执行董事马克·雷伯特 (Marc Raibert) 的对话，该研究所专注于研究和前沿技术，致力于创造比当今任何现有机器人都更好的未来几代机器人。他一直主导创造令人难以置信的腿</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:35)</span>
+  </div>
+  <div class="dialogue-en">This is the Lex Friedman Podcast. To support it, please check out our sponsors in the description. And now, dear friends, here’s Marc Raibert. When did you first fall in love with robotics? Early robots</div>
+  <div class="dialogue-zh">这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是马克·雷伯特。您是什么时候第一次爱上机器人技术的？早期机器人</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Marc Raibert <span class="dialogue-time">(00:01:47)</span>
+  </div>
+  <div class="dialogue-en">Well, I was always a builder from a young age. I was lucky. My father was a frustrated engineer, and by that, I mean he wanted to be an aerospace engineer, but his mom from the old country thought that that would be like a grease monkey, and so she said no. So he became an accountant.</div>
+  <div class="dialogue-zh">嗯，我从小就一直是一名建筑商。我很幸运。我的父亲是一位失意的工程师，我的意思是他想成为一名航空航天工程师，但他来自祖国的妈妈认为那就像一只油猴，所以她拒绝了。于是他成为了一名会计师。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Marc Raibert <span class="dialogue-time">(00:02:10)</span>
+  </div>
+  <div class="dialogue-en">But the result of that was our basement was always full of tools and equipment and electronics, and from a young age, I would watch him assembling an ICO kit or something like that. I still have a couple of his old ICO kits.</div>
+  <div class="dialogue-zh">但这样做的结果是我们的地下室总是堆满了工具、设备和电子产品，从很小的时候起，我就会看着他组装 ICO 套件或类似的东西。我还保留着一些他的旧 ICO 工具包。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Marc Raibert <span class="dialogue-time">(00:02:27)</span>
+  </div>
+  <div class="dialogue-en">But it was really during graduate school when I followed a professor back from class. It was Berthold Horn at MIT, and I was taking an interim class. It’s IAP, Independent Activities Period. And I followed him back to his lab, and on the table was a [inaudible 00:02:50] robot arm taken apart in probably a thousand pieces. And when I saw that, from that day on, I was a roboticist.</div>
+  <div class="dialogue-zh">但那确实是在研究生期间，我跟随一位教授下课回来。我是麻省理工学院的伯特霍尔德·霍恩（Berthold Horn），当时我正在上临时课程。现在是 IAP，独立活动期。我跟着他回到他的实验室，桌子上有一个[听不清的 00:02:50] 机械臂，被拆成了大约一千块。当我看到这一点时，从那天起，我就成了一名机器人专家。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:58)</span>
+  </div>
+  <div class="dialogue-en">Do you remember the year?</div>
+  <div class="dialogue-zh">你还记得那一年吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Marc Raibert <span class="dialogue-time">(00:02:59)</span>
+  </div>
+  <div class="dialogue-en">1974.</div>
+  <div class="dialogue-zh">1974年。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:02)</span>
+  </div>
+  <div class="dialogue-en">1974. So there’s just this arm in pieces.</div>
+  <div class="dialogue-zh">1974 年。所以这只手臂就成了碎片。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Marc Raibert <span class="dialogue-time">(00:03:04)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:04)</span>
+  </div>
+  <div class="dialogue-en">And you saw the pieces and you saw in your vision the arm when it’s put back together and the possibilities that holds.</div>
+  <div class="dialogue-zh">你看到了这些碎片，在你的视野中看到了手臂被重新组合在一起时所蕴含的可能性。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Marc Raibert <span class="dialogue-time">(00:03:12)</span>
+  </div>
+  <div class="dialogue-en">Somehow it spurred my imagination. I was in the branding cognitive sciences department as a graduate student doing neurophysiology. I’d been an electrical engineer as an undergrad at Northeastern. And the neurophysiology wasn’t really working for me. It wasn’t conceptual enough. I couldn’t see really how by looking at single neurons, you were going to get to a place where you could understand cont...</div>
+  <div class="dialogue-zh">不知怎的，它激发了我的想象力。作为一名神经生理学研究生，我在品牌认知科学系工作。我在东北大学读本科时是一名电气工程师。神经生理学对我来说并没有真正的作用。这还不够概念化。我真的不明白如何通过观察单个神经元，你将到达一个可以理解连续的地方</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:58)</span>
+  </div>
+  <div class="dialogue-en">It’s so interesting, the tension between the BCS, brain cognitive science approach to understanding intelligence, and the robotics approach to understanding intelligence.</div>
+  <div class="dialogue-zh">脑认知科学（BCS）、理解智能的大脑认知科学方法和理解智能的机器人方法之间的紧张关系非常有趣。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Marc Raibert <span class="dialogue-time">(00:04:09)</span>
+  </div>
+  <div class="dialogue-en">Well, BCS is now morphed. They have the Center for Brains, minds and Machines, which is trying to bridge that gap. And even when I was there, David Maher was in the AI lab. David Maher had models of the brain that were appealing both to biologists but also to computer people. So he was a visitor in the AI lab at the time, and I guess he became full-time there.</div>
+  <div class="dialogue-zh">嗯，BCS 现在已经变形了。他们拥有大脑、思想和机器中心，该中心正在努力弥合这一差距。即使我在那里的时候，大卫·马赫也在人工智能实验室里。大卫·马赫（David Maher）的大脑模型不仅吸引了生物学家，也吸引了计算机人员。所以他当时是人工智能实验室的访客，我猜他在那里全职工作了。</div>
+</div>
+    <a href="https://lexfridman.com/marc-raibert-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="aravind-srinivas.html" class="card" style="text-decoration:none">
+  <div class="card-title">Aravind Srinivas</div>
+  <div class="card-meta">Aravind Srinivas</div>
+</a>
+<a href="ayanna-howard.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ayanna Howard: Human-Robot Interaction and Ethics of Safety-Critical Systems</div>
+  <div class="card-meta">Ayanna Howard</div>
+</a>
+<a href="boris-sofman.html" class="card" style="text-decoration:none">
+  <div class="card-title">Boris Sofman: Waymo, Cozmo, Self-Driving Cars, and the Future of Robotics</div>
+  <div class="card-meta">Boris Sofman</div>
+</a>
+<a href="colin-angle.html" class="card" style="text-decoration:none">
+  <div class="card-title">Colin Angle: iRobot</div>
+  <div class="card-meta">Colin Angle</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

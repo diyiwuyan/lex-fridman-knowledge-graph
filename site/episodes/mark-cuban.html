@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mark Cuban - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Mark Cuban</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Mark Cuban</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/mark-cuban.html" style="font-size:16px;color:#818cf8;font-weight:600">Mark Cuban</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">24,354 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/mark-cuban-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:54</span>
+  <span class="chapter-title">Entrepreneurship<span class="zh-trans"> · 创业精神</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">15:48</span>
+  <span class="chapter-title">Shark Tank<span class="zh-trans"> · 创智赢家</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">26:13</span>
+  <span class="chapter-title">How Mark made first billion<span class="zh-trans"> · 马克如何赚到第一个十亿</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">52:24</span>
+  <span class="chapter-title">Dallas Mavericks<span class="zh-trans"> · 达拉斯小牛队</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">57:49</span>
+  <span class="chapter-title">DEI debate<span class="zh-trans"> · DEI辩论</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:33:42</span>
+  <span class="chapter-title">Trump vs Biden<span class="zh-trans"> · 特朗普 vs 拜登</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:36:04</span>
+  <span class="chapter-title">Immigration<span class="zh-trans"> · 移民</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:45:37</span>
+  <span class="chapter-title">Drugs and Big Pharma<span class="zh-trans"> · 药品和大型制药公司</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:01:38</span>
+  <span class="chapter-title">AI<span class="zh-trans"> · 人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:05:49</span>
+  <span class="chapter-title">Advice for young people<span class="zh-trans"> · 给年轻人的建议</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">mark</span><span class="keyword-tag">cuban</span><span class="keyword-tag">going</span><span class="keyword-tag">don</span><span class="keyword-tag">business</span><span class="keyword-tag">company</span><span class="keyword-tag">money</span><span class="keyword-tag">got</span><span class="keyword-tag">companies</span><span class="keyword-tag">said</span><span class="keyword-tag">didn</span><span class="keyword-tag">dei</span><span class="keyword-tag">sure</span><span class="keyword-tag">person</span><span class="keyword-tag">able</span><span class="keyword-tag">doing</span><span class="keyword-tag">trying</span><span class="keyword-tag">somebody</span><span class="keyword-tag">kids</span><span class="keyword-tag">put</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I see that as being an analogous to all this huffing and puffing about reverse discrimination and conservatives not being able to speak up because if 40% of people who have been fired don’t believe they should have been fired, there’s a disconnect somewhere in how you think you’re doing your job. If you just feel like, I can’t speak up because of it, because of you’re white, and that doesn’t comport well with DEI programs, a lot of things are going to happen."</div>
+  <div class="quote-zh">我认为这类似于所有关于反向歧视的气呼呼和保守派无法发声，因为如果 40% 被解雇的人不相信他们应该被解雇，那么你认为自己的工作方式就存在脱节。如果你只是觉得，我不能因为这个、因为你是白人而发声，而这与 DEI 计划不太相符，那么很多事情就会发生。</div>
+  <div class="quote-meta">— Mark Cuban （01:07:04）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Somebody who’s curious, they want to keep on learning because business is ever-changing. It’s never static. Somebody who’s agile, because as you learn new things and the environment around you changes, you have to be able to adapt and make the changes. And somebody who can sell, because no business has ever survived without sales. And as an entrepreneur who’s creating a company, whatever your product or service is, if that’s not the most important thing and you’re just dying and excited to tell people about it, then you’re not going to succeed."</div>
+  <div class="quote-zh">充满好奇心的人希望继续学习，因为业务在不断变化。它从来都不是静态的。敏捷的人，因为当你学习新事物和周围环境发生变化时，你必须能够适应并做出改变。还有一个能够销售的人，因为没有销售，任何企业都无法生存。作为一个创建公司的企业家，无论你的产品或服务是什么，如果这不是最重要的事情，而你只是渴望并兴奋地告诉人们它，那么你就不会成功。</div>
+  <div class="quote-meta">— Mark Cuban （00:01:07）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"My dad did upholstery on cars, got up, went to work every morning at seven o’clock, came back five or six, seven o’clock, exhausted, and I learned to be nice. I learned to be caring. I learned to be accepting. Just qualities that I think he really tried to pass on to myself and my two younger brothers were just be a good human. And I think he didn’t have business experience. So as I got into business, he would just say, “Sorry, Mark, I can’t help you. I don’t understand what you’re doing.” Neither one of my parents had gone to college. You’ve got to figure it out for yourself."</div>
+  <div class="quote-zh">我爸爸做汽车内饰，每天早上七点起床去上班，五六点、七点钟回来，筋疲力尽，我学会了对人友善。我学会了关心。我学会了接受。我认为他确实试图将这些品质传递给我和我的两个弟弟，让他们成为一个好人。我认为他没有商业经验。所以当我开始做生意时，他只会说：“抱歉，马克，我帮不了你。我不明白你在做什么。”我的父母都没有上过大学。你必须自己弄清楚。</div>
+  <div class="quote-meta">— Mark Cuban （00:05:16）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"That’s a great question. Do you have to be ambitious and set aside reality at some level to think that you can create a company that could be worth 10, a hundred, a billion dollars, yeah, at some level. Because you don’t know. It’s all uncertainty. But I think if you’re delusional, that works against you because everything’s grounded in reality. You’ve got to execute. You’ve got to produce, you can have a vision and you can say, this is where I want to get to and that’s my mission, or this is my driving principle. But you still got to execute on the business plan, and that’s where most people fail."</div>
+  <div class="quote-zh">这是一个很好的问题。你是否必须雄心勃勃，并在某种程度上抛开现实，才能认为你可以创建一家价值 10、100、10 亿美元的公司，是的，在某种程度上。因为你不知道。这都是不确定性。但我认为，如果你有妄想症，那就对你不利，因为一切都是基于现实的。你必须执行。你必须生产，你可以有一个愿景，你可以说，这就是我想要达到的目标，这是我的使命，或者这是我的驱动原则。但你仍然需要执行商业计划，而这正是大多数人失败的地方。</div>
+  <div class="quote-meta">— Mark Cuban （00:23:04）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think those are all analogous. If you’re trying to accomplish something within an organization because you think there’s a problem and there’s people speaking out saying look, we’re getting it wrong, I think I’m a victim of all this, and the company… Then leadership has got to make a decision. Do they agree or not agree? Are they right or are they wrong? Is it positive or negative to the company? And you decide."</div>
+  <div class="quote-zh">我认为这些都是类似的。如果你试图在组织内完成某件事，因为你认为存在问题，并且有人大声说看，我们搞错了，我认为我是这一切的受害者，而公司......那么领导层必须做出决定。他们同意还是不同意？他们是对还是错？对公司来说是积极的还是消极的？由你决定。</div>
+  <div class="quote-meta">— Mark Cuban （01:04:23）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Cuban <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The person who controls the algorithm controls the world, right? And if you are committed to one specific platform as your singular source of information or affiliated platforms, then whoever controls the algorithm or the programming there controls you.</div>
+  <div class="dialogue-zh">控制算法的人就控制了世界，对吗？如果您致力于某一特定平台作为您的单一信息来源或附属平台，那么控制该算法或编程的人就控制了您。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:20)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Mark Cuban, a multi-billionaire businessman, an investor and star of the series Shark Tank, longtime principal owner of the Dallas Mavericks, and is someone who is unafraid to get into frequent battles on X, most recently over topics of DEI, wokeism, gender and identity politics with the likes of Elon Musk and Jordan Peterson. This is the Lex Fridman podcast. T...</div>
+  <div class="dialogue-zh">以下是与马克·库班 (Mark Cuban) 的对话，马克·库班是一位亿万富翁、投资人、《创智赢家》系列剧的明星、达拉斯小牛队的长期主要老板，并且不惧怕在 X 上频繁发生争执，最近与埃隆·马斯克 (Elon Musk) 和乔丹·彼得森 (Jordan Peterson) 等人就 DEI、觉醒主义、性别和身份政治等话题发生争执。这是莱克斯·弗里德曼播客。时间</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Entrepreneurship <span class="dialogue-time">(00:00:55)</span>
+  </div>
+  <div class="dialogue-en">You’ve started many businesses, invested in many businesses, heard a lot of pitches privately and on Shark Tank. So you’re the perfect person to ask what makes a great entrepreneur?</div>
+  <div class="dialogue-zh">你已经创办了很多企业，投资了很多企业，私下和在创智赢家上听过很多推销。那么您是询问什么造就伟大企业家的最佳人选吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Cuban <span class="dialogue-time">(00:01:07)</span>
+  </div>
+  <div class="dialogue-en">Somebody who’s curious, they want to keep on learning because business is ever-changing. It’s never static. Somebody who’s agile, because as you learn new things and the environment around you changes, you have to be able to adapt and make the changes. And somebody who can sell, because no business has ever survived without sales. And as an entrepreneur who’s creating a company, whatever your prod...</div>
+  <div class="dialogue-zh">充满好奇心的人希望继续学习，因为业务在不断变化。它从来都不是静态的。敏捷的人，因为当你学习新事物和周围环境发生变化时，你必须能够适应并做出改变。还有一个能够销售的人，因为没有销售，任何企业都无法生存。作为创建公司的企业家，无论您的产品是什么</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:39)</span>
+  </div>
+  <div class="dialogue-en">But it’s also a skill thing. How do you sell? What do you mean by selling?</div>
+  <div class="dialogue-zh">但这也是一个技巧问题。你怎么卖？你说的卖是什么意思？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Cuban <span class="dialogue-time">(00:01:42)</span>
+  </div>
+  <div class="dialogue-en">Selling is just helping. I’ve always looked at it about putting myself in the shoes of another person and asking a simple question, can I help this person? Can my product help them? From the time I was 12 years old, selling garbage bags door to door and just asking a simple question, do you use garbage bags? Do you need garbage bags? Well, let me save you some time. I’ll bring them to your house a...</div>
+  <div class="dialogue-zh">销售只是帮助。我总是把自己放在另一个人的立场上，问一个简单的问题，我可以帮助这个人吗？我的产品可以帮助他们吗？从我12岁开始，就挨家挨户卖垃圾袋，只是问一个简单的问题，你用垃圾袋吗？您需要垃圾袋吗？好吧，让我为您节省一些时间。我会把它们带到你家</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:30)</span>
+  </div>
+  <div class="dialogue-en">Trust in an industry that’s highly lacking in trust.</div>
+  <div class="dialogue-zh">信任一个高度缺乏信任的行业。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Cuban <span class="dialogue-time">(00:02:33)</span>
+  </div>
+  <div class="dialogue-en">Exactly.</div>
+  <div class="dialogue-zh">确切地。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:35)</span>
+  </div>
+  <div class="dialogue-en">Okay. So what’s the trick to selling garbage bags? Let’s go back there. At 12 years old, is it just your natural charisma? I guess a good question to ask, are you born with it or can you develop it?</div>
+  <div class="dialogue-zh">好的。那么卖垃圾袋有什么技巧呢？让我们回到那里。 12岁，这只是你天生的魅力吗？我想这是一个很好的问题，你是天生就有的还是可以培养的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Cuban <span class="dialogue-time">(00:02:45)</span>
+  </div>
+  <div class="dialogue-en">Oh, you can definitely develop it. Yeah. Because selling garbage bags door to door was easy, right? It was like… 12-year-old Mark going, “Hi, my name is Mark. Do you use garbage bags?” You know what the answer is going to be, right? “Can I just drop them off for you once a week? Whenever you need them, you just call and I’ll bring them down.” “Sure.” So that was easy.</div>
+  <div class="dialogue-zh">哦，你绝对可以开发它。是的。因为挨家挨户卖垃圾袋很容易，对吗？就像……12 岁的马克说，“嗨，我叫马克。你用垃圾袋吗？”你知道答案是什么，对吗？ “我可以每周给你送一次吗？每当你需要它们时，你只要打电话，我就会把它们送下来。” “当然。”所以这很容易。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:02)</span>
+  </div>
+  <div class="dialogue-en">But I’m sure you’ve been rejected.</div>
+  <div class="dialogue-zh">但我确信你已经被拒绝了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Cuban <span class="dialogue-time">(00:03:04)</span>
+  </div>
+  <div class="dialogue-en">Oh, yeah. Of course. Not everybody says yes.</div>
+  <div class="dialogue-zh">哦，是的。当然。不是每个人都说是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:06)</span>
+  </div>
+  <div class="dialogue-en">What was your percentage?</div>
+  <div class="dialogue-zh">你的百分比是多少？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Cuban <span class="dialogue-time">(00:03:08)</span>
+  </div>
+  <div class="dialogue-en">I don’t remember, but it’s pretty close to a hundred percent.</div>
+  <div class="dialogue-zh">我不记得了，但差不多是百分之一百了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:10)</span>
+  </div>
+  <div class="dialogue-en">Oh, okay. So that’s why you don’t remember.</div>
+  <div class="dialogue-zh">哦好的。所以这就是你不记得的原因。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Cuban <span class="dialogue-time">(00:03:12)</span>
+  </div>
+  <div class="dialogue-en">Yeah. Right? Because who’s going to say no to a 12-year-old kid who’s going to save time and money? But typically, my career where I’ve started companies, it’s to do something that other people aren’t doing. Whether it was connecting PCs to local area networks and at MicroSolutions. And the salesmanship was walking into a company and just saying, look talk to me and I can help you improve your pro...</div>
+  <div class="dialogue-zh">是的。正确的？因为谁会拒绝一个能节省时间和金钱的 12 岁孩子呢？但通常情况下，我创办公司的职业生涯就是做别人没有做的事情。是否将 PC 连接到局域网以及 MicroSolutions。推销员走进一家公司只是说，看和我谈谈，我可以帮助你提高你的专业水平</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:55)</span>
+  </div>
+  <div class="dialogue-en">I’m sure there’s a skill thing to it too, in how you solve the puzzle of communicating with a person and convincing them.</div>
+  <div class="dialogue-zh">我确信，如何解决与人沟通并说服他们的难题也需要技巧。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Cuban <span class="dialogue-time">(00:04:03)</span>
+  </div>
+  <div class="dialogue-en">Yeah, there’s skill from the perspective that I read like a maniac. Then now you can give me an example of any type of business and it’ll take me two seconds to figure out how they make money and how I can make them more productive. And I think that’s probably my biggest skill, being able to just drill down to what the actual need is, if any. And then from there, being able to say, well, if this i...</div>
+  <div class="dialogue-zh">是的，从我像疯子一样阅读的角度来看，这是有技巧的。那么现在你可以给我一个任何类型业务的例子，我只需要两秒钟就能弄清楚他们如何赚钱以及如何提高他们的生产力。我认为这可能是我最大的技能，能够深入了解实际需求（如果有的话）。然后从那里，能够说，好吧，如果我</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:35)</span>
+  </div>
+  <div class="dialogue-en">So figure out how this kind of business makes money in the present and then figure out, is there a way to make more money in the future by introducing a totally new kind of thing?</div>
+  <div class="dialogue-zh">因此，先弄清楚这种业务目前如何赚钱，然后再弄清楚，是否有办法通过引入一种全新的东西来在未来赚更多的钱？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Cuban <span class="dialogue-time">(00:04:43)</span>
+  </div>
+  <div class="dialogue-en">Correct.</div>
+  <div class="dialogue-zh">正确的。</div>
+</div>
+    <a href="https://lexfridman.com/mark-cuban-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="brendan-eich.html" class="card" style="text-decoration:none">
+  <div class="card-title">Brendan Eich: JavaScript, Firefox, Mozilla, and Brave</div>
+  <div class="card-meta">Brendan Eich</div>
+</a>
+<a href="chris-urmson.html" class="card" style="text-decoration:none">
+  <div class="card-title">Chris Urmson: Self-Driving Cars at Aurora, Google, CMU, and DARPA</div>
+  <div class="card-meta">Chris Urmson</div>
+</a>
+<a href="jensen-huang.html" class="card" style="text-decoration:none">
+  <div class="card-title">Jensen Huang</div>
+  <div class="card-meta">Jensen Huang</div>
+</a>
+<a href="kai-fu-lee.html" class="card" style="text-decoration:none">
+  <div class="card-title">Kai-Fu Lee: AI Superpowers – China and Silicon Valley</div>
+  <div class="card-meta">Kai-Fu Lee</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

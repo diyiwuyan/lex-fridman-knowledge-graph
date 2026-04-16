@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lisa Randall - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Lisa Randall</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Lisa Randall</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/lisa-randall.html" style="font-size:16px;color:#818cf8;font-weight:600">Lisa Randall</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">10,891 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/lisa-randall-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#8b5cf622;color:#8b5cf6;border:1px solid #8b5cf644;font-size:13px;padding:4px 12px">物理与宇宙学</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:24</span>
+  <span class="chapter-title">Dark matter<span class="zh-trans"> · 暗物质</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">19:16</span>
+  <span class="chapter-title">Extinction events<span class="zh-trans"> · 灭绝事件</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:16</span>
+  <span class="chapter-title">Particle physics<span class="zh-trans"> · 粒子物理学</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">45:30</span>
+  <span class="chapter-title">Physics vs mathematics<span class="zh-trans"> · 物理与数学</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">lisa</span><span class="keyword-tag">randall</span><span class="keyword-tag">matter</span><span class="keyword-tag">dark</span><span class="keyword-tag">don</span><span class="keyword-tag">physics</span><span class="keyword-tag">universe</span><span class="keyword-tag">far</span><span class="keyword-tag">model</span><span class="keyword-tag">questions</span><span class="keyword-tag">standard</span><span class="keyword-tag">doesn</span><span class="keyword-tag">interesting</span><span class="keyword-tag">stuff</span><span class="keyword-tag">theory</span><span class="keyword-tag">going</span><span class="keyword-tag">forces</span><span class="keyword-tag">particle</span><span class="keyword-tag">exist</span><span class="keyword-tag">science</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I think they’re not as scared as they should be about nuclear weapons, to be honest. I think that’s more serious danger than people realize. I think people are a little bit more scared about pandemics than they were before, but I still say they’re not super scared about it. So you’re right, there are these major events that can happen and we are setting things up so that they might happen, and we should be thinking about them. The question is who should be thinking about them? How should we be thinking about them? How do you make things happen on a global scale, because that’s really what we need."</div>
+  <div class="quote-zh">老实说，我认为他们对核武器并没有应有的恐惧。我认为这比人们意识到的更严重。我认为人们比以前更害怕流行病，但我仍然说他们并不是非常害怕。所以你是对的，这些重大事件可能会发生，我们正在安排事情以便它们可能发生，我们应该考虑它们。问题是谁应该考虑它们？我们应该如何思考他们？如何让事情在全球范围内发生，因为这正是我们所需要的。</div>
+  <div class="quote-meta">— Lisa Randall （00:22:51）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"That’s absolutely true. It’s one of the reasons CERN was formed actually. It was post-World War II, and a lot of European physicists had actually left Europe and they wanted to see Europeans work together and rebuild, and it worked. They did. It’s true, I often think that, that one of the major problems is we just don’t meet enough people so that everyone… When they seem like the other, it’s more easy to forget their humanity. I think it is important to have these connections. Extinction events"</div>
+  <div class="quote-zh">这绝对是真的。这是欧洲核子研究组织实际上成立的原因之一。当时是二战后，许多欧洲物理学家实际上已经离开了欧洲，他们希望看到欧洲人共同努力和重建，这确实奏效了。他们做到了。确实，我经常认为，主要问题之一是我们没有遇到足够多的人，所以每个人……当他们看起来像另一个人时，就更容易忘记他们的人性。我认为建立这些联系很重要。灭绝事件</div>
+  <div class="quote-meta">— Lisa Randall （00:18:45）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Sometimes it’s hard to forget the role of physics, but I think Wilson said it really well when he said when they were building Fermilab, it was like this won’t defend the country, but it’ll make it worth defending. It’s just the idea that in all this chaos, it’s still important that we still make progress in these things. Sometimes when major world events are happening, it’s easy to forget that. I think those are important too. You don’t want to forget those, but to try to keep that balance because we don’t want to lose what it is that makes humans special."</div>
+  <div class="quote-zh">有时很难忘记物理学的作用，但我认为威尔逊说得很好，当他们建造费米实验室时，他说这不会保卫国家，但它会使其值得保卫。只是这样的想法：在所有这些混乱中，我们在这些事情上取得进展仍然很重要。有时，当世界发生重大事件时，人们很容易忘记这一点。我认为这些也很重要。你不想忘记这些，但要努力保持这种平衡，因为我们不想失去人类的特殊之处。</div>
+  <div class="quote-meta">— Lisa Randall （00:55:55）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I’m really, really glad you mentioned that because actually that was one of the main points of my book, Dark Matter and the Dinosaurs. One of the reasons I wrote it was because I really think we are abusing the planet, we’re changing the planet way too quickly. Just like anything else, when you alter things, it’s good to think about the history of what it took to get here."</div>
+  <div class="quote-zh">我真的非常非常高兴你提到这一点，因为实际上这是我的书《暗物质和恐龙》的要点之一。我写这篇文章的原因之一是因为我真的认为我们正在滥用地球，我们改变地球的速度太快了。就像其他事情一样，当你改变事物时，最好想想它所经历的历史。</div>
+  <div class="quote-meta">— Lisa Randall （00:10:16）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"We’re seeing that with people now, too. I know people are worried just about AI taking over, and that’s a totally different story. We just don’t think about the future very much. We think about what we’re doing now, and we certainly don’t think enough about all the animals that we’re destroying, all the things that are precursors to humans that we rely on."</div>
+  <div class="quote-zh">我们现在也在人们身上看到了这一点。我知道人们只是担心人工智能接管，但那是完全不同的故事。我们只是不太考虑未来。我们思考我们现在正在做的事情，我们当然没有充分思考我们正在消灭的所有动物，以及我们所依赖的人类祖先的所有事物。</div>
+  <div class="quote-meta">— Lisa Randall （00:19:54）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Lisa Randall, a theoretical physicist and cosmologist at Harvard. Her work involves improving our understanding of particle physics, supersymmetry, baryogenesis, cosmological inflation, and dark matter.</div>
+  <div class="dialogue-zh">以下是与哈佛大学理论物理学家和宇宙学家丽莎·兰德尔的对话。她的工作涉及提高我们对粒子物理学、超对称性、重子发生、宇宙膨胀和暗物质的理解。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:15)</span>
+  </div>
+  <div class="dialogue-en">This is the Lex Friedman podcast. To support it, please check out our sponsors in the description. Now, dear friends, here’s Lisa Randall. Dark matter</div>
+  <div class="dialogue-zh">这是莱克斯·弗里德曼的播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是丽莎·兰德尔。暗物质</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:24)</span>
+  </div>
+  <div class="dialogue-en">One of the things you work on and write about is dark matter. We can’t see it, but there’s a lot of it in the universe. You also end one of your books with a Beatles song quote, “‘Got to be good-looking because he’s so hard to see.” What is dark matter? How should we think about it given that we can’t see it? How should we visualize it in our mind’s eye?</div>
+  <div class="dialogue-zh">您研究和撰写的内容之一是暗物质。我们看不到它，但宇宙中有很多它。你还用甲壳虫乐队的歌曲来结束你的一本书，“‘必须长得好看，因为他很难被发现。’”什么是暗物质？既然我们看不到它，我们应该如何思考它？我们应该如何在脑海中想象它？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lisa Randall <span class="dialogue-time">(00:00:47)</span>
+  </div>
+  <div class="dialogue-en">I think one of the really important things that physics teaches you is just our limitations, but also our abilities. The fact that we can deduce the existence of something that we don’t directly see is really a tribute to people that we can do that. It’s also something that tells you, you can’t overly rely on your direct senses. If you just relied on just what you see directly, you would miss so m...</div>
+  <div class="dialogue-zh">我认为物理学教给你的真正重要的事情之一就是我们的局限性，但也是我们的能力。我们可以推断出我们无法直接看到的事物的存在，这一事实确实是对我们能够做到这一点的人们的致敬。这也告诉你，你不能过度依赖你的直接感官。如果你只依赖你直接看到的东西，你会错过很多</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lisa Randall <span class="dialogue-time">(00:01:15)</span>
+  </div>
+  <div class="dialogue-en">We can generalize this, but just for now to focus on dark matter, it’s something we know is there, and it’s not just one way we know it’s there. In my book, Dark Matter and the Dinosaurs, I talk about the many different ways. There’s eight or nine that we deduce not just the existence of dark matter, but how much is there, and they all agree.</div>
+  <div class="dialogue-zh">我们可以概括这一点，但现在我们只关注暗物质，我们知道它的存在，而且它不仅仅是我们知道它存在的一种方式。在我的书《暗物质与恐龙》中，我谈论了许多不同的方式。我们不仅推断出八、九种暗物质的存在，还推断出暗物质的含量，而且他们都同意。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lisa Randall <span class="dialogue-time">(00:01:36)</span>
+  </div>
+  <div class="dialogue-en">Now, how do we know it’s there? Because of its gravitational force. Individually, a particle doesn’t have such a big gravitational force. In fact, gravity is an extremely weak force compared to other forces we know about in nature, but there’s a lot of dark matter out there. It carries a lot of energy. Five times the amount of energy as the matter. We know that’s in atoms, et cetera.</div>
+  <div class="dialogue-zh">现在，我们怎么知道它在那里？因为它的引力。单个粒子没有那么大的引力。事实上，与我们所知的自然界中的其他力相比，引力是一种极其微弱的力，但那里存在大量的暗物质。它携带着大量的能量。能量是物质的五倍。我们知道这是在原子中，等等。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lisa Randall <span class="dialogue-time">(00:02:00)</span>
+  </div>
+  <div class="dialogue-en">You can ask, how should we think about it? It’s just another form of matter that doesn’t interact with light, or at least as far as we know. It interacts gravitationally, it clumps, it forms galaxies, but it doesn’t interact with light, which means we just don’t see it. Most of our detection, before gravitational wave detectors, we only saw things because of their interactions with light in some s...</div>
+  <div class="dialogue-zh">你可能会问，我们应该如何思考？它只是另一种形式的物质，不与光相互作用，或者至少据我们所知。它通过引力相互作用，结块，形成星系，但它不与光相互作用，这意味着我们只是看不到它。在引力波探测器出现之前，我们的大多数探测，我们只能看到物体，因为它们在某些情况下与光相互作用。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:25)</span>
+  </div>
+  <div class="dialogue-en">In theory, it behaves just like any other matter, it just doesn’t interact with light.</div>
+  <div class="dialogue-zh">理论上，它的行为就像任何其他物质一样，只是不与光相互作用。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lisa Randall <span class="dialogue-time">(00:02:30)</span>
+  </div>
+  <div class="dialogue-en">When we say it interacts just like any other form of matter, we have to be careful because gravitationally, it interacts like other forms of matter, but it doesn’t experience electromagnetism, which is why it has a different distribution.</div>
+  <div class="dialogue-zh">当我们说它像任何其他形式的物质一样相互作用时，我们必须小心，因为在引力方面，它像其他形式的物质一样相互作用，但它不会经历电磁作用，这就是为什么它具有不同的分布。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lisa Randall <span class="dialogue-time">(00:02:44)</span>
+  </div>
+  <div class="dialogue-en">In our galaxy, it’s roughly spherical unless it has its own interactions, that’s another story. We know that it’s roughly spherical, whereas ordinary matter can radiate and clumps into a disk. That’s why we see the Milky Way disk. On large scales, in some sense, yes, all the matter is similar in some sense.</div>
+  <div class="dialogue-zh">在我们的银河系中，除非它有自己的相互作用，否则它大致呈球形，这是另一个故事。我们知道它大致是球形的，而普通物质可以辐射并聚集成圆盘。这就是我们看到银河系盘的原因。在大范围内，在某种意义上，是的，所有的事情在某种意义上都是相似的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lisa Randall <span class="dialogue-time">(00:03:06)</span>
+  </div>
+  <div class="dialogue-en">In fact, dark matter is in some sense more important because it can collapse more readily than ordinary matter because ordinary matter has radiative forces, which makes it hard to collapse on small scales. Actually it’s dark matter that drives galaxy formation and then ordinary matter comes along with it.</div>
+  <div class="dialogue-zh">事实上，暗物质在某种意义上更重要，因为它比普通物质更容易坍缩，因为普通物质具有辐射力，这使得它很难在小尺度上坍缩。实际上，是暗物质驱动了星系的形成，然后普通物质也随之而来。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lisa Randall <span class="dialogue-time">(00:03:30)</span>
+  </div>
+  <div class="dialogue-en">There’s also just more of it, and because there’s more of it can start collapsing sooner. That is to say the energy density in dark matter dominates over radiation earlier than you would if you just had an ordinary matter.</div>
+  <div class="dialogue-zh">而且它的数量也越来越多，而且因为它的数量越来越多，它就会更快地开始崩溃。也就是说，暗物质的能量密度比普通物质更早地支配辐射。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:43)</span>
+  </div>
+  <div class="dialogue-en">It’s part of the story of the origin of the galaxy, part of the story of the end of the galaxy, and part of the story of all the various interactions throughout.</div>
+  <div class="dialogue-zh">这是银河系起源故事的一部分，银河系终结故事的一部分，也是整个故事中各种互动的一部分。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lisa Randall <span class="dialogue-time">(00:03:50)</span>
+  </div>
+  <div class="dialogue-en">Exactly. In my book, I make jokes about, it’s like when we think about a building, we think about the architect, we think about the high level, but we forget about all the workers that did all the grunt work. In fact, dark matter was really important in the formation of our universe, and we forget that sometimes.</div>
+  <div class="dialogue-zh">确切地。在我的书中，我开玩笑说，就像当我们想到一座建筑时，我们想到建筑师，我们想到高层，但我们忘记了所有完成所有繁重工作的工人。事实上，暗物质对于我们宇宙的形成非常重要，但我们有时会忘记这一点。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:07)</span>
+  </div>
+  <div class="dialogue-en">That’s a metaphor on top of a metaphor. Okay. The unheard voices that do the actual work.</div>
+  <div class="dialogue-zh">这是一个隐喻之上的一个隐喻。好的。那些闻所未闻的声音在做实际的工作。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lisa Randall <span class="dialogue-time">(00:04:16)</span>
+  </div>
+  <div class="dialogue-en">Exactly. No, but it is a metaphor, but it also captures something because the fact is we don’t directly see it, so we forget it’s there or we don’t understand it’s there, or we think it’s not. The fact that we don’t see it makes it no less legitimate, it just means that we have challenges in order to find out exactly what it is.</div>
+  <div class="dialogue-zh">确切地。不，但它是一个隐喻，但它也捕捉到了一些东西，因为事实是我们没有直接看到它，所以我们忘记了它的存在，或者我们不明白它的存在，或者我们认为它不存在。事实上，我们看不到它并不意味着它的合法性降低，这只是意味着我们在弄清楚它到底是什么方面面临着挑战。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:35)</span>
+  </div>
+  <div class="dialogue-en">Yeah, but the things we cannot see that nevertheless have a gravitational interaction with the things we can’t see is at the layman level, it’s just mind-blowing.</div>
+  <div class="dialogue-zh">是的，但是我们看不到的东西却与我们看不到的东西有引力相互作用，这只是外行人的水平，这真是令人兴奋。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lisa Randall <span class="dialogue-time">(00:04:49)</span>
+  </div>
+  <div class="dialogue-en">It is and it isn’t because I think what it’s teaching us is that we’re human, the universe is what it is, and we’re trying to interact with that universe and discover what it is. We’ve discovered, amazing things.</div>
+  <div class="dialogue-zh">是的，也不是，因为我认为它教导我们的是，我们是人类，宇宙就是它的本质，而我们正试图与宇宙互动并发现它是什么。我们发现了令人惊奇的事情。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lisa Randall <span class="dialogue-time">(00:05:03)</span>
+  </div>
+  <div class="dialogue-en">In fact, I would say it’s more surprising that the matter that we know about is constitutes as big a fraction of the universe as it does. We’re limited, we’re human. The fact that we see 5% of the energy density of the universe, about one sixth of the energy density in matter, that’s remarkable. Why should that be? Anything could be out there, yet the universe that we see is a significant fraction...</div>
+  <div class="dialogue-zh">事实上，我想说更令人惊讶的是，我们所知道的物质构成了宇宙的很大一部分。 We’re limited, we’re human.事实上，我们看到了宇宙能量密度的 5%，大约是物质能量密度的六分之一，这是非常了不起的。为什么会这样呢？任何事物都可能存在，但我们所看到的宇宙只是其中的一小部分</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:30)</span>
+  </div>
+  <div class="dialogue-en">Yeah, but a lot of our intuition, I think operates using visualizations in the mind.</div>
+  <div class="dialogue-zh">是的，但我认为我们的很多直觉都是通过头脑中的可视化来运作的。</div>
+</div>
+    <a href="https://lexfridman.com/lisa-randall-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="david-kirtley.html" class="card" style="text-decoration:none">
+  <div class="card-title">David Kirtley</div>
+  <div class="card-meta">David Kirtley</div>
+</a>
+<a href="jeffrey-shainline.html" class="card" style="text-decoration:none">
+  <div class="card-title">Jeffrey Shainline: Neuromorphic Computing and Optoelectronic Intelligence</div>
+  <div class="card-meta">Jeffrey Shainline</div>
+</a>
+<a href="lee-cronin-3.html" class="card" style="text-decoration:none">
+  <div class="card-title">Lee Cronin #3</div>
+  <div class="card-meta">Lee Cronin</div>
+</a>
+<a href="lee-cronin.html" class="card" style="text-decoration:none">
+  <div class="card-title">Lee Cronin: Origin of Life, Aliens, Complexity, and Consciousness</div>
+  <div class="card-meta">Lee Cronin</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

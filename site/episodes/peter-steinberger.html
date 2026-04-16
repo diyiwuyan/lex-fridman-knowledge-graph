@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peter Steinberger - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Peter Steinberger</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Peter Steinberger</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/peter-steinberger.html" style="font-size:16px;color:#818cf8;font-weight:600">Peter Steinberger</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">33,442 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/peter-steinberger-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:30</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">5:36</span>
+  <span class="chapter-title">OpenClaw origin story<span class="zh-trans"> · OpenClaw 起源故事</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">8:55</span>
+  <span class="chapter-title">Mind-blowing moment<span class="zh-trans"> · 令人兴奋的时刻</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">18:22</span>
+  <span class="chapter-title">Why OpenClaw went viral<span class="zh-trans"> · 为什么 OpenClaw 如此火爆</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">22:19</span>
+  <span class="chapter-title">Self-modifying AI agent<span class="zh-trans"> · 自修改AI代理</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">27:04</span>
+  <span class="chapter-title">Name-change drama<span class="zh-trans"> · 改名剧</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">44:15</span>
+  <span class="chapter-title">Moltbook saga<span class="zh-trans"> · 毛书传奇</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">52:34</span>
+  <span class="chapter-title">OpenClaw security concerns<span class="zh-trans"> · OpenClaw 安全问题</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:01:14</span>
+  <span class="chapter-title">How to code with AI agents<span class="zh-trans"> · 如何使用 AI 代理进行编码</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:32:09</span>
+  <span class="chapter-title">Programming setup<span class="zh-trans"> · 编程设置</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:38:52</span>
+  <span class="chapter-title">GPT Codex 5.3 vs Claude Opus 4.6<span class="zh-trans"> · GPT Codex 5.3 与 Claude Opus 4.6</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:47:59</span>
+  <span class="chapter-title">Best AI agent for programming<span class="zh-trans"> · 最佳编程人工智能代理</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:09:59</span>
+  <span class="chapter-title">Life story and career advice<span class="zh-trans"> · 人生故事和职业建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:13:56</span>
+  <span class="chapter-title">Money and happiness<span class="zh-trans"> · 金钱和幸福</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:17:49</span>
+  <span class="chapter-title">Acquisition offers from OpenAI and Meta<span class="zh-trans"> · OpenAI 和 Meta 的收购要约</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:34:58</span>
+  <span class="chapter-title">How OpenClaw works<span class="zh-trans"> · OpenClaw 的工作原理</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:46:17</span>
+  <span class="chapter-title">AI slop<span class="zh-trans"> · AI 坡度</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:52:20</span>
+  <span class="chapter-title">AI agents will replace 80% of apps<span class="zh-trans"> · AI代理将取代80%的应用程序</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:00:57</span>
+  <span class="chapter-title">Will AI replace programmers?<span class="zh-trans"> · AI会取代程序员吗？</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">peter</span><span class="keyword-tag">steinberger</span><span class="keyword-tag">don</span><span class="keyword-tag">agent</span><span class="keyword-tag">stuff</span><span class="keyword-tag">code</span><span class="keyword-tag">hmm</span><span class="keyword-tag">didn</span><span class="keyword-tag">agents</span><span class="keyword-tag">whole</span><span class="keyword-tag">openclaw</span><span class="keyword-tag">model</span><span class="keyword-tag">project</span><span class="keyword-tag">built</span><span class="keyword-tag">made</span><span class="keyword-tag">human</span><span class="keyword-tag">codex</span><span class="keyword-tag">used</span><span class="keyword-tag">better</span><span class="keyword-tag">got</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"And, and also just kudos to Anthropic. Like, I think that’s, it’s a really, it’s a really beautiful idea to, like, like some of the stuff that’s in there. Like, like, we hope Claude finds meaning in its work. ‘Cause we don’t… Maybe it’s a little early, but I think that’s meaningful. That’s something that’s important for the future as we approach something that, at some point, me and may not… has, like, glimpses of consciousness, whatever that even means, because we don’t even know. So I, I read about this. I found it super fascinating, and I, I started a whole discussion with my agent on WhatsApp. And, and I’m like…"</div>
+  <div class="quote-zh">而且，也只是对人类的荣誉。就像，我认为这是一个非常非常好的主意，喜欢里面的一些东西。就像，就像，我们希望克劳德在它的工作中找到意义。因为我们不……也许现在有点早，但我认为这是有意义的。这对未来很重要，因为我们正在接近某种东西，在某些时候，我或可能没有……有意识的一瞥，无论这意味着什么，因为我们甚至不知道。所以我，我读到了这个。我发现它非常有趣，我在 WhatsApp 上与我的经纪人进行了全面的讨论。而且，我就像……</div>
+  <div class="quote-meta">— Peter Steinberger （01:25:51）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, I mean, if I do terminal commands like switching folders or random stuff, of course I type. It’s faster, right? But if I talk to the agent in, in most ways, I just actually have a conversation. You just press the, the walkie-talkie button and then I just, like, use my phrases. S- sometimes when I do PRs because it’s always the same, I have, like, a slash command for a few things, but in even that, I don’t use much because it’s, it’s very rare that it’s really always the same questions. Sometimes I, I see a PR and for… You know, like for PRs I actually do look at the code because I don’t trust people. Like, there could always be something malicious in it, so I need to actually look over the code."</div>
+  <div class="quote-zh">好吧，我的意思是，如果我执行诸如切换文件夹或随机内容之类的终端命令，我当然会输入。更快，对吧？但如果我与代理人交谈，在大多数情况下，我实际上只是进行了一次对话。你只需按下对讲机按钮，然后我就可以使用我的短语。有时，当我做 PR 时，因为它总是相同的，我有，比如，一些东西的斜杠命令，但即使这样，我也不会使用太多，因为它是，它是非常罕见的，它真的总是相同的问题。有时我，我看到一个 PR，然后……你知道，就像 PR 一样，我实际上会查看代码，因为我不信任别人。就像，其中总是可能存在恶意内容，所以我需要实际检查代码。</div>
+  <div class="quote-meta">— Peter Steinberger （01:15:55）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"You can even ask a question like, do we need a- a programming language that’s made for agents? Because all of those languages are made for humans. So how- what would that look like? Um, I think there’s a- there’s whole bunch of interesting questions that we’ll discover. And also how because everything is now world knowledge, how it in many ways, things will stagnate ’cause if you build something new and the agent has no idea that’s gonna be much harder to use than something that’s already there. Um…… of when I build Mac apps, I build them in, in Swift and SwiftUI, mm, partly because I like pain, partly because it… the, the deepest level of system integration, I can only get through there."</div>
+  <div class="quote-zh">您甚至可以问这样的问题：我们是否需要一种专为代理设计的编程语言？因为所有这些语言都是为人类而设计的。那么，那会是什么样子呢？嗯，我认为我们会发现很多有趣的问题。而且，因为现在一切都是世界知识，所以在很多方面，事情都会停滞不前，因为如果你构建了一些新的东西，而代理不知道它会比已经存在的东西更难使用。嗯……当我构建 Mac 应用程序时，我将它们构建在 Swift 和 SwiftUI 中，嗯，部分是因为我喜欢痛苦，部分是因为它……最深层次的系统集成，我只能通过那里。</div>
+  <div class="quote-meta">— Peter Steinberger （02:07:32）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"That’s multiple levels, actually. I think partially why I find it quite easy to work with agents is because I led engineering teams before. You know, I had a large company before. And eventually, you have to understand and accept and realize that your employees will not write a code the same way you do. Maybe it’s also not as good as you would do, but it will push the project forward."</div>
+  <div class="quote-zh">实际上，这是多个层次的。我认为与代理商合作很容易的部分原因是我以前领导过工程团队。你知道，我以前有一家大公司。最终，您必须理解、接受并意识到您的员工不会以与您相同的方式编写代码。也许它也没有你做的那么好，但它会推动项目向前发展。</div>
+  <div class="quote-meta">— Peter Steinberger （01:11:39）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah. And also, apps will become API if they want or not. Because my agent can figure out how to use my phone. I mean, on- on the other side, it’s a little more tricky. On Android, that’s already … People already do that. And then we’ll just click the Order Uber for Me button for me. Or maybe another service. Or maybe there’s- there’s a … there’s an API I can call so it’s faster. Uh, I think that’s a space we’re just beginning to even understand what that means. And I … Again, I didn’t even … That was not something I thought of. Something that I- that I discovered as people use this, and it … We are still so early. But yeah, I think data is very important. Like, apps that can give me data, but that also can be API. Why do I need a Sonos app anymore when I can …"</div>
+  <div class="quote-zh">是的。而且，无论应用程序愿意与否，它们都将成为 API。因为我的代理人可以弄清楚如何使用我的手机。我的意思是，在另一方面，这有点棘手。在 Android 上，这已经……人们已经这样做了。然后我们只需点击“为我订购 Uber”按钮即可。或者也许是其他服务。或者也许有——有一个……有一个我可以调用的 API，所以速度更快。呃，我认为我们才刚刚开始理解这意味着什么。我……再说一遍，我什至没有……那不是我想到的。当人们使用它时我发现了一些东西，而且它......我们还很早。但是，是的，我认为数据非常重要。比如，可以为我提供数据的应用程序，但也可以是 API。当我可以……时，为什么我还需要 Sonos 应用程序？</div>
+  <div class="quote-meta">— Peter Steinberger （02:55:50）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Peter Steinberger <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">I watched my agent happily click the “I’m not a robot” button. I made the agent very aware. Like, it knows what his source code is. It understands th- how it sits and runs in its own harness. It knows where documentation is. It knows which model it runs. It understands its own system that made it very easy for an agent to… Oh, you don’t like anything? You just prompted it to existence, and then th...</div>
+  <div class="dialogue-zh">我看着我的经纪人高兴地点击了“我不是机器人”按钮。我让代理人非常清楚。就像，它知道他的源代码是什么。它了解自己如何在自己的安全带中安坐和奔跑。它知道文档在哪里。它知道它运行哪种模型。它了解自己的系统，这使得代理很容易......哦，你不喜欢任何东西？你只是促使它存在，然后</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:31)</span>
+  </div>
+  <div class="dialogue-en">You prefer agentic engineering?</div>
+  <div class="dialogue-zh">您更喜欢代理工程？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Peter Steinberger <span class="dialogue-time">(00:00:33)</span>
+  </div>
+  <div class="dialogue-en">Yeah, I always tell people I’d- I do agentic engineering, and then maybe after 3:00 AM, I switch to wipe coding, and then I have regrets on the next day.</div>
+  <div class="dialogue-zh">是的，我总是告诉人们我会-我做代理工程，然后也许在凌晨 3:00 之后，我切换到擦除编码，然后第二天我就后悔了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:40)</span>
+  </div>
+  <div class="dialogue-en">What a walk of shame.</div>
+  <div class="dialogue-zh">这是多么羞耻的举动啊。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Peter Steinberger <span class="dialogue-time">(00:00:42)</span>
+  </div>
+  <div class="dialogue-en">Yeah, you just have to clean up and, like, fix your sh- shit.</div>
+  <div class="dialogue-zh">是的，你只需要清理干净，比如修复你的狗屎。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:45)</span>
+  </div>
+  <div class="dialogue-en">We’ve all been there.</div>
+  <div class="dialogue-zh">我们都去过那里。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Peter Steinberger <span class="dialogue-time">(00:00:46)</span>
+  </div>
+  <div class="dialogue-en">I used to write really long prompts. And by writing, I mean, I don’t write, I- I- I talk, you know? These- these hands are, like, too- too precious for writing now. I just- I just use bespoke prompts to build my software.</div>
+  <div class="dialogue-zh">我曾经写过很长的提示。通过写作，我的意思是，我不写，我-我-我说话，你知道吗？这些——这些手，对于现在的写作来说，太——太珍贵了。我只是 - 我只是使用定制的提示来构建我的软件。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:00)</span>
+  </div>
+  <div class="dialogue-en">So, you, for real, with all those terminals, are using voice?</div>
+  <div class="dialogue-zh">那么，您真的在使用所有这些终端吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Peter Steinberger <span class="dialogue-time">(00:01:04)</span>
+  </div>
+  <div class="dialogue-en">Yeah. I used to do it very extensively, to the point where there was a period where I lost my voice.</div>
+  <div class="dialogue-zh">是的。我曾经非常广泛地这样做，以至于有一段时间我失声了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:13)</span>
+  </div>
+  <div class="dialogue-en">I mean, I have to ask you, just curious. I- I know you’ve probably gotten huge offers from major companies. Can you speak to who you’re considering working with?</div>
+  <div class="dialogue-zh">我的意思是，我必须问你，只是好奇。我-我知道你可能已经收到了大公司的巨额offer。您能谈谈您正在考虑与谁合作吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Peter Steinberger <span class="dialogue-time">(00:01:27)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:30)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Peter Steinberger, creator of OpenClaw, formerly known as MoldBot, ClawedBot, Clawdus, Claude, spelled with a W as in lobster claw. Not to be confused with Claud, the AI model from Anthropic, spelled with a U. In fact, this confusion is the reason Anthropic kindly asked Peter to change the name to OpenClaw. So, what is OpenClaw? It’s an open-source AI agent tha...</div>
+  <div class="dialogue-zh">以下是与 OpenClaw 的创建者 Peter Steinberger 的对话，Peter Steinberger 以前称为 MoldBot、ClawedBot、Clawdus、Claude，拼写为龙虾爪中的 W。不要与 Anthropic 的 AI 模型 Claud 混淆，拼写为 U。事实上，这种混淆正是 Anthropic 善意地要求 Peter 将名称更改为 OpenClaw 的原因。那么，什么是OpenClaw？这是一个开源人工智能代理</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:19)</span>
+  </div>
+  <div class="dialogue-en">And a kind of AI psychosis, a mix of clickbait fearmongering and genuine, fully justifiable concern about the role of AI in our digital, interconnected human world. OpenClaw, as its tagline states, is the AI that actually does things. It’s an autonomous AI assistant that lives in your computer, has access to all of your stuff, if you let it, talks to you through Telegram, WhatsApp, Signal, iMessag...</div>
+  <div class="dialogue-zh">还有一种人工智能精神病，是一种标题诱饵式的恐吓和对人工智能在数字化、互联的人类世界中的作用的真正、完全合理的担忧的混合体。正如其口号所说，OpenClaw 是真正做事的人工智能。它是一个驻留在您计算机中的自主人工智能助手，可以访问您的所有内容，如果您允许，它可以通过 Telegram、WhatsApp、Signal、iMessag 与您对话</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:07)</span>
+  </div>
+  <div class="dialogue-en">The ingredients for this kind of AI agent were all there, but putting it all together in a system that definitively takes a step forward over the line from language to agency, from ideas to actions, in a way that created a useful assistant that feels like one who gets you and learns from you, in an open source, community-driven way, is the reason OpenClaw took the internet by storm. Its power, in ...</div>
+  <div class="dialogue-zh">这种人工智能代理的要素已经全部具备，但将它们整合到一个系统中，从语言到代理、从想法到行动，以一种开源、社区驱动的方式创造出一个有用的助手，感觉就像一个能理解你并向你学习的人，这就是 OpenClaw 席卷互联网的原因。它的力量，在</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:51)</span>
+  </div>
+  <div class="dialogue-en">With it, you can own and have control over your data, but precisely because you have this control, you also have the responsibility to protect it from cybersecurity threats of various kinds. There are great ways to protect yourself, but the threats and vulnerabilities are out there. Again, a powerful AI agent with system-level access is a security minefield, but it also represents the future. Beca...</div>
+  <div class="dialogue-zh">有了它，您可以拥有并控制您的数据，但正是因为您拥有这种控制权，您也有责任保护它免受各种网络安全威胁。有很多很好的方法可以保护自己，但威胁和漏洞也存在。同样，具有系统级访问权限的强大人工智能代理是一个安全雷区，但它也代表着未来。贝卡</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:41)</span>
+  </div>
+  <div class="dialogue-en">He sold it, and for a brief time, fell out of love with programming, vanished for three years, and then came back, rediscovered his love for programming, and built, in a very short time, an open source AI agent that took the internet by storm. He is, in many ways, the symbol of the AI revolution happening in the programming world. There was the ChatGPT moment in 2022, the DeepSeek moment in 2025, ...</div>
+  <div class="dialogue-zh">他卖掉了它，并在短时间内失去了对编程的热爱，消失了三年，然后回来，重新发现了他对编程的热爱，并在很短的时间内建立了一个开源人工智能代理，席卷了互联网。从很多方面来说，他都是编程世界中人工智能革命的象征。 2022年有ChatGPT时刻，2025年有DeepSeek时刻，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:36)</span>
+  </div>
+  <div class="dialogue-en">The one and only, the Clawed Father. Actually, Benjamin predicted it in his tweet. “The following is a conversation with Claude, a respected crustacean.” It’s a hilarious-looking picture of a lobster in a suit, so I think the prophecy has been fulfilled. Let’s go to this moment when you built a prototype in one hour, that was the early version of OpenClaw. I think this story’s really inspiring to ...</div>
+  <div class="dialogue-zh">独一的利爪之父。事实上，本杰明在他的推文中预测到了这一点。 “以下是与受人尊敬的甲壳类动物克劳德的对话。”这是一张穿着西装的龙虾的搞笑照片，所以我认为预言已经实现了。让我们回到这个时刻，当你在一小时内构建了一个原型时，那是 OpenClaw 的早期版本。我觉得这个故事真的很励志</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Peter Steinberger <span class="dialogue-time">(00:06:20)</span>
+  </div>
+  <div class="dialogue-en">You know, I wanted that since April.</div>
+  <div class="dialogue-zh">你知道，从四月起我就想要那个。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:23)</span>
+  </div>
+  <div class="dialogue-en">A personal assistant. AI personal assistant.</div>
+  <div class="dialogue-zh">私人助理。人工智能私人助理。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Peter Steinberger <span class="dialogue-time">(00:06:25)</span>
+  </div>
+  <div class="dialogue-en">Yeah. And I, I played around with some other things, like even stuff that gets all my WhatsApp, and I could just run queries on it. That was back when we had GPT-4.1, with the one million context window. And I, I pulled in all the data and then just asked him questions like, “What makes this friendship meaningful?”</div>
+  <div class="dialogue-zh">是的。而我，我尝试了一些其他的东西，比如那些可以获取我所有 WhatsApp 的东西，我可以在上面运行查询。那是在我们有了 GPT-4.1 的时候，它有 100 万个上下文窗口。而我，我收集了所有数据，然后问了他这样的问题：“是什么让这段友谊变得有意义？”</div>
+</div>
+    <a href="https://lexfridman.com/peter-steinberger-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="chris-lattner.html" class="card" style="text-decoration:none">
+  <div class="card-title">Chris Lattner: Compilers, LLVM, Swift, TPU, and ML Accelerators</div>
+  <div class="card-meta">Chris Lattner</div>
+</a>
+<a href="david-patterson.html" class="card" style="text-decoration:none">
+  <div class="card-title">David Patterson: Computer Architecture and Data Storage</div>
+  <div class="card-meta">David Patterson</div>
+</a>
+<a href="elon-musk-4.html" class="card" style="text-decoration:none">
+  <div class="card-title">Elon Musk #4</div>
+  <div class="card-meta">Elon Musk</div>
+</a>
+<a href="ryan-graves.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ryan Graves: UFOs, Fighter Jets, and Aliens</div>
+  <div class="card-meta">Ryan Graves</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

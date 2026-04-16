@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DHH David Heinemeier Hansson - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>DHH David Heinemeier Hansson</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">DHH David Heinemeier Hansson</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/dhh-david-heinemeier-hansson.html" style="font-size:16px;color:#818cf8;font-weight:600">Dhh David Heinemeier Hansson</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">66,359 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/dhh-david-heinemeier-hansson-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:21</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:32</span>
+  <span class="chapter-title">Programming<span class="zh-trans"> · 编程</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">19:57</span>
+  <span class="chapter-title">JavaScript<span class="zh-trans"> · JavaScript</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:16</span>
+  <span class="chapter-title">Google Chrome and DOJ<span class="zh-trans"> · 谷歌浏览器和司法部</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">38:03</span>
+  <span class="chapter-title">Ruby programming language<span class="zh-trans"> · Ruby 编程语言</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">45:14</span>
+  <span class="chapter-title">Beautiful code<span class="zh-trans"> · 漂亮的代码</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:03:15</span>
+  <span class="chapter-title">Metaprogramming<span class="zh-trans"> · 元编程</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:06:36</span>
+  <span class="chapter-title">Dynamic typing<span class="zh-trans"> · 动态类型</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:13:55</span>
+  <span class="chapter-title">Scaling<span class="zh-trans"> · 缩放</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:26:47</span>
+  <span class="chapter-title">Future of programming<span class="zh-trans"> · 编程的未来</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:44:18</span>
+  <span class="chapter-title">Future of AI<span class="zh-trans"> · 人工智能的未来</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:50:13</span>
+  <span class="chapter-title">Vibe coding<span class="zh-trans"> · 振动编码</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:58:45</span>
+  <span class="chapter-title">Rails manifesto: Principles of a great programming language<span class="zh-trans"> · Rails 宣言：优秀编程语言的原则</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:23:11</span>
+  <span class="chapter-title">Why managers are useless<span class="zh-trans"> · 为什么管理者没有用</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:32:32</span>
+  <span class="chapter-title">Small teams<span class="zh-trans"> · 小团队</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:38:39</span>
+  <span class="chapter-title">Jeff Bezos<span class="zh-trans"> · 杰夫·贝佐斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:53:57</span>
+  <span class="chapter-title">Why meetings are toxic<span class="zh-trans"> · 为什么会议有毒</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:01:43</span>
+  <span class="chapter-title">Case against retirement<span class="zh-trans"> · 反对退休的案例</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:09:00</span>
+  <span class="chapter-title">Hard work<span class="zh-trans"> · 努力工作</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">don</span><span class="keyword-tag">dhh</span><span class="keyword-tag">going</span><span class="keyword-tag">ruby</span><span class="keyword-tag">programming</span><span class="keyword-tag">code</span><span class="keyword-tag">apple</span><span class="keyword-tag">got</span><span class="keyword-tag">language</span><span class="keyword-tag">better</span><span class="keyword-tag">car</span><span class="keyword-tag">web</span><span class="keyword-tag">didn</span><span class="keyword-tag">rails</span><span class="keyword-tag">source</span><span class="keyword-tag">able</span><span class="keyword-tag">software</span><span class="keyword-tag">money</span><span class="keyword-tag">ways</span><span class="keyword-tag">business</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Host of Lex Fridman Podcast. Research Scientist at MIT, working on human-AI interaction, robotics, and machine learning. View all posts by Lex Fridman →"</div>
+  <div class="quote-zh">莱克斯·弗里德曼播客的主持人。麻省理工学院的研究科学家，致力于人机交互、机器人和机器学习。查看莱克斯·弗里德曼发表的所有帖子 →</div>
+  <div class="quote-meta">— About Lex Fridman </div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:21)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with David Heinemeyer Hansen, also known as DHH. He is a legend in the programming and tech world, brilliant and insightful, sometimes controversial, and always fun to talk to. He’s the creator of Ruby on Rails, which is an influential web development framework behind many websites used by millions of people, including Shopify, GitHub, and Airbnb. He is the co-owner...</div>
+  <div class="dialogue-zh">以下是与 David Heinemeyer Hansen（也称为 DHH）的对话。他是编程和技术界的传奇人物，才华横溢、富有洞察力，有时颇具争议，但交谈起来总是很有趣。他是 Ruby on Rails 的创建者，Ruby on Rails 是一个有影响力的 Web 开发框架，为数百万人使用的许多网站提供支持，包括 Shopify、GitHub 和 Airbnb。他是共同所有人</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:57)</span>
+  </div>
+  <div class="dialogue-en">He is a New York Times best-selling author together with his co-author, Jason Fried, of four books, Rework, Remote, Getting Real, and It Doesn’t Have To Be Crazy At Work. And on top of that, he’s also a race car driver, including being a class winner at the legendary twenty-four-hour Le Mans race. This is the Lex Fridman podcast. To support it, please check out our sponsors in the description and ...</div>
+  <div class="dialogue-zh">他与杰森·弗里德 (Jason Fried) 合着了《返工》、《远程》、《变得真实》和《工作不必疯狂》四本书，成为《纽约时报》畅销书作家。最重要的是，他还是一名赛车手，包括在传奇的 24 小时勒芒比赛中获得组别冠军。这是莱克斯·弗里德曼播客。为了支持它，请查看说明中的赞助商和</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:32)</span>
+  </div>
+  <div class="dialogue-en">For someone who became a legendary programmer, you officially got into programming late in life, and I guess that’s because you tried to learn how to program a few times and you failed. So can you tell me the full story, the saga of your failures to learn programming? Was Commodore 64 involved? DHH</div>
+  <div class="dialogue-zh">对于成为传奇程序员的人来说，您在晚年才正式进入编程领域，我想那是因为您尝试学习如何编程几次但失败了。那么你能告诉我完整的故事吗？你学习编程失败的传奇故事？ Commodore 64 是否参与其中？ DHH</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:53)</span>
+  </div>
+  <div class="dialogue-en">Commodore 64 was the inspiration. I really wanted a Commodore 64. That was the first computer I ever sat down in front. And the way I sat down in front of it was I was five years old and there was this one kid on my street who had a Commodore 64. No one else had a computer, so we were all the kids just getting over there and we were all playing Yie Ar Kung-Fu. I don’t know if you’ve ever seen that...</div>
+  <div class="dialogue-zh">Commodore 64 就是灵感来源。我真的很想要一台 Commodore 64。那是我坐在前面的第一台计算机。当我坐在它前面时，我才五岁，街上有一个孩子拥有一台 Commodore 64。其他人没有电脑，所以我们都是刚到那里的孩子，我们都在玩一阿功夫。不知道你是否见过</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:53)</span>
+  </div>
+  <div class="dialogue-en">The disappointment. DHH</div>
+  <div class="dialogue-zh">失望。 DHH</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:54)</span>
+  </div>
+  <div class="dialogue-en">This is not a Commodore 64. But it was a computer. So I got my first computer at essentially six years old, that Amstrad 464. And of course, the first thing I wanted to do, I wanted to play video games. And I think the computer, which he by the way had traded for a TV and a stereo recorder or something like that, came with two games. One was this Frogger game where you had to escape from undergrou...</div>
+  <div class="dialogue-zh">这不是 Commodore 64。但它是一台计算机。所以我在六岁的时候就得到了我的第一台电脑，那就是 Amstrad 464。当然，我想做的第一件事就是玩视频游戏。我认为他用这台电脑换了一台电视和一台立体声录音机或类似的东西，附带了两款游戏。其中之一是这款青蛙过河游戏，你必须从地下逃脱</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:46)</span>
+  </div>
+  <div class="dialogue-en">So I tried to do that and it would take like two hours to print this game into the Amstrad, and of course I’d make some spelling mistake along the way and something wouldn’t work and the whole thing… I wasn’t that good of English, I was born in Denmark. So I was really trying to get into it because I wanted all these games and I didn’t have the money to buy them. And I tried quite hard for quite a...</div>
+  <div class="dialogue-zh">所以我尝试这样做，大约需要两个小时才能将这个游戏打印到 Amstrad 中，当然，我会在整个过程中犯一些拼写错误，有些东西不起作用，整个事情......我的英语不太好，我出生在丹麦。所以我真的很想参与其中，因为我想要所有这些游戏，但我没有钱购买它们。我很努力地尝试了很长时间</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:34)</span>
+  </div>
+  <div class="dialogue-en">If there’s a thing and you assign something, why would you assign another thing to it? So for some reason, I understood constants. Constants made sense to me, but variables didn’t. Then maybe I’m 11 to 12, I’ve gotten into the Amiga at this point. The Amiga, by the way, still perhaps my favorite computer of all time. I mean, this is one of those things where people get older and they’re like, oh, ...</div>
+  <div class="dialogue-zh">如果有一个东西并且你分配了一些东西，为什么你要给它分配另一个东西呢？所以出于某种原因，我理解了常量。常量对我来说有意义，但变量没有。那么也许我是 11 岁到 12 岁，此时我已经进入了 Amiga。顺便说一句，Amiga 可能仍然是我一直以来最喜欢的计算机。我的意思是，这是人们变老的事情之一，他们会说，哦，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:16)</span>
+  </div>
+  <div class="dialogue-en">Look at this sexy thing. That is a sexy machine right there. DHH</div>
+  <div class="dialogue-zh">看看这个性感的东西。那是一台性感的机器。 DHH</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:19)</span>
+  </div>
+  <div class="dialogue-en">This is from an age by the way where computing wasn’t global in the same sense, that different territories had different computers that were popular. The Amiga was really popular in Europe, but it wasn’t very popular at all in the US as far as I understand. It wasn’t popular in Japan. There were just different machines. The Apple II was a big thing in the US. I’d never even heard of Apple in the ’...</div>
+  <div class="dialogue-zh">顺便说一下，这是一个计算并不是全球化的时代，不同的地区有不同的流行计算机。 Amiga 在欧洲非常受欢迎，但据我了解，它在美国一点也不受欢迎。它在日本并不流行。只是有不同的机器。 Apple II 在美国风靡一时。我什至从未听说过苹果公司</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:04)</span>
+  </div>
+  <div class="dialogue-en">And this time I tried harder. I got into conditionals, I got into loops, I got into all these things and still, I couldn’t do it. And on the second attempt, I really got to the point of maybe I’m not smart enough. Maybe it’s too much math. I like math in this sort of superficial way. I don’t like it in the deep way that some of my perhaps slightly nerdier friends did, who I had tremendous respect ...</div>
+  <div class="dialogue-zh">而这一次我更加努力了。我陷入了条件语句，陷入了循环，陷入了所有这些事情，但我仍然做不到。在第二次尝试时，我真的意识到也许我不够聪明。也许数学太多了。我喜欢这种肤浅的数学。我不喜欢像我的一些可能有点书呆子的朋友那样的方式，我非常尊重他们</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:53)</span>
+  </div>
+  <div class="dialogue-en">I actually at that time had already begun making friends with people who knew how to program, who weren’t even programming EasyAMOS, they were programming with freaking Assembly. And I would sit down and just go, the moves and the memories and the copies, how do you even do this? I don’t even understand how you go from this to Amiga demos for example. That was the big thing with the Amiga. It had ...</div>
+  <div class="dialogue-zh">事实上，我当时已经开始和那些知道如何编程的人交朋友，他们甚至没有编程 EasyAMOS，他们正在使用该死的 Assembly 进行编程。我会坐下来，然后走，移动、记忆和副本，你是怎么做到的？例如，我什至不明白你是如何从这里转到 Amiga 演示的。这就是 Amiga 的大事。它有</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:34)</span>
+  </div>
+  <div class="dialogue-en">On that thing? DHH</div>
+  <div class="dialogue-zh">在那件事上？ DHH</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:36)</span>
+  </div>
+  <div class="dialogue-en">On this thing. They would make these little almost like music videos, combining some MIDI music, combining some cool graphics, and they would do all of it in like 4K. Four kilobytes that is. Not four Ks of resolution. Four kilobytes of memory. And I just thought that was such a cool scene. This was obviously pre-internet. It was even pre-BBS, bulletin board systems, to some extent. It was you swap...</div>
+  <div class="dialogue-zh">就这件事而言。他们会制作这些几乎像音乐视频一样的小视频，结合一些 MIDI 音乐，结合一些很酷的图形，他们会以 4K 的方式完成所有这些。即四KB。分辨率不是四个 K。四KB内存。我只是觉得那真是一个很酷的场景。这显然是在互联网出现之前。在某种程度上，它甚至是前BBS、公告板系统。原来是你交换的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:22)</span>
+  </div>
+  <div class="dialogue-en">I didn’t learn programming then and I wouldn’t learn programming until much later, until I was almost 20 years old. The bulletin board systems existed in this funny space where they were partly a service to the demo scenes allowing all these demo groups to distribute their amazing demos. And then it was also a place to trade piracy software, pirated software. And I ended up starting one of those w...</div>
+  <div class="dialogue-zh">那时我没有学习编程，直到很久以后，直到我快20岁的时候我才学习编程。公告板系统存在于这个有趣的空间中，它们在一定程度上是为演示场景提供服务，允许所有这些演示小组分发他们令人惊叹的演示。然后它也是一个交易盗版软件、盗版软件的地方。我最终开始了其中的一个</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:59)</span>
+  </div>
+  <div class="dialogue-en">Nice. DHH</div>
+  <div class="dialogue-zh">好的。 DHH</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:00)</span>
+  </div>
+  <div class="dialogue-en">Which is funny because again, I’m 14 years old. By the time I was installing my third line, you had to get someone from the telephone company to come do it. I get this guy and he’s just looking around, like what is this? Why the hell is a 14 year old having three phone lines into their tiny little bedroom? What’s going on here? Why are all these modems blinking red and black and making funny sound...</div>
+  <div class="dialogue-zh">这很有趣，因为我又14岁了。当我安装第三条线路时，你必须让电话公司的人来做这件事。我找到了这个人，他只是四处张望，这是什么？为什么一个 14 岁的孩子的小卧室里要插三根电话线？这是怎么回事？为什么所有这些调制解调器都闪烁红色和黑色并发出奇怪的声音</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:23)</span>
+  </div>
+  <div class="dialogue-en">Did your parents know? DHH</div>
+  <div class="dialogue-zh">你父母知道吗？ DHH</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:24)</span>
+  </div>
+  <div class="dialogue-en">They did and they didn’t. They knew I had the phone lines. They knew I had the computer. I don’t think they really understood that I was trading pirated software that was both illegal and whatever else was going on.</div>
+  <div class="dialogue-zh">他们做到了，也没有做到。他们知道我有电话线。他们知道我有电脑。我认为他们并没有真正理解我正在交易盗版软件，这些软件既非法又发生了其他事情。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:38)</span>
+  </div>
+  <div class="dialogue-en">Oh, we should probably say that in Europe, maybe you can comment on this, especially in Eastern Europe, but Europe in general, piracy I think was more acceptable than it was in the United States. I don’t know, maybe it’s just my upbringing- DHH</div>
+  <div class="dialogue-zh">哦，我们可能应该说，在欧洲，也许你可以对此发表评论，特别是在东欧，但总的来说，欧洲，我认为盗版比在美国更容易被接受。我不知道，也许这只是我的成长经历-DHH</div>
+</div>
+    <a href="https://lexfridman.com/dhh-david-heinemeier-hansson-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="aravind-srinivas.html" class="card" style="text-decoration:none">
+  <div class="card-title">Aravind Srinivas</div>
+  <div class="card-meta">Aravind Srinivas</div>
+</a>
+<a href="ayanna-howard.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ayanna Howard: Human-Robot Interaction and Ethics of Safety-Critical Systems</div>
+  <div class="card-meta">Ayanna Howard</div>
+</a>
+<a href="boris-sofman.html" class="card" style="text-decoration:none">
+  <div class="card-title">Boris Sofman: Waymo, Cozmo, Self-Driving Cars, and the Future of Robotics</div>
+  <div class="card-meta">Boris Sofman</div>
+</a>
+<a href="colin-angle.html" class="card" style="text-decoration:none">
+  <div class="card-title">Colin Angle: iRobot</div>
+  <div class="card-meta">Colin Angle</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

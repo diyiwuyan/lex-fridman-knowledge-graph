@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rick Spence - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Rick Spence</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Rick Spence</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/rick-spence.html" style="font-size:16px;color:#818cf8;font-weight:600">Rick Spence</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">30,809 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/rick-spence-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:37</span>
+  <span class="chapter-title">KGB and CIA<span class="zh-trans"> · 克格勃和中央情报局</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:54</span>
+  <span class="chapter-title">Okhrana, Cheka, NKVD<span class="zh-trans"> · 奥赫拉纳、契卡、内务人民委员部</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:26</span>
+  <span class="chapter-title">CIA spies vs KGB spies<span class="zh-trans"> · 中央情报局间谍与克格勃间谍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">37:02</span>
+  <span class="chapter-title">Assassinations and mind control<span class="zh-trans"> · 暗杀和精神控制</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">43:56</span>
+  <span class="chapter-title">Jeffrey Epstein<span class="zh-trans"> · 杰弗里·爱泼斯坦</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">50:48</span>
+  <span class="chapter-title">Bohemian Grove<span class="zh-trans"> · 波西米亚丛林</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:02:42</span>
+  <span class="chapter-title">Occultism<span class="zh-trans"> · 神秘主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:13:53</span>
+  <span class="chapter-title">Nazi party and Thule society<span class="zh-trans"> · 纳粹党和图勒协会</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:54:11</span>
+  <span class="chapter-title">Protocols of the Elders of Zion<span class="zh-trans"> · 锡安长老会的议定书</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:27:16</span>
+  <span class="chapter-title">Charles Manson<span class="zh-trans"> · 查尔斯·曼森</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:54:03</span>
+  <span class="chapter-title">Zodiac Killer<span class="zh-trans"> · 十二宫杀手</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:04:57</span>
+  <span class="chapter-title">Illuminati<span class="zh-trans"> · 光明会</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:12:21</span>
+  <span class="chapter-title">Secret societies<span class="zh-trans"> · 秘密社团</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">rick</span><span class="keyword-tag">spence</span><span class="keyword-tag">going</span><span class="keyword-tag">don</span><span class="keyword-tag">jews</span><span class="keyword-tag">german</span><span class="keyword-tag">got</span><span class="keyword-tag">intelligence</span><span class="keyword-tag">manson</span><span class="keyword-tag">organization</span><span class="keyword-tag">whole</span><span class="keyword-tag">called</span><span class="keyword-tag">name</span><span class="keyword-tag">russian</span><span class="keyword-tag">human</span><span class="keyword-tag">war</span><span class="keyword-tag">secret</span><span class="keyword-tag">germany</span><span class="keyword-tag">party</span><span class="keyword-tag">course</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Well, because we know so little, we tend to go by beliefs. So we believe in this. We believe in that. You believe that your cult leader is the answer to everything. And it seems to be very, very easy to get people to believe things. And then what happens is that whether or not those beliefs have any real basis in reality, they begin to influence your actions. So here again, regrettably in some ways to bring it back to the Nazis, what were the Nazis convinced of? They were convinced that Jews were basically evil aliens. That’s what it comes down to. They weren’t really humans. There’s some sort of evil contamination which we must eradicate. And they set out to do that."</div>
+  <div class="quote-zh">嗯，因为我们所知甚少，所以我们倾向于相信信念。所以我们相信这一点。我们相信这一点。你相信你的邪教领袖是一切问题的答案。让人们相信事情似乎非常非常容易。然后发生的事情是，无论这些信念在现实中是否有任何真正的基础，它们都会开始影响你的行为。那么在这里，遗憾的是，在某些方面将其带回纳粹分子，纳粹分子相信什么？他们确信犹太人基本上是邪恶的外星人。归根结底就是这样。他们不是真正的人类。我们必须根除某种邪恶的污染。他们开始这样做。</div>
+  <div class="quote-meta">— Rick Spence （03:21:09）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"To this day however, you will find people who will insist that it’s actually true because they desperately want it to be true. But this is, I think the milieu that, I like that word apparently that this comes out of, and this is this whole kind of unhealthy mix. So France to me is the only place that in the decade preceding it, that something like this would be concocted. So it was either created by some sort of unknown person there. But I still think that even though he dies in like 1879, that in Maurice Joly’s troubled career, he went from being an opponent of French Emperor, Napoleon III, which is what the whole dialogues was written against."</div>
+  <div class="quote-zh">然而直到今天，你会发现有人坚持认为这确实是真的，因为他们迫切希望它是真的。但我认为这就是我喜欢这个词的背景，这就是整个不健康的组合。所以对我来说，法国是在之前的十年里唯一一个能够炮制出这样的东西的地方。所以它要么是由那里的某个不知名的人创建的。但我仍然认为，尽管他去世于1879年左右，但在莫里斯·乔利坎坷的职业生涯中，他从法国皇帝拿破仑三世的反对者变成了整个对话所反对的对象。</div>
+  <div class="quote-meta">— Rick Spence （02:05:21）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, I guess on one level I’m comforted that there’s somebody actually making decisions as opposed to, I mean, what do you want? Do you want chaos or do you want everything kind of rigidly controlled? And I don’t put much stock in the idea that there actually is some small group of people running everything, because if they were, it would operate more efficiently. I do think that there are various disparate groups of people who think that they’re running things or try to, and that’s what concerns me more than anything else."</div>
+  <div class="quote-zh">好吧，我想在某种程度上，我感到欣慰的是，有人真正做出了决定，而不是，我的意思是，你想要什么？你想要混乱还是想要一切都受到严格控制？我不太相信实际上有一小群人在管理一切，因为如果是他们的话，它的运作会更有效。我确实认为有各种各样不同的人认为他们正在管理或试图管理事物，这就是我最关心的事情。</div>
+  <div class="quote-meta">— Rick Spence （03:19:07）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So it’s a way of manipulating this. Then finally, we come to the E. That I think is the most important, ego. Sometimes people spy or betray because of the egotistical satisfaction that they receive, the sheer kind of Machiavellian joy in deceit. An example of that would be Kim Philby, one of the Cambridge five. Now, Philby was a communist, and he would argue that he always saw himself as serving the communist cause. But he also made this statement, I think it’s in the preface to his autobiography, and he says, one never looks twice at the offer of service in elite force. He’s talking about his recruitment by the NKVD in the 1930s, and he was absolutely chuffed by that."</div>
+  <div class="quote-zh">所以这是操纵这个的一种方法。最后，我们来到E。我认为这是最重要的，自我。有时，人们监视或背叛是因为他们获得了自私的满足，即欺骗中纯粹的马基雅维利式的快乐。剑桥五人之一的金·菲尔比就是一个例子。现在，菲尔比是一名共产主义者，他会争辩说，他始终认为自己是为共产主义事业服务的。但他也发表了这样的声明，我认为这是在他的自传的序言中，他说，人们永远不会再看精锐部队的服役机会。他正在谈论 1930 年代他被内务人民委员部招募的事，他对此非常高兴。</div>
+  <div class="quote-meta">— Rick Spence （00:27:23）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And I think that it just has to do with the changes that have taken place during the war. One of the things that people began looking for was that why was there a war? And we’ve just had this whole disastrous war and the world has been turned upside down. So there has to be some kind of explanation for that. I don’t know. And one of the things this offered to, see there’s this evil plan, there’s this evil plan that has been put into motion, and this could possibly explain what’s taking place. The reason with the protocols were, I think widely bought then and why they still are in many ways is the same reason that the Taxil hoax I was talking about was. Because it told a story that people wanted to believe."</div>
+  <div class="quote-zh">我认为这与战争期间发生的变化有关。人们开始寻找的一件事是为什么会发生战争？我们刚刚经历了这场灾难性的战争，世界已经天翻地覆。所以必须对此有某种解释。我不知道。这提供的一件事是，看看有这个邪恶的计划，有这个邪恶的计划已经付诸实施，这可能可以解释正在发生的事情。我认为这些协议当时被广泛购买的原因是，为什么它们在很多方面仍然如此，这与我所说的塔西尔骗局的原因是一样的。因为它讲述了一个人们愿意相信的故事。</div>
+  <div class="quote-meta">— Rick Spence （02:10:49）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">Most people, most of the time are polite, cooperative, and kind until they’re not.</div>
+  <div class="dialogue-zh">大多数人在大多数时候都是有礼貌、合作和友善的，直到他们不再这样做为止。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:13)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Rick Spence, a historian specializing in the history of intelligence agencies, espionage, secret societies, conspiracies, the occult and military history. This is the Lex Fridman Podcast. To support it, please check out our sponsors in the description. And now dear friends, here’s Rick Spence. KGB and CIA</div>
+  <div class="dialogue-zh">以下是与里克·斯宾塞（Rick Spence）的对话，他是一位历史学家，专门研究情报机构、间谍、秘密结社、阴谋、神秘学和军事历史。这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。亲爱的朋友们，这是里克·斯彭斯。克格勃和中央情报局</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:38)</span>
+  </div>
+  <div class="dialogue-en">You have written and lectured about serial killers, secret societies, cults and intelligence agencies. So we can basically begin at any of these fascinating topics, but let’s begin with intelligence agencies. Which has been the most powerful intelligence agency in history?</div>
+  <div class="dialogue-zh">您撰写并演讲过有关连环杀手、秘密社团、邪教和情报机构的内容。所以我们基本上可以从这些令人着迷的话题开始，但让我们从情报机构开始。历史上最强大的情报机构是哪个？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:00:55)</span>
+  </div>
+  <div class="dialogue-en">The most powerful intelligence agency in history. It’s an interesting question. I’d say probably in terms of historical longevity and consistency of performance that the Russian Intelligence Services. Notice I didn’t say the KGB specifically, but the Russian Intelligence Services, going back to the Czarist period are consistently pretty good. Not infallible, none of them are. Of course, there’s a ...</div>
+  <div class="dialogue-zh">史上最强大的情报机构。这是一个有趣的问题。我想说的可能是俄罗斯情报部门的历史悠久和表现的一致性。请注意，我并没有具体说克格勃，但俄罗斯情报部门，可以追溯到沙皇时期，一直都相当不错。并非绝对正确，没有一个是绝对正确的。当然，有一个</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:01:49)</span>
+  </div>
+  <div class="dialogue-en">So what I mean by that is that if you’re looking at the modern SVR or FSB, which are just two different organizations that used to be part of the one big KGB or the KGB or its predecessors, the Checka, you’re really going back to the late 19th century and the Imperial Russian Intelligence Security Service, generally known as the Okhrana or Okhrana.</div>
+  <div class="dialogue-zh">所以我的意思是，如果你看到现代的 SVR 或 FSB，它们只是两个不同的组织，曾经是克格勃或克格勃或其前身 Checka 的一部分，你真的会回到 19 世纪末的俄罗斯帝国情报安全局，通常被称为 Okhrana 或 Okhrana。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:02:17)</span>
+  </div>
+  <div class="dialogue-en">It’s really the Department of Police, the special Corps of Gendarmes. Their primary job was protecting the imperial regime and protecting it against imperial or other interior enemies, Revolutionaries for the most part. They got very, very good at that by co-opting people within those movements, infiltrating and recruiting informers, [inaudible 00:02:41] provocateurs. In fact, they excelled at the...</div>
+  <div class="dialogue-zh">这实际上是警察局，特种宪兵队。他们的主要工作是保护帝国政权并保护其免受帝国或其他内部敌人的侵害，其中大部分是革命者。他们非常非常擅长在这些运动中拉拢人员、渗透和招募告密者、[听不清 00:02:41] 挑衅者。事实上，他们在这方面表现出色</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:02:46)</span>
+  </div>
+  <div class="dialogue-en">Person who placed aside an organization to cause trouble, usually maneuver them into a position of leadership, and they provoke actions that can then allow you to crack down on that is many sort of lure or bring the target organization into any legal or open status that it can be more effectively suppressed. They were very good at that. So good that by the early 20th century in the years preceding...</div>
+  <div class="dialogue-zh">搁置一个组织来制造麻烦的人，通常会操纵他们担任领导职务，然后他们挑起行动，然后你可以打击这种诱惑，或者使目标组织进入任何合法或公开的状态，以便更有效地镇压。他们非常擅长这一点。太好了，到了 20 世纪初期的前几年</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:03:42)</span>
+  </div>
+  <div class="dialogue-en">Nothing was discussed at any central committee meeting of any revolutionary group that the Okhrana wasn’t immediately aware of, and they often had people in positions to influence what those decisions were. Of course, that raises an interesting question, is that if they were that good and they had infiltrated and effectively controlled most of the opposition, then how did the regime get overthrown...</div>
+  <div class="dialogue-zh">任何革命团体的中央委员会会议上都没有讨论任何奥克拉纳没有立即意识到的内容，而且他们经常派人影响这些决定。当然，这就提出了一个有趣的问题，如果他们真有那么好，已经渗透并有效控制了大部分反对派，那么政权是如何被推翻的呢？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:04:40)</span>
+  </div>
+  <div class="dialogue-en">Bolsheviks are nowhere to be seen. Trotsky and Lenin are nowhere to be seen. They have nothing to do with that. That has to do effectively with a political conspiracy within the Russian parliament, the Duma. To unseat and emperor, they thought was bungling the war and was essentially a loser to begin with. It was a coup d’etat, a parliamentary coup d’etat. The temporary or provisional government t...</div>
+  <div class="dialogue-zh">布尔什维克无处可见。托洛茨基和列宁却不见踪影。他们与此无关。这实际上与俄罗斯议会杜马内部的政治阴谋有关。他们认为，推翻皇帝就是搞砸了战争，本质上就是一个失败者。这是一场政变，一场议会政变。临时或临时政府</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:05:46)</span>
+  </div>
+  <div class="dialogue-en">It was the Tsarist political system itself that did that. What then transpired was that the Okhrana and its method, and many of its agents then immediately segued over into the new Soviet Security Service. So one of the first things that Lenin did in December of 1917, within a month of seizing power since the hold on power was tenuous at best, was that while you were going to need some kind of org...</div>
+  <div class="dialogue-zh">这是沙皇政治制度本身造成的。随后发生的事情是，国家安全局及其方法，以及它的许多特工立即转入新成立的苏联安全部门。因此，列宁在 1917 年 12 月夺取政权后一个月内所做的第一件事就是，尽管你需要某种组织，因为对权力的控制充其量也很脆弱。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:07:02)</span>
+  </div>
+  <div class="dialogue-en">So why would they do that? Well, they were professionals. They also needed to eat and things were somewhat precarious. So if your job is to be an agent provocateur, if your job is to infiltrate targeted organizations and lead them astray, you do that for whoever pays you. That’s part of the professionalism, which goes in. Under the Soviets, the Soviet Intelligence Services are also very good at th...</div>
+  <div class="dialogue-zh">那么他们为什么要这么做呢？嗯，他们是专业人士。他们也需要吃饭，事情有些不稳定。因此，如果你的工作是成为一名特务挑衅者，如果你的工作是渗透到目标组织并引导他们误入歧途，那么无论谁付钱给你，你都会这样做。这是专业精神的一部分。在苏联时期，苏联情报部门也非常擅长</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:07:59)</span>
+  </div>
+  <div class="dialogue-en">Then placing those people in high positions, the ultimate goal, of course, is to get your people into positions of leadership and influence in the opposing intelligence service. So they did. Of course, it all fell apart and they ended up in …Philby ended up living the last part of his life in exile in Moscow, but they got their money’s worth out of him. You can also find this in KGB infiltration, ...</div>
+  <div class="dialogue-zh">然后把这些人放在高位，最终的目标当然是让你的人在对方情报部门中担任领导和影响力的职位。他们就这么做了。当然，一切都崩溃了，他们最终……菲尔比在莫斯科流亡，度过了生命的最后一段时光，但他们从他身上得到了值得的钱。你也可以在克格勃渗透中找到这一点，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:57)</span>
+  </div>
+  <div class="dialogue-en">So the scale of the infiltration, the number of people and the skill of it, is there a case to be made that the Okhrana and the Chaka orchestrated both the components of the Russian Revolution as you described them?</div>
+  <div class="dialogue-zh">那么，渗透的规模、人员数量和技巧，是否有理由证明 Okhrana 和 Chaka 精心策划了您所描述的俄罗斯革命的两个组成部分？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:09:14)</span>
+  </div>
+  <div class="dialogue-en">Well, there’s an interesting question for me. There are all kinds of questions about this. One of the questions is whether or not Lenin was an Okhrana agent. Okay, I’ve just said heresy. I’ll do that quite often. I am a heretic and proud of it.</div>
+  <div class="dialogue-zh">嗯，对我来说有一个有趣的问题。对此有各种各样的疑问。问题之一是列宁是否是奥克拉纳的特工。好吧，我刚才说的是异端邪说。我会经常这样做。我是一个异教徒并为此感到自豪。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:31)</span>
+  </div>
+  <div class="dialogue-en">Great.</div>
+  <div class="dialogue-zh">伟大的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:09:33)</span>
+  </div>
+  <div class="dialogue-en">Why would you possibly say that Lenin could have been an Okhrana agent? Well, let’s look what he managed to do. So you had, coming into the 20th century, nominally, a single Marxist movement, the Russian social Democratic Labor Party, and Bolsheviks and Mensheviks majority- ites and minority-ites are merely factions of that party. They always agreed that they were all Marxists. We all believe in d...</div>
+  <div class="dialogue-zh">你为什么会说列宁可能是 Okhrana 的特工？好吧，让我们看看他做了什么。因此，进入20世纪，名义上只有一个马克思主义运动，即俄罗斯社会民主工党，而布尔什维克和孟什维克的多数派和少数派只是该党的派别。他们始终一致认为自己都是马克思主义者。我们都相信d</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:10:31)</span>
+  </div>
+  <div class="dialogue-en">Once you have the state, then you induce socialism from above. Whereas the majority of the people, the so-called Mensheviks, the minority-ites who are oddly-enough, the vast majority of the party, that’s one of the first things. How do you lose that argument? How does the minority get to grab the name? But Lenin did that. So what Lenin wanted was a conspiratorial party of committed revolutionaries...</div>
+  <div class="dialogue-zh">一旦你拥有了国家，你就可以自上而下地诱导社会主义。而大多数人，即所谓的孟什维克，奇怪的少数派，党的绝大多数，这是首要的事情之一。你怎么会输掉这场争论呢？少数人如何获得这个名字？但列宁做到了。所以列宁想要的是一个由坚定的革命者组成的阴谋党</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:11:38)</span>
+  </div>
+  <div class="dialogue-en">But look, they lost. So what Lenin managed to do starting around 1903, continuing under this, is he managed to divide, to take what had been a single Marxist party and split it into angry contending factions because he and his Bolsheviks run one side advocating a much more militant conspiratorial policy. The discombobulated Mensheviks were over on the other. And in between were a lot of people who...</div>
+  <div class="dialogue-zh">但你看，他们输了。因此，从 1903 年左右开始，列宁成功地做到了这一点，并继续这样做，他成功地分裂了曾经的单一马克思主义政党，并将其分裂成愤怒的相互竞争的派别，因为他和他的布尔什维克站在一边，主张更加激进的阴谋政策。另一方面，混乱的孟什维克则结束了。中间有很多人</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:12:52)</span>
+  </div>
+  <div class="dialogue-en">I find that suspicious. It’s one of those things that it’s so convenient in a way, is that I’m not necessarily sure that was an accident. There’s also this whole question to me as to what was going on within the Okhrana itself. Now, this is one of these questions we may come to later about how intelligence agencies interact or serve the governments to which they are theoretically subordinate. They...</div>
+  <div class="dialogue-zh">我觉得这很可疑。从某种程度上来说，这是非常方便的事情之一，就是我不一定确定这是一次意外。我也有一个关于 Okhrana 内部发生的事情的完整问题。现在，这是我们稍后可能会遇到的关于情报机构如何与它们理论上所属的政府互动或服务的问题之一。他们</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Rick Spence <span class="dialogue-time">(00:13:43)</span>
+  </div>
+  <div class="dialogue-en">They also know how to leverage that information in a way to get people to do what you want them to do. So an argument can be made, again, an argument, not a fact, merely an opinion, which is mostly what history is made out of opinions is that at some point between about 1900 and 1917, people within the Okhrana were playing their own game. That game took them in a direction, which meant that contin...</div>
+  <div class="dialogue-zh">他们还知道如何利用这些信息来让人们做你希望他们做的事情。因此，可以再次提出一个论点，一个论点，不是事实，只是一种观点，历史主要是由观点构成的，即在大约 1900 年到 1917 年之间的某个时刻，Okhrana 内部的人们在玩自己的游戏。那场比赛把他们带向了一个方向，这意味着继续</div>
+</div>
+    <a href="https://lexfridman.com/rick-spence-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="book-1984-george-orwell.html" class="card" style="text-decoration:none">
+  <div class="card-title">Book 1984 George Orwell</div>
+  <div class="card-meta">Book 1984 George Orwell</div>
+</a>
+<a href="daniel-schmachtenberger.html" class="card" style="text-decoration:none">
+  <div class="card-title">Daniel Schmachtenberger: Steering Civilization Away from Self-Destruction</div>
+  <div class="card-meta">Daniel Schmachtenberger</div>
+</a>
+<a href="douglas-murray.html" class="card" style="text-decoration:none">
+  <div class="card-title">Douglas Murray: Racism, Marxism, and the War on the West</div>
+  <div class="card-meta">Douglas Murray</div>
+</a>
+<a href="glenn-loury.html" class="card" style="text-decoration:none">
+  <div class="card-title">Glenn Loury: Race, Racism, Identity Politics, and Cancel Culture</div>
+  <div class="card-meta">Glenn Loury</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cenk Uygur - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Cenk Uygur</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Cenk Uygur</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/cenk-uygur.html" style="font-size:16px;color:#818cf8;font-weight:600">Cenk Uygur</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">43,988 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/cenk-uygur-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:03</span>
+  <span class="chapter-title">Progressivism<span class="zh-trans"> · 进步主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">8:12</span>
+  <span class="chapter-title">Communism<span class="zh-trans"> · 共产主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">23:00</span>
+  <span class="chapter-title">Capitalism<span class="zh-trans"> · 资本主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">29:03</span>
+  <span class="chapter-title">Corruption<span class="zh-trans"> · 腐败</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">33:49</span>
+  <span class="chapter-title">Money in politics<span class="zh-trans"> · 政治中的金钱</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">50:36</span>
+  <span class="chapter-title">Fixing politics<span class="zh-trans"> · 解决政治问题</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:09:47</span>
+  <span class="chapter-title">Meritocracy &amp; DEI<span class="zh-trans"> · 精英管理与 DEI</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:20:45</span>
+  <span class="chapter-title">Far-left vs far-right<span class="zh-trans"> · 极左 vs 极右</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:55:19</span>
+  <span class="chapter-title">Donald Trump<span class="zh-trans"> · 唐纳德·特朗普</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:15:36</span>
+  <span class="chapter-title">Joe Biden<span class="zh-trans"> · 乔·拜登</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:34:03</span>
+  <span class="chapter-title">Bernie Sanders<span class="zh-trans"> · 伯尼·桑德斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:47:32</span>
+  <span class="chapter-title">Kamala Harris<span class="zh-trans"> · 卡玛拉·哈里斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:55:00</span>
+  <span class="chapter-title">Harris vs Trump presidential debate<span class="zh-trans"> · 哈里斯 vs 特朗普总统辩论</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:08:31</span>
+  <span class="chapter-title">RFK Jr<span class="zh-trans"> · 小RFK</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:18:12</span>
+  <span class="chapter-title">The Young Turks<span class="zh-trans"> · 青年土耳其党</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:26:25</span>
+  <span class="chapter-title">Joe Rogan<span class="zh-trans"> · 乔·罗根</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:36:05</span>
+  <span class="chapter-title">Propaganda<span class="zh-trans"> · 宣传</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:43:22</span>
+  <span class="chapter-title">Conspiracy theories<span class="zh-trans"> · 阴谋论</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:51:09</span>
+  <span class="chapter-title">Israel-Palestine<span class="zh-trans"> · 以色列-巴勒斯坦</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">going</span><span class="keyword-tag">don</span><span class="keyword-tag">cenk</span><span class="keyword-tag">uygur</span><span class="keyword-tag">money</span><span class="keyword-tag">media</span><span class="keyword-tag">got</span><span class="keyword-tag">trump</span><span class="keyword-tag">biden</span><span class="keyword-tag">said</span><span class="keyword-tag">corporate</span><span class="keyword-tag">guys</span><span class="keyword-tag">cetera</span><span class="keyword-tag">saying</span><span class="keyword-tag">doing</span><span class="keyword-tag">politics</span><span class="keyword-tag">doesn</span><span class="keyword-tag">bernie</span><span class="keyword-tag">war</span><span class="keyword-tag">says</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"So communism makes no sense at all, totally opposed to human nature. It never works. It always evolves into dictatorship because it is not built for human nature. We’re never going to act like that. It’s not in our DNA. You could try to wish it into existence than they have, and it never works. And it’s because once you have almost no rules in terms of, “Oh, we’re all equal,” even though communism eventually winds up having an enormous amount of rules, it creates a power vacuum. When you say, “Hey, there’s no structure of power here. We’re all equal. It’s a flat line,” one guy usually gets up because that’s human nature, and goes, “I don’t think so. I think if you’re going to leave a power vacuum, I’m going to take that power vacuum.”"</div>
+  <div class="quote-zh">所以共产主义根本没有任何意义，完全违背人性。它永远不会起作用。它总是演变成独裁，因为它不是为人性而建立的。我们永远不会那样做。它不存在于我们的 DNA 中。你可以尝试比他们更希望它存在，但它永远不会成功。这是因为一旦你几乎没有“哦，我们都是平等的”规则，即使共产主义最终拥有大量规则，它也会造成权力真空。当你说，“嘿，这里没有权力结构。我们都是平等的。这是一条平线，”一个人通常会站起来，因为这是人性，然后说，“我不这么认为。我想如果你要留下权力真空，我就会填补这个权力真空。”</div>
+  <div class="quote-meta">— Cenk Uygur （00:09:32）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Oh, 100%. Okay. So, let me explain. Again, people for the uninitiated, they think, “Oh, that sounds conspiratorial.” Well, in this case, that’s actually somewhat true because people now know about this. It’s the Powell memo, the most infamous political memo in history. Lewis Powell writes a memo for the Chamber of Commerce in 1971. That’s basically a blueprint for how the Chamber of Commerce can take over the government. Lewis Powell explains, one of the most important things you have to do is take over the media, but even more important than that is taking over the Supreme Court, because the Supreme Court is the ultimate arbiter of what is allowed and not allowed. He says, “We need ‘activist judges’ to help business interests on the court.”"</div>
+  <div class="quote-zh">哦，100%。好的。那么，让我解释一下。再说一次，对于那些不了解情况的人来说，他们会想，“哦，这听起来像是阴谋。”嗯，在这种情况下，这实际上有点正确，因为人们现在知道了这一点。这是鲍威尔备忘录，历史上最臭名昭著的政治备忘录。刘易斯·鲍威尔 (Lewis Powell) 于 1971 年为商会撰写了一份备忘录。这基本上是商会如何接管政府的蓝图。刘易斯·鲍威尔解释说，你要做的最重要的事情之一就是接管媒体，但比这更重要的是接管最高法院，因为最高法院是允许和不允许什么的最终仲裁者。他说：“我们需要‘积极分子法官’来帮助法庭上的商业利益。”</div>
+  <div class="quote-meta">— Cenk Uygur （00:42:27）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yes. You know why? Because I’m a real populist, and I believe in the people. So, I drive the establishment crazy because they don’t believe in the people. They think, “Oh, have you seen MAGA? Have you seen these guys? Have you seen the radicals on the left? We’re so much smarter. You know how many Ivy League degrees we have? We know what we’re doing.” No, you don’t. No, everybody to some degree looks out for their own interests. Why I like capitalism and why I love democracy is because it’s the wisdom of the crowd. So, in the long run, the crowd is right. Oftentimes in the short term, we’re wrong. But the wisdom of the crowd in the long run is much, much better than the elites that run things."</div>
+  <div class="quote-zh">是的。你知道为什么吗？因为我是一个真正的民粹主义者，我相信人民。所以，我让当权者发疯，因为他们不相信人民。他们想，“哦，你见过 MAGA吗？你见过这些人吗？你见过左派激进分子吗？我们聪明多了。你知道我们有多少常春藤盟校学位吗？我们知道我们在做什么。”不，你不知道。不，每个人都在某种程度上关注自己的利益。我为什么喜欢资本主义，为什么我喜欢民主，因为它是群众的智慧。所以，从长远来看，大众是对的。从短期来看，我们常常是错的。但从长远来看，群众的智慧比管理事物的精英要好得多。</div>
+  <div class="quote-meta">— Cenk Uygur （00:56:40）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Because people are taught to just be in the tribe they’re in. And to believe it a hundred percent. I’ve gotten kicked out of every… I might be the most attacked man in internet history, partly because we’ve been around forever. And partly because I disagree with every part of the political spectrum, because I believe in independent thought. And the minute you vary a little bit, people go nuts. And so the far left tribe is going to go with their preset ideology, just like the far right tribe is."</div>
+  <div class="quote-zh">因为人们被教导要融入他们所在的部落。并且要百分百相信这一点。我被踢出了每一个……我可能是互联网历史上受攻击最多的人，部分原因是我们一直存在。部分原因是我不同意政治光谱的各个部分，因为我相信独立思想。一旦你稍微改变一点，人们就会发疯。因此，极左部落将遵循他们预设的意识形态，就像极右部落一样。</div>
+  <div class="quote-meta">— Cenk Uygur （01:15:28）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But Trump says, “Oh, I don’t think there’s anyone at Kamala Harris’s rallies, all the pictures are AI.” Let’s say he says that in a debate because he’s liable to say anything. You just say, okay, so you think every reporter that was there, every photographer that was there, every human being that was there, they’re all lying. They have a conspiracy of thousands of people, but none of them were actually there. Do you understand how insane you sound?"</div>
+  <div class="quote-zh">但特朗普说，“哦，我认为卡马拉·哈里斯的集会上没有人，所有图片都是人工智能。”假设他在辩论中这么说，因为他可能会说什么。你只是说，好吧，所以你认为在场的每个记者，在场的每个摄影师，在场的每个人，他们都在撒谎。他们有一个数千人的阴谋，但实际上没有一个人在场。你知道你听起来有多疯狂吗？</div>
+  <div class="quote-meta">— Cenk Uygur （02:58:56）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Cenk Uygur <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">Communism makes no sense at all, totally opposed to human nature. It never works. It always evolves into dictatorship. It creates a power vacuum. When you say, “Hey, there’s no structure of power here. We’re all equal. It’s a flat line,” one guy usually gets up, because that’s human nature, and goes, “I don’t think so. I think if you’re going to leave a power vacuum, I’m going to take that power v...</div>
+  <div class="dialogue-zh">共产主义毫无意义，完全违背人性。它永远不会起作用。它总是演变成独裁统治。它造成了权力真空。当你说，“嘿，这里没有权力结构。我们都是平等的。这是一条平线，”一个人通常会站起来，因为这是人性，然后说，“我不这么认为。我认为如果你要留下权力真空，我会采取这种权力v</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Cenk Uygur <span class="dialogue-time">(00:00:25)</span>
+  </div>
+  <div class="dialogue-en">Corporatism hates competition. It wants monopoly and oligopoly power. Whereas capitalism loves competition and wants the free markets. When mainstream media has you hooked, you got no hope because you don’t have the right information. You have propaganda, you have marketing. You don’t have real news. When you’re in the online world, it’s chaotic. And don’t get me wrong, it’s got plenty of downside...</div>
+  <div class="dialogue-zh">社团主义讨厌竞争。它想要垄断和寡头垄断权力。而资本主义喜欢竞争并想要自由市场。当主流媒体让你着迷时，你就没有希望了，因为你没有正确的信息。你有宣传，你有营销。你没有真正的消息。当你身处网络世界时，一切都是混乱的。别误会我的意思，它有很多缺点</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:11)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Cenk Uygur, a progressive political commentator and host of The Young Turks. As I’ve said before, I will speak with everyone, including on the left and the right of the political spectrum, always in good faith, with empathy, rigor, and backbone. Sometimes I fail. Sometimes I say stupid, inaccurate, ineloquent things, and I frequently change my mind as I’m learn...</div>
+  <div class="dialogue-zh">以下是与进步政治评论员、青年土耳其党主持人岑克·维吾尔的对话。正如我之前所说，我将始终本着善意、同理心、严谨和坚定的态度与所有人交谈，包括政治领域的左派和右派。有时我会失败。有时我会说一些愚蠢的、不准确的、不雄辩的话，并且随着我的学习，我经常改变主意</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:03)</span>
+  </div>
+  <div class="dialogue-en">You wrote a book.</div>
+  <div class="dialogue-zh">你写了一本书。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Cenk Uygur <span class="dialogue-time">(00:02:04)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:05)</span>
+  </div>
+  <div class="dialogue-en">A manifesto that outlines the progressive vision for America. So the big question, what are some defining ideas of progressivism?</div>
+  <div class="dialogue-zh">一份概述美国进步愿景的宣言。所以最大的问题是，进步主义的一些定义思想是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Cenk Uygur <span class="dialogue-time">(00:02:14)</span>
+  </div>
+  <div class="dialogue-en">Yes. So in order to do that, Lex, we got to talk about where we are in the political spectrum. And in fact, there’s two different spectrums now. People often think of left, right, and that’s true, that exists, but layered on top of that is now populist versus establishment. So I’m center-left on the left, right spectrum, but I’m all the way on that populist end of the second spectrum. So where doe...</div>
+  <div class="dialogue-zh">是的。因此，为了做到这一点，莱克斯，我们必须讨论我们在政治领域的位置。事实上，现在有两个不同的范围。人们经常想到左派、右派，这是事实，确实存在，但除此之外现在还有民粹主义与建制派的对抗。所以我在左、右光谱中属于中左翼，但我一直在第二光谱的民粹主义一端。那么母鹿在哪里</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Cenk Uygur <span class="dialogue-time">(00:03:16)</span>
+  </div>
+  <div class="dialogue-en">So expand the circle of liberty. Everybody’s in favor of that, right? No, absolutely not. Certainly the King of England was not in favor of expanding the circle of liberty, and the Founding Fathers said, “We’re going to expand it.” And they expanded it to propertied white men. And then progressives have been … they’re progressives because they expanded the circle of liberty. They, then from then o...</div>
+  <div class="dialogue-zh">所以扩大自由的范围。大家都赞成，对吧？不，绝对不是。 Certainly the King of England was not in favor of expanding the circle of liberty, and the Founding Fathers said, “We’re going to expand it.”他们将其扩展到有产的白人。然后进步主义者……他们是进步主义者，因为他们扩大了自由的范围。他们，那么从那时起o</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Cenk Uygur <span class="dialogue-time">(00:04:08)</span>
+  </div>
+  <div class="dialogue-en">And I don’t believe that undocumented immigrants should immediately be citizens or anything along those lines. But I do believe in expanding liberty overall. And the contours of that are what’s interesting. And then you see justice for all. Everybody’s for justice. No. Right now, marijuana possession is still illegal in a lot of parts of the country. Now, a lot of right-wingers and left-wingers ag...</div>
+  <div class="dialogue-zh">我不认为无证移民应该立即成为公民或类似的东西。但我确实相信全面扩大自由。有趣的是它的轮廓。然后你就会看到所有人的正义。每个人都是为了正义。不。目前，在该国许多地区持有大麻仍然是非法的。现在，很多右翼分子和左翼分子</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Cenk Uygur <span class="dialogue-time">(00:04:55)</span>
+  </div>
+  <div class="dialogue-en">So equality of opportunity is an interesting one because the far left will say, at least some portions of them will say, equality of results. So progressives just want a fair chance, so free college education, but afterwards you don’t get to have exact same results as either the wealthiest person or we’re not all going to be equal. We don’t have equal talent, skills, abilities, et cetera.</div>
+  <div class="dialogue-zh">因此，机会平等是一个有趣的问题，因为极左派会说，至少他们中的某些人会说，结果平等。所以进步人士只是想要一个公平的机会，所以免费的大学教育，但之后你不会得到与最富有的人完全相同的结果，或者我们不会都是平等的。我们没有同等的天赋、技能、能力等等。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:21)</span>
+  </div>
+  <div class="dialogue-en">There’s a lot of questions I can ask there. So on the circle of liberty, yes, so expanding the number of people whose freedoms are protected. But what about the magnitude of freedom for each individual person? So expanding the freedom of the individual and protecting the freedoms of an individual. It seems like progressives are more willing to expand the size of government where government can do ...</div>
+  <div class="dialogue-zh">我可以在那里问很多问题。所以在自由范围上，是的，所以扩大了自由受到保护的人数。但每个人的自由程度又如何呢？因此扩大个人的自由并保护个人的自由。进步派似乎更愿意在政府力所能及的范围内扩大政府规模</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Cenk Uygur <span class="dialogue-time">(00:05:49)</span>
+  </div>
+  <div class="dialogue-en">So Lex, what we’re probably going to talk about a lot today is balance. And so a lot of people think, “Oh, I am on the right, I’m on left.” And that comes with a certain preset ideology. So the right is always correct. The left is always correct. So there’s two problems with that. Number one, how could you possibly believe in a preset ideology if you’re an independent thinker? It’s literally, by d...</div>
+  <div class="dialogue-zh">所以莱克斯，我们今天可能要讨论的很多内容是平衡。所以很多人会想，“哦，我在右边，我在左边。”这带有一定的预设意识形态。所以正确的永远是正确的。左边永远是正确的。所以这有两个问题。第一，如果你是一个独立思考者，你怎么可能相信预设的意识形态？从字面上看，是由 d</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Cenk Uygur <span class="dialogue-time">(00:06:47)</span>
+  </div>
+  <div class="dialogue-en">And that gets into a really interesting nuance because mainstream media, in my opinion, is the matrix, and its job is to delude you into thinking corporate rule is great for you and we should never change it and the status quo is wonderful. So they have created a false middle. What mainstream media calls moderate, is actually, in my opinion, extremist corporate ideology. So for example, they’ll sa...</div>
+  <div class="dialogue-zh">这变成了一个非常有趣的细微差别，因为在我看来，主流媒体是一个矩阵，它的作用是欺骗你，让你认为公司规则对你来说很好，我们永远不应该改变它，现状是美好的。所以他们创造了一个虚假的中间。主流媒体所说的温和，在我看来实际上是极端的企业意识形态。例如，他们会说</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Cenk Uygur <span class="dialogue-time">(00:07:36)</span>
+  </div>
+  <div class="dialogue-en">But wait, let’s look at your positions. You’re against paid family leave, that polls at 84%. So you’re a radical corporatist who say that women should be forced back into work the day after they have birth. You’re against a higher minimum wage, you’re for every corporate position, and they all poll at 33% or less. So Joe Manchin is not at all a moderate, and this applies to almost every corporate ...</div>
+  <div class="dialogue-zh">但是等等，让我们看看你们的立场。 84% 的人反对带薪家庭假。所以你是一个激进的社团主义者，他说女性应该在产后第二天就被迫重返工作岗位。你反对提高最低工资，你支持所有公司职位，而他们的民调支持率都在 33% 或更低。所以乔·曼钦根本不是一个温和派，这适用于几乎所有公司</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:11)</span>
+  </div>
+  <div class="dialogue-en">So that’s an interesting distinction here. So you’re actually, as far as I understand, pro-capitalism, which is an interesting place to be. That’s the thing that probably makes you center-left and then still populist. You’re full of beautiful contradictions, let’s say this, which will be great to untangle. But what’s the difference between corporatism and capitalism? Is there a difference?</div>
+  <div class="dialogue-zh">这是一个有趣的区别。所以据我所知，你实际上是支持资本主义的，这是一个有趣的地方。这可能会让你成为中左派，但仍然是民粹主义者。你充满了美丽的矛盾，比方说，这将是很好的解开。但法团主义和资本主义有什么区别呢？有区别吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Cenk Uygur <span class="dialogue-time">(00:08:33)</span>
+  </div>
+  <div class="dialogue-en">Yeah, so I really believe in capitalism. I don’t think that there’s really a second choice. Where it gets super interesting is the distinction between capitalism and socialism, because that’s not at all as clear as people think it is. And people often say socialism and communism as synonyms when they’re not synonyms. And so I view it as there’s basically four distinct areas. It’s obviously a spect...</div>
+  <div class="dialogue-zh">是的，所以我真的相信资本主义。我不认为真的有第二个选择。最有趣的地方是资本主义和社会主义之间的区别，因为这根本不像人们想象的那么清晰。人们经常将社会主义和共产主义视为同义词，但实际上它们并不是同义词。所以我认为它基本上有四个不同的领域。明显是一个看点</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Cenk Uygur <span class="dialogue-time">(00:09:32)</span>
+  </div>
+  <div class="dialogue-en">So communism makes no sense at all, totally opposed to human nature. It never works. It always evolves into dictatorship because it is not built for human nature. We’re never going to act like that. It’s not in our DNA. You could try to wish it into existence than they have, and it never works. And it’s because once you have almost no rules in terms of, “Oh, we’re all equal,” even though communism...</div>
+  <div class="dialogue-zh">所以共产主义根本没有任何意义，完全违背人性。它永远不会起作用。它总是演变成独裁，因为它不是为人性而建立的。我们永远不会那样做。它不存在于我们的 DNA 中。你可以尝试比他们更希望它存在，但它永远不会成功。这是因为一旦你几乎没有“哦，我们都是平等的”的规则，即使共产主义</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:23)</span>
+  </div>
+  <div class="dialogue-en">That’s actually a really interesting way to put it, because when everyone is equal, nobody is in power, and human nature is such that there’s everybody [inaudible 00:10:33] that there’s a will to power. So when you create a power vacuum, somebody’s going to fill it. So the alternative is to have people in power, but there’s a balance of power, and then there’s a democratic system that elects the p...</div>
+  <div class="dialogue-zh">这实际上是一种非常有趣的表达方式，因为当每个人都是平等的时候，没有人掌权，而人性就是每个人 [听不清 00:10:33] 都有权力意志。因此，当你创造权力真空时，就会有人来填补它。因此，另一种选择是让人民掌权，但有权力平衡，然后有一个民主制度，选举出总统。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Cenk Uygur <span class="dialogue-time">(00:10:47)</span>
+  </div>
+  <div class="dialogue-en">That is exactly it, Lex. You got it exactly right, in my opinion. Okay, so that’s why communism never works and can never work. So it’s an idea of we’re all going to work as hard as we possibly can and take only what we need. Where? When has that ever happened in the history of humanity? We’re just not built that way. So we can get into that debate with my friends on the left, et cetera. Now, corp...</div>
+  <div class="dialogue-zh">就是这样，莱克斯。在我看来，你说得完全正确。好吧，这就是为什么共产主义从来都行不通，也永远行不通。因此，我们所有人都将尽我们所能努力工作，只获取我们需要的东西。在哪里？人类历史上什么时候发生过这样的事？我们只是不是那样构建的。所以我们可以和我的左翼朋友们进行辩论，等等。现在，公司</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Cenk Uygur <span class="dialogue-time">(00:11:43)</span>
+  </div>
+  <div class="dialogue-en">But if you love corporations and corporate tax cuts and everything in favor of corporations, you’re magically called a moderate when you actually, according to the polling, have super extreme positions that the American people hate. And by the way, that’s part of the reason for the rise of Trump. We can come back to that. But the second shell game is taking out capitalism, putting in corporatism, ...</div>
+  <div class="dialogue-zh">但如果你喜欢公司和公司减税以及一切有利于公司的事情，你就会神奇地被称为温和派，而根据民意调查，你实际上拥有美国人民讨厌的超级极端立场。顺便说一句，这也是特朗普崛起的部分原因。我们可以回到这一点。但第二个骗局是剔除资本主义，引入法团主义，</div>
+</div>
+    <a href="https://lexfridman.com/cenk-uygur-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a>
+<a href="chris-blattman.html" class="card" style="text-decoration:none">
+  <div class="card-title">Chris Blattman: War and Violence</div>
+  <div class="card-meta">Chris Blattman</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

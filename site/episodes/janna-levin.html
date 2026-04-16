@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Janna Levin - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Janna Levin</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Janna Levin</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/janna-levin.html" style="font-size:16px;color:#818cf8;font-weight:600">Janna Levin</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">30,282 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/janna-levin-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#8b5cf622;color:#8b5cf6;border:1px solid #8b5cf644;font-size:13px;padding:4px 12px">物理与宇宙学</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#06b6d422;color:#06b6d4;border:1px solid #06b6d444;font-size:13px;padding:4px 12px">太空与探索</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:03</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:03</span>
+  <span class="chapter-title">Black holes<span class="zh-trans"> · 黑洞</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">10:37</span>
+  <span class="chapter-title">Formation of black holes<span class="zh-trans"> · 黑洞的形成</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">21:28</span>
+  <span class="chapter-title">Oppenheimer and the Atomic Bomb<span class="zh-trans"> · 奥本海默和原子弹</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">27:50</span>
+  <span class="chapter-title">Inside the black hole<span class="zh-trans"> · 黑洞内部</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:53</span>
+  <span class="chapter-title">Supermassive black holes<span class="zh-trans"> · 超大质量黑洞</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">44:22</span>
+  <span class="chapter-title">Physics of spacetime<span class="zh-trans"> · 时空物理学</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">47:25</span>
+  <span class="chapter-title">General relativity<span class="zh-trans"> · 广义相对论</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">52:56</span>
+  <span class="chapter-title">Gravity<span class="zh-trans"> · 重力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:09:29</span>
+  <span class="chapter-title">Information paradox<span class="zh-trans"> · 信息悖论</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:17:59</span>
+  <span class="chapter-title">Fuzzballs &amp; soft hair<span class="zh-trans"> · 毛球和柔软的头发</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:21:10</span>
+  <span class="chapter-title">ER = EPR<span class="zh-trans"> · ER=EPR</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:27:49</span>
+  <span class="chapter-title">Firewall<span class="zh-trans"> · 防火墙</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:36:41</span>
+  <span class="chapter-title">Extra dimensions<span class="zh-trans"> · 额外尺寸</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:39:06</span>
+  <span class="chapter-title">Aliens<span class="zh-trans"> · 外星人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:54:42</span>
+  <span class="chapter-title">Wormholes<span class="zh-trans"> · 虫洞</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:05:40</span>
+  <span class="chapter-title">Dark matter and dark energy<span class="zh-trans"> · 暗物质和暗能量</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:15:43</span>
+  <span class="chapter-title">Gravitational waves<span class="zh-trans"> · 引力波</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:27:51</span>
+  <span class="chapter-title">Alan Turing and Kurt Godel<span class="zh-trans"> · 艾伦·图灵和库尔特·哥德尔</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">janna</span><span class="keyword-tag">levin</span><span class="keyword-tag">black</span><span class="keyword-tag">space</span><span class="keyword-tag">hole</span><span class="keyword-tag">don</span><span class="keyword-tag">holes</span><span class="keyword-tag">quantum</span><span class="keyword-tag">energy</span><span class="keyword-tag">going</span><span class="keyword-tag">light</span><span class="keyword-tag">event</span><span class="keyword-tag">dark</span><span class="keyword-tag">horizon</span><span class="keyword-tag">universe</span><span class="keyword-tag">gravity</span><span class="keyword-tag">matter</span><span class="keyword-tag">theory</span><span class="keyword-tag">mass</span><span class="keyword-tag">earth</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"But where he ends up is the idea of a universal machine that computes, essentially can take different software and execute different jobs. We don’t have a different computer to connect to the internet than we do to write papers. It’s one machine and one piece of hardware. But it can do all of this huge variety of tasks. And so, he really does invent the computer, essentially. And famously, he uses that thinking in a very primitive form in the war effort where he’s recruited to help break the German enigma code, which is heavily encrypted and largely believed to be uncrackable code. And people believe that Turing and his very small group actually turned the tide of the war in favor of the allies, precisely by using a combination of this thinking and just sheer ingenuity and some luck."</div>
+  <div class="quote-zh">但他最终提出了一种通用机器的想法，它可以进行计算，本质上可以采用不同的软件并执行不同的工作。我们没有一台用来连接互联网的计算机和用来写论文的计算机不同。它是一台机器和一件硬件。但它可以完成所有这些种类繁多的任务。因此，从本质上讲，他确实发明了计算机。众所周知，他在战争中以一种非常原始的形式运用了这种思维，他被招募来帮助破解德国恩尼格码，这种密码被高度加密，并且在很大程度上被认为是无法破解的代码。人们相信，图灵和他的一小群人实际上扭转了战争的潮流，有利于盟友，正是通过结合这种思维、纯粹的聪明才智和一些运气。</div>
+  <div class="quote-meta">— Janna Levin （02:31:16）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think, so much. I don’t want to promote the trite trope of the mad genius, if you’re brilliant, you are insane. I don’t think that. I don’t think if your insane, you’re brilliant. But I do think somebody who’s very brilliant, who also chooses not to go for regular gratification in life, they don’t go for money. They don’t necessarily value creature comforts. They not leveraging for fame. They’re really after something different. I think that can lead to a kind of runaway instability actually, Sometimes. They’re already outside of social norms. They’re already outside of normal connections with people. They’ve already made that break, and I think that makes them more vulnerable."</div>
+  <div class="quote-zh">我想，就这么多。我不想宣扬疯狂天才的陈词滥调，如果你很聪明，那么你就是疯子。我不这么认为。我不认为如果你疯了，你就很聪明。但我确实认为，那些非常聪明的人，也选择不追求生活中的定期满足，他们不会追求金钱。他们不一定重视物质享受。他们不利用名誉。他们真正追求的是不同的东西。我认为有时这实际上会导致一种失控的不稳定。他们已经脱离了社会规范。他们已经脱离了与人的正常联系。他们已经实现了这一突破，我认为这让他们更加脆弱。</div>
+  <div class="quote-meta">— Janna Levin （02:33:23）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think it’s impossible to predict. There has been real progress and the progress, as we’ve said, comes from the childlike curiosity of saying, “Well, I don’t actually understand this. I’m going to keep leaning on it because I don’t understand it.” And then suddenly you realize nobody really understood it."</div>
+  <div class="quote-zh">我认为这是不可能预测的。我们已经取得了真正的进步，而正如我们所说，进步来自于孩子般的好奇心，他们会说：“好吧，我实际上并不理解这一点。我将继续依赖它，因为我不理解它。”然后你突然意识到没有人真正理解它。</div>
+  <div class="quote-meta">— Janna Levin （01:36:12）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, thank you. I appreciate that. You learn how to do it, too, though. I mean, I don’t think the first one I did, I think I’ve learned, and you get better. It’s really interesting. And I love to study. I think you do, too. I really look into the material. And I love science. I really do. I want to talk to a CRISPR biologist because I don’t understand it, and I want to understand it."</div>
+  <div class="quote-zh">是的，谢谢。我很欣赏这一点。不过，您也可以学习如何做到这一点。我的意思是，我不认为我做的第一个，我认为我已经学会了，而且你会变得更好。这真的很有趣。我喜欢学习。我想你也是如此。我真的很研究材料。我热爱科学。我真的这么做。我想和 CRISPR 生物学家交谈，因为我不懂它，但我想了解它。</div>
+  <div class="quote-meta">— Janna Levin （02:50:22）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"The best scientists I know often ask the simplest questions. First of all, there’s probably some confidence there, but also they’re never going to lie to themselves that they understand something that they don’t understand. So even this idea that Newton didn’t understand the apple falling from the tree, had he lived another couple hundred of years, he would’ve invented relativity, because he never would’ve lied to himself that he understood it. He would’ve kept asking this very simple question. And I think that there is this childlike beauty to that, absolutely."</div>
+  <div class="quote-zh">我认识的最好的科学家经常问最简单的问题。首先，他们可能有一些信心，但他们也永远不会欺骗自己说他们理解了他们不理解的东西。因此，即使牛顿不理解苹果从树上掉下来的想法，如果他再活几百年，他也会发明相对论，因为他永远不会欺骗自己说他理解它。他会一直问这个非常简单的问题。我认为这绝对有一种童真之美。</div>
+  <div class="quote-meta">— Janna Levin （01:05:03）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Janna Levin <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">… black holes, curve space and time around them, in the way that we’ve been describing, things fall along the curves in space. If the black holes move around, the curves have to follow them, right? But they can’t travel faster than the speed of light either. So what happens is black holes, let’s say move around, maybe I’ve got two black holes in orbit around each other, that can happen. It takes a...</div>
+  <div class="dialogue-zh">......黑洞，围绕它们的曲线空间和时间，就像我们所描述的那样，事物沿着空间曲线下落。如果黑洞移动，曲线就必须跟随它们，对吗？但它们的运动速度也不能超过光速。所以发生的事情是黑洞，比如说四处移动，也许我有两个黑洞在彼此围绕的轨道上，这可能会发生。这需要一个</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Janna Levin <span class="dialogue-time">(00:00:49)</span>
+  </div>
+  <div class="dialogue-en">And then it radiates in the gravitational waves. It radiates away all those imperfections and it settles down to one quiescent, perfectly silent black hole that’s spinning. Beautiful stuff. And it emits E equals MC squared energy. So the mass of the final black hole will be less than the sum of the two starter black holes. And that energy is radiated away in this ringing of spacetime. It’s really ...</div>
+  <div class="dialogue-zh">然后它在引力波中辐射。它辐射掉了所有这些缺陷，最终形成一个静止的、完全安静的旋转黑洞。美丽的东西。它发射E等于MC平方的能量。因此最终黑洞的质量将小于两个初始黑洞的质量之和。这种能量在时空的鸣响中被辐射出去。真的是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:34)</span>
+  </div>
+  <div class="dialogue-en">Mm-hmm.</div>
+  <div class="dialogue-zh">嗯嗯。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Janna Levin <span class="dialogue-time">(00:01:34)</span>
+  </div>
+  <div class="dialogue-en">It’s only emitted in the rippling of the shape of space. A lot of times it’s likened closer to sound. Technically, we’ve kind of argued, I mean, I haven’t done an anatomical calculation, but if you’re near enough to two colliding black holes, they actually ring spacetime in the human auditory range. The frequency is actually in the human auditory range, that the shape of space could squeeze and st...</div>
+  <div class="dialogue-zh">只在空间形状的涟漪中散发出来。很多时候它被比作更接近声音。从技术上讲，我们有点争论，我的意思是，我还没有进行解剖学计算，但如果你距离两个碰撞的黑洞足够近，它们实际上会在人类听觉范围内产生时空铃声。该频率实际上在人类听觉范围内，空间形状可以挤压和固定</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:04)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Janna Levin, a theoretical physicist and cosmologist specializing in black holes, cosmology of extra dimensions, topology of the universe, and gravitational waves in spacetime. She has also written some incredible books including; How the Universe Got Its Spots, on the topic of the shape and the size of the universe, A Madman Dreams of Turing Machines, on the t...</div>
+  <div class="dialogue-zh">以下是与 Janna Levin 的对话，Janna Levin 是一位理论物理学家和宇宙学家，专门研究黑洞、额外维度宇宙学、宇宙拓扑和时空引力波。她还写了一些令人难以置信的书，包括：宇宙如何得到它的斑点，关于宇宙的形状和大小的主题，图灵机的狂人梦想，关于</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:03)</span>
+  </div>
+  <div class="dialogue-en">I should say that you sent me a message about not starting early in the morning, and that made me feel like we’re kindred spirits. You wrote to me, “When the great physicist Sidney Coleman was asked to attend a 9:00 AM meeting his reply was, ‘I can’t stay up that late.&#39;”</div>
+  <div class="dialogue-zh">我应该说，你给我发了一条消息，说不要一大早出发，这让我觉得我们志趣相投。您写信给我，“当伟大的物理学家西德尼·科尔曼被邀请参加上午 9:00 的会议时，他的回答是，‘我不能熬夜那么晚。’”</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Janna Levin <span class="dialogue-time">(00:03:20)</span>
+  </div>
+  <div class="dialogue-en">Yeah, classic. Sidney was beloved.</div>
+  <div class="dialogue-zh">是的，经典。西德尼深受爱戴。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:23)</span>
+  </div>
+  <div class="dialogue-en">I think all the best thoughts, honestly, maybe the worst thoughts too, all come at night. There’s something about the night. Maybe it’s the silence. Maybe it’s the peace all around. Maybe it’s the darkness. And you could be with yourself and you can think deeply.</div>
+  <div class="dialogue-zh">我认为所有最好的想法，老实说，也许还有最糟糕的想法，都在晚上出现。晚上有事。也许这就是沉默。也许这就是周围的和平。也许这就是黑暗。你可以和自己在一起，你可以深入思考。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Janna Levin <span class="dialogue-time">(00:03:38)</span>
+  </div>
+  <div class="dialogue-en">I feel like they’re stolen hours in the middle of the night, because it’s not busy. Your gadgets aren’t pinging. There’s really no pressure to do anything. But I’m often awake in the middle of the night. And so it’s sort of like these extra hours of the day. I think we were exchanging messages at 4:00 in the morning.</div>
+  <div class="dialogue-zh">我觉得他们在半夜被偷了几个小时，因为那里并不忙。您的小工具没有 ping 通。确实没有压力去做任何事情。但我经常在半夜醒来。所以这有点像一天中的这些额外时间。我想我们是在凌晨 4:00 交换消息的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:57)</span>
+  </div>
+  <div class="dialogue-en">So in that way, many other ways were kindred spirits. So let’s go in one of the coolest objects in the universe, black holes. What are they? And maybe even a good way to start is to talk about how are they formed.</div>
+  <div class="dialogue-zh">因此，许多其他方面都是志同道合的。那么，让我们走进宇宙中最酷的天体之一——黑洞。这些是什么？也许一个好的开始方式就是谈论它们是如何形成的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Janna Levin <span class="dialogue-time">(00:04:13)</span>
+  </div>
+  <div class="dialogue-en">In a way, people often confuse how they’re formed with the concept of the black hole in the first place. So when black holes were first proposed, Einstein was very surprised that such a solution could be found so quickly, but really thought nature would protect us from their formation. And then nature thinks of a way. Nature thinks a way to make these crazy objects, which is to kill off a few star...</div>
+  <div class="dialogue-zh">在某种程度上，人们常常将它们的形成方式与黑洞的概念混淆。因此，当黑洞首次被提出时，爱因斯坦非常惊讶能够如此快地找到这样的解决方案，但他确实认为大自然会保护我们免受黑洞形成的影响。然后大自然就会想办法。大自然想了一个办法来制造这些疯狂的物体，那就是杀死一些恒星</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Janna Levin <span class="dialogue-time">(00:05:05)</span>
+  </div>
+  <div class="dialogue-en">And if you think of it’s 1915, 1916, when Einstein fully describes relativity in a way that’s the canonical formulation. It was a lot of changing back and forth before then. And it’s World War I, And he gets a message from the eastern front from a friend of his, Karl Schwarzschild, who solved Einstein’s equations between sitting in the trenches and cannon fire, it was joked that he was calculating...</div>
+  <div class="dialogue-zh">如果你想想那是 1915 年、1916 年，当时爱因斯坦以规范表述的方式完整地描述了相对论。在此之前，已经发生了很多来回变化。这是第一次世界大战，他从东部前线收到了他的朋友卡尔史瓦西的消息，他解决了爱因斯坦坐在战壕和炮火之间的方程式，有人开玩笑说他正在计算</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Janna Levin <span class="dialogue-time">(00:06:03)</span>
+  </div>
+  <div class="dialogue-en">It’s really just about the idea. He sets up this completely untenable situation. He says, “Imagine I crush all the mass of a star to a point. Don’t ask how that’s done, because that’s really absurd, but let’s just pretend and let’s just imagine that that’s a scenario.” And then he wants to decide what happens to spacetime if I set up this confounding, but somehow very simple scenario. And really w...</div>
+  <div class="dialogue-zh">这实际上只是关于想法。他造成了这种完全站不住脚的局面。他说：“想象一下，我将一颗恒星的所有质量压碎到一点。不要问这是怎么做到的，因为这真的很荒谬，但让我们假装一下，想象一下这是一个场景。”然后他想决定如果我设置这个令人困惑但又非常简单的场景，时空会发生什么。真的很w</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Janna Levin <span class="dialogue-time">(00:07:01)</span>
+  </div>
+  <div class="dialogue-en">The black hole is not the mass crushed to a point. The black hole is the event horizon. And the event horizon is really just a point in spacetime or a region at spacetime. It’s actually in this case, a surface in spacetime. And it marks a separation in events, which is why it’s called an event horizon. Everything outside is causally separated from the inside, insofar as what’s inside the event hor...</div>
+  <div class="dialogue-zh">黑洞并不是被压成一点的质量。黑洞就是事件视界。事件视界实际上只是时空中的一个点或时空中的一个区域。在这种情况下，它实际上是时空中的一个表面。它标志着事件的分离，这就是为什么它被称为事件视界。外部的一切都与内部因果分离，就事件内部的内容而言</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Janna Levin <span class="dialogue-time">(00:07:48)</span>
+  </div>
+  <div class="dialogue-en">Sometimes we talk about the black holes being nothing because at the event horizon, there’s really nothing there. Sometimes when we think about black holes, we want to imagine a really dense dead star. But if you go up to the event horizon, it’s an empty region of spacetime. It’s more of a place than it is a thing. And Einstein found this fascinating. He helped get the work published, but he reall...</div>
+  <div class="dialogue-zh">有时我们说黑洞什么都不是，因为在事件视界，那里真的什么都没有。有时，当我们想到黑洞时，我们想要想象一颗非常致密的死亡恒星。但如果你到达事件视界，那是一片空旷的时空区域。 It’s more of a place than it is a thing. And Einstein found this fascinating. He helped get the work published, but he reall</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:31)</span>
+  </div>
+  <div class="dialogue-en">And maybe the purpose of the thought experiment was to find the limitations of the theory. So you find the most extreme versions in order to understand where it breaks down. And it just so happens in this case that might actually predict these extreme kinds of objects.</div>
+  <div class="dialogue-zh">也许思想实验的目的是发现该理论的局限性。因此，您需要找到最极端的版本才能了解其故障所在。在这种情况下，它实际上可能会预测这些极端类型的物体。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Janna Levin <span class="dialogue-time">(00:08:48)</span>
+  </div>
+  <div class="dialogue-en">It does both. So it also describes the sun from far away. So the same solution does a great job helping us understand the Earth’s orbit around the sun. It’s incredible. It does a great job. It’s almost overkill. You don’t really need to be that precise as relativity. And yes, it predicts the phenomenon of black holes, but doesn’t really explain how nature would form them. But then it also, on top ...</div>
+  <div class="dialogue-zh">它两者兼而有之。所以它也描述了来自远处的太阳。因此，同样的解决方案可以很好地帮助我们了解地球绕太阳的轨道。太不可思议了。它做得很好。这几乎是矫枉过正了。你真的不需要像相对论那么精确。是的，它预测了黑洞的现象，但并没有真正解释自然是如何形成黑洞的。但除此之外</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Janna Levin <span class="dialogue-time">(00:09:25)</span>
+  </div>
+  <div class="dialogue-en">Sometimes I liken it to it’s like a dying man marking in the dirt that something’s gone wrong here. Right? It’s signaling that there’s some culprit, there’s something wrong in the theory. And even Roger Penrose who did this general work trying to understand the formation of black holes from gravitational collapse, he thought, oh yeah, there’s a singularity that’s inevitable. There’s no way around ...</div>
+  <div class="dialogue-zh">有时我把它比作一个垂死的人在泥土上标记这里出了问题。正确的？这表明有罪魁祸首，理论有问题。即使罗杰·彭罗斯（Roger Penrose）做了这项一般工作，试图理解引力坍缩形成的黑洞，他也认为，哦，是的，有一个不可避免的奇点。没有办法解决</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:10:07)</span>
+  </div>
+  <div class="dialogue-en">So according to him, the closer you get to the singularity, the more quantum mechanics comes into play, and therefore there is no singularity. There’s something else.</div>
+  <div class="dialogue-zh">因此，根据他的说法，越接近奇点，量子力学就越发挥作用，因此奇点并不存在。还有别的事。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Janna Levin <span class="dialogue-time">(00:10:14)</span>
+  </div>
+  <div class="dialogue-en">I think everybody would say that. I think everybody would say, the closer you get to the singularity, for sure, you have to include quantum mechanics. You just can’t consistently talk about magnifying such small scales, having such enormous ruptures and curvatures and energy scales and not include quantum mechanics, that that’s just inconsistent with the world as we understand it. Formation of bla...</div>
+  <div class="dialogue-zh">我想每个人都会这么说。我想每个人都会说，越接近奇点，当然就必须包括量子力学。你不能始终如一地谈论放大如此小的尺度，拥有如此巨大的断裂、曲率和能量尺度，而不包括量子力学，这与我们所理解的世界不一致。 bla的形成</div>
+</div>
+    <a href="https://lexfridman.com/janna-levin-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="barry-barish.html" class="card" style="text-decoration:none">
+  <div class="card-title">Barry Barish: Gravitational Waves and the Most Precise Device Ever Built</div>
+  <div class="card-meta">Barry Barish</div>
+</a>
+<a href="brian-keating.html" class="card" style="text-decoration:none">
+  <div class="card-title">Brian Keating: Cosmology, Astrophysics, Aliens &amp; Losing the Nobel Prize</div>
+  <div class="card-meta">Brian Keating</div>
+</a>
+<a href="clara-sousa-silva.html" class="card" style="text-decoration:none">
+  <div class="card-title">Clara Sousa-Silva: Searching for Signs of Life on Venus and Other Planets</div>
+  <div class="card-meta">Clara Sousa-Silva</div>
+</a>
+<a href="katherine-de-kleer.html" class="card" style="text-decoration:none">
+  <div class="card-title">Katherine de Kleer: Planets, Moons, and Asteroids in Our Solar System</div>
+  <div class="card-meta">Katherine de Kleer</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

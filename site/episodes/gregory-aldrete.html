@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gregory Aldrete - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Gregory Aldrete</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Gregory Aldrete</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/gregory-aldrete.html" style="font-size:16px;color:#818cf8;font-weight:600">Gregory Aldrete</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">39,897 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/gregory-aldrete-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Ancient vs modern world<span class="zh-trans"> · 古代与现代世界</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">6:28</span>
+  <span class="chapter-title">Romans’ relationship to the past<span class="zh-trans"> · 罗马人与过去的关系</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">15:40</span>
+  <span class="chapter-title">Three phases of Roman history<span class="zh-trans"> · 罗马历史的三个阶段</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">18:30</span>
+  <span class="chapter-title">Rome’s expansion<span class="zh-trans"> · 罗马的扩张</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:10</span>
+  <span class="chapter-title">Punic wars<span class="zh-trans"> · 布匿战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">38:55</span>
+  <span class="chapter-title">Conquering Greece<span class="zh-trans"> · 征服希腊</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:34</span>
+  <span class="chapter-title">Scipio vs Hannibal<span class="zh-trans"> · 西庇阿 vs 汉尼拔</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">43:40</span>
+  <span class="chapter-title">Heavy infantry vs Cavalry<span class="zh-trans"> · 重步兵 vs 骑兵</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">47:17</span>
+  <span class="chapter-title">Armor<span class="zh-trans"> · 盔甲</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:00:10</span>
+  <span class="chapter-title">Alexander the Great<span class="zh-trans"> · 亚历山大大帝</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:06:11</span>
+  <span class="chapter-title">Roman law<span class="zh-trans"> · 罗马法</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:15:51</span>
+  <span class="chapter-title">Slavery<span class="zh-trans"> · 奴隶制</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:24:11</span>
+  <span class="chapter-title">Fall of the Roman Empire<span class="zh-trans"> · 罗马帝国的衰落</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:27:56</span>
+  <span class="chapter-title">Julius Caesar<span class="zh-trans"> · 尤利乌斯·凯撒</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:32:35</span>
+  <span class="chapter-title">Octavian’s rise<span class="zh-trans"> · 屋大维的崛起</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:42:28</span>
+  <span class="chapter-title">Cleopatra<span class="zh-trans"> · 克利奥帕特拉</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:47:57</span>
+  <span class="chapter-title">Musa of Parthia<span class="zh-trans"> · 帕提亚的穆萨</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:50:50</span>
+  <span class="chapter-title">Augustus’ political system<span class="zh-trans"> · 奥古斯都的政治制度</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:03:19</span>
+  <span class="chapter-title">Cicero<span class="zh-trans"> · 西塞罗</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:09:21</span>
+  <span class="chapter-title">Gestures<span class="zh-trans"> · 手势</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">roman</span><span class="keyword-tag">gregory</span><span class="keyword-tag">aldrete</span><span class="keyword-tag">romans</span><span class="keyword-tag">rome</span><span class="keyword-tag">empire</span><span class="keyword-tag">going</span><span class="keyword-tag">history</span><span class="keyword-tag">ancient</span><span class="keyword-tag">don</span><span class="keyword-tag">emperor</span><span class="keyword-tag">stuff</span><span class="keyword-tag">guy</span><span class="keyword-tag">caesar</span><span class="keyword-tag">war</span><span class="keyword-tag">augustus</span><span class="keyword-tag">interesting</span><span class="keyword-tag">law</span><span class="keyword-tag">army</span><span class="keyword-tag">republic</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I think, as a historian, the way you begin to understand an alien, a foreign culture, which is what these cultures are, is to look for those little moments of sympathy. But on the other hand, there’s ways in which ancient cultures are wildly different from us. You also look for those moments where you just think, “How the hell could these people have done that? I just don’t understand how they could have thought or acted in this way.” It’s lining up those moments of sympathy and kind of disconnection that I think is when you begin to start to understand a foreign culture or an ancient culture."</div>
+  <div class="quote-zh">我认为，作为一名历史学家，你开始理解外星人、外国文化的方式，也就是这些文化的本质，就是寻找那些同情的小时刻。但另一方面，古代文化在某些方面与我们截然不同。你也会寻找那些你只是想的时刻，“这些人到底怎么能这么做？我只是不明白他们怎么会这样思考或这样做。”我认为，当你开始了解外国文化或古代文化时，这些同情和脱节的时刻就会排列起来。</div>
+  <div class="quote-meta">— Gregory Aldrete （00:04:40）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"We have curiosity. I think curiosity is a great thing that you want to learn something new. I think the human impulse to want to learn new stuff is one of our best characteristics. And at least up to this point, what makes us special is the ability to store up an accumulation of knowledge and to pass that knowledge on to the next generation. I mean, that’s really all we are. We’re the accumulation of the knowledge of infinite generations that’ve come before us. And everything we do is based on that. Otherwise, we’d all just be starting ground zero kind of just from the beginning. So our ability to store up knowledge and pass it on, I think is our special power as human beings. And I think our curiosity is what keeps us going forward."</div>
+  <div class="quote-zh">我们有好奇心。我认为好奇心是一件很棒的事情，你想学习新的东西。我认为人类想要学习新东西的冲动是我们最好的特征之一。至少到目前为止，我们的特殊之处在于我们有能力积累知识并将这些知识传递给下一代。我的意思是，这就是我们的全部。我们是我们之前无数代人知识的积累。我们所做的一切都是基于此。否则，我们都会从零开始。因此，我认为我们储存知识并传递知识的能力是我们作为人类的特殊力量。我认为我们的好奇心是我们前进的动力。</div>
+  <div class="quote-meta">— Gregory Aldrete （03:40:43）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Rome itself has different aspects. But what I think is actually another big difference between the modern world and the ancient is our relationship with the past. One of the keys to understanding all of Roman history is to understand that this was a people who were obsessed with the past and for whom the past had power, not just as something inspirational, but it actually dictated what you would do in your daily life. Today, especially in the United States, we don’t have much of a relationship with the past. We see ourselves as free agents just floating along, not tethered to what came before."</div>
+  <div class="quote-zh">罗马本身有不同的方面。但我认为现代世界和古代世界之间的另一个巨大区别实际上是我们与过去的关系。理解整个罗马历史的关键之一是要了解这是一个痴迷于过去的民族，对他们来说过去具有力量，不仅是鼓舞人心的东西，而且它实际上决定了你在日常生活中会做什么。今天，尤其是在美国，我们与过去没有太多关系。我们将自己视为自由行动者，只是随波逐流，不受过去的束缚。</div>
+  <div class="quote-meta">— Gregory Aldrete （00:08:48）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah. It’s a book that my wife and I wrote together, and it is trying to make people understand how deeply rooted are current actions in almost every way. Even things that we think are just truly unique parts of our culture or things that we think are just innate to human nature or actually rooted in the past. So this is another power of the past thing, and this is just a long specific list of examples really. So I mean, we go through government and education and intellectual stuff and art and architecture and a lot of the things we’ve been talking about today, language, culture, medicine. But even things like habits, the way we celebrate things, the way we get married. Our married rituals have all sorts of things in common with Roman weddings."</div>
+  <div class="quote-zh">是的。这是我和妻子一起写的一本书，它试图让人们了解当前的行为在几乎各个方面是多么根深蒂固。即使我们认为是我们文化中真正独特的部分，或者我们认为是人性固有的或实际上植根于过去的东西。所以这是过去事物的另一种力量，这实际上只是一长串具体的例子。所以我的意思是，我们经历了政府、教育、智力、艺术和建筑，以及我们今天谈论的很多事情，语言、文化、医学。但即使是诸如习惯、我们庆祝事物的方式、我们结婚的方式之类的事情。我们的结婚仪式与罗马婚礼有很多共同点。</div>
+  <div class="quote-meta">— Gregory Aldrete （03:29:55）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"A lot of societies have this power of the past. Today, not so much, but some still do. About a decade ago, I was in Serbia and I was talking to some of the people there about the breakup of Yugoslavia and some of the wars that had taken place where people turned against their neighbors, basically murdered people they had lived next to for decades. When I was talking to them, some of them actually brought up things like, “Oh, well, it was justified because in this battle in 12 whatever, they did this.” And I was thinking, “Wow, you’re citing something from 800 years ago to justify your actions today.” That’s a modern person who still understands the power of the past, or maybe is crippled by it, is another way to view it."</div>
+  <div class="quote-zh">许多社会都拥有这种过去的力量。今天，情况已经不那么严重了，但有些人仍然这样做。大约十年前，我在塞尔维亚，和那里的一些人谈论南斯拉夫的解体，以及发生的一些战争，人们反对他们的邻居，基本上谋杀了他们生活了几十年的人。当我和他们交谈时，他们中的一些人实际上提出了诸如“哦，好吧，这是合理的，因为在 12 场战斗中，他们这样做了。”我在想，“哇，你引用了 800 年前的事情来证明你今天的行为是正确的。”这是一个仍然了解过去的力量的现代人，或者可能被过去的力量所削弱，这是看待它的另一种方式。</div>
+  <div class="quote-meta">— Gregory Aldrete （00:14:11）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Gregory Aldrete <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">Rome always wins because even if they lose battles, they go to the Italian allies and half citizens and raise new armies. So how do you beat them? He can never raise that many troops himself. And Hannibal, I think correctly, figures out the one way to maybe defeat Rome is to cut them away from their allies. Well, how do you do this? Hannibal’s plan is, “I’m not going to wait and fight the Romans i...</div>
+  <div class="dialogue-zh">罗马总是获胜，因为即使他们输掉了战斗，他们也会去找意大利盟友和半公民并组建新的军队。那么你如何击败他们呢？他自己永远不可能调集那么多军队。我认为汉尼拔正确地认为，击败罗马的一种方法就是切断他们与盟友的联系。那么，你怎么做呢？汉尼拔的计划是：“我不会等待与罗马人作战</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Gregory Aldrete <span class="dialogue-time">(00:00:51)</span>
+  </div>
+  <div class="dialogue-en">Hannibal famously crosses the Alps with elephants. Dramatic stuff. Nobody expects him to do this. Nobody thinks you can do this. Shows up in Northern Italy. Romans send an army. Hannibal massacres them. He is a military genius. Rome takes a year, raises a second army. We know this story, sends it against Hannibal. Hannibal wipes them out.</div>
+  <div class="dialogue-zh">汉尼拔驾驭大象穿越阿尔卑斯山而闻名。戏剧性的东西。没有人期望他这样做。没有人认为你能做到这一点。出现在意大利北部。罗马人派出一支军队。汉尼拔屠杀了他们。他是一位军事天才。罗马花了一年时间，组建了第二支军队。我们知道这个故事，并将其发送给汉尼拔。汉尼拔消灭了他们。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Gregory Aldrete <span class="dialogue-time">(00:01:12)</span>
+  </div>
+  <div class="dialogue-en">Rome gets clever this time. They say, “Okay, Hannibal’s different. We’re going to take two years, raise two armies and send them both out at the same time against Hannibal.” They do this, and this is the Battle of Cannae, which is one of the most famous battles in history. Hannibal is facing this army of 80, 000 Romans about, and he comes up with strategy called double envelopment. I mean, we can ...</div>
+  <div class="dialogue-zh">罗马这次聪明了。他们说：“好吧，汉尼拔不一样。我们要花两年时间，组建两支军队，同时派出两支军队来对抗汉尼拔。”他们这样做了，这就是坎尼战役，这是历史上最著名的战役之一。汉尼拔面对这支大约80、000罗马人的军队，他想出了双重包围的策略。我的意思是，我们可以</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:03)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Gregory Aldrete, a historian specializing in ancient Rome and military history. This is the Lex Fridman Podcast. To support it, please check out our in the description. And now, dear friends, here’s Gregory Aldrete.</div>
+  <div class="dialogue-zh">以下是与专门研究古罗马和军事史的历史学家格雷戈里·阿尔德雷特的对话。这是莱克斯·弗里德曼播客。要支持它，请查看我们的说明。现在，亲爱的朋友们，这是格雷戈里·奥尔德雷特。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:23)</span>
+  </div>
+  <div class="dialogue-en">What do you think is the big difference between the ancient world and the modern world?</div>
+  <div class="dialogue-zh">您认为古代世界和现代世界最大的区别是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Gregory Aldrete <span class="dialogue-time">(00:02:28)</span>
+  </div>
+  <div class="dialogue-en">Well, the easy answer, the one you often get is technology, and obviously, there’s huge differences in technology between the ancient world and today. But I think some of the more interesting stuff is a little bit more amorphous things, more structural things. I would say, first of all, childhood mortality. In the ancient world, and this is true, Greeks, Romans, Egyptians, really anybody up until ...</div>
+  <div class="dialogue-zh">嗯，最简单的答案是，你经常得到的答案是技术，显然，古代世界和今天的技术存在巨大差异。但我认为一些更有趣的东西是一些更加无定形的东西，更加结构化的东西。我想说，首先是儿童死亡率。在古代世界，这是事实，希腊人、罗马人、埃及人，实际上是任何人，直到</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Gregory Aldrete <span class="dialogue-time">(00:02:57)</span>
+  </div>
+  <div class="dialogue-en">I mean, put yourself in the place of average inhabitant of the ancient world. If you were an ancient person, three or four of your kids probably would’ve died. You would’ve buried your children. And nowadays, we think of that as an unusual thing, and just psychologically, that’s a huge thing. You would’ve seen multiple of your siblings die. If you were a woman, for example, if you were lucky enoug...</div>
+  <div class="dialogue-zh">我的意思是，将自己置于古代世界的普通居民的位置。如果你是一个古代人，你的孩子可能会死掉三四个。你会埋葬你的孩子。如今，我们认为这是一件不寻常的事情，而且从心理上来说，这是一件大事。你会看到你的多个兄弟姐妹死去。举例来说，如果你是一名女性，如果你足够幸运</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:37)</span>
+  </div>
+  <div class="dialogue-en">But fundamentally, do you think human nature changed much? Do you think the same elements of what we see today, fear, greed, love, hope, optimism and the cynicism, the underlying forces that result in war, all of that, permeates human history?</div>
+  <div class="dialogue-zh">但从根本上来说，你认为人性发生了很大变化吗？你认为我们今天所看到的同样的元素，恐惧、贪婪、爱、希望、乐观和愤世嫉俗，以及导致战争的潜在力量，所有这些，都渗透到了人类历史中吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Gregory Aldrete <span class="dialogue-time">(00:03:56)</span>
+  </div>
+  <div class="dialogue-en">Crude answer, yes. I think human nature is roughly constant. And for me, as an ancient historian, the kind of documents that I really like dealing with are not the traditional literary sources, but they’re the things that give us those little glimpse into everyday life. Stuff like tombstones or graffiti or just something that survives on a scrap of parchment that records a financial transaction. W...</div>
+  <div class="dialogue-zh">粗略的回答是，是的。我认为人性大致是恒定的。对我来说，作为一名古代历史学家，我真正喜欢处理的文献不是传统的文学资料，而是那些让我们对日常生活有一些了解的东西。像墓碑或涂鸦之类的东西，或者只是在一张记录金融交易的羊皮纸上幸存下来的东西。瓦</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Gregory Aldrete <span class="dialogue-time">(00:04:40)</span>
+  </div>
+  <div class="dialogue-en">I think, as a historian, the way you begin to understand an alien, a foreign culture, which is what these cultures are, is to look for those little moments of sympathy. But on the other hand, there’s ways in which ancient cultures are wildly different from us. You also look for those moments where you just think, “How the hell could these people have done that? I just don’t understand how they cou...</div>
+  <div class="dialogue-zh">我认为，作为一名历史学家，你开始理解外星人、外国文化的方式，也就是这些文化的本质，就是寻找那些同情的小时刻。但另一方面，古代文化在某些方面与我们截然不同。你也会寻找那些你只是想的时刻，“这些人到底是怎么做到的？我只是不明白他们是如何做到的”</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:14)</span>
+  </div>
+  <div class="dialogue-en">I love the idea of assembling the big picture from the details and the little pieces, because that is the thing that makes up life. The big picture is nothing without the details.</div>
+  <div class="dialogue-zh">我喜欢从细节和小片段中拼凑出大局的想法，因为这就是构成生活的东西。没有细节，大局就毫无意义。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Gregory Aldrete <span class="dialogue-time">(00:05:23)</span>
+  </div>
+  <div class="dialogue-en">Yep, yep, and those details would bring it to life. I mean, it’s not the grand sweep of things. It’s seeing those little hopes and fears. Another thing that I think is a huge difference between the modern world and the ancient is just basically everybody’s a farmer. Everybody’s a small family farmer, and we forget this.</div>
+  <div class="dialogue-zh">是的，是的，这些细节会让它变得栩栩如生。我的意思是，这并不是什么大事。它看到了那些小小的希望和恐惧。我认为现代世界和古代世界之间的巨大差异是基本上每个人都是农民。每个人都是小家庭农民，我们忘记了这一点。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Gregory Aldrete <span class="dialogue-time">(00:05:42)</span>
+  </div>
+  <div class="dialogue-en">I was just writing a lecture for my next Great Courses course, and I was writing about farming in the ancient world. I was really thinking if we were to write a realistic textbook of let’s say the Roman Empire, nine out of 10 chapters should be details of what it was like to be a small-time family farmer, because that’s what 90% of the people in the ancient world did. They weren’t soldiers, they w...</div>
+  <div class="dialogue-zh">我正在为我的下一门伟大课程写一篇演讲，我正在写有关古代世界农业的文章。我真的在想，如果我们要写一本关于罗马帝国的现实教科书，那么十分之九的章节应该是关于作为一个小家庭农民的细节，因为这就是古代世界 90% 的人所做的。他们不是士兵，他们是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:37)</span>
+  </div>
+  <div class="dialogue-en">Nevertheless, it is the emperors and the philosophers and the artists and the warriors who carve history.</div>
+  <div class="dialogue-zh">然而，书写历史的是皇帝、哲学家、艺术家和武士。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Gregory Aldrete <span class="dialogue-time">(00:06:43)</span>
+  </div>
+  <div class="dialogue-en">And it is the important stuff. I mean, that’s true. There’s a reason we focus on that.</div>
+  <div class="dialogue-zh">这是重要的事情。我的意思是，那是真的。我们关注这一点是有原因的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:48)</span>
+  </div>
+  <div class="dialogue-en">That’s a good reminder though. If we want to truly empathize and understand what life was like, we have to represent it fully.</div>
+  <div class="dialogue-zh">不过，这是一个很好的提醒。如果我们想真正体会和理解生活是什么样的，我们就必须充分地再现它。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Gregory Aldrete <span class="dialogue-time">(00:06:56)</span>
+  </div>
+  <div class="dialogue-en">And I would say let’s not forget them. Let’s not forget what life was like for 80, 90% of the people in the ancient world, the ones we don’t talk about, because that’s important too.</div>
+  <div class="dialogue-zh">我想说我们不要忘记他们。我们不要忘记古代世界 80%、90% 的人的生活是什么样的，我们不谈论这些人，因为这也很重要。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:06)</span>
+  </div>
+  <div class="dialogue-en">The Roman Empire is widely considered to be the most powerful, influential, and impactful empire in human history. What are some reasons for that?</div>
+  <div class="dialogue-zh">罗马帝国被广泛认为是人类历史上最强大、最有影响力的帝国。有哪些原因？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Gregory Aldrete <span class="dialogue-time">(00:07:18)</span>
+  </div>
+  <div class="dialogue-en">Yeah. I mean, Rome has been hugely influential, I think, just because of the image. I mean, there’s all these practical ways. I mean, the words I’m using to speak with you today, 30% are direct from Latin. Another 30% are from Latin descended languages. Our law codes, I mean, our habits, our holidays, everything comes fairly directly from the ancient world. But the image of Rome, at least again in...</div>
+  <div class="dialogue-zh">是的。我的意思是，我认为罗马之所以具有巨大的影响力，只是因为它的形象。我的意思是，有所有这些实用的方法。我的意思是，我今天和你们说话时使用的词语，30% 直接来自拉丁语。另外 30% 来自拉丁语后裔。我们的法律法规，我的意思是，我们的习惯，我们的假期，一切都直接来自古代世界。但罗马的形象，至少在</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Gregory Aldrete <span class="dialogue-time">(00:08:14)</span>
+  </div>
+  <div class="dialogue-en">But Rome is a little schizophrenic in that it’s both the empire when it was ruled by emperors, which is one kind of model, and it’s the Roman Republic when it was a pseudo-democracy, which is a different model. It’s interesting how some later civilizations tend to either focus on one or the other of those. The United States, Revolutionary France, they were very obsessed with the Roman Republic as ...</div>
+  <div class="dialogue-zh">但罗马有点精神分裂，它既是皇帝统治时的帝国，这是一种模式，又是伪民主时的罗马共和国，这是另一种模式。有趣的是，一些后来的文明倾向于关注其中一个或另一个。美国，革命的法国，他们非常迷恋罗马共和国</div>
+</div>
+    <a href="https://lexfridman.com/gregory-aldrete-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="jordan-peterson-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Jordan Peterson #2</div>
+  <div class="card-meta">Jordan Peterson</div>
+</a>
+<a href="yuval-noah-harari.html" class="card" style="text-decoration:none">
+  <div class="card-title">Yuval Noah Harari</div>
+  <div class="card-meta">Yuval Noah Harari</div>
+</a>
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tulsi Gabbard - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Tulsi Gabbard</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Tulsi Gabbard</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/tulsi-gabbard.html" style="font-size:16px;color:#818cf8;font-weight:600">Tulsi Gabbard</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">15,920 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/tulsi-gabbard-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:07</span>
+  <span class="chapter-title">War in Iraq<span class="zh-trans"> · 伊拉克战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">8:53</span>
+  <span class="chapter-title">Battle injuries and PTSD<span class="zh-trans"> · 战伤和创伤后应激障碍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">16:03</span>
+  <span class="chapter-title">War on terrorism<span class="zh-trans"> · 反恐战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">24:44</span>
+  <span class="chapter-title">War in Gaza<span class="zh-trans"> · 加沙战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">28:45</span>
+  <span class="chapter-title">War in Ukraine<span class="zh-trans"> · 乌克兰战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">32:31</span>
+  <span class="chapter-title">Syria<span class="zh-trans"> · 叙利亚</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:13</span>
+  <span class="chapter-title">Warmongers<span class="zh-trans"> · 好战者</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">49:33</span>
+  <span class="chapter-title">Nuclear war<span class="zh-trans"> · 核战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:05:01</span>
+  <span class="chapter-title">TikTok ban<span class="zh-trans"> · TikTok 禁令</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:17:06</span>
+  <span class="chapter-title">Bernie Sanders<span class="zh-trans"> · 伯尼·桑德斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:22:01</span>
+  <span class="chapter-title">Politics<span class="zh-trans"> · 政治</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:40:52</span>
+  <span class="chapter-title">Personal attacks<span class="zh-trans"> · 人身攻击</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:43:01</span>
+  <span class="chapter-title">God<span class="zh-trans"> · 上帝</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">war</span><span class="keyword-tag">tulsi</span><span class="keyword-tag">gabbard</span><span class="keyword-tag">military</span><span class="keyword-tag">president</span><span class="keyword-tag">party</span><span class="keyword-tag">going</span><span class="keyword-tag">don</span><span class="keyword-tag">god</span><span class="keyword-tag">congress</span><span class="keyword-tag">government</span><span class="keyword-tag">country</span><span class="keyword-tag">national</span><span class="keyword-tag">security</span><span class="keyword-tag">iraq</span><span class="keyword-tag">nuclear</span><span class="keyword-tag">hey</span><span class="keyword-tag">democratic</span><span class="keyword-tag">biden</span><span class="keyword-tag">saying</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Whoever that most effective neutral broker is, that’s the best person to do this. The Biden-Harris administration, I think the role that they have to take is actually encouraging Zelenskyy to sit down and begin this process. Those kinds of engagements are the most, to me, the most powerful exercises of diplomacy that can’t be matched, especially when our president’s foremost role and responsibility is to serve as commander in chief, and I wish that we had leaders who were more willing to engage because I think we’d make a lot more progress more quickly to find areas both of mutual interest as well as to help de-conflict and de-escalate areas where there is tension or disagreement or adversarial interests."</div>
+  <div class="quote-zh">无论最有效的中立经纪人是谁，他都是做到这一点的最佳人选。我认为拜登-哈里斯政府必须扮演的角色实际上是鼓励泽连斯基坐下来开始这一进程。对我来说，这种接触是最有力、最有力的外交活动，无法比拟，特别是当我们的总统最重要的角色和责任是担任总司令时，我希望我们的领导人更愿意参与，因为我认为我们会更快地取得更多进展，找到共同感兴趣的领域，并帮助在存在紧张、分歧或敌对利益的领域化解冲突和缓和局势。</div>
+  <div class="quote-meta">— Tulsi Gabbard （00:29:44）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Experiencing firsthand that high human cost of war caused me, a 20-something-year-old from Hawaii… I had left my seat in the state legislature to volunteer to deploy with my brothers and sisters in my unit to Iraq, and so recognize the cost of war, I think, in two fundamental ways. Number one is the high human cost of war on our troops and on the people in the country where this war was being waged. And also the cost on American taxpayers."</div>
+  <div class="quote-zh">作为一名来自夏威夷的 20 多岁的年轻人，我亲身经历了战争造成的高昂人员伤亡……我离开了州立法机构的席位，自愿与部队中的兄弟姐妹一起部署到伊拉克，因此我认为，从两个基本方面认识到战争的代价。第一是战争给我们的军队和战争发生国的人民造成了高昂的人员伤亡。还有美国纳税人的成本。</div>
+  <div class="quote-meta">— Tulsi Gabbard （00:03:26）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"They don’t want to be the one guy in the room who’s just like, “Hey, guys, let’s just take a breath and actually think this through. What will happen, not just in the immediate response of this action that you’re advocating for, but what are all of the other people, other actors, stakeholders in the world, how will they respond, and then how will we respond to them? How will they respond to us?” Actually go through this exercise of, in the military, this is commonly referred to as, “What are the second, third, fourth order of effects that will occur as a result of pursuing a specific course of action?”"</div>
+  <div class="quote-zh">他们不想成为房间里的那个人，“嘿，伙计们，让我们喘口气，认真思考一下。会发生什么，不仅仅是你们所倡导的这一行动的立即反应，还有世界上所有其他人、其他参与者、利益相关者会怎样？他们将如何回应，然后我们将如何回应他们？他们将如何回应我们？”实际上，在军队中，这通常被称为“由于采取特定的行动方针而产生的第二、第三、第四顺序的效果是什么？”</div>
+  <div class="quote-meta">— Tulsi Gabbard （01:00:48）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yes. I guess the bottom line upfront is this is another piece of legislation being expedited through Congress with strong bipartisan support in the name of national security interests that is essentially a power grab and an assault on freedom and liberty. And I’ll just say this in, I think, probably the top three things that they’re not actually telling us that’s in the bill. Freedom of speech, it’s our ability to be able to express ourselves, whether it be in person, on a podcast, on a social media platform, in a newspaper, whatever the platform may be. This legislation gives the executive the power to decide which platforms are acceptable for us to be able to use TikTok itself."</div>
+  <div class="quote-zh">是的。我想最重要的是，这是国会以国家安全利益的名义在两党的大力支持下加快通过的另一项立法，本质上是对权力的攫取和对自由的攻击。我想，我只想说这可能是法案中他们实际上没有告诉我们的前三件事。言论自由是指我们表达自己的能力，无论是当面、在播客、社交媒体平台、报纸上，无论是什么平台。这项立法赋予行政部门权力来决定哪些平台可以让我们使用 TikTok 本身。</div>
+  <div class="quote-meta">— Tulsi Gabbard （01:05:15）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"During his 2008 campaign, yes. I think that his message resonated with so many people across generations and across different views, different backgrounds to where people cried on the night that he was elected because they felt so hopeful. I talked to people, and I know people who set aside their entire lives to work on his campaign to be a part of this hope and change mission that he laid out that would bring us together. Some of the people that I know personally, they gave up their lives during the campaign, and after he won, they went to Washington, DC, because they wanted to be able to do the work that they had that he had laid out and continue to be a part of this mission that they expected would extend beyond the campaign."</div>
+  <div class="quote-zh">在他 2008 年的竞选期间，是的。我认为他的信息引起了许多跨代、不同观点、不同背景的人的共鸣，人们在他当选的那天晚上哭泣，因为他们感到如此充满希望。我和人们交谈过，我认识一些人，他们将一生奉献给他的竞选活动，成为他所制定的希望和变革使命的一部分，使我们团结在一起。我个人认识的一些人，他们在竞选期间放弃了自己的生命，在他获胜后，他们去了华盛顿特区，因为他们希望能够完成他布置的工作，并继续成为这项他们期望在竞选之外延伸的使命的一部分。</div>
+  <div class="quote-meta">— Tulsi Gabbard （01:32:57）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tulsi Gabbard <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">It’s a sad state of affairs when some of the most influential voices in our country will label someone a lover or supporter of dictators simply because you’re saying, “Hey, we shouldn’t be going to war. There is another way.”</div>
+  <div class="dialogue-zh">当我们国家一些最有影响力的声音仅仅因为你说“嘿，我们不应该发动战争。还有另一种方法”就给某人贴上独裁者的情人或支持者的标签时，这是一种可悲的情况。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:20)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Tulsi Gabbard, who was a longtime Democrat, including being the vice chair of the Democratic National Committee. She endorsed Bernie in 2016 and Biden in 2020. She has been both loved and heavily criticized for her independent thinking and bold political stances, especially on topics of war and the military industrial complex. She served in the US military for ...</div>
+  <div class="dialogue-zh">以下是与图尔西·加巴德 (Tulsi Gabbard) 的对话，他是长期民主党人，包括担任民主党全国委员会副主席。她在2016年支持伯尼，在2020年支持拜登。她因其独立思考和大胆的政治立场，特别是在战争和军工综合体问题上，既受到爱戴，也受到严厉批评。她在美国军队服役了</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:58)</span>
+  </div>
+  <div class="dialogue-en">This is a Lex Fridman podcast. To support it, please check out our sponsors in the description.</div>
+  <div class="dialogue-zh">这是莱克斯·弗里德曼的播客。为了支持它，请在说明中查看我们的赞助商。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:03)</span>
+  </div>
+  <div class="dialogue-en">And now, dear friends, here’s Tulsi Gabbard. War in Iraq</div>
+  <div class="dialogue-zh">现在，亲爱的朋友们，这是图尔西·加巴德。伊拉克战争</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:07)</span>
+  </div>
+  <div class="dialogue-en">You’ve served in the US military for many years, achieving rank of Lieutenant Colonel. You were deployed in Iraq in 2004 and ’05, Kuwait in ’08 and ’09. What lessons about life and about country have you learned from that experience of war?</div>
+  <div class="dialogue-zh">您在美国军队服役多年，获得中校军衔。您于 2004 年和 05 年被部署在伊拉克，08 年和 09 年被部署在科威特。您从战争经历中学到了哪些关于人生和国家的教训？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tulsi Gabbard <span class="dialogue-time">(00:01:25)</span>
+  </div>
+  <div class="dialogue-en">So many. Central to those lessons learned was having my eyes open to the very real cost of war.</div>
+  <div class="dialogue-zh">这么多。这些经验教训的核心是让我认识到战争的真实代价。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tulsi Gabbard <span class="dialogue-time">(00:01:35)</span>
+  </div>
+  <div class="dialogue-en">Of course, I served in a medical unit during that first deployment to Iraq. It was 2005 during the height of that war, and unfortunately we took a lot of casualties. We, across the entire US military, my brigade that I deployed with was from the Hawaii National Guard. We had approximately 3000 soldiers who were operating in four different areas of Iraq. And my first task every day was to go throug...</div>
+  <div class="dialogue-zh">当然，在第一次部署到伊拉克期间，我在医疗部队服役。那是2005年，正值战争最激烈的时期，不幸的是我们伤亡惨重。我们，在整个美国军队中，我所部署的旅来自夏威夷国民警卫队。我们有大约 3000 名士兵在伊拉克的四个不同地区执行任务。我每天的第一个任务就是完成</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tulsi Gabbard <span class="dialogue-time">(00:02:14)</span>
+  </div>
+  <div class="dialogue-en">I went through that list name by name, looking to see if any one of our nearly 3000 soldiers from Hawaii had been hurt in the line of duty. And then, if seeing them on the list, tracking them down. Where were they? Were they getting the care they needed? Would they be able to get sufficient care to stay in the country and return to duty? Did I need to get them evacuated? Usually it would be to mil...</div>
+  <div class="dialogue-zh">我逐个查看了这份名单，看看我们近 3000 名来自夏威夷的士兵中是否有人在执行任务时受伤。然后，如果在名单上看到他们，就追踪他们。他们在哪里？他们得到了所需的护理吗？他们能否得到足够的照顾以留在国内并重返岗位？我需要让他们撤离吗？通常是到密尔</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tulsi Gabbard <span class="dialogue-time">(00:03:26)</span>
+  </div>
+  <div class="dialogue-en">Experiencing firsthand that high human cost of war caused me, a 20-something-year-old from Hawaii… I had left my seat in the state legislature to volunteer to deploy with my brothers and sisters in my unit to Iraq, and so recognize the cost of war, I think, in two fundamental ways. Number one is the high human cost of war on our troops and on the people in the country where this war was being wage...</div>
+  <div class="dialogue-zh">作为一名来自夏威夷的 20 多岁的年轻人，我亲身经历了战争造成的高昂人员伤亡……我离开了州立法机构的席位，自愿与部队中的兄弟姐妹一起部署到伊拉克，因此我认为，从两个基本方面认识到战争的代价。第一是战争给我们的军队和战争发生国的人民造成了高昂的人员伤亡</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tulsi Gabbard <span class="dialogue-time">(00:03:56)</span>
+  </div>
+  <div class="dialogue-en">Seeing then, back again in 2005, and recognizing KBR Halliburton, one of the biggest defense contracting companies then, and I know that they’re still very much in that business now, Dick Cheney being connected with that company at one point or another, but in our camp specifically, which was one of the larger ones in Iraq at that time, there wasn’t anything that happened in our camp that didn’t h...</div>
+  <div class="dialogue-zh">回顾2005年，当时最大的国防承包公司之一KBR哈里伯顿，我知道他们现在仍然在从事这一业务，迪克·切尼曾在某一时刻与该公司有联系，但特别是在我们的营地，当时是伊拉克最大的营地之一，我们营地发生的任何事情都令人震惊。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tulsi Gabbard <span class="dialogue-time">(00:04:48)</span>
+  </div>
+  <div class="dialogue-en">I got curious about how much it costs us as taxpayers. And so I started asking around some of the people, and I think at that time it was like, well, every time a soldier or a service member walks through the door, if I were to go in for breakfast and grab a banana and walk out, that’s an automatic $35 per head per meal four times a day, thousands and thousands of people.</div>
+  <div class="dialogue-zh">我很好奇我们作为纳税人要花多少钱。所以我开始询问周围的一些人，我想当时就像是，每次有士兵或服役人员走进门时，如果我进去吃早餐，抓起一根香蕉然后走出去，那么每天四次，每人每餐自动收费 35 美元，成千上万的人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tulsi Gabbard <span class="dialogue-time">(00:05:13)</span>
+  </div>
+  <div class="dialogue-en">And then we made friends. There’s a pretty large Filipino community in Hawaii. A lot of Filipino soldiers from Hawaii. We made friends with the Filipino workers who were there. They would often go in the back of the tents and set up their own rice cookers and cook their own meals, which is where the real good food was. But just started talking to them and getting to know them and asked like, “Hey,...</div>
+  <div class="dialogue-zh">然后我们交了朋友。夏威夷有一个相当大的菲律宾社区。很多来自夏威夷的菲律宾士兵。我们和那里的菲律宾工人成了朋友。他们常常会到帐篷后面架起电饭锅，自己做饭，这才是真正的美食所在。但刚开始与他们交谈并了解他们并问道，“嘿，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tulsi Gabbard <span class="dialogue-time">(00:06:26)</span>
+  </div>
+  <div class="dialogue-en">It was an eye-opening experience that growing up in Hawaii, I frankly hadn’t given much thought to before, but it’s what led me ultimately coming back from that first deployment there was no way that I could go back to the life that I had left behind. And I knew somehow, someway I needed to find a way to use those experiences to try to make a positive impact, to try to influence those… I mean, fra...</div>
+  <div class="dialogue-zh">这是在夏威夷长大的一次令人大开眼界的经历，坦率地说，我以前没有考虑太多，但这就是我最终从第一次部署中回来的原因，我无法回到我离开的生活。我知道不知何故，我需要找到一种方法来利用这些经历来尝试产生积极的影响，尝试影响那些……我的意思是，fra</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:11)</span>
+  </div>
+  <div class="dialogue-en">If we can just go back to that list. So the list is just name and injury, name and injury.</div>
+  <div class="dialogue-zh">如果我们能回到那个列表就好了。所以名单上只有名字和伤病，名字和伤病。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tulsi Gabbard <span class="dialogue-time">(00:07:17)</span>
+  </div>
+  <div class="dialogue-en">Name, unit, potentially location if someone had documented that, and their injury.</div>
+  <div class="dialogue-zh">姓名、单位、可能的位置（如果有人记录了这些情况）以及他们的受伤情况。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:24)</span>
+  </div>
+  <div class="dialogue-en">And it’s just pages and pages of that.</div>
+  <div class="dialogue-zh">这只是一页又一页。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tulsi Gabbard <span class="dialogue-time">(00:07:26)</span>
+  </div>
+  <div class="dialogue-en">Yeah. Yeah. I didn’t get to call home every day, but when I called home and talked to my parents, I felt the tension in their voice. They didn’t want me to worry about anything at home. And so they were always like, “Hey, how are you? What can we send you?” And this and that. But it wasn’t like I was calling them from down the street and saying, “Hey, how’s it going? Let’s go have lunch,” or whate...</div>
+  <div class="dialogue-zh">是的。是的。我没有每天给家里打电话，但是当我打电话回家和父母交谈时，我感受到了他们声音中的紧张。他们不想让我担心家里的任何事情。所以他们总是说，“嘿，你好吗？我们可以给你寄什么？”还有这个和那个。但我并不是在街上给他们打电话，说：“嘿，怎么样？我们去吃午饭吧，”或者什么</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tulsi Gabbard <span class="dialogue-time">(00:08:31)</span>
+  </div>
+  <div class="dialogue-en">What my dad told me later when I got home after that deployment was that every time they saw the news, and they saw a helicopter shot down or crashed or some IED, they held their breath until they saw or heard the news of who it was or what it was. Battle injuries and PTSD</div>
+  <div class="dialogue-zh">后来当我在部署后回到家时，我父亲告诉我，每次他们看到新闻，看到一架直升机被击落或坠毁或一些简易爆炸装置时，他们都会屏住呼吸，直到看到或听到消息，知道这是谁或是什么。战伤和创伤后应激障碍</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:53)</span>
+  </div>
+  <div class="dialogue-en">What can you say about what the soldiers had to go through physically and psychologically when they get injured?</div>
+  <div class="dialogue-zh">您能谈谈士兵们受伤时在身体和心理上所经历的情况吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Tulsi Gabbard <span class="dialogue-time">(00:09:01)</span>
+  </div>
+  <div class="dialogue-en">The physical; some injuries appeared to be minor upfront. At that time, traumatic brain injury was not something that was talked about much, if at all. Many had visible wounds. Others are now what we know appeared like, “All right, cool, you checked out,” but had invisible wounds. Those who were injured in a way that did not allow them to get back to work, found it emotionally very difficult to be...</div>
+  <div class="dialogue-zh">身体方面；一些伤势在前期看来是轻伤。当时，创伤性脑损伤并没有被太多谈论，甚至根本没有被谈论。许多人身上都有明显的伤口。其他人现在看起来就像我们所知道的那样，“好吧，酷，你退房了”，但有看不见的伤口。那些因受伤而无法重返工作岗位的人发现，在情感上很难恢复健康。</div>
+</div>
+    <a href="https://lexfridman.com/tulsi-gabbard-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a>
+<a href="cenk-uygur.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cenk Uygur</div>
+  <div class="card-meta">Cenk Uygur</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

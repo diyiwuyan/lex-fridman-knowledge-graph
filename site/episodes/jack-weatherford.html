@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jack Weatherford - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Jack Weatherford</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Jack Weatherford</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/jack-weatherford.html" style="font-size:16px;color:#818cf8;font-weight:600">Jack Weatherford</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">43,856 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/jack-weatherford-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:56</span>
+  <span class="chapter-title">Origin story of Genghis Khan<span class="zh-trans"> · 成吉思汗的起源故事</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">42:42</span>
+  <span class="chapter-title">Early battles &amp; conquests<span class="zh-trans"> · 早期的战斗和征服</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">55:23</span>
+  <span class="chapter-title">Power<span class="zh-trans"> · 力量</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">57:45</span>
+  <span class="chapter-title">Secret History<span class="zh-trans"> · 秘史</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:11:10</span>
+  <span class="chapter-title">Mongolian steppe<span class="zh-trans"> · 蒙古草原</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:14:27</span>
+  <span class="chapter-title">Mounted archery and horse-riding<span class="zh-trans"> · 骑马射箭和骑马</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:22:48</span>
+  <span class="chapter-title">Genghis Khan’s army<span class="zh-trans"> · 成吉思汗的军队</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:39:00</span>
+  <span class="chapter-title">Military tactics and strategy<span class="zh-trans"> · 军事战术和战略</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:51:24</span>
+  <span class="chapter-title">Wars of conquest<span class="zh-trans"> · 征服战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:55:48</span>
+  <span class="chapter-title">Dan Carlin<span class="zh-trans"> · 丹·卡林</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:05:49</span>
+  <span class="chapter-title">Religious freedom<span class="zh-trans"> · 宗教自由</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:21:36</span>
+  <span class="chapter-title">Trade and the Silk Road<span class="zh-trans"> · 贸易与丝绸之路</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:30:21</span>
+  <span class="chapter-title">Weapons innovation<span class="zh-trans"> · 武器创新</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:31:52</span>
+  <span class="chapter-title">Kublai Khan and conquering China<span class="zh-trans"> · 忽必烈和征服中国</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:13:43</span>
+  <span class="chapter-title">Fall of the Mongol Empire<span class="zh-trans"> · 蒙古帝国的没落</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:40:38</span>
+  <span class="chapter-title">Genetic legacy<span class="zh-trans"> · 遗传遗产</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:50:32</span>
+  <span class="chapter-title">Lessons from Genghis Khan<span class="zh-trans"> · 成吉思汗的教训</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:00:48</span>
+  <span class="chapter-title">Human nature<span class="zh-trans"> · 人性</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:03:58</span>
+  <span class="chapter-title">Visiting Mongolia<span class="zh-trans"> · 访问蒙古</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:23:27</span>
+  <span class="chapter-title">Lex: Dan Carlin<span class="zh-trans"> · 莱克斯：丹·卡林</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">khan</span><span class="keyword-tag">jack</span><span class="keyword-tag">weatherford</span><span class="keyword-tag">mongols</span><span class="keyword-tag">going</span><span class="keyword-tag">said</span><span class="keyword-tag">don</span><span class="keyword-tag">genghis</span><span class="keyword-tag">history</span><span class="keyword-tag">chinggis</span><span class="keyword-tag">china</span><span class="keyword-tag">horse</span><span class="keyword-tag">mongol</span><span class="keyword-tag">didn</span><span class="keyword-tag">family</span><span class="keyword-tag">empire</span><span class="keyword-tag">important</span><span class="keyword-tag">mother</span><span class="keyword-tag">came</span><span class="keyword-tag">mongolia</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"So, she was obviously extremely distressed about it. Whereas Sochigel, the mother of the boy, she may have been distressed, I don’t know, but nothing has shown up in the record. So, he does have this episode of having killed off his brother. But I don’t think it was a deeply meaningful, I think it was important, but I don’t think it was a mostly deeply meaningful for Temüjin. The brother was gone, the problem was solved, mother is extremely ticked off at him but…"</div>
+  <div class="quote-zh">所以，她显然是非常苦恼的。而男孩的母亲索奇格尔可能很伤心，我不知道，但记录中没有显示任何内容。所以，他确实有杀死他兄弟的这段情节。但我不认为这具有深刻的意义，我认为这很重要，但我不认为这对铁木真来说具有最深刻的意义。哥哥走了，问题解决了，母亲对他非常生气，但是……</div>
+  <div class="quote-meta">— Jack Weatherford （00:34:47）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"The Mongol and the horse are inseparable. I wrote one line in the book that the editor removed because that was insulting. I said, the Mongol and the horse, they live together, they know each other with every twitch of the muscle and they smell the same. Well, I was saying it just not to be insulting about anything but they have that deep intimacy and the horses do know their owner from the smell. This is very important. It’s also important for Genghis Khan because they made the flags, what they call [foreign language 01:16:05], out of the horse hair from their own horses. And so, in battle, they used it for a very practical purpose and that is the horses would return to their source because they knew the smell of their flag, it was other members of their own herd."</div>
+  <div class="quote-zh">蒙古人和马是密不可分的。我在书中写了一行，编辑删除了，因为那是侮辱性的。我说，蒙古人和马，他们生活在一起，他们肌肉的每一次抽动都认识彼此，他们的气味也一样。好吧，我这么说并不是为了侮辱任何事情，但它们之间有着深厚的亲密关系，而且马确实可以通过气味认出它们的主人。这非常重要。这对成吉思汗来说也很重要，因为他们用自己的马匹的马毛制作了他们所说的[外语 01:16:05] 的旗帜。因此，在战斗中，他们将其用于非常实际的目的，那就是马匹会返回源头，因为它们知道旗帜的气味，那是他们自己马群的其他成员。</div>
+  <div class="quote-meta">— Jack Weatherford （01:15:36）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But for the Mongolians, it’s a symbolic thing. Because obviously, it’s used for a horse. But for the Mongols, your destiny, yourself is your Khiimori, your wind horse that lives inside of you, your wind horse that guides you and gives you opportunities. But it’s up to you to ride that wind horse. It’s up to you to use the wind horse, not to just go wild with the wind horse. And so, I think it’s at that crucial moment. He’s on his way back home to go with Jamukha and the other soldiers to the market to rescue Börte. And so, symbolically, he found a whip there. But I think it means that he found the way to control his destiny, his fate. It’s very important, very important."</div>
+  <div class="quote-zh">但对于蒙古人来说，这是一个象征性的事情。因为显然，它是用于马的。但对于蒙古人来说，你的命运，你自己就是你的希森，你内心的风马，引导你、给你机会的风马。但能否驾驭那匹风马取决于你。风马的使用取决于你，而不是随风马而狂。所以，我认为现在正处于关键时刻。他正在回家的路上，准备与贾木卡和其他士兵一起前往市场营救波尔特。因此，他象征性地在那里发现了一根鞭子。但我认为这意味着他找到了掌控他的命运、他的命运的方法。这非常重要，非常重要。</div>
+  <div class="quote-meta">— Jack Weatherford （04:06:40）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"He goes to a man who ruled the Khiyad people in Central Mongolia, the Tuul River, about where the capital Ulaanbaatar is today. He goes there because that Wang Khan is his name or Toghrul khan. He goes there because Wang khan had been the Lord over his father at one point, and his father had gone on raids for him. And so he went there and actually he took a gift, that’s because Börte’s mother had brought a sable coat as a gift for mother Hö’elün at that time of the marriage. So he took the coat and he took it and he gave it as a gift to Wang Khan and asked for his help. And Wang Khan said, “Yes.” He said, “I’ll send some troops, but we need more. And you need to ask Jamukha. You need to ask him to come also.” He said, “I will send a message to him to get troops.”"</div>
+  <div class="quote-zh">他去找了一位统治蒙古中部图拉河地区希亚德人的人，那里大约就是今天首都乌兰巴托的地方。他去那里是因为王汗是他的名字或托古鲁尔汗。他去那里是因为王可汗曾经是他父亲的主，而他的父亲为他进行了袭击。所以他去了那里，实际上他拿了一份礼物，因为当时博尔特的母亲在结婚时给母亲Hö’elün带来了一件貂皮大衣作为礼物。于是他拿了那件外套，他把它作为礼物送给了王汗，并请求他的帮助。王汗说：“是的。”他说：“我会派出一些军队，但我们需要更多。你需要问札木合。你需要让他也来。”他说：“我会传话给他，让他调兵遣将。”</div>
+  <div class="quote-meta">— Jack Weatherford （00:22:28）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So, it was an unusual gift and don’t… It has meaning, but I don’t know all the meanings behind it. It’s sort of odd to me. But the golden belt I didn’t think about it in different ways. But the belt for the Mongol man is really the sign of manhood. And in fact, just a belt, büse, a woman was often then and even now called a person without a belt because that’s how they were at that time."</div>
+  <div class="quote-zh">所以，这是一份不寻常的礼物，而且不……它有意义，但我不知道它背后的所有含义。这对我来说有点奇怪。但金腰带我并没有以不同的方式思考。但对于蒙古男人来说，腰带确实是男子气概的标志。事实上，只是一条腰带，büse，一个女人在当时甚至现在都经常被称为没有腰带的人，因为那是他们当时的样子。</div>
+  <div class="quote-meta">— Jack Weatherford （00:39:44）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Jack Weatherford, anthropologist and historian specializing in Genghis Khan and the Mongol Empire. He has written a legendary book on his topic titled Genghis Khan and the Making of the Modern World, and he has written many other books, including Emperor of the Seas: Kublai Khan and the Making of China, Genghis Khan and the Quest for God, The Secret History of ...</div>
+  <div class="dialogue-zh">以下是与专门研究成吉思汗和蒙古帝国的人类学家和历史学家杰克·韦瑟福德的对话。他就他的主题写了一本传奇性的书，名为《成吉思汗与现代世界的形成》，他还写了许多其他书籍，包括《海皇：忽必烈与中国的形成》、《成吉思汗与上帝的探索》、《成吉思汗秘史》等。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:56)</span>
+  </div>
+  <div class="dialogue-en">Genghis Khan, born in approximately 1162, became the conqueror of the largest contiguous empire in history. But before that, he was a boy named Temüjin, who at nine years old, lost everything. His father, his tribe, living in poverty, abandoned to the harshness of the Mongolian steppe. From a boy with nothing to the conqueror of the world. So tell me about this boy, his childhood and the Mongolian...</div>
+  <div class="dialogue-zh">成吉思汗大约出生于 1162 年，成为历史上面积最大的帝国的征服者。但在此之前，他是一个名叫铁木真的男孩，九岁时就失去了一切。他的父亲，他的部落，生活贫困，被遗弃在严酷的蒙古草原上。从一个一无所有的男孩到世界的征服者。告诉我关于这个男孩、他的童年和蒙古语的故事</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jack Weatherford <span class="dialogue-time">(00:01:27)</span>
+  </div>
+  <div class="dialogue-en">The story of Genghis Khan, like the story I think of all of us, it doesn’t begin at birth, it begins… That’s the beginning of life. The story begins long before birth, and sometimes it can be many generations before and sometimes only shortly before. But I think with Genghis Khan, a crucial thing is to understand how his parents met and then how he was conceived. And that is that one day a cart wa...</div>
+  <div class="dialogue-zh">成吉思汗的故事，就像我想到的我们所有人的故事一样，它不是从出生开始，而是开始……那就是生命的开始。故事早在出生前就开始了，有时可能是好几代人之前，有时只是不久之前。但我认为对于成吉思汗来说，至关重要的是了解他的父母是如何相遇的，以及他是如何受孕的。就是有一天，一辆手推车</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jack Weatherford <span class="dialogue-time">(00:02:29)</span>
+  </div>
+  <div class="dialogue-en">So what happened was a man named Yesügei… Yesügei, the future father of Genghis Khan. Yesügei was up on a hill. He was hunting with his falcon. The words of the Secret History of the Mongols were very clear, and he looked down and he saw her and he could barely glimpse her, but he knew she was young and she was a new bride. And he rode back to camp. He got his two brothers and they came racing dow...</div>
+  <div class="dialogue-zh">于是发生了一个名叫也速该的人……也速该，成吉思汗未来的父亲。也速该在一座小山上。他正在用他的猎鹰狩猎。蒙古秘史的话写得很清楚，他低头就看到了她，几乎看不到她的影子，但他知道她很年轻，而且是新新娘。然后他骑马返回营地。他带着他的两个兄弟，他们飞奔而来</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jack Weatherford <span class="dialogue-time">(00:03:28)</span>
+  </div>
+  <div class="dialogue-en">And she decided that it’s more important for him to live. And she told him when he came back, “You must flee. If you stay here, they will kill you and they will take me. But if you flee, they will take me, but you will have the chance to find another wife. There are many women in the world. You find one and you call her Hö’elün after my name, and you remember me when you’re with her.” It’s a very ...</div>
+  <div class="dialogue-zh">她认为对他来说，活下去更重要。当他回来时，她告诉他：“你必须逃。如果你留在这里，他们会杀了你，他们会带走我。但如果你逃，他们会带走我，但你将有机会找到另一个妻子。世界上有很多女人。你找到一个，你就用我的名字给她起名叫诃额仑，当你和她在一起时，你就会记住我。”这是一个非常</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jack Weatherford <span class="dialogue-time">(00:04:22)</span>
+  </div>
+  <div class="dialogue-en">She didn’t say a word until her husband was over the ridge. And when he was over the ridge and she could no longer see him, she began to scream and wail. And one of the brothers said to her, “It doesn’t matter if you shake the waters out of the river and if you shake the mountains with your screaming, you will never see this man again.” And he was right. That was the moment that Genghis Khan’s mot...</div>
+  <div class="dialogue-zh">直到她丈夫翻过山脊，她才说一句话。当他越过山脊，她再也看不见他时，她开始尖叫和哭泣。其中一位兄弟对她说：“无论你把河里的水抖掉，或者用尖叫震动山，你都不会再见到这个人了。”他是对的。那是成吉思汗的座右铭</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:17)</span>
+  </div>
+  <div class="dialogue-en">So the meeting is fundamentally sort of a mixture of heartbreak and dark criminal type of kidnapping?</div>
+  <div class="dialogue-zh">所以这次会议基本上是心碎和黑暗犯罪类型绑架的混合体？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jack Weatherford <span class="dialogue-time">(00:05:27)</span>
+  </div>
+  <div class="dialogue-en">Yes.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:28)</span>
+  </div>
+  <div class="dialogue-en">And from that is conceived this conqueror of the biggest contiguous empire in history.</div>
+  <div class="dialogue-zh">由此孕育了历史上最大的连续帝国的征服者。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jack Weatherford <span class="dialogue-time">(00:05:35)</span>
+  </div>
+  <div class="dialogue-en">What I was really interested in was how did this happen? Who was this person? As Wordsworth wrote in his poem, “The child is father of the man, and it’s the childhood that created him.” And it’s that episode that was before he was born, but all the things that happened throughout his childhood made him into the man that he became. And so he was now, suddenly this unusual situation was created wher...</div>
+  <div class="dialogue-zh">我真正感兴趣的是这是怎么发生的？这个人是谁？正如华兹华斯在他的诗中写道：“孩子是男人的父亲，是童年创造了他。”这是他出生之前的那段插曲，但他整个童年发生的所有事情使他成为了现在的样子。现在他就是这样，突然之间就出现了这种不寻常的情况</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jack Weatherford <span class="dialogue-time">(00:06:38)</span>
+  </div>
+  <div class="dialogue-en">And during this campaign against the Tatars, he killed two Tatars. One of them was named Temujin-üge, which is sort of person of iron is what it means from the Turkic. But today a part of also Mongolian language. So he came back, he had a baby, and he decided to name him Temüjin, the person of iron or iron-man, we might call him.</div>
+  <div class="dialogue-zh">在这次对鞑靼人的征战中，他杀死了两名鞑靼人。其中一位名叫铁木真兀格，是突厥语中铁人的意思。但今天也是蒙古语的一部分。于是他回来了，生了一个孩子，他决定给他起名叫铁木真，我们可以这样称呼他，铁人或铁人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:04)</span>
+  </div>
+  <div class="dialogue-en">After the man he killed.</div>
+  <div class="dialogue-zh">在他杀了那个人之后。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jack Weatherford <span class="dialogue-time">(00:07:05)</span>
+  </div>
+  <div class="dialogue-en">After the man he killed. So he has a kidnapped mother, she’s a second wife now, not a legal wife, but just a second kidnapped wife. And he’s named for someone his father just killed. It was not an auspicious beginning. And in fact, just episode after episode in his childhood was inauspicious. The father and mother moved camp one time when he was quite young and somehow they overlooked him and forg...</div>
+  <div class="dialogue-zh">在他杀了那个人之后。所以他有一个被绑架的母亲，她现在是第二个妻子，不是合法的妻子，而只是一个被绑架的第二个妻子。他是以他父亲刚刚杀死的一个人的名字命名的。这不是一个吉祥的开始。事实上，他童年时期的一幕又一幕都是不吉利的。当他还很小的时候，父亲和母亲曾经搬过营地，但不知何故，他们忽视了他并忘记了他。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jack Weatherford <span class="dialogue-time">(00:07:58)</span>
+  </div>
+  <div class="dialogue-en">And it’s very odd to me that I never have any inkling of a spark of relationship much between the father and the son because then when Temüjin is eight years old, his father decides to take him off to find a wife, which finding a wife in the Mongolian terms means you give the child to that family or you give the boy to that family and he will live with them and they will raise him up and they will...</div>
+  <div class="dialogue-zh">对我来说很奇怪的是，我从来没有任何关于父亲和儿子之间关系的火花，因为当铁木真八岁的时候，他的父亲决定带他去寻找妻子，用蒙古语来说，寻找妻子意味着你把孩子交给那个家庭，或者你把男孩交给那个家庭，他会和他们住在一起，他们会抚养他，他们会</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jack Weatherford <span class="dialogue-time">(00:08:46)</span>
+  </div>
+  <div class="dialogue-en">And now his father takes him off at age eight and he was going to take him to Hö’elün’s family, but he never made it. He stopped with another family. It’s like the first family he came across. And in the words of the Secret History, it sort of like instant love that there was fire in his eyes and fire in her eyes. And he saw this girl Börte, who was about nine years old, a little older, and he wan...</div>
+  <div class="dialogue-zh">现在，他的父亲在他八岁的时候就带他离开了，他本来打算带他去诃额仑的家里，但他却没能成行。他和另一个家庭停了下来。这就像他遇到的第一个家庭。而用秘史的话来说，他的眼里有火，她的眼里有火，有点像一见钟情。他看到了这个女孩 Börte，她大约九岁，年纪稍大一些，他想要</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jack Weatherford <span class="dialogue-time">(00:09:53)</span>
+  </div>
+  <div class="dialogue-en">So now Temüjin is off living with another family, and somebody comes from his family, a family, not a relative, but a close person named Münglig comes to get him, take him back, and they make it through the winter. They make it through the winter. Mother Hö’elün, by now she has four sons and one daughter. I think the daughter had already been born or the daughter was going to be born not too long ...</div>
+  <div class="dialogue-zh">所以现在铁木真和另一个家庭住在一起，有一个人来自他的家庭，一个家庭，不是亲戚，而是一个名叫Münglig的亲密的人来接他，把他带回来，他们一起度过了冬天。他们熬过了冬天。母亲诃额仑，现已育有四子一女。我认为女儿已经出生或者不久之后女儿就会出生</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jack Weatherford <span class="dialogue-time">(00:10:57)</span>
+  </div>
+  <div class="dialogue-en">Letting her know that as a captive woman, she was not a real wife in their view. And that was really the signal that when they moved camp, they were not taking her with them. And they packed up and they took her animals. They took the animals. But at that moment, she still had one horse for a moment, and she jumped on the horse and she took the banner of her husband and she raced around the people...</div>
+  <div class="dialogue-zh">让她知道，作为一个俘虏的女人，在他们看来，她并不是一个真正的妻子。这确实是一个信号，表明当他们转移营地时，他们并没有把她带走。他们收拾好东西，带走了她的动物。他们带走了动物。但那一刻，她还是一匹马，一跃而上，她拿着丈夫的旗帜，在众人的周围奔跑。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jack Weatherford <span class="dialogue-time">(00:11:46)</span>
+  </div>
+  <div class="dialogue-en">And Temüjin cried. He was a little boy, eight years old. There was nothing he could do. He’s just a little boy. And now that family is left there on the steppe, four children, possibly five already. Sochigel, the other woman with two children. They’re all left there to die on the steppe. When the winter comes, they will surely all die.</div>
+  <div class="dialogue-zh">铁木真哭了。他是一个小男孩，八岁。他无能为力。他只是一个小男孩。现在，这个家庭只剩下四个孩子，可能已经五个了。索奇格尔，另一位有两个孩子的妇女。他们都被留在草原上等死。冬天一到，它们肯定都会死掉。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:12:14)</span>
+  </div>
+  <div class="dialogue-en">How do they make it through the winter?</div>
+  <div class="dialogue-zh">他们如何度过冬天？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jack Weatherford <span class="dialogue-time">(00:12:16)</span>
+  </div>
+  <div class="dialogue-en">Mother Hö’elün, in the words of the Secret History, she pulled her hat down over her head. She took her black stick and she ran up and down the banks of the river digging out roots to feed the gullet of her brood. She fed them through the winter. She found foods digging up whatever she could, finding whatever she could, everything she could. And even at this young age, Temüjin was already beginnin...</div>
+  <div class="dialogue-zh">诃额仑妈妈，用《秘史》的话来说，她把帽子拉低到头上。她拿着黑色的棍子，在河岸上跑来跑去，挖出树根来喂食她的孩子们。她喂养它们度过了整个冬天。她发现食物，尽其所能地挖掘，找到她能找到的一切，她能找到的一切。即使在这么年轻的时候，铁木真就已经开始了</div>
+</div>
+    <a href="https://lexfridman.com/jack-weatherford-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="ben-shapiro-destiny-debate.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ben Shapiro Destiny Debate</div>
+  <div class="card-meta">Ben Shapiro</div>
+</a>
+<a href="bernie-sanders.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bernie Sanders</div>
+  <div class="card-meta">Bernie Sanders</div>
+</a>
+<a href="douglas-murray-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Douglas Murray #2</div>
+  <div class="card-meta">Douglas Murray</div>
+</a>
+<a href="eric-weinstein-4.html" class="card" style="text-decoration:none">
+  <div class="card-title">Eric Weinstein: Difficult Conversations, Freedom of Speech, and Physics</div>
+  <div class="card-meta">Eric Weinstein</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

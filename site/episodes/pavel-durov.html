@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pavel Durov - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Pavel Durov</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Pavel Durov</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/pavel-durov.html" style="font-size:16px;color:#818cf8;font-weight:600">Pavel Durov</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">35,571 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/pavel-durov-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:07</span>
+  <span class="chapter-title">Philosophy of freedom<span class="zh-trans"> · 自由哲学</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">6:15</span>
+  <span class="chapter-title">No alcohol<span class="zh-trans"> · 不含酒精</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:20</span>
+  <span class="chapter-title">No phone<span class="zh-trans"> · 没有电话</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">20:16</span>
+  <span class="chapter-title">Discipline<span class="zh-trans"> · 纪律</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">41:28</span>
+  <span class="chapter-title">Telegram: Lean philosophy, privacy, and geopolitics<span class="zh-trans"> · Telegram：精益哲学、隐私和地缘政治</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">56:50</span>
+  <span class="chapter-title">Arrest in France<span class="zh-trans"> · 在法国被捕</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:13:01</span>
+  <span class="chapter-title">Romanian elections<span class="zh-trans"> · 罗马尼亚选举</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:23:56</span>
+  <span class="chapter-title">Power and corruption<span class="zh-trans"> · 权力与腐败</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:33:29</span>
+  <span class="chapter-title">Intense education<span class="zh-trans"> · 强化教育</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:45:29</span>
+  <span class="chapter-title">Nikolai Durov<span class="zh-trans"> · 尼古拉·杜罗夫</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:49:58</span>
+  <span class="chapter-title">Programming and video games<span class="zh-trans"> · 编程和视频游戏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:54:11</span>
+  <span class="chapter-title">VK origins &amp; engineering<span class="zh-trans"> · VK 起源与工程</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:11:24</span>
+  <span class="chapter-title">Hiring a great team<span class="zh-trans"> · 聘请一支优秀的团队</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:20:40</span>
+  <span class="chapter-title">Telegram engineering &amp; design<span class="zh-trans"> · 电报工程与设计</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:39:42</span>
+  <span class="chapter-title">Encryption<span class="zh-trans"> · 加密</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:44:39</span>
+  <span class="chapter-title">Open source<span class="zh-trans"> · 开源</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:49:26</span>
+  <span class="chapter-title">Edward Snowden<span class="zh-trans"> · 爱德华·斯诺登</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:51:58</span>
+  <span class="chapter-title">Intelligence agencies<span class="zh-trans"> · 情报机构</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:53:10</span>
+  <span class="chapter-title">Iran and Russia government pressure<span class="zh-trans"> · 伊朗和俄罗斯政府施压</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">pavel</span><span class="keyword-tag">durov</span><span class="keyword-tag">telegram</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">freedom</span><span class="keyword-tag">government</span><span class="keyword-tag">doing</span><span class="keyword-tag">certain</span><span class="keyword-tag">said</span><span class="keyword-tag">trying</span><span class="keyword-tag">got</span><span class="keyword-tag">started</span><span class="keyword-tag">app</span><span class="keyword-tag">users</span><span class="keyword-tag">experience</span><span class="keyword-tag">important</span><span class="keyword-tag">didn</span><span class="keyword-tag">team</span><span class="keyword-tag">france</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Kafka’s work is heavy. It serves as a warning for the nightmare that civilization can become, and yet I think it is also a source of optimism, because when we can recognize elements of our own world in Kafka’s stories, when we can see elements of our institutions in The Trial or in The Castle, when we can see ourselves in Gregor Samsa, we’re not just diagnosing the disease, we’re proving that we’re still human and wise enough to see it and name it. Kafka gave us the goal: to resist against such systems that tried to dehumanize us and to ensure that individual freedom and the human spirit keep flourishing. I think it will. I have faith in us humans. I love you all. This entry was posted in transcripts on September 30, 2025 by"</div>
+  <div class="quote-zh">卡夫卡的工作很繁重。它是对文明可能成为噩梦的警告，但我认为这也是乐观的源泉，因为当我们能够在卡夫卡的故事中认识到我们自己世界的元素时，当我们能够在《审判》或《城堡》中看到我们制度的元素时，当我们能够在格雷戈尔·萨姆萨中看到自己时，我们不仅仅是在诊断这种疾病，我们还在证明我们仍然是人类，并且有足够的智慧来看到它并命名它。卡夫卡给了我们一个目标：抵制那些试图使我们非人化的制度，并确保个人自由和人类精神不断繁荣。我想会的。我对我们人类有信心。我爱你们。此条目于 2025 年 9 月 30 日发布在成绩单中</div>
+  <div class="quote-meta">— Kafka （04:33:14）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"That’s a hard question to answer because it doesn’t depend on just my actions. I can just say this, I’m patient. I will not let this limitation on my freedom dictate my actions. I will, if anything, double down on defending freedoms because I experienced firsthand what the absence of freedom feels like at least during these four days in police custody when you are just stuck, unable to communicate with people that are important to you, when you don’t even know what’s going on in the world in relation to you personally. So, I have no crystal ball that would tell me the future. I can’t say that I am pessimistic. I think we’ve been able to gradually remove most of the restrictions initially imposed on my freedom last August."</div>
+  <div class="quote-zh">这是一个很难回答的问题，因为它不仅仅取决于我的行为。我只能说，我有耐心。我不会让这种对我自由的限制左右我的行为。如果有的话，我会加倍努力捍卫自由，因为至少在被警察拘留的这四天里，我亲身经历了缺乏自由的感觉，当时你被困住，无法与对你来说很重要的人沟通，当你甚至不知道世界上发生了与你个人相关的事情时。所以，我没有水晶球可以告诉我未来。我不能说我悲观。我认为我们已经能够逐步取消去年八月最初对我的自由施加的大部分限制。</div>
+  <div class="quote-meta">— Pavel Durov （01:08:01）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I don’t think a phone is a necessary device. I remember growing up, I didn’t have a mobile phone. When I was a student at the university, I didn’t have a mobile phone. When I finally got to use a mobile phone, I never used phone calls. I was always in airplane mode or mute. I hated the idea of being disturbed. My philosophy here is pretty simple, I want to define what is important in my life. I don’t want other people or companies, all kinds of organizations telling me what is important today, and what I should be thinking about. Just set up your own agenda and the phone gets in your way."</div>
+  <div class="quote-zh">我不认为手机是必要的设备。我记得小时候，我没有手机。当我还是一名大学学生时，我没有手机。当我终于开始使用手机时，我再也没有打电话过。我总是处于飞行模式或静音。我讨厌被打扰的想法。我的哲学很简单，我想定义我生活中重要的事情。我不希望其他人或公司、各种组织告诉我今天什么是重要的，以及我应该考虑什么。只需设置您自己的议程，手机就会妨碍您。</div>
+  <div class="quote-meta">— Pavel Durov （00:14:40）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Beautiful ideas can come to you while you’re doing your morning exercise, your morning routine without a phone. If you open your phone first thing in the morning, what you end up being is a creature that is told what to think about for the rest of the day. Same is true in a way if you’ve been consuming news from social media late at night. But then how do you define what is important and what you really want to become in life? Now, I’m not saying you have to completely stay away from all sources of information, but take some time to think about what’s really important for you and what you want to change in this world."</div>
+  <div class="quote-zh">当您进行晨练时，即在没有手机的情况下进行早晨例行公事时，您可能会想到美好的想法。如果你早上第一件事就是打开手机，那么你最终就会成为一个被告知这一天剩下的时间要思考什么的生物。如果你在深夜阅读社交媒体上的新闻，在某种程度上也是如此。但是，你如何定义生活中什么是重要的以及你真正想成为什么？现在，我并不是说你必须完全远离所有信息来源，而是花一些时间思考什么对你来说真正重要，以及你想改变这个世界的什么。</div>
+  <div class="quote-meta">— Pavel Durov （00:17:03）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I’m a human being like everybody else. I do get to experience emotions. Some of them are not very pleasant, but I believe that it’s the responsibility of every one of us to cope with these emotions and to learn to work through them. Self-discipline is particularly important because without it, how can you overcome this seemingly endless loop of negativity or despair that ultimately leads to depression for some people? I normally never have depression. I don’t remember having depression in the last 20 years, at least. Maybe when I was a teenager. But one of the reasons for that is I start doing things."</div>
+  <div class="quote-zh">我和其他人一样是一个人。我确实能够体验到情绪。其中一些情绪不太令人愉快，但我相信我们每个人都有责任应对这些情绪并学会克服它们。自律尤为重要，因为没有自律，你如何克服这种看似无休止的消极或绝望循环，最终导致某些人抑郁？我通常从来没有抑郁症。至少我不记得过去 20 年里有过抑郁症。也许当我十几岁的时候。但原因之一是我开始做事。</div>
+  <div class="quote-meta">— Pavel Durov （00:20:31）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Pavel Durov, Founder and CEO of Telegram, a messaging platform actively used by over 1 billion people. Pavel has spent his life fighting for freedom of speech, building tools that protect human communication from surveillance and censorship. For this, he has faced pressure from some of the most powerful governments and organizations on earth. In the face of thi...</div>
+  <div class="dialogue-zh">以下是与 Telegram 创始人兼首席执行官 Pavel Durov 的对话，Telegram 是一个被超过 10 亿人积极使用的消息平台。帕维尔一生都在为言论自由而奋斗，构建保护人类交流免受监视和审查的工具。为此，他面临着来自地球上一些最强大的政府和组织的压力。面对这</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:12)</span>
+  </div>
+  <div class="dialogue-en">Yes, he’s 100% that guy, which made the experience of hanging out with him really inspiring to me. I’m grateful for it and I’m grateful to now be able to call him a friend. This podcast conversation is in parts philosophical, about freedom, life, human nature, and the nature of government bureaucracies. And it is also in parts super technical because to me, it’s fascinating that Telegram has a rel...</div>
+  <div class="dialogue-zh">是的，他就是 100% 的那个人，这让和他一起出去玩的经历给了我很大的启发。我对此很感激，也很感激现在能够称他为朋友。这个播客对话部分是哲学性的，涉及自由、生活、人性和政府官僚机构的本质。而且它在某些方面也是超级技术性的，因为对我来说，Telegram 有一个相关的功能很有趣</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:15)</span>
+  </div>
+  <div class="dialogue-en">And by the way, while this entire conversation is in English, we’ll make captions and voiceover audio tracks available in multiple languages, including Russian, Ukrainian, French, and Hindi. On YouTube, you can switch between language audio tracks by clicking the settings gear icon, then clicking audio track, and then selecting the language you prefer. Huge thank you once again to ElevenLabs for t...</div>
+  <div class="dialogue-zh">顺便说一句，虽然整个对话都是英语，但我们将提供多种语言的字幕和画外音音轨，包括俄语、乌克兰语、法语和印地语。在 YouTube 上，您可以通过单击设置齿轮图标，然后单击音轨，然后选择您喜欢的语言来切换语言音轨。再次非常感谢 ElevenLabs 的帮助</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:07)</span>
+  </div>
+  <div class="dialogue-en">You’ve been an advocate for freedom for many years, writing that you should be ready to risk everything for freedom. What were some influences and insights that help you arrive at this value of human freedom?</div>
+  <div class="dialogue-zh">多年来，您一直是自由的倡导者，您写道，您应该准备好为自由冒一切风险。有哪些影响和见解帮助您实现了人类自由的价值？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pavel Durov <span class="dialogue-time">(00:03:21)</span>
+  </div>
+  <div class="dialogue-en">I get to experience the difference between a society with freedom and a society without freedom pretty early in life. I was four years old when my family moved from the Soviet Union to northern Italy, and I could see that a society without freedom cannot enjoy the abundance of opinions, of ideas, of goods and services. Even for a four or five-year-old kid, it was obvious. You can’t experience all ...</div>
+  <div class="dialogue-zh">我很早就体验到了自由社会和没有自由社会之间的区别。当我四岁的时候，我的家人从苏联搬到了意大利北部，我可以看到一个没有自由的社会无法享受丰富的意见、想法、商品和服务。即使对于一个四五岁的孩子来说，这也是显而易见的。你无法体验全部</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:14)</span>
+  </div>
+  <div class="dialogue-en">You also wrote “Свобода дороже денег”. It translates to, “Freedom matters more than money.” How do you prevent these values for freedom, being corrupted by money, by people with influence, by people with power?</div>
+  <div class="dialogue-zh">你还写了“Свобода дороже денег”。翻译过来就是“自由比金钱更重要”。你如何防止这些自由价值观被金钱、有影响力的人和有权势的人腐蚀？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pavel Durov <span class="dialogue-time">(00:04:29)</span>
+  </div>
+  <div class="dialogue-en">Well, the biggest enemies of freedom are fear and greed, so you make sure that they don’t stand in your way. If you imagine the worst thing that can happen to you and then make yourself be comfortable with it, there is nothing more left to be afraid of. So you stand your ground and you remember that it’s worth living your life according to the principles that you believe in, even though this life ...</div>
+  <div class="dialogue-zh">嗯，自由最大的敌人是恐惧和贪婪，所以你要确保它们不会阻碍你。如果你想象可能发生在你身上的最糟糕的事情，然后让自己适应它，那就没有什么可害怕的了。所以你坚持自己的立场，你记得按照你所信仰的原则过你的生活是值得的，即使这一生</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:08)</span>
+  </div>
+  <div class="dialogue-en">Do you contemplate your mortality? You think about your death?</div>
+  <div class="dialogue-zh">你考虑过你的死亡吗？你想过你的死吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pavel Durov <span class="dialogue-time">(00:05:12)</span>
+  </div>
+  <div class="dialogue-en">Oh yes.</div>
+  <div class="dialogue-zh">哦是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:13)</span>
+  </div>
+  <div class="dialogue-en">Are you afraid of it?</div>
+  <div class="dialogue-zh">你害怕吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pavel Durov <span class="dialogue-time">(00:05:14)</span>
+  </div>
+  <div class="dialogue-en">In a way, you have to go against your instinct of self-preservation, and it’s not easy. We are all biological beings, hard-coded to be afraid of death. Nobody wants to die, but when you approach it rationally, you live and then you die. There’s no such thing as your death in your life. You stop experiencing life once you die. So you have to ask yourself this question, is it worth living a life ful...</div>
+  <div class="dialogue-zh">在某种程度上，你必须违背自我保护的本能，这并不容易。我们都是生物体，生来就害怕死亡。没有人想死，但当你理性地对待它时，你会活着，然后就会死。你的生命中不存在死亡这回事。一旦你死了，你就不再体验生命。所以你必须问自己这个问题，过充实的生活值得吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:03)</span>
+  </div>
+  <div class="dialogue-en">Yeah, remembering that death exists makes you deeply feel every moment that you do get.</div>
+  <div class="dialogue-zh">是的，记住死亡的存在会让你深深地感受到你所经历的每一刻。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pavel Durov <span class="dialogue-time">(00:06:11)</span>
+  </div>
+  <div class="dialogue-en">That’s why I love reminding myself that I can die any day. No alcohol</div>
+  <div class="dialogue-zh">这就是为什么我喜欢提醒自己，我随时都会死去。不含酒精</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:15)</span>
+  </div>
+  <div class="dialogue-en">In many ways you live a pretty stoic existence. I got a chance to spend a couple of weeks with you. In many ways, you seek to minimize the negative effects of the outside world on your mind. You’ve written, quote, “If you want to reach your full potential and maintain clarity of mind, stay away from addictive substances. My success and health are the result of 20 plus years of complete abstinence ...</div>
+  <div class="dialogue-zh">从很多方面来说，你过着一种相当坚忍的生活。我有机会和你一起度过几周。在很多方面，你都在寻求尽量减少外部世界对你思想的负面影响。您写道，引用：“如果您想充分发挥潜力并保持头脑清醒，请远离成瘾物质。我的成功和健康是 20 多年完全禁欲的结果</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pavel Durov <span class="dialogue-time">(00:06:57)</span>
+  </div>
+  <div class="dialogue-en">That one is quite easy. When I was 11 years old, my biochemistry teacher, he gave me this book he wrote, it was called The Illusion of Paradise, and there he would describe the biological and chemical processes that happen in your body once you consume this or that substance. It was mainly related to illegal drugs, but alcohol was one of these addictive substances that he covered. So it turns out ...</div>
+  <div class="dialogue-zh">那是很容易的。当我11岁时，我的生物化学老师给了我他写的这本书，书名叫《天堂的幻觉》，书中他描述了一旦你摄入这种或那种物质，你体内发生的生物和化学过程。主要与非法毒品有关，但酒精是他所报道的成瘾物质之一。事实证明</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:08:06)</span>
+  </div>
+  <div class="dialogue-en">Yeah, in many ways it’s a poison we’re letting in our body. But by way of advice, what advice would you give to people who consider not drinking? A lot of people use alcohol to enable them to have a vibrant social life. There’s a lot of pressure from society at a party to drink so they can socialize. So what advice would you give to them, to people who imagine having a social life without alcohol?</div>
+  <div class="dialogue-zh">是的，从很多方面来说，它是我们进入身体的毒药。但作为建议，您会给那些考虑不喝酒的人什么建议？许多人通过饮酒来享受充满活力的社交生活。在聚会上，来自社会的压力很大，要求他们喝酒以便进行社交活动。那么，对于那些想要过上没有酒精的社交生活的人们，您有什么建议呢？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pavel Durov <span class="dialogue-time">(00:08:37)</span>
+  </div>
+  <div class="dialogue-en">Well, first of all, don’t be afraid to be contrarian. Set your own rules. Secondly, if you feel you need to drink, there must be some problem you’re trying to conceal. There’s some theory you’re not ready to confront, and you have to address this fear. If there is a good-looking girl you’re afraid to approach, get rid of this fear, approach her, practice. Do it again and again, it’s pretty banal, ...</div>
+  <div class="dialogue-zh">好吧，首先，不要害怕逆向思维。制定你自己的规则。其次，如果你觉得自己需要喝酒，那么你一定有什么问题想掩盖。有些理论你还没有准备好面对，你必须解决这种恐惧。如果你害怕接近一个漂亮的女孩，摆脱这种恐惧，接近她，练习。一遍又一遍地这样做，这很平庸，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:11)</span>
+  </div>
+  <div class="dialogue-en">Fix the underlying problem, which is usually at the very bottom, is always going to be fear. Work on that.</div>
+  <div class="dialogue-zh">解决根本问题，通常是在最底层，永远是恐惧。努力吧。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Pavel Durov <span class="dialogue-time">(00:09:17)</span>
+  </div>
+  <div class="dialogue-en">And very often people are trying to escape something in their lives with alcohol. What is it they’re trying to escape? What is this problem? You have to get to the bottom of it. Your mind is trying to tell you something valuable, and instead of addressing it directly, you are flooding it in alcohol, which is a spiritual painkiller, but works only temporarily and then you have to pay the debt with ...</div>
+  <div class="dialogue-zh">很多时候，人们试图用酒精来逃避生活中的某些事情。他们到底想逃避什么？这是什么问题？你必须追根究底。你的头脑试图告诉你一些有价值的事情，而不是直接解决它，而是用酒精淹没它，这是一种精神止痛药，但只能暂时起作用，然后你必须用酒精来偿还债务。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:51)</span>
+  </div>
+  <div class="dialogue-en">So what do you do? I mean, you’ve been in a lot of gatherings, a lot of parties. Is there some challenges to saying no?</div>
+  <div class="dialogue-zh">那么你做什么呢？我的意思是，你参加过很多聚会、很多派对。说不有一些挑战吗？</div>
+</div>
+    <a href="https://lexfridman.com/pavel-durov-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="brett-johnson.html" class="card" style="text-decoration:none">
+  <div class="card-title">Brett Johnson: US Most Wanted Cybercriminal</div>
+  <div class="card-meta">Brett Johnson</div>
+</a>
+<a href="jason-calacanis.html" class="card" style="text-decoration:none">
+  <div class="card-title">Jason Calacanis: Startups, Angel Investing, Capitalism, and Friendship</div>
+  <div class="card-meta">Jason Calacanis</div>
+</a>
+<a href="magatte-wade.html" class="card" style="text-decoration:none">
+  <div class="card-title">Magatte Wade: Africa, Capitalism, Communism, and the Future of Humanity</div>
+  <div class="card-meta">Magatte Wade</div>
+</a>
+<a href="mark-zuckerberg.html" class="card" style="text-decoration:none">
+  <div class="card-title">Mark Zuckerberg: Meta, Facebook, Instagram, and the Metaverse</div>
+  <div class="card-meta">Mark Zuckerberg</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

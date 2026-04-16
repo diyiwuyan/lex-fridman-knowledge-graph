@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lars Brownworth - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Lars Brownworth</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Lars Brownworth</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/lars-brownworth.html" style="font-size:16px;color:#818cf8;font-weight:600">Lars Brownworth</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">21,139 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/lars-brownworth-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:17</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:37</span>
+  <span class="chapter-title">The start of the Viking Age<span class="zh-trans"> · 维京时代的开始</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">12:30</span>
+  <span class="chapter-title">Viking military strategy, tactics &amp; technology<span class="zh-trans"> · 维京军事战略、战术和技术</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">26:13</span>
+  <span class="chapter-title">Ragnar Lothbrok<span class="zh-trans"> · 拉格纳·洛斯布鲁克</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">35:40</span>
+  <span class="chapter-title">The Great Heathen Army<span class="zh-trans"> · 伟大的异教徒军队</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:23</span>
+  <span class="chapter-title">Rollo and Normandy<span class="zh-trans"> · 罗洛和诺曼底</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">50:34</span>
+  <span class="chapter-title">Viking religion and Valhalla<span class="zh-trans"> · 维京宗教和瓦尔哈拉</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:01:06</span>
+  <span class="chapter-title">Viking explorers<span class="zh-trans"> · 维京探险家</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:06:13</span>
+  <span class="chapter-title">Vikings in North America<span class="zh-trans"> · 北美洲的维京人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:19:35</span>
+  <span class="chapter-title">Vikings in the East<span class="zh-trans"> · 维京人在东方</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:39:14</span>
+  <span class="chapter-title">Byzantine Empire<span class="zh-trans"> · 拜占庭帝国</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:47:57</span>
+  <span class="chapter-title">History and human nature<span class="zh-trans"> · 历史与人性</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">lars</span><span class="keyword-tag">brownworth</span><span class="keyword-tag">vikings</span><span class="keyword-tag">viking</span><span class="keyword-tag">empire</span><span class="keyword-tag">history</span><span class="keyword-tag">don</span><span class="keyword-tag">roman</span><span class="keyword-tag">england</span><span class="keyword-tag">europe</span><span class="keyword-tag">king</span><span class="keyword-tag">byzantine</span><span class="keyword-tag">east</span><span class="keyword-tag">human</span><span class="keyword-tag">going</span><span class="keyword-tag">away</span><span class="keyword-tag">land</span><span class="keyword-tag">rollo</span><span class="keyword-tag">north</span><span class="keyword-tag">went</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"You know, and what their goals were for li- And I think the short answer is they were identical to us, which is why we can understand them. It’s why you should read things. It’s why you should read the Meditations because this is not just some dry whatever talking to himself in a culture that you cannot understand and can never recreate. It’s a human talking about being human, you know? And I think human nature has not changed, and I don’t think human nature will change. So we are flawed and broken, and we’re… that’s, that’s the human condition. We’re gonna be flawed and broken. So I don’t think… I actually think that’s the great, that’s the great question of history. If you wanna understand history, you have to know about human nature. What is our human nature?"</div>
+  <div class="quote-zh">你知道，他们的目标是什么——我认为简短的答案是他们与我们相同，这就是为什么我们可以理解他们。这就是为什么你应该阅读一些东西。这就是为什么你应该阅读《沉思录》，因为这不仅仅是在一个你无法理解也永远无法重现的文化中自言自语的枯燥乏味的东西。这是一个人在谈论作为人，你知道吗？而且我认为人性没有改变，我也不认为人性会改变。所以我们是有缺陷和破碎的，我们……这就是人类的状况。我们将会有缺陷和破碎。所以我不认为……我实际上认为这是伟大的，这是历史的伟大问题。如果你想了解历史，你就必须了解人性。我们的人性是什么？</div>
+  <div class="quote-meta">— Lars Brownworth （01:59:57）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, that’s the question, isn’t it? I… The short answer is I subscribe to the great man or great woman theory. I think there’s moments—I can’t imagine the Protestant Reformation. I don’t think you can just swap out Martin Luther and have a Protestant Reformation. I don’t think you can swap out Augustus and have the Roman Empire. I mean, there are… I don’t think you can swap out Genghis—and so on and so forth. I think ultimately these impersonal forces are insufficient for explaining, because we are people. We are humans. We are, you know, everything is kind of a relational thing. And but at the same time, you know, the moment needs the man, but the man also needs the moment, you know?"</div>
+  <div class="quote-zh">是的，这就是问题，不是吗？我……简短的回答是我赞同伟人或伟人理论。我认为有些时刻——我无法想象新教改革。我不认为你可以取代马丁·路德而进行新教改革。我不认为你可以取代奥古斯都而拥有罗马帝国。我的意思是，有……我认为你不能换掉成吉思汗——等等。我认为最终这些非个人力量不足以解释，因为我们是人。我们是人类。我们，你知道，一切都是有关系的。但与此同时，你知道，这一刻需要男人，但男人也需要那一刻，你知道吗？</div>
+  <div class="quote-meta">— Lars Brownworth （01:48:20）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Honestly, I think it’s the end of the world, and I don’t think they were wrong to think that. The Anglo-Saxon Chronicle says the night before Lindisfarne, the monks saw sheets of lightning in the sky in the shape of dragons, and this was obviously meant to foreshadow the dragon ships coming up. But if you were brave, then you got taken to the House of the Dead, which was Valhalla. Every day you would fight, and whatever wounds you got would be magically healed that night, and then the next morning, you’d get up and do it again, so you’re essentially practicing for Ragnarok, the final battle. You know, there’s this poem by Tennyson, Ulysses, my favorite poem. I think it captures the Viking spirit."</div>
+  <div class="quote-zh">老实说，我认为这是世界末日，而且我认为他们的想法没有错。 《盎格鲁-撒克逊编年史》记载，在林迪斯法恩的前一天晚上，僧侣们看到天空中出现了一条条龙形闪电，这显然是预示着龙船即将来临。但如果你足够勇敢，那么你就会被带到死亡之屋，也就是瓦尔哈拉殿堂。每天你都会战斗，无论你受到什么伤害，当晚都会神奇地痊愈，然后第二天早上，你会起床再做一次，所以你本质上是在为《诸神黄昏》——最后一战进行练习。你知道，丁尼生的这首诗《尤利西斯》是我最喜欢的诗。我认为它抓住了维京人的精神。</div>
+  <div class="quote-meta">— Lars Brownworth （00:00:21）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think in one way, it’s inevitable. There’s so many examples of destroyers who just wreck civilizations. The builders are much more rare, you know? So I think it’s one of the reasons I think Augustus is a much more interesting person than Julius Caesar is. Augustus was a builder, and I like to see that. I like to see not just can you pull down, but can you build up? You know, just to take Ireland for example, Dublin, Limerick, almost every major city in Ireland was founded by the Vikings. So I don’t think it’s just a given that it would have happened. I think there’s something about the Vikings, and it’s probably tied to their pragmatism, their—like this pragmatic streak of, “We’re gonna use whatever. Oh, this system of king works."</div>
+  <div class="quote-zh">我认为从某种程度上来说，这是不可避免的。有很多毁灭者破坏文明的例子。建筑商要难得多，你知道吗？所以我认为这就是我认为奥古斯都比朱利叶斯·凯撒更有趣的原因之一。奥古斯都是一名建设者，我喜欢看到这一点。我喜欢看到你不仅能拉倒，而且能建立起来吗？要知道，就拿爱尔兰来说，都柏林、利默里克，几乎爱尔兰的每一个主要城市都是由维京人建立的。所以我认为这并不是理所当然的。我认为维京人有一些东西，这可能与他们的实用主义有关，他们的实用主义倾向，“我们会使用任何东西。哦，这个国王制度是有效的。”</div>
+  <div class="quote-meta">— Lars Brownworth （01:29:21）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, I’ve been… That’s a great question. I’ve been trying to think for the past 20 years, like why it’s such a niche field, right? Why would people be interested in it? I think number one, it’s a great story. And people are people, and we haven’t changed much, which is one of the reasons why it’s accessible, because it’s very… These are people you could meet today. But I think podcasting in general, because there’s such a low bar to get in, or there was at the time. I mean, there’s nobody else, so just by virtue of being first, you know, it attracted attention. Whatever its merits, being first was the strongest one."</div>
+  <div class="quote-zh">是的，我一直……这是一个很好的问题。过去20年来我一直在思考，为什么它是一个如此小众的领域，对吧？为什么人们会对它感兴趣？我认为第一，这是一个很棒的故事。人就是人，我们没有太大改变，这就是它容易接近的原因之一，因为它非常......这些都是你今天可以遇到的人。但我认为播客总体来说是因为进入的门槛很低，或者说当时是这样。我的意思是，没有其他人，所以仅仅凭借第一，你知道，它就引起了关注。不管有什么优点，第一就是最强的。</div>
+  <div class="quote-meta">— Lars Brownworth （01:37:49）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lars Brownworth <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The Viking long ships could average 70 to 120 miles a day. They could hit a place, raid it, drag off whoever they wanted, and get away before you could get your army there. That’s just absolutely terrifying.</div>
+  <div class="dialogue-zh">维京长船平均每天可行驶 70 至 120 英里。他们可以袭击一个地方，袭击它，拖走他们想要的任何人，然后在你到达你的军队之前逃跑。这真是太可怕了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:13)</span>
+  </div>
+  <div class="dialogue-en">What do you think it felt like for Alcuin and the monks to see the Viking ships on the horizon?</div>
+  <div class="dialogue-zh">你认为阿尔昆和僧侣们看到地平线上的维京船只有什么感觉？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lars Brownworth <span class="dialogue-time">(00:00:21)</span>
+  </div>
+  <div class="dialogue-en">Honestly, I think it’s the end of the world, and I don’t think they were wrong to think that. The Anglo-Saxon Chronicle says the night before Lindisfarne, the monks saw sheets of lightning in the sky in the shape of dragons, and this was obviously meant to foreshadow the dragon ships coming up. But if you were brave, then you got taken to the House of the Dead, which was Valhalla. Every day you wo...</div>
+  <div class="dialogue-zh">老实说，我认为这是世界末日，而且我认为他们的想法没有错。 《盎格鲁-撒克逊编年史》记载，在林迪斯法恩的前一天晚上，僧侣们看到天空中出现了一条条龙形闪电，这显然是预示着龙船即将来临。但如果你足够勇敢，那么你就会被带到死亡之屋，也就是瓦尔哈拉殿堂。每天你都</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lars Brownworth <span class="dialogue-time">(00:01:01)</span>
+  </div>
+  <div class="dialogue-en">The last line of it is to strive, “To seek, to find, and not to yield.” I think that’s very much like the Viking, you know, my purpose holds, to sail beyond the baths of all the Western stars until I die. We may die, but I’m gonna do this, I’m not gonna yield.</div>
+  <div class="dialogue-zh">最后一句是努力，“去寻求，去发现，而不是屈服。”我认为这很像维京人，你知道，我的目标是，航行到所有西方星星的浴场之外，直到我死去。我们可能会死，但我会这么做，我不会屈服。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:17)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Lars Brownworth, a historian and author of many excellent history books, including The Sea Wolves: A History of the Vikings and The Normans: From Raiders to Kings. He’s also the host of two history podcast series. The first, called 12 Byzantine Rulers: The History of the Byzantine Empire, is one of the first, if not the first ever, history podcasts launched ove...</div>
+  <div class="dialogue-zh">以下是与历史学家拉尔斯·布朗沃斯 (Lars Brownworth) 的对话，他是许多优秀历史书籍的作者，包括《海狼：维京人的历史》和《诺曼人：从袭击者到国王》。他还是两个历史播客系列的主持人。第一个名为《12 位拜占庭统治者：拜占庭帝国的历史》，是最早（如果不是有史以来第一个）历史播客之一。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:03)</span>
+  </div>
+  <div class="dialogue-en">In this conversation, we focus primarily on the Vikings, the seafaring Norse warriors and explorers who, over a period of just 300 years, reshaped the medieval world and the trajectory of Western civilization as we know it. This is a Lex Fridman Podcast. To support it, please check out our sponsors in the description where you can also find links to contact me, ask questions, give feedback, and so...</div>
+  <div class="dialogue-zh">在本次对话中，我们主要关注维京人、北欧航海战士和探险家，他们在短短 300 年的时间里重塑了中世纪世界和我们所知的西方文明的轨迹。这是莱克斯·弗里德曼播客。为了支持它，请在描述中查看我们的赞助商，您还可以在其中找到联系我、提出问题、提供反馈等的链接</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:37)</span>
+  </div>
+  <div class="dialogue-en">Your writing and podcasts take us from the Vikings to the Normans to Crusades, to the collapse of the East Roman Empire, also known as the Byzantine Empire. There’s a thread, I think, that connects the Vikings through all of it, so let’s start at the beginning. Let’s start with the Vikings.</div>
+  <div class="dialogue-zh">您的写作和播客带我们从维京人到诺曼人到十字军东征，再到东罗马帝国（也称为拜占庭帝国）的崩溃。我认为，有一条线索将维京人贯穿其中，所以让我们从头开始。让我们从维京人开始。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:58)</span>
+  </div>
+  <div class="dialogue-en">So the age of the Vikings was intense and violent, as you write about, often dated from 793 AD to 1066 AD. It lasted less than three centuries. So the start is often dated to June 8th, 793. What happened on June 8th, 793?</div>
+  <div class="dialogue-zh">因此，正如您所写，维京人的时代是激烈而暴力的，通常可以追溯到公元 793 年至公元 1066 年。它持续了不到三个世纪。所以开始的日期通常是 793 年 6 月 8 日。793 年 6 月 8 日发生了什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lars Brownworth <span class="dialogue-time">(00:03:23)</span>
+  </div>
+  <div class="dialogue-en">In June of 793, a group of Vikings, probably originating from Norway, arrived at the Holy Island of Lindisfarne, which was a monastic community, and they essentially slaughtered everyone, burned a couple of buildings, and grabbed everything that had any value and left. And that was the first Viking raid that came in force. And I do think Lindisfarne is a good beginning date because the terror that...</div>
+  <div class="dialogue-zh">793年6月，一群可能来自挪威的维京人到达了林迪斯法恩圣岛，这是一个修道院社区，他们基本上屠杀了所有人，烧毁了几座建筑物，并抢走了所有剩下的有价值的东西。这是第一次维京人的袭击。我确实认为林迪斯法恩是一个很好的开始日期，因为恐怖</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:55)</span>
+  </div>
+  <div class="dialogue-en">So the word of it has spread. Like there’s a- there’s a bunch of accounts, like the monk Alcuin wrote about this event in a letter to King Ethelred of Northumbria, quote, “It is nearly 350 years that we and our fathers have inhabited this most lovely land, and never before has such terror appeared in Britain as we have now suffered from a pagan race, nor was it thought that such an inroad from the...</div>
+  <div class="dialogue-zh">于是这句话就传开了。就像有——有一堆记载，就像僧侣阿尔昆在写给诺森布里亚国王埃塞尔雷德的一封信中关于这一事件的描述，引用说，“我们和我们的祖先在这片最可爱的土地上居住了近 350 年，英国从未出现过像我们现在遭受异教种族那样的恐怖，也没有想到来自异教徒的如此大的入侵。”</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lars Brownworth <span class="dialogue-time">(00:04:36)</span>
+  </div>
+  <div class="dialogue-en">That’s a great quote. Alcuin was not just a regular scholar, he was Charlemagne’s favorite scholar and he’s largely responsible, as much as one person can be, for the Carolingian Renaissance that had done so much to elevate the early medieval world. In fact, the spaces we have, the punctuation we have, spaces between words are likely a result of Alcuin’s work. He was an extremely literate man, and...</div>
+  <div class="dialogue-zh">这是一个很好的引言。阿尔昆不仅仅是一位普通的学者，他还是查理曼大帝最喜欢的学者，他对加洛林文艺复兴的发展负有最大的责任，这场文艺复兴为提升中世纪早期世界做出了巨大的贡献。事实上，我们的空格、标点符号、单词之间的空格很可能是阿尔昆工作的结果。他是一个非常有文化的人，并且</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lars Brownworth <span class="dialogue-time">(00:05:06)</span>
+  </div>
+  <div class="dialogue-en">And part of that has to do with monastic communities, the Church and the- what they thought a monastic community was. So the Church was viewed as a sacred place. Everyone in Europe, everyone in quotes, is nominally Christian, and the Church is an area of safety. It’s a literal ark from the troubles of the world that you can flee to. I believe there are even rules in England, for example, that if y...</div>
+  <div class="dialogue-zh">其中一部分与修道院社区、教会和他们所认为的修道院社区有关。因此，教堂被视为神圣的地方。欧洲的每个人，每个在引号中的人，名义上都是基督徒，而教会是一个安全的地方。这是一艘名副其实的方舟，你可以逃离这个世界的烦恼。我相信在英格兰甚至还有规则，例如，如果你</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lars Brownworth <span class="dialogue-time">(00:05:50)</span>
+  </div>
+  <div class="dialogue-en">And the monks had dedicated themselves to a life of studying the Bible, to copying scriptures to prayer, to removing themselves literally from the temptations of the world. And so they would seek monasteries that were remote, and the most remote locations you could find were islands in the North Atlantic, because it’s just so difficult to get there…. So the ocean was considered a place of safety. ...</div>
+  <div class="dialogue-zh">僧侣们一生致力于研究圣经，抄写经文祈祷，真正摆脱世界的诱惑。因此，他们会寻找偏远的修道院，而你能找到的最偏远的地方是北大西洋的岛屿，因为到达那里非常困难……。因此海洋被认为是一个安全的地方。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:33)</span>
+  </div>
+  <div class="dialogue-en">So there’s a kind of line that you understand you don’t cross. Like, everybody agrees.</div>
+  <div class="dialogue-zh">所以有一条线你知道你不能跨越。就像，每个人都同意。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lars Brownworth <span class="dialogue-time">(00:06:38)</span>
+  </div>
+  <div class="dialogue-en">That’s right.</div>
+  <div class="dialogue-zh">这是正确的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:38)</span>
+  </div>
+  <div class="dialogue-en">It’s the kind of thing that there’s a social contract that most societies, most civilizations sign. There’s a line that we don’t cross. Let the scholars do their scholarly work. That’s one line. The other line is more kind of from a military perspective, from a mobility perspective, you just assume the sea is not a place from which a threat could come-</div>
+  <div class="dialogue-zh">这是大多数社会、大多数文明都签署的社会契约。有一条线我们不能跨越。让学者们做他们的学术工作。这是一行。另一条路线更多的是从军事角度来看，从机动性角度来看，你只是假设海洋不是一个可能出现威胁的地方——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lars Brownworth <span class="dialogue-time">(00:07:00)</span>
+  </div>
+  <div class="dialogue-en">Yeah, that’s exactly right.</div>
+  <div class="dialogue-zh">是的，完全正确。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:00)</span>
+  </div>
+  <div class="dialogue-en">… especially the north. So your conception of the world is shattered by, one, the brutality that can come, two, that the sea can bring a threat, and three, that you don’t give a damn about any of the lines that we as a society, as a Christian society, have established.</div>
+  <div class="dialogue-zh">……尤其是北方。因此，你对世界的看法被以下因素所打破：第一，可能出现的残酷行为；第二，海洋可能带来的威胁；第三，你根本不关心我们作为一个社会、作为一个基督教社会所建立的任何界限。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Lars Brownworth <span class="dialogue-time">(00:07:20)</span>
+  </div>
+  <div class="dialogue-en">That’s exactly right. I mean, even Alcuin, I think he writes a little later on that the dead were left as dung in the streets. So he’s describing dead monks as literal dung in the streets. And, you know, who would do this to men of God? Inhuman monsters.</div>
+  <div class="dialogue-zh">完全正确。我的意思是，即使是阿尔昆，我想他稍后也写道，死者被当作粪便留在街上。因此，他将死去的僧侣描述为街上的粪便。而且，你知道，谁会对属神的人做这样的事呢？没有人性的怪物。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:34)</span>
+  </div>
+  <div class="dialogue-en">So who were they, the Vikings, coming from the north? How did they think of the violence that they were doing?</div>
+  <div class="dialogue-zh">那么来自北方的维京人是谁呢？他们如何看待自己的暴力行为？</div>
+</div>
+    <a href="https://lexfridman.com/lars-brownworth-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="omar-suleiman-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Omar Suleiman #2</div>
+  <div class="card-meta">Omar Suleiman</div>
+</a>
+<a href="robert-f-kennedy-jr.html" class="card" style="text-decoration:none">
+  <div class="card-title">Robert F Kennedy Jr</div>
+  <div class="card-meta">Robert F Kennedy Jr</div>
+</a>
+<a href="albert-bourla.html" class="card" style="text-decoration:none">
+  <div class="card-title">Albert Bourla: Pfizer CEO</div>
+  <div class="card-meta">Albert Bourla</div>
+</a>
+<a href="alex-gladstein.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alex Gladstein: Bitcoin, Authoritarianism, and Human Rights</div>
+  <div class="card-meta">Alex Gladstein</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

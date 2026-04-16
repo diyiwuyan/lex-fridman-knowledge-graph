@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kevin Spacey - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Kevin Spacey</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Kevin Spacey</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/kevin-spacey.html" style="font-size:16px;color:#818cf8;font-weight:600">Kevin Spacey</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">20,514 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/kevin-spacey-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#06b6d422;color:#06b6d4;border:1px solid #06b6d444;font-size:13px;padding:4px 12px">太空与探索</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:44</span>
+  <span class="chapter-title">Seven<span class="zh-trans"> · 七</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">6:24</span>
+  <span class="chapter-title">David Fincher<span class="zh-trans"> · 大卫·芬奇</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:16</span>
+  <span class="chapter-title">Brad Pitt and Morgan Freeman<span class="zh-trans"> · 布拉德·皮特和摩根·弗里曼</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">19:46</span>
+  <span class="chapter-title">Acting<span class="zh-trans"> · 演戏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">28:10</span>
+  <span class="chapter-title">Improve<span class="zh-trans"> · 提升</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">36:54</span>
+  <span class="chapter-title">Al Pacino<span class="zh-trans"> · 阿尔·帕西诺</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:38</span>
+  <span class="chapter-title">Jack Lemmon<span class="zh-trans"> · 杰克·莱蒙</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">49:55</span>
+  <span class="chapter-title">American Beauty<span class="zh-trans"> · 美国丽人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:10:04</span>
+  <span class="chapter-title">Mortality<span class="zh-trans"> · 死亡</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:12:52</span>
+  <span class="chapter-title">Allegations<span class="zh-trans"> · 指控</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:30:50</span>
+  <span class="chapter-title">House of Cards<span class="zh-trans"> · 纸牌屋</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:49:25</span>
+  <span class="chapter-title">Jack Nicholson<span class="zh-trans"> · 杰克·尼克尔森</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:52:27</span>
+  <span class="chapter-title">Mike Nichols<span class="zh-trans"> · 迈克·尼科尔斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:58:01</span>
+  <span class="chapter-title">Christopher Walken<span class="zh-trans"> · 克里斯托弗·沃肯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:05:08</span>
+  <span class="chapter-title">Father<span class="zh-trans"> · 父亲</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:14:00</span>
+  <span class="chapter-title">Future<span class="zh-trans"> · 未来</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">kevin</span><span class="keyword-tag">spacey</span><span class="keyword-tag">said</span><span class="keyword-tag">going</span><span class="keyword-tag">scene</span><span class="keyword-tag">don</span><span class="keyword-tag">movie</span><span class="keyword-tag">jack</span><span class="keyword-tag">doing</span><span class="keyword-tag">went</span><span class="keyword-tag">film</span><span class="keyword-tag">didn</span><span class="keyword-tag">got</span><span class="keyword-tag">character</span><span class="keyword-tag">ever</span><span class="keyword-tag">audience</span><span class="keyword-tag">sam</span><span class="keyword-tag">theater</span><span class="keyword-tag">able</span><span class="keyword-tag">thought</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Those are two very interesting descriptions. I guess, when I think performer, I tend to think entertaining. I tend to think, comedy. I tend to think, winning over an audience. I tend to think, that there’s something about that quality of wanting to have people enjoy themselves."</div>
+  <div class="quote-zh">这是两个非常有趣的描述。我想，当我想到表演者时，我倾向于想到娱乐性。我倾向于认为，喜剧。我倾向于认为，赢得观众。我倾向于认为，希望人们享受自己的品质是有道理的。</div>
+  <div class="quote-meta">— Kevin Spacey （00:20:20）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"See, it’s funny. I don’t think of the roses, and I don’t think of her body and the poster, and I don’t think of those things as the beauty. I think of the bag. I think that there are things we miss that are right in front of us that are truly beautiful."</div>
+  <div class="quote-zh">看，这很有趣。我不认为玫瑰，我不认为她的身体和海报，我不认为这些东西是美丽的。我想到了袋子。我认为有些东西就在我们面前，但我们所怀念的却是真正美丽的。</div>
+  <div class="quote-meta">— Kevin Spacey （01:08:24）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And then I think more … recently contemporary, when I think of the work that Philip Seymour Hoffman did, and Heath Ledger, and people that, when I think about what they could be doing, what they could do, what they would’ve done had they stayed with us, I’m so excited when I go into a cinema, or I go into a play, and I completely am taken to some place that I believe exists, and characters that become real."</div>
+  <div class="quote-zh">然后我想到更多……最近当代的，当我想到菲利普·塞默·霍夫曼和希斯·莱杰所做的工作，以及那些人，当我想到他们可以做什么，他们可以做什么，如果他们留在我们身边他们会做什么，当我走进电影院，或者我走进戏剧时，我非常兴奋，我完全被带到了某个我相信存在的地方，以及那些变得真实的角色。</div>
+  <div class="quote-meta">— Kevin Spacey （00:22:55）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, he’s the reason I got the movie. A lot of people might think because Jack was in the film that he had something to do with it. But actually I was doing a play called Lost in Yonkers on Broadway, and we had the same dresser who worked with him, a girl named Laura, who was wonderful, Laura Beatty, and she told Al that he should come and see this play because she wanted to see me in this play. I was playing this gangster, it was a fun, fun, fun part. So I didn’t know Pacino came on some night and saw this play. And then three days later I got a call to come in and audition for this Glengary Glen Ross, which of course I knew as a play David Mamet’s play. And then I auditioned. Jamie Foley was the director who would eventually direct a bunch of House of Cards, wonderful, wonderful guy."</div>
+  <div class="quote-zh">嗯，他是我看这部电影的原因。很多人可能会认为，因为杰克出现在电影中，所以他与这部电影有关。但实际上我正在百老汇演一部叫《迷失在扬克斯》的戏剧，我们有同一个服装师和他一起工作，一个叫劳拉的女孩，她很棒，劳拉·贝蒂，她告诉阿尔他应该来看这部剧，因为她想在这部剧中看到我。我扮演这个黑帮，这是一个非常有趣、非常有趣的角色。所以我不知道帕西诺某个晚上来看过这部戏。三天后，我接到电话，要我去试镜《格伦加里·格伦·罗斯》，当然我知道这是一部大卫·马梅特的戏剧。然后我试镜了。杰米·弗利（Jamie Foley）是最终执导了一系列《纸牌屋》的导演，非常非常棒的人。</div>
+  <div class="quote-meta">— Kevin Spacey （00:40:10）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, and I also think that the film was powerful because you had three very honest and genuine portrayal of young people, and then you had Lester behaving like a young person doing things that were unexpected. And I think that the honesty with which it dealt with those issues that those teenagers were going through, and the honesty with which it dealt with what Lester was going through, I think are some of the reasons why the film had the response that it did from so many people."</div>
+  <div class="quote-zh">是的，我也认为这部电影很强大，因为你对年轻人进行了三个非常诚实和真实的描绘，然后你让莱斯特表现得像一个年轻人，做一些意想不到的事情。我认为，它诚实地处理了那些青少年正在经历的问题，以及诚实地处理了莱斯特正在经历的事情，我认为这是这部电影引起如此多观众反响的部分原因。</div>
+  <div class="quote-meta">— Kevin Spacey （00:57:52）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Kevin Spacey, a two-time Oscar-winning actor, who has starred in Se7en, The Usual Suspects, American Beauty, and House of Cards. He is one of the greatest actors ever, creating haunting performances of characters who often embody the dark side of human nature.</div>
+  <div class="dialogue-zh">以下是与两届奥斯卡影帝凯文·史派西的对话，他曾主演过《Se7en》、《非常嫌疑犯》、《美国丽人》和《纸牌屋》。他是有史以来最伟大的演员之一，创造了令人难忘的表演，这些角色往往体现了人性的阴暗面。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:20)</span>
+  </div>
+  <div class="dialogue-en">Seven years ago, he was cut from House of Cards, and canceled by Hollywood and the world, when Anthony Rapp made an allegation that Kevin Spacey sexually abused him in 1986. Anthony Rapp then filed a civil lawsuit seeking $40 million. In this trial and all civil and criminal trials that followed, Kevin was acquitted. He has never been found guilty nor liable in the court of law.</div>
+  <div class="dialogue-zh">七年前，当安东尼·拉普指控凯文·史派西在 1986 年对他进行性虐待时，他被从《纸牌屋》中除名，并被好莱坞和全世界取消。安东尼·拉普随后提起民事诉讼，要求赔偿 4000 万美元。在这次审判以及随后的所有民事和刑事审判中，凯文被无罪释放。他从未在法庭上被判有罪或承担责任。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:52)</span>
+  </div>
+  <div class="dialogue-en">In this conversation, Kevin makes clear what he did and what he didn’t do. I also encourage you to listen to Kevin’s Dan Wooten and Alison Pearson interviews, for additional details and responses to the allegations.</div>
+  <div class="dialogue-zh">在这次谈话中，凯文清楚地说明了他做了什么和没有做什么。我还鼓励您收听凯文对丹·伍滕和艾莉森·皮尔森的采访，了解更多细节和对指控的回应。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:09)</span>
+  </div>
+  <div class="dialogue-en">As an aside, let me say that one of the principles I operate under for this podcast and in life is that I will talk with everyone with empathy and with backbone. For each guest, I hope to explore their life’s work, life’s story, and what and how they think, and do so honestly and fully, the good, the bad, and the ugly, the brilliance and the flaws. I won’t whitewash their sins, but I won’t reduce ...</div>
+  <div class="dialogue-zh">顺便说一句，我在这个播客和生活中遵循的原则之一是，我将以同理心和勇气与每个人交谈。对于每一位客人，我希望探索他们一生的工作、人生的故事、他们的想法和想法，并且诚实、充分地去做，好的、坏的、丑陋的、辉煌的和缺陷的。我不会粉饰他们的罪恶，但我也不会减少</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:11)</span>
+  </div>
+  <div class="dialogue-en">Again, my goal is to understand human beings at their best and at their worst, and the hope is such understanding leads to more compassion and wisdom in the world. I will make mistakes, and when I do, I will work hard to improve. I love you all.</div>
+  <div class="dialogue-zh">再说一次，我的目标是了解人类最好的一面和最坏的一面，希望这种理解能给世界带来更多的同情心和智慧。我会犯错误，当我犯错误时，我会努力改进。我爱你们。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:34)</span>
+  </div>
+  <div class="dialogue-en">This is the Lex Fridman Podcast. To support it, please check out our sponsors in the description, and now, dear friends, here’s Kevin Spacey.</div>
+  <div class="dialogue-zh">这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商，现在，亲爱的朋友们，这是凯文·史派西。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Seven <span class="dialogue-time">(00:02:44)</span>
+  </div>
+  <div class="dialogue-en">You played a serial killer in the movie, Se7en. Your performance was one of, if not the greatest, portrayal of a murderer on screen ever. What was your process of becoming him, John Doe, the serial killer.</div>
+  <div class="dialogue-zh">你在电影《Se7en》中扮演连环杀手。你的表演即使不是银幕上最伟大的杀人犯形象，也是其中之一。你是怎样成为连环杀手约翰·多伊的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kevin Spacey <span class="dialogue-time">(00:02:59)</span>
+  </div>
+  <div class="dialogue-en">The truth is, I didn’t get the part. I had been in Los Angeles making a couple of films, Swimming With Sharks and Usual Suspects, and then I did a film called Outbreak, that Morgan Freeman was in, and I went to audition for David Fincher, in probably late November of ’94. And I auditioned for this part, and didn’t get it, and I went back to New York, and I think they started shooting like December...</div>
+  <div class="dialogue-zh">事实是，我没有得到这个角色。我在洛杉矶拍了几部电影，《与鲨鱼一起游泳》和《非常嫌疑犯》，然后我拍了一部叫《爆发》的电影，摩根·弗里曼也在其中，我大概在 94 年 11 月下旬去参加了大卫·芬奇的试镜。我试镜了这个部分，但没有得到它，我回到纽约，我认为他们像十二月一样开始拍摄</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kevin Spacey <span class="dialogue-time">(00:03:43)</span>
+  </div>
+  <div class="dialogue-en">And I’m in New York, I’m back in my … I have a wonderful apartment on West 12th Street, and my mom has come to visit for Christmas, and it’s December 23rd, and it’s like seven o’clock at night, and my phone rings, and it’s Arnold Kopelson, who’s the producer of Se7en, and he’s very jovial and he’s very friendly, and he says, “How are you doing?” And I said, “Fine,” and he said, “Listen, do you rem...</div>
+  <div class="dialogue-zh">我在纽约，我回到了我的……我在西 12 街有一套很棒的公寓，我妈妈来看我过圣诞节，那是 12 月 23 日，大约晚上七点，我的电话响了，是阿诺德·科佩尔森打来的，他是《Se7en》的制作人，他非常快乐，非常友好，他说，“你好吗？”我说，“好吧，”他说，“听着，你还想做什么吗？”</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:38)</span>
+  </div>
+  <div class="dialogue-en">So people didn’t know that you play the serial killer in the movie, and the serial killer shows up more than halfway through the movie.</div>
+  <div class="dialogue-zh">所以人们不知道你在电影中扮演连环杀手，而连环杀手在电影中出现了一半以上。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kevin Spacey <span class="dialogue-time">(00:05:49)</span>
+  </div>
+  <div class="dialogue-en">Very latest.</div>
+  <div class="dialogue-zh">非常最新。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:50)</span>
+  </div>
+  <div class="dialogue-en">And when you say billing, is like the posters, the VHS cover.</div>
+  <div class="dialogue-zh">当你说计费时，就像海报、VHS 封面一样。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kevin Spacey <span class="dialogue-time">(00:05:54)</span>
+  </div>
+  <div class="dialogue-en">That’s right.</div>
+  <div class="dialogue-zh">这是正确的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:54)</span>
+  </div>
+  <div class="dialogue-en">Everything. You’re gone.</div>
+  <div class="dialogue-zh">一切。你走了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kevin Spacey <span class="dialogue-time">(00:05:55)</span>
+  </div>
+  <div class="dialogue-en">Exactly.</div>
+  <div class="dialogue-zh">确切地。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:55)</span>
+  </div>
+  <div class="dialogue-en">You’re not there.</div>
+  <div class="dialogue-zh">你不在那儿。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Kevin Spacey <span class="dialogue-time">(00:05:56)</span>
+  </div>
+  <div class="dialogue-en">Not there. And so New Cinema told me to go fuck myself, that they absolutely could use my picture and my image, and this became a little bit of a … I’d say 24 hour conversation … and it was Fincher who said, “I actually think this is a really cool idea.” So the compromise was, I’m the first credit at the end of the movie when the credits start.</div>
+  <div class="dialogue-zh">不在那里。所以 New Cinema 告诉我去他妈的自己，他们绝对可以使用我的照片和我的形象，这变得有点……我想说 24 小时对话……芬奇说，“我实际上认为这是一个非常酷的想法。”所以妥协是，我是电影结尾、片尾字幕开始时的第一个片尾字幕。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    David Fincher <span class="dialogue-time">(00:06:24)</span>
+  </div>
+  <div class="dialogue-en">So I got on a plane on that Sunday and I flew to Los Angeles, and I went into where they were shooting, and I went into the makeup room and David Fincher was there, and we were talking about what should I do? How should I look? And I just had my hair short for Outbreak, because I was playing a military character, and I just looked at the hairdresser and I said, do you have a razor? And Fincher wen...</div>
+  <div class="dialogue-zh">所以我在那个周日登上了飞机，飞往洛杉矶，我走进了他们拍摄的地方，我走进了化妆间，大卫·芬奇也在那里，我们正在讨论我应该做什么？我应该怎样看？我只是在《爆发》中把头发剪短了，因为我扮演的是一个军人角色，我只是看着理发师，我说，你有剃须刀吗？和芬奇温</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    David Fincher <span class="dialogue-time">(00:07:09)</span>
+  </div>
+  <div class="dialogue-en">So my long-winded answer to your question is that I didn’t have that much time to think about how to build that character. What I think in the end, Fincher was able to do so brilliantly, with such terror, was to set the audience up to meet this character.</div>
+  <div class="dialogue-zh">所以我对你问题的冗长回答是，我没有那么多时间去思考如何塑造这个角色。我认为最终芬奇能够如此出色地、带着如此恐怖地表现，是为了让观众认识这个角色。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:37)</span>
+  </div>
+  <div class="dialogue-en">I think the last scene, the ending scene, and the car ride leading up to it, where it’s mostly on you in conversation with Morgan Freeman and Brad Pitt, it’s one of the greatest scenes in film history.</div>
+  <div class="dialogue-zh">我认为最后一个场景、结尾场景以及导致它的车程，主要是你与摩根·弗里曼和布拉德·皮特的对话，这是电影史上最伟大的场景之一。</div>
+</div>
+    <a href="https://lexfridman.com/kevin-spacey-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="dava-newman.html" class="card" style="text-decoration:none">
+  <div class="card-title">Dava Newman: Space Exploration, Space Suits, and Life on Mars</div>
+  <div class="card-meta">Dava Newman</div>
+</a>
+<a href="natalya-bailey.html" class="card" style="text-decoration:none">
+  <div class="card-title">Natalya Bailey: Rocket Engines and Electric Spacecraft Propulsion</div>
+  <div class="card-meta">Natalya Bailey</div>
+</a>
+<a href="tim-urban.html" class="card" style="text-decoration:none">
+  <div class="card-title">Tim Urban: Elon Musk, Neuralink, AI, Aliens, and the Future of Humanity</div>
+  <div class="card-meta">Tim Urban</div>
+</a>
+<a href="walter-isaacson.html" class="card" style="text-decoration:none">
+  <div class="card-title">Walter Isaacson</div>
+  <div class="card-meta">Walter Isaacson</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

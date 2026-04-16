@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mark Zuckerberg #3 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Mark Zuckerberg #3</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Mark Zuckerberg #3</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/mark-zuckerberg.html" style="font-size:16px;color:#818cf8;font-weight:600">Mark Zuckerberg</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">11,395 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/mark-zuckerberg-3-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:52</span>
+  <span class="chapter-title">Metaverse<span class="zh-trans"> · 元宇宙</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">15:27</span>
+  <span class="chapter-title">Quest 3<span class="zh-trans"> · 任务3</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:16</span>
+  <span class="chapter-title">Nature of reality<span class="zh-trans"> · 现实的本质</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">34:54</span>
+  <span class="chapter-title">AI in the Metaverse<span class="zh-trans"> · 虚拟宇宙中的人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">51:51</span>
+  <span class="chapter-title">Large language models<span class="zh-trans"> · 大型语言模型</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">57:49</span>
+  <span class="chapter-title">Future of humanity<span class="zh-trans"> · 人类的未来</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">going</span><span class="keyword-tag">mark</span><span class="keyword-tag">physical</span><span class="keyword-tag">zuckerberg</span><span class="keyword-tag">experience</span><span class="keyword-tag">don</span><span class="keyword-tag">reality</span><span class="keyword-tag">able</span><span class="keyword-tag">digital</span><span class="keyword-tag">version</span><span class="keyword-tag">incredible</span><span class="keyword-tag">real</span><span class="keyword-tag">feels</span><span class="keyword-tag">together</span><span class="keyword-tag">future</span><span class="keyword-tag">stuff</span><span class="keyword-tag">avatar</span><span class="keyword-tag">quest</span><span class="keyword-tag">photorealistic</span><span class="keyword-tag">metaverse</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"And I kind of think increasingly, the physical world is super important, but I actually think the real world is the combination of the physical world and the digital worlds coming together. But until this technology, they were sort of separate. It’s like you access the digital world through a screen and maybe it’s a small screen that you carry around or it’s a bigger screen when you sit down at your desk and strap in for a long session, but they’re kind of fundamentally divorced and disconnected. And I think part of what this technology is going to do is bring those together into a single coherent experience of what the modern real world is, which is, it’s got to be physical because we’re physical beings. So the physical world is always going to be super important."</div>
+  <div class="quote-zh">我越来越认为，物理世界非常重要，但我实际上认为现实世界是物理世界和数字世界的结合。但在这项技术出现之前，它们是分开的。就像你通过屏幕访问数字世界一样，也许它是你随身携带的一个小屏幕，或者当你坐在办公桌前并系好安全带进行长时间会议时它是一个更大的屏幕，但它们从根本上是分离和脱节的。我认为这项技术要做的部分工作是将这些结合在一起，形成对现代现实世界的单一连贯体验，也就是说，它必须是物理的，因为我们是物理存在。所以物质世界总是非常重要的。</div>
+  <div class="quote-meta">— Mark Zuckerberg （00:23:19）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, I mean, I think our physical bodies also fluctuate and change over time too. So I think there’s a similar question of which version of that are we? And it’s an interesting identity question because all right, it’s like, I don’t know, it’s like weight fluctuates or things like that. I think most people don’t tend to think of themselves as the… Well, I don’t know. It’s an interesting psychological question. Maybe a lot of people do think about themselves as the kind of worst version, but I think a lot of people probably think about themselves as the best version."</div>
+  <div class="quote-zh">嗯，我的意思是，我认为我们的身体也会随着时间的推移而波动和变化。所以我认为有一个类似的问题：我们是哪个版本？这是一个有趣的身份问题，因为好吧，就像，我不知道，就像体重波动或类似的事情。我认为大多数人并不倾向于认为自己是……嗯，我不知道。这是一个有趣的心理学问题。也许很多人确实认为自己是最糟糕的版本，但我认为很多人可能认为自己是最好的版本。</div>
+  <div class="quote-meta">— Mark Zuckerberg （00:31:52）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So I think it’s super exciting because I mean, the digital world is just increasing in its capability and our ability to do awesome things, but the physical world is so profound, and that’s a lot of what makes us human is that we’re physical beings. So I don’t think we want to run away from that and just spend all day on a screen. It’s one of the reasons why I care so much about helping to shape and accelerate these future computing platforms. I just think this is so powerful. And even though the current version of this is like you’re wearing a headset, I just think this is going to be by far the most human and social computing platform that has ever existed. And that’s what makes me excited."</div>
+  <div class="quote-zh">所以我认为这非常令人兴奋，因为我的意思是，数字世界的能力和我们做伟大事情的能力正在不断增强，但物理世界是如此深刻，而我们之所以成为人类，很大程度上是因为我们是物理存在。所以我认为我们不想逃避这一点，只是在屏幕上度过一整天。这就是我如此关心帮助塑造和加速这些未来计算平台的原因之一。我只是觉得这太强大了。尽管当前版本就像你戴着耳机，但我认为这将是迄今为止最人性化和社交化的计算平台。这就是让我兴奋的原因。</div>
+  <div class="quote-meta">— Mark Zuckerberg （00:59:52）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I am curious to see, just because I’ve never done one of these before, I’ve never done a podcast as one of these Kodak Avatars, and I’m curious to see what people think of it. Because one of the issues that we’ve had in some of the VR and mixed reality work is it tends to feel a lot more profound when you’re in it than the 2D videos capturing the experience. So I think that this one, because it’s photorealistic, may look as amazing in 2D for people watching it as it feels, I think, to be in it. But we’ve certainly had this issue where a lot of the other things, it’s like you feel the sense of immersion when you’re in it that, that doesn’t quite translate to a 2D screen. But I don’t know, I’m curious to see what people think."</div>
+  <div class="quote-zh">我很想知道，只是因为我以前从未做过其中之一，我从未作为这些柯达化身之一做过播客，而且我很好奇人们对此有何看法。因为我们在一些 VR 和混合现实工作中遇到的问题之一是，当你身处其中时，它往往比捕捉体验的 2D 视频更深刻。所以我认为，由于它具有照片般的真实感，对于观看它的人来说，在 2D 中看起来可能会像身临其境一样令人惊叹。但我们确实遇到了这个问题，很多其他事情，就像你在其中时感受到的沉浸感，这并不能完全转化为 2D 屏幕。但我不知道，我很好奇人们怎么想。</div>
+  <div class="quote-meta">— Mark Zuckerberg （00:10:39）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So yeah, it’s a very interesting technical challenge and I think we’ll continue tuning this for the years to come as well. But I’m pretty excited to get this out because I think Quest 3 is going to be the first device like this that millions of people are going to get that’s mixed reality. And it’s only when you have millions of people using something that you start getting the whole developer community really starting to experiment and build stuff because now there are going to be people who actually use it. So I think we got some of that flywheel going with Quest Pro, but I think it’ll really get accelerated once Quest 3 gets out there. So yeah, I’m pretty excited about this one."</div>
+  <div class="quote-zh">所以，是的，这是一个非常有趣的技术挑战，我认为我们也将在未来几年继续对此进行调整。但我很高兴能把它发布出来，因为我认为 Quest 3 将成为数百万人将获得的第一款混合现实设备。只有当你有数百万人使用某种东西时，你才开始让整个开发者社区真正开始试验和构建东西，因为现在会有人真正使用它。所以我认为我们在 Quest Pro 中配备了一些飞轮，但我认为一旦 Quest 3 推出，它就会真正加速。是的，我对此感到非常兴奋。</div>
+  <div class="quote-meta">— Mark Zuckerberg （00:20:24）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Mark Zuckerberg, Inside the Metaverse. Mark and I are hundreds of miles apart from each other in physical space, but it feels like we’re in the same room because we appear to each other as photorealistic Kodak Avatars in 3D with spatial audio. This technology is incredible and I think it’s the future of how human beings connect to each other in a deeply meaning...</div>
+  <div class="dialogue-zh">以下是与马克·扎克伯格的对话，《Inside the Metaverse》。马克和我在物理空间中相距数百英里，但感觉就像我们在同一个房间里，因为我们在彼此看来就像具有空间音频的 3D 逼真柯达头像。这项技术令人难以置信，我认为这是人类如何以深刻的方式相互联系的未来</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Zuckerberg <span class="dialogue-time">(00:01:16)</span>
+  </div>
+  <div class="dialogue-en">Yeah, we can put the light anywhere.</div>
+  <div class="dialogue-zh">是的，我们可以把灯放在任何地方。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:19)</span>
+  </div>
+  <div class="dialogue-en">And it doesn’t feel awkward to be really close to you.</div>
+  <div class="dialogue-zh">而且离你很近也不会感到尴尬。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Zuckerberg <span class="dialogue-time">(00:01:22)</span>
+  </div>
+  <div class="dialogue-en">No, it does. I actually moved you back a few feet before you got into the headset. You were right here.</div>
+  <div class="dialogue-zh">不，确实如此。实际上，在您戴上耳机之前，我将您向后退了几英尺。你就在这里。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:27)</span>
+  </div>
+  <div class="dialogue-en">I don’t know if people can see this, but this is incredible. The realism here is just incredible. Where am I? Where are you, Mark? Where are we?</div>
+  <div class="dialogue-zh">我不知道人们是否能看到这一点，但这太不可思议了。这里的现实主义令人难以置信。我在哪里？马克，你在哪里？我们在哪里？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Zuckerberg <span class="dialogue-time">(00:01:39)</span>
+  </div>
+  <div class="dialogue-en">You’re in Austin, right?</div>
+  <div class="dialogue-zh">你在奥斯汀，对吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:41)</span>
+  </div>
+  <div class="dialogue-en">No. I mean this place. We’re shrouded by darkness with ultra realistic face, and it just feels like we’re in the same room. This is really the most incredible thing I’ve ever seen. And sorry to be in your personal space. We have done jujitsu before.</div>
+  <div class="dialogue-zh">不，我是说这个地方。我们被黑暗笼罩着，有着超现实的面孔，感觉就像我们在同一个房间里。这确实是我见过的最不可思议的事情。很抱歉打扰您的个人空间。我们以前练过柔术。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Zuckerberg <span class="dialogue-time">(00:01:58)</span>
+  </div>
+  <div class="dialogue-en">Yeah. I was commenting to the team before that I feel like we’ve choked each other from further distances than it feels like we are right now.</div>
+  <div class="dialogue-zh">是的。我之前曾向团队评论说，我觉得我们在比现在更远的距离上窒息了对方。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:08)</span>
+  </div>
+  <div class="dialogue-en">This is just really incredible. I don’t know how to describe it with words. It really feels like we’re in the same room.</div>
+  <div class="dialogue-zh">这实在是太不可思议了。我不知道如何用言语来形容。真的感觉就像我们在同一个房间。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Zuckerberg <span class="dialogue-time">(00:02:17)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:17)</span>
+  </div>
+  <div class="dialogue-en">It feels like the future. This is truly, truly incredible. I just wanted to take it in. I’m still getting used to it. It’s you, it’s really you, but you’re not here with me. You’re there wearing a headset and I’m wearing a headset. It’s really, really incredible. Can you describe what it takes currently for us to appear so photo realistic to each other?</div>
+  <div class="dialogue-zh">感觉就像是未来。这实在是太不可思议了。我只是想接受它。我还在习惯它。是你，确实是你，但你不在我身边。你戴着耳机，我也戴着耳机。这真的非常非常令人难以置信。您能描述一下目前我们需要什么才能让彼此显得如此逼真吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Zuckerberg <span class="dialogue-time">(00:02:44)</span>
+  </div>
+  <div class="dialogue-en">Yeah. So, for background, we both did these scans for this research project that we have at Meta called Kodak Avatars. And the idea is that instead of our avatars being cartoony and instead of actually transmitting a video, what it does is we’ve scanned ourselves and a lot of different expressions, and we’ve built a computer model of each of our faces and bodies and the different expressions that ...</div>
+  <div class="dialogue-zh">是的。因此，作为背景，我们都为 Meta 的名为“柯达头像”的研究项目进行了这些扫描。这个想法是，我们的化身不是卡通化的，也不是实际传输视频，而是我们扫描了自己和许多不同的表情，我们为我们每个人的脸和身体以及不同的表情建立了一个计算机模型。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:47)</span>
+  </div>
+  <div class="dialogue-en">And it captures everything. To me, the subtleties of the human face, even the flaws, that’s all amazing. It makes it so much more immersive. It makes you realize that perfection isn’t the thing that leads to immersion. It’s the little subtle flaws like freckles and variations in color and just…</div>
+  <div class="dialogue-zh">它捕获了一切。对我来说，人脸的微妙之处，甚至是缺陷，都令人惊叹。它使它更加身临其境。它让你意识到完美并不能带来沉浸感。这是一些微妙的瑕疵，比如雀斑和颜色变化，而且……</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Zuckerberg <span class="dialogue-time">(00:04:11)</span>
+  </div>
+  <div class="dialogue-en">Wrinkles.</div>
+  <div class="dialogue-zh">皱纹。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:12)</span>
+  </div>
+  <div class="dialogue-en">… all stuff about noses.</div>
+  <div class="dialogue-zh">……所有关于鼻子的东西。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Zuckerberg <span class="dialogue-time">(00:04:12)</span>
+  </div>
+  <div class="dialogue-en">Asymmetry.</div>
+  <div class="dialogue-zh">不对称。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:14)</span>
+  </div>
+  <div class="dialogue-en">Yeah, asymmetry, and just the corners of the eyes, what your eyes do when you smile, all that kind of stuff.</div>
+  <div class="dialogue-zh">是的，不对称，还有眼角，微笑时眼睛的样子，诸如此类的东西。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Zuckerberg <span class="dialogue-time">(00:04:20)</span>
+  </div>
+  <div class="dialogue-en">Eyes are a huge part of it.</div>
+  <div class="dialogue-zh">眼睛是其中很大的一部分。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:22)</span>
+  </div>
+  <div class="dialogue-en">It’s just incredible.</div>
+  <div class="dialogue-zh">这太不可思议了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Mark Zuckerberg <span class="dialogue-time">(00:04:23)</span>
+  </div>
+  <div class="dialogue-en">There’s all these studies that most of communication, even when people are speaking, is not actually the words that they’re saying. It’s the expression and all that. And we try to capture that with the classical expressive avatar system that we have. That’s the more cartoon designed one. You can put those expressions on those faces as well. But there’s obviously a certain realism that comes with d...</div>
+  <div class="dialogue-zh">所有这些研究表明，大多数交流，即使当人们说话时，实际上也不是他们所说的话。这就是表达方式等等。我们尝试用我们拥有的经典表达化身系统来捕捉这一点。这是一种比较卡通化的设计。您也可以将这些表情放在这些脸上。但显然，d 带来了一定的现实主义</div>
+</div>
+    <a href="https://lexfridman.com/mark-zuckerberg-3-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="albert-bourla.html" class="card" style="text-decoration:none">
+  <div class="card-title">Albert Bourla: Pfizer CEO</div>
+  <div class="card-meta">Albert Bourla</div>
+</a>
+<a href="andrew-huberman.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Neuroscience of Optimal Performance</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="anya-fernald.html" class="card" style="text-decoration:none">
+  <div class="card-title">Anya Fernald: Regenerative Farming and the Art of Cooking Meat</div>
+  <div class="card-meta">Anya Fernald</div>
+</a>
+<a href="aravind-srinivas.html" class="card" style="text-decoration:none">
+  <div class="card-title">Aravind Srinivas</div>
+  <div class="card-meta">Aravind Srinivas</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

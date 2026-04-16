@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ben Shapiro - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Ben Shapiro</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Ben Shapiro</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/ben-shapiro.html" style="font-size:16px;color:#818cf8;font-weight:600">Ben Shapiro</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">32,081 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/ben-shapiro-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">2:01</span>
+  <span class="chapter-title">Kanye ‘Ye’ West<span class="zh-trans"> · 坎耶·“耶”·韦斯特</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">9:41</span>
+  <span class="chapter-title">Hitler and the nature of evil<span class="zh-trans"> · 希特勒与邪恶的本质</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">17:47</span>
+  <span class="chapter-title">Political attacks on the left and the right<span class="zh-trans"> · 对左翼和右翼的政治攻击</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">23:31</span>
+  <span class="chapter-title">Quebec mosque shooting<span class="zh-trans"> · 魁北克清真寺枪击案</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">33:26</span>
+  <span class="chapter-title">Elon Musk buying Twitter<span class="zh-trans"> · 埃隆·马斯克收购 Twitter</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">46:29</span>
+  <span class="chapter-title">Trump and Biden<span class="zh-trans"> · 特朗普和拜登</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">51:03</span>
+  <span class="chapter-title">Hunter Biden’s laptop<span class="zh-trans"> · 亨特·拜登的笔记本电脑</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:02:36</span>
+  <span class="chapter-title">Candace Owens<span class="zh-trans"> · 坎迪斯·欧文斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:06:15</span>
+  <span class="chapter-title">War in Ukraine<span class="zh-trans"> · 乌克兰战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:16:24</span>
+  <span class="chapter-title">Rhetoric vs truth<span class="zh-trans"> · 修辞与事实</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:21:19</span>
+  <span class="chapter-title">Infamous BBC interview<span class="zh-trans"> · 臭名昭著的 BBC 采访</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:24:35</span>
+  <span class="chapter-title">Day in the life<span class="zh-trans"> · 生命中的一天</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:39:31</span>
+  <span class="chapter-title">Abortion<span class="zh-trans"> · 流产</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:52:26</span>
+  <span class="chapter-title">Climate change<span class="zh-trans"> · 气候变化</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:59:48</span>
+  <span class="chapter-title">God and faith<span class="zh-trans"> · 神与信仰</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:10:58</span>
+  <span class="chapter-title">Tribalism<span class="zh-trans"> · 部落主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:15:34</span>
+  <span class="chapter-title">Advice for young people<span class="zh-trans"> · 给年轻人的建议</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:19:20</span>
+  <span class="chapter-title">Andrew Breitbart<span class="zh-trans"> · 安德鲁·布赖特巴特</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:21:50</span>
+  <span class="chapter-title">Self-doubt<span class="zh-trans"> · 自我怀疑</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:23:52</span>
+  <span class="chapter-title">Love<span class="zh-trans"> · 爱</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">ben</span><span class="keyword-tag">shapiro</span><span class="keyword-tag">going</span><span class="keyword-tag">don</span><span class="keyword-tag">human</span><span class="keyword-tag">stuff</span><span class="keyword-tag">twitter</span><span class="keyword-tag">said</span><span class="keyword-tag">biden</span><span class="keyword-tag">person</span><span class="keyword-tag">somebody</span><span class="keyword-tag">talking</span><span class="keyword-tag">media</span><span class="keyword-tag">saying</span><span class="keyword-tag">god</span><span class="keyword-tag">story</span><span class="keyword-tag">politics</span><span class="keyword-tag">trump</span><span class="keyword-tag">man</span><span class="keyword-tag">political</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"So this is, universalism I’m not a believer in. I think that you have some values that are fairly limited that all human beings should hold in common. And that’s pretty much it. I think that everybody should have the ability to join with their own culture. I think how we define tribe is a different thing. So I think that tribes should not be defined by innate physical characteristics, for example. Because I think that, thank God, as a civilization, we’ve outgrown that. And I think that that is a childish way to view the world. All the tall people aren’t a tribe. All the black people [inaudible 02:12:25], all the white people aren’t a tribe."</div>
+  <div class="quote-zh">所以这就是，我不相信普世主义。我认为有些价值观是相当有限的，但全人类都应该持有这些价值观。就这样了。我认为每个人都应该有能力融入自己的文化。我认为我们如何定义部落是不同的。因此，我认为部落不应该由先天的身体特征等来定义。因为我认为，感谢上帝，作为一个文明，我们已经超越了这一点。我认为这是一种幼稚的看待世界的方式。所有高个子的人都不是一个部落。所有黑人 [听不清 02:12:25]、所有白人都不是一个部落。</div>
+  <div class="quote-meta">— Ben Shapiro （02:11:49）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Sure. Let’s call it a crisis of faith and an ongoing question of faith, which I think is, I hope most religious people… And the word Israel in Hebrew, Israel, means to struggle with God. That’s literally what the word means. And so the idea of struggling with God, if you’re Jewish or Bnei Yisrael, the idea of struggling with God, I think is endemic to the human condition. If you understand what God’s doing, then I think you’re wrong. And if you think that that question doesn’t matter, then I think you’re also wrong. I think that God is a very necessary hypothesis."</div>
+  <div class="quote-zh">当然。让我们称其为信仰危机和持续存在的信仰问题，我认为，我希望大多数宗教人士……以色列这个词在希伯来语中是以色列，意思是与上帝斗争。这就是这个词的字面意思。因此，如果你是犹太人或以色列人，与上帝斗争的想法，我认为与上帝斗争的想法是人类状况的普遍现象。如果你明白神在做什么，那么我认为你错了。如果你认为这个问题无关紧要，那么我认为你也错了。我认为上帝是一个非常必要的假设。</div>
+  <div class="quote-meta">— Ben Shapiro （02:06:14）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I don’t think that we can actually do that, though. First of all, I think that it’s platonic lies or generally bad. Then second of all, I don’t think that we actually have the capacity to do this. I think that the people who are the elites of our society who get together in rooms and talk about this stuff, and I’ve been in some of those meetings at my synagogues Friday night, actually. No, but I’ve been-"</div>
+  <div class="quote-zh">但我认为我们实际上无法做到这一点。首先，我认为这是柏拉图式的谎言，或者说总体来说很糟糕。其次，我认为我们实际上没有能力做到这一点。我认为我们社会的精英们聚集在房间里谈论这些事情，事实上，我周五晚上在犹太教堂参加了一些会议。不，但我一直——</div>
+  <div class="quote-meta">— Ben Shapiro （01:58:40）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And that raises a more fundamental question of what exactly liberty is for. And I think that both the right and the left actually tend to make a mistake when they discuss liberty. The left tends to think that liberty is an ultimate good. That simple choice makes a bad thing good, which is not true. And I think the right talks about liberty in almost the same terms sometimes. And I think that’s not true either. The question is whether liberty is of inherent value or instrumental value. Is liberty good in and of itself or is liberty good because it allows you to achieve X, Y or Z?"</div>
+  <div class="quote-zh">这就提出了一个更根本的问题：自由究竟是为了什么？我认为右派和左派在讨论自由时实际上都容易犯错误。左派倾向于认为自由是终极的善。这个简单的选择使坏事变成好事，但事实并非如此。我认为右派有时会用几乎相同的术语来谈论自由。我认为这也不是真的。问题是自由具有内在价值还是工具价值。自由本身是好的，还是因为它可以让你实现 X、Y 或 Z？</div>
+  <div class="quote-meta">— Ben Shapiro （02:04:39）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So I understand both sides of it. I wasn’t offended by Ye’s comments in that way though, because if you’re a pro-life human being, then you do think that what’s happening is a great tragedy on scale that involves the dehumanization of an entire class of people, the pre-born."</div>
+  <div class="quote-zh">所以我理解它的两面。不过，我并没有被叶的评论所冒犯，因为如果你是一个反堕胎的人，那么你确实会认为正在发生的事情是一场规模巨大的悲剧，涉及整个阶层的人，即未出生的人的非人化。</div>
+  <div class="quote-meta">— Ben Shapiro （00:17:20）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The great lie we tell ourselves is that people who are evil are not like us. They’re class apart. Everybody in history who has sinned is a person who’s very different from me. Robert George, the philosopher over at Princeton, he’s fond of doing a thought experiment in his classes where he asks people to raise their hand If they had lived in Alabama in 1861, how many of you would be abolitionists? ...</div>
+  <div class="dialogue-zh">我们对自己说的最大谎言是，邪恶的人不像我们。他们的阶级不同。历史上所有犯过罪的人都与我截然不同。普林斯顿大学的哲学家罗伯特·乔治（Robert George）喜欢在课堂上做一个思想实验，他要求人们举手，如果他们生活在 1861 年的阿拉巴马州，你们中有多少人会成为废奴主义者？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:32)</span>
+  </div>
+  <div class="dialogue-en">Do you ever sit back in the quiet of your mind and think, Am I participating in evil?</div>
+  <div class="dialogue-zh">你是否曾静下心来想一想：我是否参与了邪恶？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:41)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Ben Shapiro, a conservative political commentator, host of the Ben Shapiro show, co-founder of The Daily Wire, and author of several books, including The Authoritarian Moment, The Right Side of History and Facts Don’t Care About Your Feelings. Whatever Your political leanings, I humbly asked that you tried to put those aside and listen with an open mind trying ...</div>
+  <div class="dialogue-zh">以下是与本·夏皮罗（Ben Shapiro）的对话，他是一位保守派政治评论员、本·夏皮罗节目的主持人、《每日电讯报》的联合创始人，也是多本书的作者，包括《威权时刻》、《历史的正确面》和《事实不关心你的感受》。无论您的政治倾向如何，我谦虚地要求您尝试将这些放在一边，并以开放的心态倾听</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:44)</span>
+  </div>
+  <div class="dialogue-en">I seek only to understand, and in so doing, hopefully add a bit of love to the world. This is Lex Fridman podcast to support it. Please check out our sponsors in the description. And now, dear friends, here’s Ben Shapiro. Kanye ‘Ye’ West</div>
+  <div class="dialogue-zh">我只寻求理解，并希望通过这样做，为世界增添一点爱。这是 Lex Fridman 播客来支持它。请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是本·夏皮罗。坎耶·“耶”·韦斯特</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:01)</span>
+  </div>
+  <div class="dialogue-en">Let’s start with a difficult topic. What do you think about the comments made by Ye formerly known as Kanye West about Jewish people?</div>
+  <div class="dialogue-zh">让我们从一个困难的话题开始吧。您如何看待叶原名 Kanye West 对犹太人的评论？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:02:09)</span>
+  </div>
+  <div class="dialogue-en">They’re awful and antisemitic and they seem to get worse over time. They started off with the bizarre death con 3 tweet, and then they went into even more stereotypical garbage about Jews and Jews being sexual manipulators. I think that was the Pete Davidson, Kim Kardashian stuff, and then Jews running all of the media, Jews being in charge of the financial sector. Jewish people… I called it on my...</div>
+  <div class="dialogue-zh">他们很糟糕，而且反犹太主义，而且随着时间的推移，他们似乎变得更糟。他们从奇怪的 Death Con 3 推文开始，然后他们进入了关于犹太人和犹太人是性操纵者的更刻板的垃圾。我认为那是皮特·戴维森（Pete Davidson）、金·卡戴珊（Kim Kardashian）的事情，然后是犹太​​人管理所有媒体，犹太人负责金融部门。犹太人……我把它称为我的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:43)</span>
+  </div>
+  <div class="dialogue-en">Do you think those words come from pain, where they come from?</div>
+  <div class="dialogue-zh">你认为这些话是来自痛苦吗？它们从哪里来？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:02:47)</span>
+  </div>
+  <div class="dialogue-en">And it’s always hard to try and read somebody’s mind what he looks like to me, just having experience in my own family with people who are bipolar is he seems like a bipolar personality. He seems like somebody who is in the middle of a manic episode. And when you’re manic, you tend to say a lot of things that you shouldn’t say, and you tend to believe that they’re the most brilliant things ever sa...</div>
+  <div class="dialogue-zh">在我看来，试图读懂某人的想法总是很困难，仅仅在我自己的家庭中与躁郁症患者相处的经历就表明他看起来像一个躁郁症人格。他看起来就像是一个正处于躁狂期的人。当你狂躁时，你往往会说很多不该说的话，并且你倾向于相信它们是有史以来最聪明的事情</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:03:37)</span>
+  </div>
+  <div class="dialogue-en">So I would imagine it’s coming from that. From his comments, I would also imagine that he’s doing the logical mistake that a lot of anti-Semites or racist or bigots do, which is somebody hurt me, that person is a Jew, therefore all Jews are bad. And that jump from a person did something to me I don’t like, who’s a member of a particular race or class, and therefore everybody of that race or class ...</div>
+  <div class="dialogue-zh">所以我想它就是来自于此。从他的评论中，我还可以想象他犯了许多反犹太主义者、种族主义者或偏执者所做的逻辑错误，那就是有人伤害了我，那个人是犹太人，因此所有犹太人都是坏人。一个人的跳跃对我做了一些我不喜欢的事情，他是特定种族或阶级的成员，因此该种族或阶级的每个人</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:07)</span>
+  </div>
+  <div class="dialogue-en">So jumping from the individual to the group.</div>
+  <div class="dialogue-zh">就这样从个体跳到了群体。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:04:09)</span>
+  </div>
+  <div class="dialogue-en">That’s the way he’s been expressing it, right? He keeps talking about his Jewish agents, and I watched your interview with him and you kept saying this, “So just name the agents. Just name the people who are screwing you.” And he wouldn’t do it. Instead, he just kept going back to the general, the group, the Jews in general. That’s textbook bigotry, and if we’re putting any other context, he would...</div>
+  <div class="dialogue-zh">他就是这样表达的，对吗？他一直在谈论他的犹太特工，我看了你对他的采访，你一直这么说，“所以只说出那些特工的名字。只说出那些欺骗你的人的名字。”但他不会这么做。相反，他只是不断地回到将军、团体、整个犹太人身上。这是教科书上的偏执，如果我们有任何其他背景，他会</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:30)</span>
+  </div>
+  <div class="dialogue-en">To the degree that’s what fuels hate in the world. What’s the way to reverse that process? What’s the way to alleviate the hate?</div>
+  <div class="dialogue-zh">在某种程度上，这就是助长世界仇恨的原因。有什么方法可以扭转这个过程呢？有什么办法可以消除仇恨呢？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:04:38)</span>
+  </div>
+  <div class="dialogue-en">When it comes to alleviating the stuff that he’s saying, obviously debunking it, making clear that what he’s saying is garbage. But the reality is that for most people who are in any way engaged with these issues, I don’t think they’re being convinced to be antisemitic by Ye. I think that there’s a group of people who may be swayed that antisemitism is acceptable because Ye is saying what he’s say...</div>
+  <div class="dialogue-zh">当谈到缓和他所说的话时，显然是在揭穿它，明确表示他所说的是垃圾。但现实是，对于大多数以任何方式参与这些问题的人来说，我认为叶并没有说服他们成为反犹太主义者。我认为有一群人可能会认为反犹太主义是可以接受的，因为叶说的是他所说的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:34)</span>
+  </div>
+  <div class="dialogue-en">So there is a degree to which it normalizes that idea that Jews control the media, Jews control X institution. Is there a way to talk about a high representation of a group like Jewish people in a certain institution like the media or Hollywood and so on without it being a hateful conversation?</div>
+  <div class="dialogue-zh">因此，在一定程度上，犹太人控制媒体、犹太人控制 X 机构的想法正常化了。有没有一种方法可以在媒体或好莱坞等特定机构中谈论像犹太人这样的群体的高代表性，而不是充满仇恨的对话？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:06:02)</span>
+  </div>
+  <div class="dialogue-en">Sure, of course. A high percentage of higher than statistically represented in the population, percentage of Hollywood agents are probably Jewish. A higher percentage of lawyers generally are probably Jewish. A high percentage of accountants are probably Jewish. Also, A higher percentage of engineers are probably Asian. Like the statistical truths are statistical truths. It doesn’t necessarily mea...</div>
+  <div class="dialogue-zh">当然，当然。好莱坞特工中犹太人的比例可能高于人口中的统计比例。律师中犹太人的比例通常可能较高。很大比例的会计师可能是犹太人。此外，亚洲工程师的比例可能更高。就像统计真理就是统计真理一样。这并不一定意味着</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:58)</span>
+  </div>
+  <div class="dialogue-en">Yeah, there’s a jump between… It’s also possible that record label owners as a group have a culture that Fs over artists.</div>
+  <div class="dialogue-zh">是的，两者之间存在跳跃……唱片公司所有者作为一个群体也可能拥有一种超越艺术家的文化。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:07:09)</span>
+  </div>
+  <div class="dialogue-en">Sure.</div>
+  <div class="dialogue-zh">当然。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:09)</span>
+  </div>
+  <div class="dialogue-en">Doesn’t treat artists fairly. And it’s also possible that there’s a high representation of Jews in the group of people that own record labels, but it’s that small, but a very big leap that people take from the group that own record labels to all Jews.</div>
+  <div class="dialogue-zh">不公平对待艺术家。也有可能在拥有唱片公司的人群中犹太人的比例很高，但这虽然很小，但却是人们从拥有唱片公司的群体到所有犹太人的飞跃。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:07:27)</span>
+  </div>
+  <div class="dialogue-en">For sure. And I think that one of the other issues also is that antisemitism is fascinating because it breaks down into so many different parts, meaning that if you look at of different types of antisemitism, if you’re a racist against black people, it’s typically because you’re racist based on the color of their skin.</div>
+  <div class="dialogue-zh">一定。我认为其他问题之一是反犹太主义很有趣，因为它可以分解为许多不同的部分，这意味着如果你观察不同类型的反犹太主义，如果你是针对黑人的种族主义者，那通常是因为你是基于他们肤色的种族主义者。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ben Shapiro <span class="dialogue-time">(00:07:44)</span>
+  </div>
+  <div class="dialogue-en">If you’re racist against the Jews, you’re antisemitic. Then there are actually a few different ways that breaks down. You have antisemitism in terms of ethnicity, which is like Nazi antisemitism. You have Jewish parentage, you have Jewish grandparent, therefore your blood is corrupt and you are inherently going to have bad properties. Then there’s old school religious antisemitism, which is that t...</div>
+  <div class="dialogue-zh">如果你对犹太人持种族主义态度，那么你就是反犹太主义者。那么实际上有几种不同的分解方式。从种族角度来看，存在反犹太主义，就像纳粹反犹太主义一样。你有犹太血统，你有犹太祖父母，因此你的血统是腐败的，你天生就有不好的属性。还有老派的宗教反犹太主义，那就是</div>
+</div>
+    <a href="https://lexfridman.com/ben-shapiro-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-huberman-3.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Focus, Stress, Relationships, and Friendship</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="andrew-huberman-5.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman #5</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="andrew-huberman.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Neuroscience of Optimal Performance</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="carl-hart.html" class="card" style="text-decoration:none">
+  <div class="card-title">Carl Hart: Heroin, Cocaine, MDMA, Alcohol &amp; the Role of Drugs in Society</div>
+  <div class="card-meta">Carl Hart</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

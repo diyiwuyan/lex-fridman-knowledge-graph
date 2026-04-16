@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elon Musk And Neuralink Team - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Elon Musk And Neuralink Team</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Elon Musk And Neuralink Team</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/elon-musk.html" style="font-size:16px;color:#818cf8;font-weight:600">Elon Musk</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">88,652 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/elon-musk-and-neuralink-team-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#06b6d422;color:#06b6d4;border:1px solid #06b6d444;font-size:13px;padding:4px 12px">太空与探索</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:49</span>
+  <span class="chapter-title">Elon Musk<span class="zh-trans"> · 埃隆·马斯克</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:06</span>
+  <span class="chapter-title">Telepathy<span class="zh-trans"> · 心灵感应</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">10:45</span>
+  <span class="chapter-title">Power of human mind<span class="zh-trans"> · 人类心灵的力量</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">15:12</span>
+  <span class="chapter-title">Future of Neuralink<span class="zh-trans"> · Neuralink 的未来</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">20:27</span>
+  <span class="chapter-title">Ayahuasca<span class="zh-trans"> · 死藤水</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">29:57</span>
+  <span class="chapter-title">Merging with AI<span class="zh-trans"> · 与人工智能融合</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">34:44</span>
+  <span class="chapter-title">xAI<span class="zh-trans"> · 人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">36:57</span>
+  <span class="chapter-title">Optimus<span class="zh-trans"> · 擎天柱</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">43:47</span>
+  <span class="chapter-title">Elon’s approach to problem-solving<span class="zh-trans"> · 埃隆解决问题的方法</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:01:23</span>
+  <span class="chapter-title">History and geopolitics<span class="zh-trans"> · 历史和地缘政治</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:05:53</span>
+  <span class="chapter-title">Lessons of history<span class="zh-trans"> · 历史的教训</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:10:12</span>
+  <span class="chapter-title">Collapse of empires<span class="zh-trans"> · 帝国的崩溃</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:17:55</span>
+  <span class="chapter-title">Time<span class="zh-trans"> · 时间</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:20:37</span>
+  <span class="chapter-title">Aliens and curiosity<span class="zh-trans"> · 外星人和好奇心</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:28:12</span>
+  <span class="chapter-title">DJ Seo<span class="zh-trans"> · DJ 徐</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:36:20</span>
+  <span class="chapter-title">Neural dust<span class="zh-trans"> · 神经尘埃</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:43:03</span>
+  <span class="chapter-title">History of brain–computer interface<span class="zh-trans"> · 脑机接口的历史</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:51:07</span>
+  <span class="chapter-title">Biophysics of neural interfaces<span class="zh-trans"> · 神经接口的生物物理学</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:01:36</span>
+  <span class="chapter-title">How Neuralink works<span class="zh-trans"> · Neuralink 的工作原理</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">brain</span><span class="keyword-tag">noland</span><span class="keyword-tag">elon</span><span class="keyword-tag">musk</span><span class="keyword-tag">don</span><span class="keyword-tag">able</span><span class="keyword-tag">going</span><span class="keyword-tag">arbaugh</span><span class="keyword-tag">human</span><span class="keyword-tag">bliss</span><span class="keyword-tag">seo</span><span class="keyword-tag">chapman</span><span class="keyword-tag">doing</span><span class="keyword-tag">neuralink</span><span class="keyword-tag">cursor</span><span class="keyword-tag">trying</span><span class="keyword-tag">user</span><span class="keyword-tag">matthew</span><span class="keyword-tag">macdougall</span><span class="keyword-tag">control</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Oh, man. I think it’s all about understanding how much we need God. And I don’t think that there’s any light without the dark. I think that if all of us were happy all the time, there would be no reason to turn to God ever. I feel like there would be no concept of good or bad, and I think that as much of the darkness and the evil that’s in the world, it makes us all appreciate the good and the things we have so much more. And I think when I had my accident, one of the first things I said to one of my best friends was… And this was within the first month or two after my accident, I said, “Everything about this accident has just made me understand and believe that God is real and that there really is a God, basically. And that my interactions with him have all been real and worthwhile.”"</div>
+  <div class="quote-zh">哦，伙计。我认为这一切都在于了解我们有多么需要上帝。我认为没有黑暗就没有光明。我认为，如果我们所有人一直都快乐，就没有理由转向上帝。我觉得不会有好坏的概念，我认为世界上有那么多的黑暗和邪恶，它让我们所有人更加珍惜我们所拥有的美好和事物。我想当我发生事故时，我对我最好的朋友说的第一件事是……在事故发生后的一两个月内，我说，“关于这次事故的一切让我理解并相信上帝是真实的，基本上真的有一个上帝。我与他的互动都是真实的和值得的。”</div>
+  <div class="quote-meta">— Noland Arbaugh （08:31:23）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, I think that, generally, people would call that ASI, artificial super intelligence. But there are these thresholds where you could say at some point the AI is smarter than any single human. And then, you’ve got eight billion humans, and actually, each human is machine augmented via their computers. So, it’s a much higher bar to compete with eight billion machine augmented humans. That’s a whole bunch of orders of magnitude more. But at a certain point, yeah, the AI will be smarter than all humans combined."</div>
+  <div class="quote-zh">嗯，我认为，一般来说，人们会称之为 ASI，人工智能。但存在这些阈值，在某些时候你可以说人工智能比任何一个人都聪明。然后，你有八十亿人，实际上，每个人都是通过他们的计算机进行机器增强的。因此，与 80 亿机器增强人类竞争的门槛要高得多。这要高出一大堆数量级。但在某个时刻，人工智能将比所有人类加起来还要聪明。</div>
+  <div class="quote-meta">— Elon Musk （00:52:49）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"My faith. My faith in God was a big one. My understanding that it was all for purpose, and even if that purpose wasn’t anything involving Neuralink, even if that purpose was… There’s a story in the Bible about Job, and I think it’s a really, really popular story about how Job has all of these terrible things happen to him, and he praises God throughout the whole situation. I thought, and I think a lot of people think for most of their lives that they are Job, that they’re the ones going through something terrible, and they just need to praise God through the whole thing and everything will work out."</div>
+  <div class="quote-zh">我的信仰。我对上帝有很大的信心。我的理解是，这一切都是有目的的，即使这个目的与 Neuralink 无关，即使这个目的是……圣经中有一个关于约伯的故事，我认为这是一个非常非常流行的故事，讲述了约伯如何让所有这些可怕的事情发生在他身上，而他在整个情况下赞美上帝。我想，我想很多人一生中的大部分时间都认为他们是约伯，他们正在经历可怕的事情，他们只需要在整个事情中赞美上帝，一切都会好起来的。</div>
+  <div class="quote-meta">— Noland Arbaugh （06:58:47）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So, I mean, I thought about AI, essentially, for a long time, and the thing that at least my biological neural net comes up with as being the most important thing is adherence to truth, whether that truth is politically correct or not. So, I think if you force AIs to lie or train them to lie, you’re really asking for trouble, even if that lie is done with good intentions. So, you saw issues with ChatGPT and Gemini and whatnot. Like, you asked Gemini for an image of the Founding Fathers of the United States, and it shows a group of diverse women. Now, that’s factually untrue."</div>
+  <div class="quote-zh">So, I mean, I thought about AI, essentially, for a long time, and the thing that at least my biological neural net comes up with as being the most important thing is adherence to truth, whether that truth is politically correct or not.所以，我认为如果你强迫人工智能撒谎或训练他们撒谎，你真的是在自找麻烦，即使这个谎言是出于善意。所以，您看到了 ChatGPT 和 Gemini 等问题。比如，你向双子座要了一张美国开国元勋的照片，它展示了一群多元化的女性。现在看来，这实际上是不正确的。</div>
+  <div class="quote-meta">— Elon Musk （00:54:00）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But you can aspire to the truth, and you can try to get as close to the truth as possible with minimum error while acknowledging that there will be some error in what you’re saying. So, this is how physics works. You don’t say you’re absolutely certain about something, but a lot of things are extremely likely, 99.99999% likely to be true. So, aspiring to the truth is very important. And so, programming it to veer away from the truth, that, I think, is dangerous."</div>
+  <div class="quote-zh">但你可以追求真理，你可以尝试以最小的错误尽可能接近真理，同时承认你所说的会有一些错误。所以，这就是物理学的运作原理。你不会说你对某件事绝对确定，但很多事情极有可能，99.99999% 的可能性是真的。所以，追求真理是非常重要的。因此，我认为，对其进行编程以偏离事实是危险的。</div>
+  <div class="quote-meta">— Elon Musk （00:57:57）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Elon Musk, DJ Seo, Matthew MacDougall, Bliss Chapman, and Noland Arbaugh about Neuralink and the future of humanity. Elon, DJ, Matthew and Bliss are of course part of the amazing Neuralink team, and Noland is the first human to have a Neuralink device implanted in his brain. I speak with each of them individually, so use timestamps to jump around, or as I recom...</div>
+  <div class="dialogue-zh">以下是与 Elon Musk、DJ Seo、Matthew MacDougall、Bliss Chapman 和 Noland Arbaugh 关于 Neuralink 和人类未来的对话。 Elon、DJ、Matthew 和 Bliss 当然都是令人惊叹的 Neuralink 团队的成员，而 Noland 是第一个在大脑中植入 Neuralink 设备的人。我分别与他们每个人交谈，因此使用时间戳来跳转，或者按照我的建议</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:00:49)</span>
+  </div>
+  <div class="dialogue-en">Drinking coffee or water?</div>
+  <div class="dialogue-zh">喝咖啡还是水？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:51)</span>
+  </div>
+  <div class="dialogue-en">Water. I’m so over-caffeinated right now. Do you want some caffeine?</div>
+  <div class="dialogue-zh">水。我现在咖啡因过量了。你想要一些咖啡因吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:00:58)</span>
+  </div>
+  <div class="dialogue-en">Sure.</div>
+  <div class="dialogue-zh">当然。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:59)</span>
+  </div>
+  <div class="dialogue-en">There’s a Nitro drink.</div>
+  <div class="dialogue-zh">有一种硝基饮料。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:01:02)</span>
+  </div>
+  <div class="dialogue-en">This supposed to keep you up for like tomorrow afternoon, basically.</div>
+  <div class="dialogue-zh">基本上，这应该能让你在明天下午保持清醒。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:08)</span>
+  </div>
+  <div class="dialogue-en">Yeah. Yeah. I don’t want to [inaudible 00:01:11].</div>
+  <div class="dialogue-zh">是的。是的。我不想 [听不清 00:01:11]。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:01:11)</span>
+  </div>
+  <div class="dialogue-en">So what is Nitro? It’s just got a lot of caffeine or something?</div>
+  <div class="dialogue-zh">那么什么是硝基呢？它只是含有大量咖啡因或其他东西吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:13)</span>
+  </div>
+  <div class="dialogue-en">Don’t ask questions. It’s called Nitro. Do you need to know anything else?</div>
+  <div class="dialogue-zh">不要问问题。它被称为硝基。您还需要了解其他信息吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:01:17)</span>
+  </div>
+  <div class="dialogue-en">It’s got nitrogen in it. That’s ridiculous. What we breathe is 78% nitrogen anyway. What do you need to add more for?</div>
+  <div class="dialogue-zh">里面有氮气。这太荒谬了。无论如何，我们呼吸的是 78% 的氮气。你还需要添加更多做什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:01:24)</span>
+  </div>
+  <div class="dialogue-en">Unfortunately, you’re going to eat it.</div>
+  <div class="dialogue-zh">不幸的是，你会吃掉它。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:01:29)</span>
+  </div>
+  <div class="dialogue-en">Most people think that they’re breathing oxygen and they’re actually breathing 78% nitrogen. You need like a milk bar, like from Clockwork Orange.</div>
+  <div class="dialogue-zh">大多数人认为他们呼吸的是氧气，但实际上他们呼吸的是 78% 的氮气。你需要像发条橙那样的牛奶吧。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:41)</span>
+  </div>
+  <div class="dialogue-en">Yeah. Yeah. Is that the top three Kubrick film for you?</div>
+  <div class="dialogue-zh">是的。是的。这是您心目中排名前三的库布里克电影吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:01:44)</span>
+  </div>
+  <div class="dialogue-en">Clockwork Orange? It’s pretty good. It’s demented. Jarring, I’d say.</div>
+  <div class="dialogue-zh">发条橙？非常好。这是疯狂的。我想说，很刺耳。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:49)</span>
+  </div>
+  <div class="dialogue-en">Okay. Okay. So, first, let’s step back, and big congrats on getting Neuralink implanted into a human. That’s a historic step for Neuralink.</div>
+  <div class="dialogue-zh">好的。好的。首先，让我们退一步，热烈祝贺 Neuralink 被植入人体。这对 Neuralink 来说是历史性的一步。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:01:49)</span>
+  </div>
+  <div class="dialogue-en">Thanks. Yeah.</div>
+  <div class="dialogue-zh">谢谢。是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:04)</span>
+  </div>
+  <div class="dialogue-en">And there’s many more to come.</div>
+  <div class="dialogue-zh">还有更多的事情即将发生。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:02:07)</span>
+  </div>
+  <div class="dialogue-en">Yeah. And we just obviously have our second implant as well.</div>
+  <div class="dialogue-zh">是的。显然我们也有第二个植入物。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:11)</span>
+  </div>
+  <div class="dialogue-en">How did that go?</div>
+  <div class="dialogue-zh">进展如何？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Elon Musk <span class="dialogue-time">(00:02:12)</span>
+  </div>
+  <div class="dialogue-en">So far, so good. It looks like we’ve got, I think, on the order of 400 electrodes that are providing signals.</div>
+  <div class="dialogue-zh">到目前为止，一切都很好。我认为，我们似乎拥有大约 400 个提供信号的电极。</div>
+</div>
+    <a href="https://lexfridman.com/elon-musk-and-neuralink-team-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="alex-filippenko.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alex Filippenko: Supernovae, Dark Energy, Aliens &amp; the Expanding Universe</div>
+  <div class="card-meta">Alex Filippenko</div>
+</a>
+<a href="alex-garland.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alex Garland: Ex Machina, Devs, Annihilation, and the Poetry of Science</div>
+  <div class="card-meta">Alex Garland</div>
+</a>
+<a href="alien-debate.html" class="card" style="text-decoration:none">
+  <div class="card-title">Alien Debate: Sara Walker and Lee Cronin</div>
+  <div class="card-meta">Alien Debate</div>
+</a>
+<a href="andrew-huberman-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Sleep, Dreams, Creativity &amp; the Limits of the Human Mind</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

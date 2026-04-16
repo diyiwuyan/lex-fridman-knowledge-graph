@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Charan Ranganath - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Charan Ranganath</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Charan Ranganath</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/charan-ranganath.html" style="font-size:16px;color:#818cf8;font-weight:600">Charan Ranganath</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">32,485 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/charan-ranganath-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:03</span>
+  <span class="chapter-title">Experiencing self vs remembering self<span class="zh-trans"> · 体验自我 vs 记住自我</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:44</span>
+  <span class="chapter-title">Creating memories<span class="zh-trans"> · 创造回忆</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">24:16</span>
+  <span class="chapter-title">Why we forget<span class="zh-trans"> · 为什么我们会忘记</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">31:53</span>
+  <span class="chapter-title">Training memory<span class="zh-trans"> · 训练记忆力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">42:22</span>
+  <span class="chapter-title">Memory hacks<span class="zh-trans"> · 内存黑客</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">54:10</span>
+  <span class="chapter-title">Imagination vs memory<span class="zh-trans"> · 想象力与记忆力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:03:29</span>
+  <span class="chapter-title">Memory competitions<span class="zh-trans"> · 记忆比赛</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:13:18</span>
+  <span class="chapter-title">Science of memory<span class="zh-trans"> · 记忆科学</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:28:33</span>
+  <span class="chapter-title">Discoveries<span class="zh-trans"> · 发现</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:39:37</span>
+  <span class="chapter-title">Deja vu<span class="zh-trans"> · 似曾相识</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:44:54</span>
+  <span class="chapter-title">False memories<span class="zh-trans"> · 错误的记忆</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:04:59</span>
+  <span class="chapter-title">False confessions<span class="zh-trans"> · 虚假供述</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:08:45</span>
+  <span class="chapter-title">Heartbreak<span class="zh-trans"> · 心碎</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:16:19</span>
+  <span class="chapter-title">Nature of time<span class="zh-trans"> · 时间的本质</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:24:00</span>
+  <span class="chapter-title">Brain–computer interface (BCI)<span class="zh-trans"> · 脑机接口（BCI）</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:38:04</span>
+  <span class="chapter-title">AI and memory<span class="zh-trans"> · 人工智能和记忆</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:48:18</span>
+  <span class="chapter-title">ADHD<span class="zh-trans"> · 多动症</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:55:15</span>
+  <span class="chapter-title">Music<span class="zh-trans"> · 音乐</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:05:00</span>
+  <span class="chapter-title">Human mind<span class="zh-trans"> · 人的心灵</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">memory</span><span class="keyword-tag">charan</span><span class="keyword-tag">ranganath</span><span class="keyword-tag">don</span><span class="keyword-tag">going</span><span class="keyword-tag">brain</span><span class="keyword-tag">stuff</span><span class="keyword-tag">memories</span><span class="keyword-tag">interesting</span><span class="keyword-tag">got</span><span class="keyword-tag">doing</span><span class="keyword-tag">model</span><span class="keyword-tag">human</span><span class="keyword-tag">attention</span><span class="keyword-tag">happened</span><span class="keyword-tag">learning</span><span class="keyword-tag">able</span><span class="keyword-tag">fascinating</span><span class="keyword-tag">remembering</span><span class="keyword-tag">humans</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I mean, I do feel like adolescence is much more important than I think people give credit for. I think that there is this kind of a sense the first three years of life is the most important part, but the teenage years are just so important for the brain. And so that’s where a lot of mental illness starts to emerge. Now we’re thinking of things like schizophrenia as a neurodevelopmental disorder because it just emerges during that period of adolescence and early adulthood. And I think the other part of it is is that I guess I was a little bit too firm in saying that memory determines who we are. It’s really the self is an evolving construct. I think we kind of underestimate that."</div>
+  <div class="quote-zh">我的意思是，我确实觉得青春期比我认为人们认为的要重要得多。我认为有一种感觉，生命的前三年是最重要的部分，但青少年时期对大脑来说也同样重要。这就是许多精神疾病开始出现的地方。现在，我们将精神分裂症视为一种神经发育障碍，因为它只是在青春期和成年早期出现。我认为另一部分是，我想我说记忆决定我们是谁有点过于坚定了。事实上，自我是一个不断发展的结构。我认为我们有点低估了这一点。</div>
+  <div class="quote-meta">— Charan Ranganath （00:13:21）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Basically I think that a lot of learning in the brain is driven towards being able to make sense. I mean really memory is all about the present and the future. The past is done. So biologically speaking, it’s not important unless there’s something from the past that’s useful. And so what our brains are really optimized for is to learn about the stuff from the past that’s going to be most useful and understanding the present and predicting the future. And so cause-effect relationships for instance, that’s a big one. Now my future is completely unpredictable in the sense that you could in the next 10 minutes pull a knife on me and slit my throat."</div>
+  <div class="quote-zh">基本上我认为大脑中的很多学习都是为了能够理解。我的意思是，记忆实际上是关于现在和未来的。过去的事已经过去了。所以从生物学上来说，除非过去有一些有用的东西，否则它并不重要。因此，我们的大脑真正优化的目的是了解过去最有用的东西，了解现在并预测未来。例如，因果关系是一个很大的关系。现在我的未来完全不可预测，因为你可能在接下来的 10 分钟内对我拔刀割断我的喉咙。</div>
+  <div class="quote-meta">— Charan Ranganath （00:02:50）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"But it became a great story. And it was definitely, Randy and I were already tight, but that was a real bonding experience for us. And I learned from that that it’s like I don’t look back on that enough actually because I think we often, at least for me, I don’t necessarily have the confidence to think that things will work out, that I’ll be able to get through certain things. But my ability to actually get something done in that moment is better than I give myself credit for, I think. And that was the lesson of that story that I really took away."</div>
+  <div class="quote-zh">但这成为了一个伟大的故事。毫无疑问，兰迪和我已经很亲密了，但这对我们来说是一次真正的亲密经历。我从中了解到，我实际上没有足够地回顾过去，因为我认为我们经常，至少对我来说，我不一定有信心认为事情会成功，我将能够度过某些事情。但我认为，我在那一刻真正完成某件事的能力比我自己相信的要好。这就是我真正从那个故事中学到的教训。</div>
+  <div class="quote-meta">— Charan Ranganath （00:10:24）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, yes, but that’s very important. So, you can understand, for instance, how do neurons talk to each other? That’s a really big, big question. Neural computation, in and of itself… You think it’s the most simple question, right? Not at all. I mean, it’s a big, big question, and understanding how two parts of the brain interact, meaning that it’s not just one area, speaking it’s not like Twitter where one area of the brain’s shouting and then another area of the brain’s just stuck listening to this crap. It’s like they’re actually interacting on the millisecond scale."</div>
+  <div class="quote-zh">嗯，是的，但这非常重要。那么，例如，您可以理解神经元如何相互通信？这是一个非常非常大的问题。神经计算本身......你认为这是最简单的问题，对吧？一点也不。我的意思是，这是一个很大很大的问题，了解大脑的两个部分如何相互作用，这意味着它不仅仅是一个区域，说起来它不像 Twitter，大脑的一个区域在喊叫，然后大脑的另一个区域只是在听这些废话。就好像他们实际上正在以毫秒级进行交互。</div>
+  <div class="quote-meta">— Charan Ranganath （01:38:07）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"So, I think there’s a lot that can be learned from mice. There’s a lot that can be learned from non-human primates. And then there’s a lot that you need to learn from humans. And I think unfortunately, some of the people in the National Institutes of Health think you can learn everything from the mouse. It’s like, “Why study memory in humans when I could study learning in a mouse?” And just like, “Oh my God, I’m going to get my funding from somewhere else.”"</div>
+  <div class="quote-zh">所以，我认为可以从老鼠身上学到很多东西。从非人类灵长类动物身上可以学到很多东西。然后你需要向人类学习很多东西。我认为不幸的是，美国国立卫生研究院的一些人认为你可以从老鼠身上学到一切。就像，“当我可以研究老鼠的学习能力时，为什么要研究人类的记忆呢？”就像，“天哪，我要从其他地方获得资金。”</div>
+  <div class="quote-meta">— Charan Ranganath （01:39:08）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Charan Ranganath <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The act of remembering can change the memory. If you remember some event and then I tell you something about the event, later on when you remember the event, you might remember some original information from the event as well as some information about what I told you. And sometimes if you’re not able to tell the difference, that information that I told you gets mixed into the story that you had or...</div>
+  <div class="dialogue-zh">记忆的行为可以改变记忆。如果你记得某个事件，然后我告诉你有关该事件的一些信息，稍后当你记得该事件时，你可能会记得该事件的一些原始信息以及我告诉你的一些信息。有时，如果你无法区分，我告诉你的信息就会混入你的故事中，或者</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:37)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Charan Ranganath, a psychologist and neuroscientist at UC Davis specializing in human memory. He’s the author of, Why We Remember. Unlocking Memory’s Power To Hold On To What Matters. This is the Lex Fridman podcast. To support it, please check out our sponsors in the description. And now, dear friends, here’s Charan Ranganath. Danny Kahneman describes the expe...</div>
+  <div class="dialogue-zh">以下是与加州大学戴维斯分校专门研究人类记忆的心理学家和神经科学家查兰·兰加纳特 (Charan Ranganath) 的对话。他是《我们为何记得》一书的作者。释放记忆的力量，抓住重要的事情。这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是查兰·兰加纳特 (Charan Ranganath)。丹尼·卡尼曼描述了这次经历</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Charan Ranganath <span class="dialogue-time">(00:01:27)</span>
+  </div>
+  <div class="dialogue-en">Danny really impacted me. I was an undergrad at Berkeley and I got to take a class from him long before he won the Nobel Prize or anything and it was just a mind-blowing class. But this idea of the remembering self and the experiencing self, I got into it because it’s so much about memory even though he doesn’t study memory. So we’re right now having this experience, right? And people can watch it...</div>
+  <div class="dialogue-zh">丹尼确实对我影响很大。我是伯克利大学的一名本科生，早在他获得诺贝尔奖或其他任何奖项之前我就上过他的课，那是一门令人兴奋的课程。但是关于记忆自我和体验自我的想法，我很感兴趣，因为它与记忆息息相关，尽管他并不研究记忆。所以我们现在就有这样的经历，对吗？人们可以观看它</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Charan Ranganath <span class="dialogue-time">(00:02:11)</span>
+  </div>
+  <div class="dialogue-en">And it tends to be biased by the beginning and the end, and he talks about the peaks, but there’s also the best parts, the worst parts, etc. And those are the things that we remember. And so when we make decisions, we usually consult memory and we feel like our memory is a record of what we’ve experienced, but it’s not. It’s this kind of very biased sample, but it’s biased in an interesting and I ...</div>
+  <div class="dialogue-zh">它往往在开始和结束时有偏差，他谈论高峰，但也有最好的部分，最差的部分等等。这些都是我们记住的事情。因此，当我们做出决定时，我们通常会参考记忆，我们感觉记忆是我们经历过的事情的记录，但事实并非如此。这是一种非常有偏见的样本，但它在一个有趣且我认为有偏见的样本中存在偏见。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:39)</span>
+  </div>
+  <div class="dialogue-en">So in the way we construct a narrative about our past, you say that it gives us an illusion of stability. Can you explain that?</div>
+  <div class="dialogue-zh">因此，你说我们构建关于过去的叙述的方式给了我们一种稳定的幻觉。你能解释一下吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Charan Ranganath <span class="dialogue-time">(00:02:50)</span>
+  </div>
+  <div class="dialogue-en">Basically I think that a lot of learning in the brain is driven towards being able to make sense. I mean really memory is all about the present and the future. The past is done. So biologically speaking, it’s not important unless there’s something from the past that’s useful. And so what our brains are really optimized for is to learn about the stuff from the past that’s going to be most useful an...</div>
+  <div class="dialogue-zh">基本上我认为大脑中的很多学习都是为了能够理解。我的意思是，记忆实际上是关于现在和未来的。过去的事已经过去了。所以从生物学上来说，除非过去有一些有用的东西，否则它并不重要。因此，我们的大脑真正最优化的就是学习过去最有用的东西</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:31)</span>
+  </div>
+  <div class="dialogue-en">I was planning on it.</div>
+  <div class="dialogue-zh">我正计划着呢。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Charan Ranganath <span class="dialogue-time">(00:03:32)</span>
+  </div>
+  <div class="dialogue-en">Exactly. But having seen some of your work and just generally my expectations about life, I’m not expecting that. I have a certainty that everything’s going to be fine and we’re going to have a great time talking today, but we’re often right. It’s like, okay, so I go to see a band on stage, I know they’re going to make me wait, the show’s going to start late and then they come on. There’s a very g...</div>
+  <div class="dialogue-zh">确切地。但看过你的一些作品以及我对生活的总体期望后，我并不期待这一点。我确信一切都会好起来的，我们今天会聊得很开心，但我们常常是对的。就像，好吧，所以我去看舞台上的乐队，我知道他们会让我等待，演出会很晚开始，然后他们就上场了。有一个非常g</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Charan Ranganath <span class="dialogue-time">(00:04:14)</span>
+  </div>
+  <div class="dialogue-en">It’s not real, it’s imagined. And it’s amazing that we have this capability and that’s what memory is about. But it can also give us the illusion that we know everything that’s about to happen. And I think what’s valuable about that illusion is when it’s broken, it gives us the information. So I mean, I’m sure being in AI about information theory and the idea is the information is what you didn’t ...</div>
+  <div class="dialogue-zh">这不是真实的，而是想象的。令人惊奇的是我们拥有这种能力，这就是记忆的意义。但它也会给我们一种错觉，以为我们知道即将发生的一切。我认为这种幻觉的价值在于，当它被打破时，它会为我们提供信息。所以我的意思是，我确信人工智能是关于信息论的，这个想法是信息是你没有的</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:49)</span>
+  </div>
+  <div class="dialogue-en">The error is where the learning happens.</div>
+  <div class="dialogue-zh">错误就是学习发生的地方。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Charan Ranganath <span class="dialogue-time">(00:04:53)</span>
+  </div>
+  <div class="dialogue-en">Exactly. Exactly.</div>
+  <div class="dialogue-zh">确切地。确切地。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:55)</span>
+  </div>
+  <div class="dialogue-en">Well, just to linger on Danny Kahneman and just this whole idea of experiencing self versus remembering self, I was hoping you can give a simple answer of how we should live life based on the fact that our memories could be a source of happiness or could be the primary source of happiness, that an event when experienced bears its fruits the most when it’s remembered over and over and over and over...</div>
+  <div class="dialogue-zh">好吧，只是停留在丹尼·卡尼曼以及体验自我与记住自我的整个想法上，我希望你能给出一个简单的答案，告诉我们应该如何生活，基于这样一个事实：我们的记忆可能是幸福的源泉，或者可能是幸福的主要源泉，经历过的事件只有在被一遍又一遍地记住时才能结出最大的果实。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Charan Ranganath <span class="dialogue-time">(00:05:45)</span>
+  </div>
+  <div class="dialogue-en">Well first I’ll say I wish I could take you on the road with me because that was such a great description.</div>
+  <div class="dialogue-zh">好吧，首先我会说我希望能带你一起上路，因为这是一个很棒的描述。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:51)</span>
+  </div>
+  <div class="dialogue-en">Can I be your opening act?</div>
+  <div class="dialogue-zh">我可以为你做开场表演吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Charan Ranganath <span class="dialogue-time">(00:05:52)</span>
+  </div>
+  <div class="dialogue-en">Oh my God, no, I’m going to open for you, dude. Otherwise, it’s like everybody leaves after you’re done. Believe me, I did that in Columbus, Ohio once. It wasn’t fun. The opening acts drank our bar tab. We spent all this money going all the way there and there was only the… Everybody left after the opening acts were done and there was just that stoner dude with the dreadlocks hanging out. And then...</div>
+  <div class="dialogue-zh">天哪，不，我要为你开门，伙计。否则，就好像你完成后每个人都离开了。相信我，我在俄亥俄州哥伦布市就这么做过一次。这并不有趣。开场表演喝了我们的酒吧标签。我们花了这么多钱一路去那里，但只有……开场表演结束后，每个人都离开了，只有那个留着辫子的瘾君子在外面闲逛。进而</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:21)</span>
+  </div>
+  <div class="dialogue-en">So we should as a small tangent, you’re a legit touring act?</div>
+  <div class="dialogue-zh">所以我们应该稍微切题一下，你是一个合法的巡演艺人吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Charan Ranganath <span class="dialogue-time">(00:06:26)</span>
+  </div>
+  <div class="dialogue-en">When I was in grad school, I played in a band and yeah, we traveled, we would play shows. It wasn’t like we were in a hardcore touring band, but we did some touring and had some fun times and yeah, we did a movie soundtrack.</div>
+  <div class="dialogue-zh">当我读研究生时，我在乐队中演奏，是的，我们旅行，我们会表演。这不像我们在一个硬核巡演乐队中，但我们做了一些巡演并度过了一些有趣的时光，是的，我们做了电影配乐。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:39)</span>
+  </div>
+  <div class="dialogue-en">Nice.</div>
+  <div class="dialogue-zh">好的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Charan Ranganath <span class="dialogue-time">(00:06:39)</span>
+  </div>
+  <div class="dialogue-en">Henry, Portrait of a Serial Killer. So that’s a good movie. We were on the soundtrack for the sequel, Henry 2, Mask of Sanity, which is a terrible movie.</div>
+  <div class="dialogue-zh">亨利，《连环杀手的肖像》。所以这是一部好电影。我们正在为续集《亨利2：理智的面具》制作配乐，这是一部糟糕的电影。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:48)</span>
+  </div>
+  <div class="dialogue-en">How’s the soundtrack? It’s pretty good?</div>
+  <div class="dialogue-zh">配乐怎么样？还不错吧？</div>
+</div>
+    <a href="https://lexfridman.com/charan-ranganath-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-huberman-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Sleep, Dreams, Creativity &amp; the Limits of the Human Mind</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="andrew-ng.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Ng: Deep Learning, Education, and Real-World AI</div>
+  <div class="card-meta">Andrew Ng</div>
+</a>
+<a href="ben-goertzel.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ben Goertzel: Artificial General Intelligence</div>
+  <div class="card-meta">Ben Goertzel</div>
+</a>
+<a href="bryan-johnson.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bryan Johnson: Kernel Brain-Computer Interfaces</div>
+  <div class="card-meta">Bryan Johnson</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

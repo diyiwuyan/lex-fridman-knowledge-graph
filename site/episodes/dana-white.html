@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dana White - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Dana White</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Dana White</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/dana-white.html" style="font-size:16px;color:#818cf8;font-weight:600">Dana White</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">17,129 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/dana-white-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#f9731622;color:#f97316;border:1px solid #f9731644;font-size:13px;padding:4px 12px">体育与武术</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:57</span>
+  <span class="chapter-title">Mike Tyson and early days of fighting<span class="zh-trans"> · 迈克·泰森和早期的战斗</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">11:35</span>
+  <span class="chapter-title">Jiu jitsu<span class="zh-trans"> · 柔术</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">17:39</span>
+  <span class="chapter-title">Origin of UFC<span class="zh-trans"> · UFC的起源</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">31:50</span>
+  <span class="chapter-title">Joe Rogan<span class="zh-trans"> · 乔·罗根</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">37:56</span>
+  <span class="chapter-title">Lorenzo Fertitta<span class="zh-trans"> · 洛伦佐·费尔蒂塔</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:23</span>
+  <span class="chapter-title">Great fighters<span class="zh-trans"> · 伟大的战士</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">44:20</span>
+  <span class="chapter-title">Khabib vs Conor<span class="zh-trans"> · 卡比卜 vs 康纳</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">47:27</span>
+  <span class="chapter-title">Jon Jones<span class="zh-trans"> · 乔恩·琼斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">50:28</span>
+  <span class="chapter-title">Conor McGregor<span class="zh-trans"> · 康纳·麦格雷戈</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">55:31</span>
+  <span class="chapter-title">Trump<span class="zh-trans"> · 王牌</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:01:09</span>
+  <span class="chapter-title">Elon vs Zuck<span class="zh-trans"> · 埃隆 vs 扎克</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:02:30</span>
+  <span class="chapter-title">Mike Tyson vs Jake Paul<span class="zh-trans"> · 迈克·泰森 VS 杰克·保罗</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:05:18</span>
+  <span class="chapter-title">Forrest Griffin vs Stephan Bonnar<span class="zh-trans"> · 福雷斯特·格里芬 VS 斯蒂芬·博纳尔</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:12:31</span>
+  <span class="chapter-title">Gambling<span class="zh-trans"> · 赌博</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:27:33</span>
+  <span class="chapter-title">Mortality<span class="zh-trans"> · 死亡</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">dana</span><span class="keyword-tag">white</span><span class="keyword-tag">fucking</span><span class="keyword-tag">going</span><span class="keyword-tag">fight</span><span class="keyword-tag">guy</span><span class="keyword-tag">don</span><span class="keyword-tag">shit</span><span class="keyword-tag">ufc</span><span class="keyword-tag">fighting</span><span class="keyword-tag">guys</span><span class="keyword-tag">got</span><span class="keyword-tag">night</span><span class="keyword-tag">said</span><span class="keyword-tag">conor</span><span class="keyword-tag">money</span><span class="keyword-tag">fights</span><span class="keyword-tag">put</span><span class="keyword-tag">doing</span><span class="keyword-tag">ever</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Well, I would put Ali as the greatest of all time human being. I mean, it’s easy as a fight fan to focus on him as a fighter, but when you focus on him as a human and you think about what he meant at that time and place, the things he said, the poems he came up with, just the overall brilliance of Muhammad Ali. The guts to have the strength mentally, physically, and emotionally to go against the grain at the time that he did it. It was a very dangerous time for him to be who he was. Yet, because of how smart he was and because of his personality and how if you sat down with him, you could be the biggest racist on the planet, it’s hard to get in the room with Ali and not like Ali."</div>
+  <div class="quote-zh">好吧，我会把阿里视为有史以来最伟大的人类。我的意思是，作为一个格斗迷，很容易将注意力集中在他作为一个战士上，但是当你把注意力集中在他作为一个人时，你会想到他在那个时间和地点的意思，他说的话，他写的诗，以及穆罕默德·阿里的整体才华。有勇气在精神上、身体上和情感上有勇气去违背他当时所做的事情。对他来说，这是一个非常危险的时刻。然而，因为他很聪明，因为他的个性，如果你和他坐在一起，你可能会成为这个星球上最大的种族主义者，很难和阿里一起进入房间，而不是像阿里那样。</div>
+  <div class="quote-meta">— Dana White （00:01:30）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, yeah. But when you first go in, our first jiu-jitsu lesson, me, Lorenzo, and Frank was with John Lewis, and I remember thinking, “Holy shit, I can’t believe that I’m 28 years old and this is the first time I’m experiencing this, that another human being could do this to me on the ground.” It is such an eyeopening, mind blowing experience when you do it for the first time and then you become completely addicted to it. And we were training three, four days a week trying to kill each other, me and the Fertittas, and that’s how we fell in love with the sport. I think that first time that you do jiu-jitsu, it’s like the red pill and the blue pill in The Matrix. Do you want to believe that this is the world that you live in, or do you want to see what the real world looks like?"</div>
+  <div class="quote-zh">是啊是啊。但当你第一次进去时，我们的第一堂柔术课，我、洛伦佐和弗兰克和约翰·刘易斯在一起，我记得我当时想，“天哪，我不敢相信我已经 28 岁了，这是我第一次经历这种事，另一个人可以在地上对我做这种事。”当你第一次这样做时，这是一种令人大开眼界、令人兴奋的体验，然后你就会完全沉迷其中。我们每周训练三、四天，试图杀死彼此，包括我和费尔蒂塔夫妇，这就是我们爱上这项运动的原因。我认为你第一次练习柔术时，就像《黑客帝国》中的红色药丸和蓝色药丸一样。你想相信这就是你生活的世界，还是想看看现实世界是什么样子？</div>
+  <div class="quote-meta">— Dana White （00:12:28）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, I was doing this when I was broke, and I’m doing this now when I’m not broke. I’m doing this because I love it. And I feel like there’s so much more to do, and this is truly my passion in life. It’s like the Sphere. We’re doing the Sphere? Why? Why would I do the Sphere? It’s going to cost me a bunch of money. It’s really challenging. Most people think it can’t be pulled off, and you’re looking at weird angles, different things going on inside other than the fight and all this other stuff. But yeah, I’m doing it because it’s awesome and it’s challenging and it’s hard, and I think that if anybody can do it right, it’s us. So why not take that challenge?"</div>
+  <div class="quote-zh">是的，当我破产的时候我就这么做了，现在当我还没有破产的时候我也在这么做。我这样做是因为我喜欢它。我觉得还有很多事情要做，这确实是我生活的热情。就像球体一样。我们正在做球体？为什么？我为什么要做球体？这将花费我一大笔钱。这真的很有挑战性。大多数人认为这是不可能的，而且你会从奇怪的角度来看，除了打斗和所有其他事情之外，里面还发生着不同的事情。但是，是的，我这样做是因为它很棒，很有挑战性，而且很困难，而且我认为如果有人能做得好，那就是我们。那么为什么不接受这个挑战呢？</div>
+  <div class="quote-meta">— Dana White （00:28:55）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"At the time, there was a stigma attached to the sport that these guys were despicable, disgusting human beings, which was the furthest thing from the truth. These kids had all gone to college, had college degrees, most of them because they wrestled in college. And we started to meet some of them. We loved the different stories. You had Chuck Liddell who had this mohawk, looks like an ax murderer, but graduated from Cal Poly with honors in accounting. Then you had Matt Hughes who was this farm boy, literally lived on a farm. And so there were all these cool stories with all these good people that weren’t what people thought they were. And Lorenzo and I always felt like there’s something here. If this thing was done the right way, this could be big."</div>
+  <div class="quote-zh">当时，这项运动有一种耻辱，认为这些人是卑鄙、令人厌恶的人类，这与事实相去甚远。这些孩子都上过大学，拥有大学学位，其中大多数是因为他们在大学摔跤。我们开始见到他们中的一些人。我们喜欢不同的故事。查克·利德尔（Chuck Liddell）留着莫霍克发型，看起来像一个斧头杀人犯，但以优异的成绩毕业于加州理工学院会计专业。然后是马特·休斯（Matt Hughes），他是一个农场男孩，确实住在农场里。因此，所有这些很酷的故事都是关于这些好人的，但他们并不是人们想象的那样。洛伦佐和我总觉得这里有东西。如果这件事以正确的方式完成，这可能会很大。</div>
+  <div class="quote-meta">— Dana White （00:18:25）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think that Mike Tyson is actually one of those unique guys who has crossed over. Any of these other boxers from his era, they have no way of making money other than fighting. Mike Tyson has made a lot of money outside of fighting. Tyson still has that aura. You could be at a restaurant and he walks in and you’re like, “Holy fuck. Mike Tyson’s here.” He still has that type of aura and energy in a room, and he makes lots of money outside of the ring. I think that he ends up getting these offers that he can’t refuse."</div>
+  <div class="quote-zh">我认为迈克·泰森实际上是那些独特的跨界者之一。他那个时代的任何其他拳击手，除了战斗之外没有其他赚钱的办法。迈克·泰森在拳击之外赚了很多钱。泰森还是有那种气场。你可能在一家餐馆，他走进来，你会说，“天哪。迈克·泰森在这里。”他在场上仍然拥有那种光环和能量，而且他在擂台外赚了很多钱。我认为他最终会得到这些他无法拒绝的邀请。</div>
+  <div class="quote-meta">— Dana White （01:03:07）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dana White <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">Khabib beat Conor. Putin was on FaceTime before he even made it to the locker room. Trump sitting president, ex-president, watching all the fights calling, wants to talk about the fights. Valentina Shevchenko, every time she goes home, she meets with the president of the country. The list goes on and on and on. Elon Musk, Zuckerberg, I mean, the list goes on and on and on. The most powerful people...</div>
+  <div class="dialogue-zh">哈比卜击败了康纳。普京在到达更衣室之前就已经通过 FaceTime 通话了。现任总统、前总统特朗普看着所有的争斗，想要谈论这些争斗。瓦伦蒂娜·舍甫琴科，每次回家都会见国家主席。这样的例子不胜枚举。埃隆·马斯克、扎克伯格，我的意思是，这样的名单一直在不断地增长。最有权势的人</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:30)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Dana White, the president of the UFC, a mixed martial arts organization that revolutionized the art, the sport, and the business of fighting. And Dana is truly the mastermind behind the UFC. This is the Lex Fridman Podcast. To support it, please check out our sponsors in the description. And now, dear friends, here’s Dana White. Do you remember when you saw you...</div>
+  <div class="dialogue-zh">以下是与 UFC 主席达纳·怀特 (Dana White) 的对话，UFC 是一个综合格斗组织，彻底改变了格斗艺术、运动和商业。而达纳才是 UFC 真正的幕后策划者。这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是达纳·怀特。你还记得当你看到你的时候吗</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dana White <span class="dialogue-time">(00:01:00)</span>
+  </div>
+  <div class="dialogue-en">I think so. I remember being at my grandmother’s house and I think it was an Ali fight, and all my uncles were going crazy during the fight, and there was just this buzz and this energy in the house that I liked at a very young age, and I’m pretty sure that was my first fight.</div>
+  <div class="dialogue-zh">我想是的。我记得在我祖母的家里，我认为那是一场阿里的战斗，我所有的叔叔在战斗中都发疯了，房子里充满了我很小的时候就喜欢的嗡嗡声和能量，我很确定那是我的第一次战斗。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:17)</span>
+  </div>
+  <div class="dialogue-en">Ali was something special.</div>
+  <div class="dialogue-zh">阿里是个特别的人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dana White <span class="dialogue-time">(00:01:18)</span>
+  </div>
+  <div class="dialogue-en">Yeah, incredible. I mean, when you look around, not just here in the office, but at my house, Ali and Tyson are everywhere.</div>
+  <div class="dialogue-zh">是的，难以置信。我的意思是，当你环顾四周时，不仅在办公室，而且在我家里，阿里和泰森无处不在。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:27)</span>
+  </div>
+  <div class="dialogue-en">Would you put Ali as the greatest of all time boxing?</div>
+  <div class="dialogue-zh">你会把阿里视为有史以来最伟大的拳击手吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dana White <span class="dialogue-time">(00:01:30)</span>
+  </div>
+  <div class="dialogue-en">Well, I would put Ali as the greatest of all time human being. I mean, it’s easy as a fight fan to focus on him as a fighter, but when you focus on him as a human and you think about what he meant at that time and place, the things he said, the poems he came up with, just the overall brilliance of Muhammad Ali. The guts to have the strength mentally, physically, and emotionally to go against the g...</div>
+  <div class="dialogue-zh">好吧，我会把阿里视为有史以来最伟大的人类。我的意思是，作为一个格斗迷，很容易将注意力集中在他作为一个战士上，但是当你把注意力集中在他作为一个人时，你会想到他在那个时间和地点的意思，他说的话，他写的诗，以及穆罕默德·阿里的整体才华。有勇气在精神上、身体上和情感上有勇气对抗现实</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:26)</span>
+  </div>
+  <div class="dialogue-en">Yeah, he’s all love, humor, all of it.</div>
+  <div class="dialogue-zh">是的，他充满了爱、幽默，这一切。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dana White <span class="dialogue-time">(00:02:29)</span>
+  </div>
+  <div class="dialogue-en">100%</div>
+  <div class="dialogue-zh">100%</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:30)</span>
+  </div>
+  <div class="dialogue-en">And had the guts in the ring and the guts to take a stand.</div>
+  <div class="dialogue-zh">并且有勇气在擂台上，有勇气表明立场。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dana White <span class="dialogue-time">(00:02:34)</span>
+  </div>
+  <div class="dialogue-en">100%</div>
+  <div class="dialogue-zh">100%</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:34)</span>
+  </div>
+  <div class="dialogue-en">When it was hard.</div>
+  <div class="dialogue-zh">当困难的时候。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dana White <span class="dialogue-time">(00:02:35)</span>
+  </div>
+  <div class="dialogue-en">He might be one of the all time greatest humans. Just an impactful, powerful human being who happened to be a great boxer.</div>
+  <div class="dialogue-zh">他可能是有史以来最伟大的人类之一。只是一个有影响力、强大的人，碰巧是一位伟大的拳击手。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:47)</span>
+  </div>
+  <div class="dialogue-en">And sometimes the right moment meets the great human being. That’s important.</div>
+  <div class="dialogue-zh">有时，正确的时机会遇到伟大的人。这很重要。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dana White <span class="dialogue-time">(00:02:52)</span>
+  </div>
+  <div class="dialogue-en">I agree with you. And he was the right guy in the right place at the right time. And he’s also a guy who used his platform for all the right things.</div>
+  <div class="dialogue-zh">我同意你的看法。他是在正确的时间出现在正确的地点的正确的人。他也是一个利用自己的平台做所有正确事情的人。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:03)</span>
+  </div>
+  <div class="dialogue-en">So that might’ve been your first fight, but when did you fall in love with fighting? The art of it? The science of it?</div>
+  <div class="dialogue-zh">所以这可能是你第一次打架，但是你什么时候爱上打架的呢？它的艺术？其中的科学原理是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dana White <span class="dialogue-time">(00:03:09)</span>
+  </div>
+  <div class="dialogue-en">Yeah, I would say I really fell in love with it, so I was a senior. It was 1987 and Hagler Leonard happened, and I watched that fight and I taped it and I watched that fight like a million times. I was a huge, huge Hagler fan, and I like Sugar Ray Leonard too, but I was a huge Hagler fan. And I just remember I watched that fight a million times because I was pissed off and I felt like Haggler got ...</div>
+  <div class="dialogue-zh">是的，我想说我真的爱上了它，所以我是一名大四学生。那是 1987 年，哈格勒·伦纳德 (Hagler Leonard) 发生了，我观看了那场比赛，并将其录制下来，我观看了那场比赛一百万次。我是哈格勒的超级粉丝，我也喜欢舒格·雷·伦纳德，但我是哈格勒的超级粉丝。我只记得我看了那场战斗一百万遍，因为我很生气，我觉得哈格勒得到了</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:49)</span>
+  </div>
+  <div class="dialogue-en">The battle of it.</div>
+  <div class="dialogue-zh">其战。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dana White <span class="dialogue-time">(00:03:50)</span>
+  </div>
+  <div class="dialogue-en">Yeah. I was 17 and then after that, USA’s Tuesday Night Fights came out on television. It was on every Tuesday night. Religiously, never missed Tuesday Night Fights. I was there, watched all those fights. And a lot of the things you see in the UFC, not necessarily just the production, but I would say the feel and the style and all those things are all things that I loved about boxing and things th...</div>
+  <div class="dialogue-zh">是的。我 17 岁，在那之后，电视上播出了美国的周二之夜拳击赛。那是在每周二晚上。从宗教角度来说，从来没有错过过周二晚上的战斗。我在那里，观看了所有这些战斗。你在 UFC 中看到的很多东西，不一定只是制作，但我想说的是感觉和风格以及所有这些东西都是我喜欢拳击和东西的东西。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:31)</span>
+  </div>
+  <div class="dialogue-en">You loved and hated?</div>
+  <div class="dialogue-zh">你又爱又恨？</div>
+</div>
+    <a href="https://lexfridman.com/dana-white-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="anya-fernald.html" class="card" style="text-decoration:none">
+  <div class="card-title">Anya Fernald: Regenerative Farming and the Art of Cooking Meat</div>
+  <div class="card-meta">Anya Fernald</div>
+</a>
+<a href="aravind-srinivas.html" class="card" style="text-decoration:none">
+  <div class="card-title">Aravind Srinivas</div>
+  <div class="card-meta">Aravind Srinivas</div>
+</a>
+<a href="ayanna-howard.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ayanna Howard: Human-Robot Interaction and Ethics of Safety-Critical Systems</div>
+  <div class="card-meta">Ayanna Howard</div>
+</a>
+<a href="ben-askren.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ben Askren: Wrestling and MMA</div>
+  <div class="card-meta">Ben Askren</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

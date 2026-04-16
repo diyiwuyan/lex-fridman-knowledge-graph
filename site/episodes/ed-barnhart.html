@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ed Barnhart - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Ed Barnhart</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Ed Barnhart</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/ed-barnhart.html" style="font-size:16px;color:#818cf8;font-weight:600">Ed Barnhart</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">32,774 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/ed-barnhart-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:39</span>
+  <span class="chapter-title">Lost civilizations<span class="zh-trans"> · 失落的文明</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">8:43</span>
+  <span class="chapter-title">Hunter-gatherers<span class="zh-trans"> · 狩猎采集者</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">12:16</span>
+  <span class="chapter-title">First humans in the Americas<span class="zh-trans"> · 美洲第一批人类</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">22:07</span>
+  <span class="chapter-title">South America<span class="zh-trans"> · 南美洲</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">27:36</span>
+  <span class="chapter-title">Pyramids<span class="zh-trans"> · 金字塔</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">34:40</span>
+  <span class="chapter-title">Religion<span class="zh-trans"> · 宗教</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">47:44</span>
+  <span class="chapter-title">Shamanism<span class="zh-trans"> · 萨满教</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">49:41</span>
+  <span class="chapter-title">Ayahuasca<span class="zh-trans"> · 死藤水</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">55:54</span>
+  <span class="chapter-title">Lost City of Z<span class="zh-trans"> · 失落的Z城</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:00:48</span>
+  <span class="chapter-title">Graham Hancock</span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:07:51</span>
+  <span class="chapter-title">Uncontacted tribes<span class="zh-trans"> · 未接触的部落</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:13:51</span>
+  <span class="chapter-title">Maya civilization<span class="zh-trans"> · 玛雅文明</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:29:40</span>
+  <span class="chapter-title">Mayan calendar<span class="zh-trans"> · 玛雅历法</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:44:57</span>
+  <span class="chapter-title">Flood myths<span class="zh-trans"> · 洪水神话</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:13:25</span>
+  <span class="chapter-title">Aztecs<span class="zh-trans"> · 阿兹特克人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:30:52</span>
+  <span class="chapter-title">Inca Empire<span class="zh-trans"> · 印加帝国</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:48:52</span>
+  <span class="chapter-title">Early humans in North America<span class="zh-trans"> · 北美洲的早期人类</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:54:50</span>
+  <span class="chapter-title">Columbus<span class="zh-trans"> · 哥伦布</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:59:26</span>
+  <span class="chapter-title">Vikings<span class="zh-trans"> · 维京人</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">barnhart</span><span class="keyword-tag">maya</span><span class="keyword-tag">got</span><span class="keyword-tag">don</span><span class="keyword-tag">america</span><span class="keyword-tag">civilization</span><span class="keyword-tag">going</span><span class="keyword-tag">everybody</span><span class="keyword-tag">amazon</span><span class="keyword-tag">humans</span><span class="keyword-tag">called</span><span class="keyword-tag">city</span><span class="keyword-tag">civilizations</span><span class="keyword-tag">human</span><span class="keyword-tag">came</span><span class="keyword-tag">said</span><span class="keyword-tag">didn</span><span class="keyword-tag">whole</span><span class="keyword-tag">talk</span><span class="keyword-tag">south</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"I guess there’s always that chance, but I am an optimist. I think you’re an optimist too. I think exactly as you just said. I think that the greatest capacity of humans is our ability to innovate. And we are never more innovative than when we’re under distress. I think that a lot of the developments of humans over the last thousands of years have been about we didn’t change the world when we were comfortable. It was when we were in crisis. Necessity is the mother of invention. But I think we’ll be all right. I think that this impending climate crisis is real and happening. I actually personally think that I’m going to answer a question that you didn’t even ask me."</div>
+  <div class="quote-zh">我想总是有这样的机会，但我是一个乐观主义者。我想你也是一个乐观主义者。我想正如你刚才所说的。我认为人类最大的能力就是我们的创新能力。当我们处于困境时，我们的创新能力是最高的。我认为过去几千年来人类的许多发展都是因为我们在舒适的时候并没有改变世界。那是我们陷入危机的时候。需要是发明之母。但我想我们会没事的。我认为这场迫在眉睫的气候危机是真实存在的并且正在发生。事实上，我个人认为我会回答一个你甚至没有问过我的问题。</div>
+  <div class="quote-meta">— Ed Barnhart （03:10:34）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think a lot of the things that are interpreted as baby sacrifices, Coral’s evidence being one of them, I think it’s more about the tragic nature of infant mortality. In the past, it was a lot more common. There were cultures that didn’t even really properly name their kid until they got to five, because chances were they were going to die. And so I think a lot of these babies that we find in these ceremonial contexts that are interpreted as sacrifices, I think they’re putting them in special places because they mourn the death of their kids, and it just happened a lot more frequently then."</div>
+  <div class="quote-zh">我认为很多事情都被解释为婴儿牺牲，珊瑚的证据就是其中之一，我认为这更多的是关于婴儿死亡的悲剧性。在过去，这种情况更为常见。有些文化甚至在孩子长到五岁时才真正给他们起正确的名字，因为他们很可能会死。所以我认为我们在这些仪式中发现的很多婴儿都被解释为牺牲，我认为他们把他们放在特殊的地方，因为他们哀悼孩子的死亡，而且这种情况发生得更频繁。</div>
+  <div class="quote-meta">— Ed Barnhart （00:26:56）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think it’s a case by case thing. I think if we look globally, I’d lean much more towards the human parallel development. But if I look just to the Americas and we have a shorter time period where the things that become major civilizations, now, I’ll say up to 30,000 years ago, which is still a blip in the time of humans, I think that there were shared things that those people came over with from Asia and that, as they got separated, that they had core values that then turned into things like religion and cultural customs that we can see. I’m a big proponent that there are commonalities in all the cultures of the Americas that lead back to and point to a single distant origin."</div>
+  <div class="quote-zh">我认为这是具体情况而定的事情。我认为如果我们放眼全球，我会更倾向于人类并行发展。但如果我只看美洲，我们有一个较短的时间段，那些东西成为主要文明的东西，现在，我会说直到三万年前，这仍然是人类时代的一个昙花一现，我认为这些人从亚洲过来，有一些共同的东西，当他们分开时，他们有核心价值观，然后变成了我们可以看到的宗教和文化习俗等东西。我非常支持美洲所有文化都有共同点，这些共同点可以追溯到并指向一个遥远的起源。</div>
+  <div class="quote-meta">— Ed Barnhart （00:21:12）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, I’ve met Graham, and personally I like him. He’s a nice guy, got a nice sense of humor, and I think he’s smart. And I also think he is a very good researcher. He and I are working on the same set of facts. The differences are interpretations. I do not believe Graham’s idea that a single, now lost ancient civilization seeded the rest of them. I just don’t see that on a number of levels, artifact wise, technology wise, art, historical analysis. So I think his research is great. I think that he’s very well-read, in fact, better read than a lot of my colleagues, but his conclusions I disagree with. And he and I have talked about this and had a very civil and normal conversation about it and agree to disagree without spitting any venom at any point in the conversation."</div>
+  <div class="quote-zh">嗯，我见过格雷厄姆，我个人很喜欢他。他是一个好人，很有幽默感，而且我认为他很聪明。我也认为他是一位非常优秀的研究员。他和我正在研究同一组事实。差异在于解释。我不相信格雷厄姆的观点，即一个现已失落的古代文明为其余的文明播下了种子。我只是在很多层面上都没有看到这一点，包括文物、技术、艺术、历史分析。所以我认为他的研究很棒。我认为他博览群书，事实上，比我的很多同事都更博览群书，但我不同意他的结论。他和我已经讨论过这个问题，并进行了非常文明和正常的对话，我们同意不同意，但在对话的任何时候都不会吐出任何恶毒。</div>
+  <div class="quote-meta">— Ed Barnhart （01:00:59）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Most Maya agree with this today, and who knows what the original architects, thousands of years ago were thinking, but it’s nine months, it’s the human gestation period. So if you conceived on the day 13, monkey, chances are your kid’s coming out on or near 13, monkey, and I think it’s beautiful. I mean, if that’s right, that means the Maya and the people of Mesoamerica will all share it together, when they thought about, “We need a count of time for us,” they didn’t look up into the heavens, they looked into their bodies. “What’s the first cycle that we actually go through as humans?” and they picked this nine-month thing. It really is our cycle, and no other culture on the planet looked inside themselves to create their calendar like that."</div>
+  <div class="quote-zh">今天大多数玛雅人都同意这一点，谁知道几千年前最初的建筑师在想什么，但现在是九个月，这是人类的妊娠期。所以，如果你在 13 号那天受孕，猴子，你的孩子很可能会在 13 号或接近 13 号出生，猴子，我认为这很美好。我的意思是，如果这是正确的，那就意味着玛雅人和中美洲人民将共同分享它，当他们想到“我们需要为我们计算时间”时，他们没有仰望天空，而是看着自己的身体。 “作为人类，我们真正经历的第一个周期是什么？”他们选择了这个九个月的东西。这确实是我们的周期，地球上没有其他文化会审视自己的内心来创建这样的日历。</div>
+  <div class="quote-meta">— Ed Barnhart （01:33:08）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ed Barnhart <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">For the vast majority of human existence, we’ve been nomadic and we’ve done these wider or tighter nomadic circles, depending on the geographic region, but they’d move. So once humans figured out how to stay in a place, that’s the initial trigger to what would become civilization.</div>
+  <div class="dialogue-zh">在人类生存的绝大多数时间里，我们一直处于游牧状态，并且根据地理区域的不同，我们已经形成了更宽或更窄的游牧圈，但它们会移动。因此，一旦人类弄清楚如何留在一个地方，这就是文明的最初触发点。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:20)</span>
+  </div>
+  <div class="dialogue-en">I think you said beauty and blood went hand in hand for the Aztec.</div>
+  <div class="dialogue-zh">我想你说过，对于阿兹特克人来说，美丽和鲜血是齐头并进的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ed Barnhart <span class="dialogue-time">(00:00:24)</span>
+  </div>
+  <div class="dialogue-en">What I meant by that is they were absolutely comfortable with human sacrifice and ripping people’s hearts out. They had this just grotesque, violent bend, but in the same way, they also absolutely loved flower gardens and poetry and music and dance. The same Aztec king who would order the hearts of 1,000 people extracted also would stand up at dinner parties to recite his own poetry. But they were...</div>
+  <div class="dialogue-zh">我的意思是，他们对活人祭祀和撕心裂肺感到非常满意。他们有这种怪诞、暴力的倾向，但同样，他们也绝对热爱花园、诗歌、音乐和舞蹈。这位下令抽取 1000 个人心脏的阿兹特克国王也会在晚宴上站起来背诵他自己的诗歌。但他们是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:11)</span>
+  </div>
+  <div class="dialogue-en">While the person was alive?</div>
+  <div class="dialogue-zh">当这个人还活着的时候？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ed Barnhart <span class="dialogue-time">(00:01:13)</span>
+  </div>
+  <div class="dialogue-en">Yep, while the person was alive.</div>
+  <div class="dialogue-zh">是的，当这个人还活着的时候。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:17)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Ed Barnhart, an archeologist specializing in ancient civilizations of South America, Mesoamerica, and North America. This is the Lex Friedman Podcast. To support it, please check out our sponsors in the description. And now, dear friends, here’s Ed Barnhart. Lost civilizations</div>
+  <div class="dialogue-zh">以下是与专门研究南美洲、中美洲和北美古代文明的考古学家埃德·巴恩哈特的对话。这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是埃德·巴恩哈特。失落的文明</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:39)</span>
+  </div>
+  <div class="dialogue-en">Do you think there are lost civilizations in the history of humans on earth which we don’t know anything about?</div>
+  <div class="dialogue-zh">您认为地球上人类历史上是否存在我们一无所知的失落文明？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ed Barnhart <span class="dialogue-time">(00:01:47)</span>
+  </div>
+  <div class="dialogue-en">Yes, I do. And in fact, we have found some civilizations that we had no idea about just in my lifetime. I mean, we’ve got Gobekli Tepe and we’ve got the stuff that’s going on in the Amazon, and there’s some other less startling things that we had no idea existed and push our dates back and gave us whole new civilizations we had no idea about. So yeah, it’s happened and I think it’ll happen again.</div>
+  <div class="dialogue-zh">是的，我愿意。事实上，我们发现了一些我们在有生之年还不知道的文明。我的意思是，我们有哥贝克力石阵，我们有亚马逊正在发生的事情，还有其他一些我们不知道存在的不那么令人吃惊的事情，它们把我们的日期推后，给我们带来了我们不知道的全新文明。所以是的，它已经发生了，我认为它还会再次发生。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:17)</span>
+  </div>
+  <div class="dialogue-en">Do you think there’s a loss civilization in the Amazon that the Amazon jungle has eaten up or is hiding the evidence of?</div>
+  <div class="dialogue-zh">你认为亚马逊丛林中是否存在一种失落的文明，亚马逊丛林已经吞噬了它，或者隐藏了它的证据？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ed Barnhart <span class="dialogue-time">(00:02:27)</span>
+  </div>
+  <div class="dialogue-en">Yes, I do. And we’re beginning to find it. There are these huge, what we call geoglyphs, these mound groups that are in geometric patterns. I think that the average Joe, when they hear the word civilization, they think of something that looks like Rome. And I don’t think we’re ever going to find anything that looks like Rome in the Amazon. I think a lot of things there, I mean, wherever you are on...</div>
+  <div class="dialogue-zh">是的，我愿意。我们正在开始找到它。有这些巨大的，我们所说的地质符号，这些呈几何图案的土丘群。我认为普通人，当他们听到文明这个词时，他们会想到一些看起来像罗马的东西。我认为我们永远不会在亚马逊地区找到任何看起来像罗马的东西。我认为那里有很多事情，我的意思是，无论你在哪里</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:10)</span>
+  </div>
+  <div class="dialogue-en">But is it possible that all that land that’s not covered by trees is actually hiding stone, for example, some architecture, some things that are just very difficult to find for archeologists.</div>
+  <div class="dialogue-zh">但有没有可能所有没有被树木覆盖的土地实际上都隐藏着石头，例如一些建筑，一些考古学家很难找到的东西。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ed Barnhart <span class="dialogue-time">(00:03:22)</span>
+  </div>
+  <div class="dialogue-en">I think at the base of the Andes where the Amazon connects to the Andes, there’s a lot of potential there because that’s where the stone actually starts poking up. When you get down into the basin, stone is meters and meters under the ground except for a stray cliff here and there where the river dug deep. And even then only in the dry season, because that river rises over 100 feet every year.</div>
+  <div class="dialogue-zh">我认为在亚马逊河与安第斯山脉连接的安第斯山脉底部，那里有很大的潜力，因为那是石头真正开始露出来的地方。当你进入盆地时，除了河水深挖处的零散悬崖之外，石头在地下有数米深。即使这样，也只能在旱季进行，因为那条河每年都会上涨 100 英尺以上。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:51)</span>
+  </div>
+  <div class="dialogue-en">Well, that’s one of the things, having visited that area, just interacting with waterfalls and seeing the water, I was humbled by the power of water to shape landscapes and probably erase history in the context that we’re talking about of civilizations. Water can just make everything disappear over a period of centuries and millennia, and so if there’s something existed a very long time ago, thous...</div>
+  <div class="dialogue-zh">嗯，这是其中一件事，在参观了那个地区，只是与瀑布互动并看到了水，我对水塑造景观的力量感到谦卑，并可能抹去我们正在谈论的文明背景下的历史。水可以让一切在几个世纪、几千年的时间里消失，所以如果有东西在很久以前就存在了，那么</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ed Barnhart <span class="dialogue-time">(00:04:24)</span>
+  </div>
+  <div class="dialogue-en">Absolutely. In fact, in my opinion, that’s almost a certainty in a lot of places. The Grand Canyon was dug by water. There’s this wimpy little river in it right now, and you can’t possibly imagine that it dug that, but it did. The power of nature and geology is really magical. And when it comes to ancient civilizations that could be from a long time ago, there’s probably a lot that are just under ...</div>
+  <div class="dialogue-zh">绝对地。事实上，在我看来，这在很多地方几乎是确定的。大峡谷是水挖出来的。现在里面有一条软弱的小河，你不可能想象它是它挖的，但它确实挖了。自然和地质的力量真是神奇。当谈到可能来自很久以前的古代文明时，可能有很多都处于历史之下</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:58)</span>
+  </div>
+  <div class="dialogue-en">Under the ocean. So you think Atlantis ever existed?</div>
+  <div class="dialogue-zh">在海洋之下。那么你认为亚特兰蒂斯曾经存在过吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ed Barnhart <span class="dialogue-time">(00:05:03)</span>
+  </div>
+  <div class="dialogue-en">I don’t think that Atlantis existed. I do think it was one of Plato’s many parables talking about putting it in an interesting story as a teaching device in his school. If one did exist or a shadow of it, my money would be on Akrotiri. Akrotiri is what’s left of a big city that was on the island of Santorini, and when their volcano blew up, it blew up most of the city and shot chunks of it so vast...</div>
+  <div class="dialogue-zh">我不认为亚特兰蒂斯存在。我确实认为这是柏拉图的众多寓言之一，他谈到将其放入一个有趣的故事中作为他学校的教学工具。如果确实存在或者只有它的影子，我的钱就会投在阿克罗蒂里。阿克罗蒂里是圣托里尼岛上一座大城市的遗迹，当他们的火山爆发时，它炸毁了这座城市的大部分地区，并将其炸得如此巨大</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:00)</span>
+  </div>
+  <div class="dialogue-en">Akrotiri, the ancient Greek city, it says, “The settlement was destroyed in the Theran eruption sometime in the 16th century BCE and buried in volcanic ash, which preserved the remains of the frescoes and many objects and artworks.” So we don’t know how advanced that civilization was.</div>
+  <div class="dialogue-zh">古希腊城市阿克罗蒂里，它说，“这个定居点在公元前 16 世纪的塞兰火山喷发中被摧毁，并被火山灰掩埋，其中保留了壁画的遗迹以及许多物品和艺术品。”所以我们不知道那个文明有多先进。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ed Barnhart <span class="dialogue-time">(00:06:19)</span>
+  </div>
+  <div class="dialogue-en">No, but we can walk around the ruins and see that it’s got streets, it’s got plumbing, it’s got little sconces for torches at night. It was a vibrant city with a lot of, especially in terms of hydraulic engineering, it’s very advanced for being 3,500 years old.</div>
+  <div class="dialogue-zh">不，但我们可以绕着废墟走一圈，看看那里有街道，有管道，还有晚上可以拿火把的小壁灯。这是一座充满活力的城市，有很多，特别是在水利工程方面，它拥有 3,500 年的历史，非常先进。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:42)</span>
+  </div>
+  <div class="dialogue-en">So if you check it out, here’s an image of the excavation. What a project.</div>
+  <div class="dialogue-zh">所以如果你检查一下，这是一张挖掘的图片。多么好的一个项目啊。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Ed Barnhart <span class="dialogue-time">(00:06:47)</span>
+  </div>
+  <div class="dialogue-en">It’s an amazing place and you can tell that it’s just part of it because it’s pretty close to where the crater begins. So the city itself was probably much larger.</div>
+  <div class="dialogue-zh">这是一个令人惊叹的地方，你可以看出它只是其中的一部分，因为它非常靠近火山口的起点。所以城市本身可能要大得多。</div>
+</div>
+    <a href="https://lexfridman.com/ed-barnhart-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="andrew-huberman-4.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman #4</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="andrew-huberman.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Neuroscience of Optimal Performance</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

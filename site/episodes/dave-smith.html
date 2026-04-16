@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dave Smith - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Dave Smith</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Dave Smith</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/dave-smith.html" style="font-size:16px;color:#818cf8;font-weight:600">Dave Smith</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">35,707 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/dave-smith-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:26</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:45</span>
+  <span class="chapter-title">Libertarianism<span class="zh-trans"> · 自由主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:00</span>
+  <span class="chapter-title">Ron Paul<span class="zh-trans"> · 罗恩·保罗</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">6:13</span>
+  <span class="chapter-title">Military–industrial complex<span class="zh-trans"> · 军工综合体</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">13:06</span>
+  <span class="chapter-title">War on Terror<span class="zh-trans"> · 反恐战争</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">25:25</span>
+  <span class="chapter-title">China and Taiwan<span class="zh-trans"> · 中国和台湾</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">33:13</span>
+  <span class="chapter-title">Just war theory<span class="zh-trans"> · 正义战争论</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">40:22</span>
+  <span class="chapter-title">Israel and Gaza<span class="zh-trans"> · 以色列和加沙</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">57:49</span>
+  <span class="chapter-title">Douglas Murray<span class="zh-trans"> · 道格拉斯·默里</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:05:42</span>
+  <span class="chapter-title">Hamas<span class="zh-trans"> · 哈马斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:22:01</span>
+  <span class="chapter-title">Hitler and Stalin<span class="zh-trans"> · 希特勒和斯大林</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:24:15</span>
+  <span class="chapter-title">Darryl Cooper<span class="zh-trans"> · 达里尔·库珀</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:33:27</span>
+  <span class="chapter-title">Antisemitism<span class="zh-trans"> · 反犹太主义</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:47:00</span>
+  <span class="chapter-title">World leaders<span class="zh-trans"> · 世界领导人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:59:34</span>
+  <span class="chapter-title">Jeffrey Epstein<span class="zh-trans"> · 杰弗里·爱泼斯坦</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:07:37</span>
+  <span class="chapter-title">Sam Harris<span class="zh-trans"> · 萨姆·哈里斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:20:21</span>
+  <span class="chapter-title">Ukraine and Russia<span class="zh-trans"> · 乌克兰和俄罗斯</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:39:46</span>
+  <span class="chapter-title">Joe Rogan<span class="zh-trans"> · 乔·罗根</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:52:15</span>
+  <span class="chapter-title">Conspiracy theories<span class="zh-trans"> · 阴谋论</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">going</span><span class="keyword-tag">dave</span><span class="keyword-tag">smith</span><span class="keyword-tag">war</span><span class="keyword-tag">don</span><span class="keyword-tag">guy</span><span class="keyword-tag">saying</span><span class="keyword-tag">israel</span><span class="keyword-tag">got</span><span class="keyword-tag">doing</span><span class="keyword-tag">talking</span><span class="keyword-tag">said</span><span class="keyword-tag">human</span><span class="keyword-tag">sure</span><span class="keyword-tag">government</span><span class="keyword-tag">hamas</span><span class="keyword-tag">military</span><span class="keyword-tag">trump</span><span class="keyword-tag">whole</span><span class="keyword-tag">least</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"And so there’s just little things like that where if you’re being sloppy and you already really want this conclusion, I see where you could see these things as evidence, but if you’re just being a little … if you’re critically thinking about them, it’s actually … it’s not as strong a case as you think it is. Again, I’ll speculate every now and again on things, but I like to take on something where I feel like I can prove this case. I really have enough evidence that I think I can prove this. I think I can prove that the neocons didn’t invade Iraq because they were worried about weapons of mass destruction and they actually had this agenda for at least a decade before the war broke out. There’s strong tangible evidence for that."</div>
+  <div class="quote-zh">所以，在一些小事情上，如果你很草率，而且你已经非常想要这个结论，我知道你可以在哪里将这些事情视为证据，但如果你只是有点......如果你批判性地思考它们，它实际上......它并不像你想象的那么有力。再说一次，我会时不时地推测一些事情，但我喜欢承担一些我觉得我可以证明这一点的事情。我确实有足够的证据，我想我可以证明这一点。我想我可以证明新保守派入侵伊拉克并不是因为他们担心大规模杀伤性武器，而且他们实际上在战争爆发前至少十年就已经制定了这一议程。有强有力的切实证据证明这一点。</div>
+  <div class="quote-meta">— Dave Smith （02:55:31）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And that should be the standard, because there’s so many other standards that I see thrown out that I just think make no moral sense at all. People will argue about in Gaza, they’ll argue about the civilian to combatant ratio, that to me doesn’t really… That’s not what counts. That’s not the measure that’s important. And also no one knows what the numbers are. They’re all just pretend to. And then the other thing will be that people, as someone just recently argued with me about, they’ll say, “Well, Hamas has to go. That’s the starting point. Hamas has to go.” And I’m like, “No, I don’t think you get to say that, because the truth is that…”"</div>
+  <div class="quote-zh">这应该是标准，因为我看到有很多其他标准被抛弃了，我认为这些标准根本没有道德意义。人们会在加沙争论，他们会争论平民与战斗人员的比例，对我来说这并不是真的......这不是重要的。这不是重要的措施。而且没有人知道这些数字是多少。他们都只是假装。然后另一件事是，人们，正如最近有人与我争论的那样，他们会说，“好吧，哈马斯必须下台。这就是起点。哈马斯必须下台。”我想，“不，我认为你不能这么说，因为事实是……”</div>
+  <div class="quote-meta">— Dave Smith （00:38:35）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"They just, from the top down, were able to create this feeling that like, “Hey, there’s a new Adolf Hitler on the rise over here in Iraq. We got to go see about this. There are these poor people in Kuwait, we have to do that.” They were able to create this desire for war. It’s really incredible when you think about it, because I think for the most part in human history, you would’ve had to have some type of plausible threat, some type of plausible reality to convince people that we actually have to go to war in order to deal with this. Whereas the idea that in 1991, the United States of America would feel threatened by Iraq was just ridiculous. And yet they were able to do it."</div>
+  <div class="quote-zh">他们只是从上到下营造出这样的感觉，“嘿，伊拉克这里正在崛起一个新的阿道夫·希特勒。我们必须去看看这个。科威特有这些穷人，我们必须这样做。”他们能够创造这种对战争的渴望。当你想到这一点时，这真的令人难以置信，因为我认为在人类历史的大部分时间里，你必须有某种看似合理的威胁，某种合理的现实来说服人们我们实际上必须发动战争才能解决这个问题。然而，在 1991 年，美利坚合众国会感受到伊拉克的威胁的想法简直是荒谬的。但他们还是做到了。</div>
+  <div class="quote-meta">— Dave Smith （00:22:36）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"You make a fair point. It’s certainly true that throughout human history, there’s been overt empire building and wars of conquest and things like that. But I guess I’m just saying at least even there, you would have some type of sell of why we’re going to go take these resources and why that will be good for us. Whereas the idea that Kuwait just needed to be defended by the Americans seems so, it seems so hard to convince anybody, and yet they were able to do it. If you read Neocon writing in the ’90s, it was very interesting because they would tell the truth a lot more. Essentially, I think there was the Soviet Union had just collapsed."</div>
+  <div class="quote-zh">你说得有道理。毫无疑问，在整个人类历史上，确实存在过公开的帝国建设和征服战争等等。但我想我只是说，至少即使在那里，你也会有某种类型的销售，说明为什么我们要获取这些资源以及为什么这对我们有好处。尽管科威特只需要美国人来保卫的想法似乎如此，但似乎很难说服任何人，但他们却做到了。如果你读过 20 世纪 90 年代新保守派的作品，你会发现它非常有趣，因为他们会说更多的实话。本质上，我认为苏联刚刚解体。</div>
+  <div class="quote-meta">— Dave Smith （00:23:49）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think it’s sickening and incredibly disturbing. I guess the way I look at it… I always, and maybe there is a degree of naivete to this, or perhaps it’s just that I just don’t want to allow myself to go down a certain path because I think it leads to such dark outcomes, but I always try to be against the government for the people, against the powerful sympathetic to the powerless. I think that… Look, it’s sickening. You see big crowds cheering on people with these people who have been in captivity for… I think some of them for over a year and a half."</div>
+  <div class="quote-zh">我认为这令人恶心且令人难以置信。我想我看待它的方式......我总是，也许这有一定程度的天真，或者也许只是我不想让自己走上某条路，因为我认为这会导致如此黑暗的结果，但我总是试图反对政府为人民，反对强权同情弱者。我认为……看，这令人作呕。你会看到一大群人为人们欢呼，这些人已经被囚禁了……我想其中一些人已经被囚禁了一年半以上。</div>
+  <div class="quote-meta">— Dave Smith （01:00:04）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Smith <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">All the people who sold the war in Iraq, they lied us into war after a war. They’ve bankrupted the country, damn near destroyed the dollar and no one loses their job. No one even gets in trouble over any of this. If you make everybody monsters and they’re not human beings, well, you can’t do diplomacy with monsters, you can’t negotiate with monsters, but you can with humans. Maybe there are times ...</div>
+  <div class="dialogue-zh">所有在伊拉克出卖战争的人，他们在一场战争之后欺骗我们进入战争。他们让国家破产，几乎摧毁了美元，但没有人失去工作。甚至没有人会因此而陷入麻烦。如果你把每个人都变成怪物而不是人类，那么你就不能与怪物进行外交，你不能与怪物谈判，但你可以与人类。也许有的时候</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Smith <span class="dialogue-time">(00:00:44)</span>
+  </div>
+  <div class="dialogue-en">So he’s very highly incentivized to get this thing done as quick as possible. You are fighting in a way that produces more of the thing that you’re fighting, and so the first step is to stop doing that. Your cure is making the patient more sick. So stop doing that. And then let’s see if maybe we could heal. Where are the tapes? Why is everyone talking about the flight logs and the files? Where are...</div>
+  <div class="dialogue-zh">所以他非常有动力尽快完成这件事。你的战斗方式会产生更多你正在战斗的东西，所以第一步就是停止这样做。你的治疗方法正在使病人病情加重。所以别再这样做了。然后让我们看看是否可以治愈。磁带在哪里？为什么每个人都在谈论飞行日志和文件？在哪里</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:26)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Dave Smith, an outspoken and at times controversial anti-war libertarian comedian and podcast host. This is the Lex Fridman podcast to support it. Please check on our sponsors in the description. And now, dear friends, here’s Dave Smith.</div>
+  <div class="dialogue-zh">以下是与戴夫·史密斯的对话，戴夫·史密斯是一位直言不讳、时常引起争议的反战自由主义喜剧演员和播客主持人。这是 Lex Fridman 播客来支持它。请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是戴夫·史密斯。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:45)</span>
+  </div>
+  <div class="dialogue-en">You are a longtime libertarian, perhaps an anarcho-capitalist. We can talk about that. Can you explain the different variants, flavors of libertarianism and where you stand among those variants?</div>
+  <div class="dialogue-zh">你是一个长期的自由主义者，也许是一个无政府资本主义者。我们可以谈谈这个。您能解释一下自由主义的不同变体、风格以及您在这些变体中的立场吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Smith <span class="dialogue-time">(00:02:00)</span>
+  </div>
+  <div class="dialogue-en">Yeah, so there’s almost like with left-wing schools of thought or right-wing schools of thought, there’s many different camps and different thinkers. And so within the kind of broader theme of libertarianism, there was a lot of influence from people like Ayn Rand, Milton Friedman, Thomas Sowell. Those were I think some of the more mainstream figures. And then there’s the Ron Paul round of Libertar...</div>
+  <div class="dialogue-zh">是的，所以几乎就像左翼思想流派或右翼思想流派一样，有许多不同的阵营和不同的思想家。因此，在更广泛的自由主义主题中，艾因·兰德、米尔顿·弗里德曼、托马斯·索威尔等人的影响很大。我认为这些是一些更主流的人物。然后是 Libertar 的 Ron Paul 回合</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:00)</span>
+  </div>
+  <div class="dialogue-en">You’ve been a big fan of Ron Paul. Can you explain what you admire about him?</div>
+  <div class="dialogue-zh">你一直是罗恩·保罗的忠实粉丝。你能解释一下你欣赏他的什么地方吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Smith <span class="dialogue-time">(00:03:04)</span>
+  </div>
+  <div class="dialogue-en">A big fan is an understatement. I think Ron Paul is the greatest living American hero. I revere him on the level of the founding fathers, Thomas Jefferson or George Washington, number one. I mean all of the major issues that he was correct in his understanding of them, his diagnosis of what caused these problems and his solutions. And in hindsight, there’s just a million different examples of wher...</div>
+  <div class="dialogue-zh">一个大粉丝是轻描淡写的。我认为罗恩·保罗是当今最伟大的美国英雄。我对他的尊敬相当于开国元勋托马斯·杰斐逊或第一号乔治·华盛顿的水平。我的意思是，他对所有重大问题的理解、对导致这些问题的原因的诊断以及他的解决方案都是正确的。事后看来，只有一百万个不同的例子</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Smith <span class="dialogue-time">(00:04:12)</span>
+  </div>
+  <div class="dialogue-en">And then he would be the lone no vote in Congress all the time, on the bills that the entire Congress, bipartisan agreement, everything, and there’s one vote against it. And that he would be that guy. He clearly kept doing what he was doing simply because he believed it was right, not because there was any benefit for him. In fact, he dealt with a lot of headaches for the views that he had. And th...</div>
+  <div class="dialogue-zh">然后他将一直是国会中唯一一个对整个国会的法案、两党协议、一切都投反对票的人，只有一票反对。他就是那个人。他显然继续做他正在做的事情只是因为他相信这是对的，而不是因为对他有任何好处。事实上，他因为自己的观点而遇到了很多麻烦。还有那</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Smith <span class="dialogue-time">(00:05:00)</span>
+  </div>
+  <div class="dialogue-en">And you imagine what it must’ve been like from the lobbyist perspective when they first tried to go there and they’d be like, “All right, listen, we really need you to vote yes on this or that.” And he was like, “The constitution doesn’t authorize us to do that.” And they’re like, “What? Who in this town even talks like that?” I’ve met him many times at this point, and he is just genuinely, he’s l...</div>
+  <div class="dialogue-zh">你可以想象，从说客的角度来看，当他们第一次尝试去那里时，他们会说，“好吧，听着，我们真的需要你对这个或那个投赞成票。”他说，“宪法没有授权我们这样做。”他们会说，“什么？这个镇上谁会这样说话？”我已经见过他很多次了，他真的，他是我</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:10)</span>
+  </div>
+  <div class="dialogue-en">Yeah, as you said, there’s integrity there. Can you speak to the ideas that Ron Paul represents? He says some of the things he’s been right about. Maybe can you speak about the economics, the Fed, and maybe war and being anti-military intervention?</div>
+  <div class="dialogue-zh">是的，正如你所说，那里有诚信。您能谈谈罗恩·保罗所代表的想法吗？他说了一些他认为是正确的事情。也许你能谈谈经济、美联储，也许还有战争和反军事干预？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Smith <span class="dialogue-time">(00:06:23)</span>
+  </div>
+  <div class="dialogue-en">Well, I think it all came from the same central thesis, which is that the highest political value ought to be liberty. And that the government, by its very nature, is an instrument of force and tyranny. And therefore, the more government you have, the less liberty you have. I think he was way ahead of his time in really calling out the corruption in DC and I think that’s one of the things, it’s a ...</div>
+  <div class="dialogue-zh">嗯，我认为这一切都来自同一个中心论点，那就是最高的政治价值应该是自由。就其本质而言，政府是武力和暴政的工具。因此，政府越多，自由就越少。我认为他在真正谴责华盛顿特区的腐败方面远远领先于他的时代，我认为这是其中一件事，这是一个</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Smith <span class="dialogue-time">(00:07:43)</span>
+  </div>
+  <div class="dialogue-en">You know what I mean? And to have the Republicans agree with him. These were a lot of the same people who had voted for George W. Bush twice and supported the war and even mocked their liberal fellow countrymen for not being on board with it. And a lot of that was the work that Ron Paul did and people waking up to how messed up all these wars were. And I think that at least there were a couple of ...</div>
+  <div class="dialogue-zh">你知道我的意思？并让共和党人同意他的观点。这些人中有很多人曾两次投票支持乔治·W·布什，支持战争，甚至嘲笑他们的自由派同胞不参与战争。其中很多都是罗恩·保罗所做的工作，人们开始意识到所有这些战争是多么混乱。我认为至少有一些</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Smith <span class="dialogue-time">(00:08:49)</span>
+  </div>
+  <div class="dialogue-en">And then there were the conservatives who said that they supported small government, limited government at home, but were always on the side of whatever the next war is. And at least for me, and I think for a lot of people of my generation, Ron Paul was the first guy who came along and said, no, I’m for limited government here and abroad. And it was kind of like a portal where you could access a d...</div>
+  <div class="dialogue-zh">还有一些保守派人士表示，他们支持小政府、国内有限政府，但无论下一场战争是什么，他们总是站在一边。至少对我来说，我认为对我这一代的很多人来说，罗恩·保罗是第一个站出来说“不，我支持国内外实行有限政府”的人。它有点像一个门户网站，您可以在其中访问d</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Smith <span class="dialogue-time">(00:09:38)</span>
+  </div>
+  <div class="dialogue-en">And then of course, the more you look into it, you realize that, okay, those two things do make sense together. And then also that in the initial wave of the original progressives, people like Woodrow Wilson or FDR, these were people who were pushing big government at home and big government abroad. And that actually made much more sense as a cohesive worldview. And to oppose that would be the Ron...</div>
+  <div class="dialogue-zh">当然，你越深入地研究它，你就会意识到，好吧，这两件事在一起确实有意义。然后，在最初的进步派浪潮中，像伍德罗·威尔逊或罗斯福这样的人，这些人在国内推动大政府，在国外推动大政府。作为一种有凝聚力的世界观，这实际上更有意义。反对的是罗恩</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Smith <span class="dialogue-time">(00:10:31)</span>
+  </div>
+  <div class="dialogue-en">I was already against George W. Bush, and I didn’t like the war. I had already figured out, I think this war in Iraq is bullshit. And I think that we were lied into it. And so I kind of got that. And then there were liberals and left-wingers who I knew. I grew up in New York City, so I was very familiar with the left-wing perspective who are critical of George W. Bush for fighting the war and sign...</div>
+  <div class="dialogue-zh">我本来就反对乔治·W·布什，而且我不喜欢战争。我已经想通了，我认为这场伊拉克战争是胡说八道。我认为我们被骗了。所以我有点明白了。然后还有我认识的自由主义者和左翼分子。我在纽约长大，所以我非常熟悉左翼观点，他们批评乔治·W·布什的战争和签名</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Smith <span class="dialogue-time">(00:11:27)</span>
+  </div>
+  <div class="dialogue-en">And he was like, “Oh my God, they’re free. Look at this speedy trial. Are you kidding me? What is going on here? They can own guns and their women can wear mini skirts.” And that just made people so angry that they were ready to suicide bomb themselves. That makes no sense at all. And then Ron Paul was just like, “No, look, here’s the thing. If we think we can just go around the world killing peop...</div>
+  <div class="dialogue-zh">他说，“天哪，他们是自由的。看看这个快速的审判。你在开玩笑吗？这里发生了什么事？他们可以拥有枪支，他们的女人可以穿迷你裙。”这让人们非常愤怒，他们准备自杀式炸弹袭击自己。这完全没有意义。然后罗恩·保罗就说，“不，看，事情是这样的。如果我们认为我们可以环游世界杀人</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Smith <span class="dialogue-time">(00:12:15)</span>
+  </div>
+  <div class="dialogue-en">And it was an interesting introduction to the idea that there are people outside of that who are dominated by that who don’t care for it very much. And that’s what 9/11 was actually about. And for me, I was living in New York City, I was 18, I think when 9/11 happened, and that was the moment of my childhood. It was a huge thing to live through. I mean, we were attacked. This seemed like something...</div>
+  <div class="dialogue-zh">这是对这个想法的一个有趣的介绍，即在这个世界之外，还有一些人被那些不太关心它的人所统治。这就是 9/11 的实际意义。对我来说，我住在纽约市，我 18 岁，我想当 9/11 发生时，那是我童年的时刻。这是一件需要经历的大事。我的意思是，我们遭到了袭击。这看起来像什么</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:13:04)</span>
+  </div>
+  <div class="dialogue-en">Yeah, we should also say that there’s some degree of truth that the battle is not just militaristic, it’s also cultural. And then many of those parts of the world don’t want other people’s values forced onto them.</div>
+  <div class="dialogue-zh">是的，我们还应该说，在某种程度上，这场战斗不仅是军国主义的，也是文化的。世界上许多地方不希望别人的价值观强加给他们。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Smith <span class="dialogue-time">(00:13:21)</span>
+  </div>
+  <div class="dialogue-en">Right. But the way that George W. Bush and Dick Cheney and every right wing host in America, and Sean Hannity and Bill O’Reilly and everybody, what they were saying is that they hate that we are free, whereas it was much closer to saying they don’t like us imposing on them. Even like all the hardcore neocons, Brett Stevens, The New York Times, he wrote this piece on the 20th anniversary of the inv...</div>
+  <div class="dialogue-zh">正确的。但是乔治·W·布什和迪克·切尼以及美国每一位右翼主持人，还有肖恩·汉尼蒂和比尔·奥莱利以及所有人，他们所说的是他们讨厌我们的自由，而更接近于说他们不喜欢我们强加于他们。即使像所有铁杆新保守派一样，《纽约时报》的布雷特·史蒂文斯 (Brett Stevens) 也在《纽约时报》成立 20 周年之际写了这篇文章。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Dave Smith <span class="dialogue-time">(00:14:12)</span>
+  </div>
+  <div class="dialogue-en">It’s like, “Okay, but what about the 20 plus million people who were displaced? What about the million people who were killed? What about all the millions of people who were injured? What about the tens of thousands of our soldiers who have blown their brains out in the aftermath of the thing?” So many times it is true with government policy in general, people talk about the end result that they w...</div>
+  <div class="dialogue-zh">就像是，“好吧，但是那20多百万流离失所的人呢？那100万被杀的人呢？那数百万受伤的人呢？那我们数以万计的士兵在事件发生后被炸得脑浆全开呢？”很多时候，政府政策的总体情况都是如此，人们谈论他们想要的最终结果</div>
+</div>
+    <a href="https://lexfridman.com/dave-smith-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-bustamante.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Bustamante: CIA Spy</div>
+  <div class="card-meta">Andrew Bustamante</div>
+</a>
+<a href="andrew-callaghan.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Callaghan</div>
+  <div class="card-meta">Andrew Callaghan</div>
+</a>
+<a href="bassem-youssef.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bassem Youssef</div>
+  <div class="card-meta">Bassem Youssef</div>
+</a>
+<a href="cenk-uygur.html" class="card" style="text-decoration:none">
+  <div class="card-title">Cenk Uygur</div>
+  <div class="card-meta">Cenk Uygur</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

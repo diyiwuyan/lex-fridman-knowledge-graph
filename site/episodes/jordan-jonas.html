@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jordan Jonas - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Jordan Jonas</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Jordan Jonas</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/jordan-jonas.html" style="font-size:16px;color:#818cf8;font-weight:600">Jordan Jonas</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">31,391 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/jordan-jonas-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ef444422;color:#ef4444;border:1px solid #ef444444;font-size:13px;padding:4px 12px">政治与社会</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:19</span>
+  <span class="chapter-title">Alone Season 6<span class="zh-trans"> · 独自一人第6季</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">35:38</span>
+  <span class="chapter-title">Arctic<span class="zh-trans"> · 北极</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">51:53</span>
+  <span class="chapter-title">Roland Welker<span class="zh-trans"> · 罗兰·韦尔克</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">59:29</span>
+  <span class="chapter-title">Freight trains<span class="zh-trans"> · 货运列车</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:11:14</span>
+  <span class="chapter-title">Siberia<span class="zh-trans"> · 西伯利亚</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:29:40</span>
+  <span class="chapter-title">Hunger<span class="zh-trans"> · 饥饿</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:49:23</span>
+  <span class="chapter-title">Suffering<span class="zh-trans"> · 痛苦</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:04:09</span>
+  <span class="chapter-title">God<span class="zh-trans"> · 上帝</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:19:10</span>
+  <span class="chapter-title">Mortality<span class="zh-trans"> · 死亡</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:24:54</span>
+  <span class="chapter-title">Resilience<span class="zh-trans"> · 弹力</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:36:40</span>
+  <span class="chapter-title">Hope<span class="zh-trans"> · 希望</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:39:24</span>
+  <span class="chapter-title">Lex AMA<span class="zh-trans"> · 莱克斯·阿玛</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">jordan</span><span class="keyword-tag">jonas</span><span class="keyword-tag">going</span><span class="keyword-tag">got</span><span class="keyword-tag">don</span><span class="keyword-tag">didn</span><span class="keyword-tag">interesting</span><span class="keyword-tag">thought</span><span class="keyword-tag">went</span><span class="keyword-tag">stuff</span><span class="keyword-tag">moose</span><span class="keyword-tag">alone</span><span class="keyword-tag">hard</span><span class="keyword-tag">sure</span><span class="keyword-tag">able</span><span class="keyword-tag">felt</span><span class="keyword-tag">doing</span><span class="keyword-tag">yourself</span><span class="keyword-tag">cold</span><span class="keyword-tag">put</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"Yeah, I think that’s important to recognize because it’s really easy, I mean especially with what I do and what I talk about, and I see so much of the value in nature. Gosh, I also see a beautiful moose and a calf running around, and then next week I see the calf ripped the shreds by wolves and you’re just like, “Oh.” And it’s not as Rousseauian as we like to think. Things must die for things to live, like you said. And that’s just played out all the time. And it’s indifferent to you, doesn’t care if you live or die, and doesn’t care how you die or how much pain you go through while you… It’s pretty brutal. So it’s interesting that he taps into that, and I think it’s valuable because it’s easy to idealize in a way."</div>
+  <div class="quote-zh">是的，我认为认识到这一点很重要，因为它真的很容易，我的意思是特别是我所做的和我所谈论的，而且我看到了大自然的很多价值。天哪，我还看到一头美丽的驼鹿和一头小牛跑来跑去，然后下周我看到小牛被狼撕成碎片，你就会说，“哦。”它并不像我们想象的那样是卢梭式的。正如你所说，事物必须死亡才能生存。这一直在上演。而且它对你漠不关心，不关心你是生是死，也不关心你是怎么死的，也不关心你在你的时候经历了多少痛苦……这非常残酷。所以他利用这一点很有趣，我认为这很有价值，因为在某种程度上很容易理想化。</div>
+  <div class="quote-meta">— Jordan Jonas （02:16:09）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And then plan to go overnight. Don’t be so afraid of all the potentialities that you delay it inevitably. It’s actually one of the things that I’ve enjoyed the most about guiding people, is giving them the tools so that now they have this ability into the future. You can go out and feel like, “I’m going to pick this spot on the map and go there.” And that’s a tool in your toolkit of life that is I think really valuable, because I think everybody should spend some time in nature. I think it’s been pretty proven healthy."</div>
+  <div class="quote-zh">然后计划过夜。不要因为害怕所有的潜力而不可避免地推迟它。实际上，我最喜欢指导人们的事情之一就是为他们提供工具，以便他们现在拥有这种能力走向未来。你可以走出去，感觉“我要在地图上选择这个地点，然后去那里。”这是你生活工具箱中的一个工具，我认为它非常有价值，因为我认为每个人都应该花一些时间在大自然中。我认为这已经被证明是非常健康的。</div>
+  <div class="quote-meta">— Jordan Jonas （02:35:06）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And then, I think things that might, you start thinking about family and this and that in those situations. And I just knew that those… because I had gone to all these trips to Russia for a year at a time, the time context was a little broader for me than I think for some people. Because I knew I could be gone for a year and come back, catch up with my loved ones, bring what I got back, whether that’d be psychological, whatever it is, and we’d all enrich each other."</div>
+  <div class="quote-zh">然后，我认为，在这种情况下，你可能会开始考虑家庭以及这个和那个。我只知道那些……因为我一次去俄罗斯旅行了一年，所以对我来说，时间背景比我想象的对某些人来说要广泛一些。因为我知道我可以离开一年然后回来，与我所爱的人团聚，带回我得到的东西，无论是心理上的，还是什么，我们都会彼此丰富。</div>
+  <div class="quote-meta">— Jordan Jonas （00:46:31）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"There must be so many of those lakes that people haven’t been to.” It really was a neat area, really remote. And for the show’s purpose, I think it was perfect because it did have enough game and enough different avenues forward that I think it really did reward activity. But it’s a special place. It was Dene, there was a tribe that lived there, the Dene people, which interestingly enough, here’s a side note."</div>
+  <div class="quote-zh">一定有很多这样的湖泊人们没有去过。”这确实是一个整洁的地区，非常偏僻。就节目的目的而言，我认为它是完美的，因为它确实有足够的游戏和足够的不同途径，我认为它确实奖励了活动。但这是一个特别的地方。那是德内，那里住着一个部落，德内人，有趣的是，这里有一个旁注。</div>
+  <div class="quote-meta">— Jordan Jonas （00:35:57）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I didn’t like hitchhiking, just because you’re depending on the other people. I don’t know why, you just want to be independent, but you do meet really cool people. A lot of times there’s really nice people that pick you up and that’s cool. But I just personally actually didn’t do it a lot and I wasn’t… If you’re on the streets for 10 years, you’ll end up doing it a lot more because you need to get from point A to point B, but we just tried to avoid it as much as we could because it didn’t appeal to us as much."</div>
+  <div class="quote-zh">我不喜欢搭便车，只是因为你依赖其他人。我不知道为什么，你只是想独立，但你确实遇到了很酷的人。很多时候，会有非常好的人来接你，这很酷。但我个人实际上并没有经常这样做，而且我也没有......如果你在街上呆了 10 年，你最终会做更多的事情，因为你需要从 A 点到 B 点，但我们只是尽力避免它，因为它对我们没有多大吸引力。</div>
+  <div class="quote-meta">— Jordan Jonas （01:09:46）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Jordan Jonas, winner of Alone Season 6, a show where the task is to survive alone in the arctic wilderness longer than anyone else. He is widely considered to be one of, if not the greatest competitors on that show. He has a fascinating life story that took him from a farm in Idaho and hoboing on trains across America to traveling with tribes in Siberia. All th...</div>
+  <div class="dialogue-zh">以下是与《孤独第六季》获胜者乔丹·乔纳斯的对话，该剧的任务是在北极荒野中独自生存比任何人都长的时间。他被广泛认为是该节目中最伟大的竞争对手之一，甚至是最伟大的竞争对手之一。他有一个引人入胜的人生故事，从爱达荷州的一个农场，乘火车穿越美国到与西伯利亚的部落一起旅行。全部</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:19)</span>
+  </div>
+  <div class="dialogue-en">You won Alone Season 6, and I think are still considered to be one of, if not the most successful survivor on that show. So let’s go back, let’s look at the big picture. Can you tell me about the show Alone? How does it work?</div>
+  <div class="dialogue-zh">你赢得了《孤独》第六季，我认为即使不是该节目中最成功的幸存者，仍然被认为是其中之一。那么让我们回过头来，看看大局。能介绍一下《孤独》这部剧吗？它是如何运作的？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Jonas <span class="dialogue-time">(00:01:35)</span>
+  </div>
+  <div class="dialogue-en">Yeah. It’s a show where they take 10 individuals and each person gets 10 items off of the list. Basic items would be an axe, a saw, a frying pan, some pretty basic stuff. And then, they send them all, drop them off all in the woods with a few cameras. And so, the people are actually alone. There’s not a crew or anything, and then you basically live there as long as you can. And so, the person that...</div>
+  <div class="dialogue-zh">是的。在这个节目中，他们邀请了 10 个人，每个人从清单中选出 10 项。基本物品是斧头、锯子、煎锅，以及一些非常基本的东西。然后，他们把它们全部发送出去，用几台相机把它们全部扔到树林里。所以，人们实际上是孤独的。没有工作人员或任何东西，然后你基本上可以尽可能长时间地住在那里。所以，那个人</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:22)</span>
+  </div>
+  <div class="dialogue-en">You have to figure out the shelter, you have to figure out the source of food, and then it gets colder and colder because I guess they drop you out in a moment where it’s going into the winter.</div>
+  <div class="dialogue-zh">你必须找到住所，你必须找到食物的来源，然后天气就会变得越来越冷，因为我猜他们会在即将进入冬天的时候把你扔出去。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Jonas <span class="dialogue-time">(00:02:31)</span>
+  </div>
+  <div class="dialogue-en">Yeah, they typically do it in temperate, colder climates, things like that. And they start in September, October, so time’s ticking when they drop you off. And yeah, the pressure’s on. You get overwhelmed with all the things you have to do right away. Like, oh man, I’m not going to eat again until I actually shoot or catch something. Got to build a shelter. It’s pretty overwhelming. Figure your wh...</div>
+  <div class="dialogue-zh">是的，他们通常在温带、寒冷的气候下这样做。他们从九月、十月开始，所以当他们送你下车的时候，时间就在流逝。是的，压力很大。你会对所有必须立即做的事情感到不知所措。就像，天哪，在我真正射击或抓住东西之前我不会再吃东西了。得建个避难所。这是相当压倒性的。计算你的wh</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Jonas <span class="dialogue-time">(00:03:22)</span>
+  </div>
+  <div class="dialogue-en">And then I felt like I got in a zone and I felt like I was right back in Siberia or in that head space. And I found, I actually really enjoyed it. I had been a little bit out of, I guess you call it the game, because I had had a child. And so, when we had our daughter, we came back to the States and then a bunch of things happened, and we didn’t end up going back to Russia, so it’d been a couple o...</div>
+  <div class="dialogue-zh">然后我感觉自己进入了一个区域，感觉自己又回到了西伯利亚，或者回到了那个头脑空间。我发现，我真的很喜欢它。我有点不适应，我想你称之为游戏，因为我有一个孩子。所以，当我们有了女儿后，我们回到了美国，然后发生了很多事情，我们最终没有回到俄罗斯，所以这是一对夫妇</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:49)</span>
+  </div>
+  <div class="dialogue-en">So you’d gotten a little soft.</div>
+  <div class="dialogue-zh">所以你变得有点软了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Jonas <span class="dialogue-time">(00:03:51)</span>
+  </div>
+  <div class="dialogue-en">So I was like, “Did I got a little soft?”</div>
+  <div class="dialogue-zh">所以我想，“我是不是有点软弱了？”</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:53)</span>
+  </div>
+  <div class="dialogue-en">Have to figure that out.</div>
+  <div class="dialogue-zh">必须弄清楚这一点。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Jonas <span class="dialogue-time">(00:03:55)</span>
+  </div>
+  <div class="dialogue-en">But then it was fun after just some days there I was like, “Oh man, I feel like I’m at home now.” And then, it was like you’re kind of in that flow state, and it was-</div>
+  <div class="dialogue-zh">但在那里呆了几天之后，我就觉得很有趣，“天哪，我感觉就像在家里一样。”然后，就好像你处于那种心流状态，而且是——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:03)</span>
+  </div>
+  <div class="dialogue-en">Actually, there’s a few moments when you left the ladder up or with the moose that you kind of screwed up a little bit.</div>
+  <div class="dialogue-zh">事实上，有一些时候，当你把梯子放在上面或者把驼鹿放在一边时，你有点搞砸了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Jonas <span class="dialogue-time">(00:04:09)</span>
+  </div>
+  <div class="dialogue-en">Oh, yeah.</div>
+  <div class="dialogue-zh">哦，是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:10)</span>
+  </div>
+  <div class="dialogue-en">How do you go from that moment of frustration to the moment of acceptance?</div>
+  <div class="dialogue-zh">你如何从沮丧的那一刻到接受的那一刻？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Jonas <span class="dialogue-time">(00:04:16)</span>
+  </div>
+  <div class="dialogue-en">I mean, the more you put yourself in life in positions that are kind of outside your comfort zone or push your abilities, the more often you’re going to screw up, and then the more opportunity you have to learn from that. And then to be honest, it’s kind of funny, but you almost get to a position where you don’t feel that… It’s not unexpected. You kind of expect you’re going to mess up here and th...</div>
+  <div class="dialogue-zh">我的意思是，你越是把自己置于生活之外的位置，或者突破你的能力，你就越容易搞砸，然后你就有越多的机会从中学习。老实说，这有点有趣，但你几乎不会感觉到……这并不意外。你有点预料到你会在这里搞砸</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Jonas <span class="dialogue-time">(00:05:15)</span>
+  </div>
+  <div class="dialogue-en">But I was struck initially with… I actually noticed how mad I was. I was like, “Oh, this is actually…” I was like, “That was awesome though. It was seeing a dinosaur. That was really cool.” And then I was like, “Oh, what an idiot. How’d I miss?” But it made me that much more determined to make it happen again. It was like, “Okay, nobody’s going to make this happen except myself.” You can’t complai...</div>
+  <div class="dialogue-zh">但一开始我感到震惊……我实际上注意到我有多生气。我当时想，“哦，这实际上是……”我当时想，“那太棒了。它看到了一只恐龙。那真的很酷。”然后我就想，“哦，真是个白痴。我怎么会错过呢？”但这让我更加坚定了再次实现这一目标的决心。就像是，“好吧，除了我自己，没有人能让这件事发生。”你不能抱怨</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Jonas <span class="dialogue-time">(00:06:09)</span>
+  </div>
+  <div class="dialogue-en">The moose came wandering along and I was able to get it. But being able to take failure the sooner you can, the better. Accept it and then learn from it, it is kind of a muscle you have to exercise a little bit.</div>
+  <div class="dialogue-zh">驼鹿走过来，我抓住了它。但越早能够接受失败越好。接受它，然后从中学习，这是一种你必须锻炼一下的肌肉。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:23)</span>
+  </div>
+  <div class="dialogue-en">Well, it’s interesting because in this case, the cost of failure is like you’re not going to be able to eat.</div>
+  <div class="dialogue-zh">嗯，这很有趣，因为在这种情况下，失败的代价就像你无法吃饭一样。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Jonas <span class="dialogue-time">(00:06:27)</span>
+  </div>
+  <div class="dialogue-en">Yeah, that was really interesting. I mean, the most interesting thing about that show was how high the stakes felt because it didn’t feel… You didn’t tell yourself you’re on a show, at least I didn’t. You just felt like you’re going to starve to death if you don’t make this happen. And so the stakes felt so high, and it was an interesting thing to tap into because, I mean, so many of our ancestors...</div>
+  <div class="dialogue-zh">是的，那真的很有趣。我的意思是，那个节目最有趣的事情是感觉赌注有多高，因为它感觉不到……你没有告诉自己你在参加一个节目，至少我没有。你只是觉得如果你不做到这一点，你就会饿死。所以赌注感觉如此之高，这是一件有趣的事情，因为我的意思是，我们的许多祖先</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:29)</span>
+  </div>
+  <div class="dialogue-en">And then there’s the situation when you left the ladder up and you needed fat, and what is it? Wolverine need some of the fat.</div>
+  <div class="dialogue-zh">还有一种情况，当你把梯子放在上面时，你需要脂肪，那是什么？金刚狼需要一些脂肪。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Jordan Jonas <span class="dialogue-time">(00:07:37)</span>
+  </div>
+  <div class="dialogue-en">Right, yeah. Well, it was… When I got the moose, I was so happy. The most joy, I could almost experience, max, maxed out, but I didn’t think I won at that point. I never thought like, “Oh, that’s my ticket to victory.” I thought, “Holy crap, it’s going to be me against somebody else that gets a moose now, and we’re going to be here six, eight months. Who knows how long? And so, I can’t be here six...</div>
+  <div class="dialogue-zh">对，是的。嗯，是……当我得到驼鹿时，我很高兴。最大的快乐，我几乎可以体验到，最大，最大，但我不认为我赢了。我从来没有想过，“哦，这是我胜利的门票。”我想，“天啊，现在将是我对抗其他拥有驼鹿的人，我们将在这里待六、八个月。谁知道要多久？所以，我不能在这里呆六个月</div>
+</div>
+    <a href="https://lexfridman.com/jordan-jonas-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="ben-shapiro-destiny-debate.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ben Shapiro Destiny Debate</div>
+  <div class="card-meta">Ben Shapiro</div>
+</a>
+<a href="bernie-sanders.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bernie Sanders</div>
+  <div class="card-meta">Bernie Sanders</div>
+</a>
+<a href="douglas-murray-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Douglas Murray #2</div>
+  <div class="card-meta">Douglas Murray</div>
+</a>
+<a href="eric-weinstein-4.html" class="card" style="text-decoration:none">
+  <div class="card-title">Eric Weinstein: Difficult Conversations, Freedom of Speech, and Physics</div>
+  <div class="card-meta">Eric Weinstein</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

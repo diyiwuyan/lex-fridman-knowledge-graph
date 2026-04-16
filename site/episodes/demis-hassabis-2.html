@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demis Hassabis #2 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Demis Hassabis #2</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Demis Hassabis #2</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/demis-hassabis.html" style="font-size:16px;color:#818cf8;font-weight:600">Demis Hassabis</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">26,458 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/demis-hassabis-2-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:21</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:06</span>
+  <span class="chapter-title">Learnable patterns in nature<span class="zh-trans"> · 自然界中可学习的模式</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">5:48</span>
+  <span class="chapter-title">Computation and P vs NP<span class="zh-trans"> · 计算和 P 与 NP</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">14:26</span>
+  <span class="chapter-title">Veo 3 and understanding reality<span class="zh-trans"> · Veo 3 和理解现实</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">18:50</span>
+  <span class="chapter-title">Video games<span class="zh-trans"> · 电子游戏</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">30:52</span>
+  <span class="chapter-title">AlphaEvolve<span class="zh-trans"> · 阿尔法进化</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">36:53</span>
+  <span class="chapter-title">AI research<span class="zh-trans"> · 人工智能研究</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">41:17</span>
+  <span class="chapter-title">Simulating a biological organism<span class="zh-trans"> · 模拟生物有机体</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">46:00</span>
+  <span class="chapter-title">Origin of life<span class="zh-trans"> · 生命的起源</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">52:15</span>
+  <span class="chapter-title">Path to AGI<span class="zh-trans"> · 通用人工智能之路</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:03:01</span>
+  <span class="chapter-title">Scaling laws<span class="zh-trans"> · 缩放定律</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:06:17</span>
+  <span class="chapter-title">Compute<span class="zh-trans"> · 计算</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:09:04</span>
+  <span class="chapter-title">Future of energy<span class="zh-trans"> · 能源的未来</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:13:00</span>
+  <span class="chapter-title">Human nature<span class="zh-trans"> · 人性</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:17:54</span>
+  <span class="chapter-title">Google and the race to AGI<span class="zh-trans"> · 谷歌和 AGI 竞赛</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:35:53</span>
+  <span class="chapter-title">Competition and AI talent<span class="zh-trans"> · 竞争与人工智能人才</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:42:27</span>
+  <span class="chapter-title">Future of programming<span class="zh-trans"> · 编程的未来</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:48:53</span>
+  <span class="chapter-title">John von Neumann<span class="zh-trans"> · 约翰·冯·诺依曼</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:58:07</span>
+  <span class="chapter-title">p(doom)<span class="zh-trans"> · p（厄运）</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">demis</span><span class="keyword-tag">hassabis</span><span class="keyword-tag">systems</span><span class="keyword-tag">going</span><span class="keyword-tag">interesting</span><span class="keyword-tag">games</span><span class="keyword-tag">don</span><span class="keyword-tag">human</span><span class="keyword-tag">model</span><span class="keyword-tag">course</span><span class="keyword-tag">research</span><span class="keyword-tag">able</span><span class="keyword-tag">physics</span><span class="keyword-tag">agi</span><span class="keyword-tag">incredible</span><span class="keyword-tag">game</span><span class="keyword-tag">technology</span><span class="keyword-tag">nature</span><span class="keyword-tag">hard</span><span class="keyword-tag">science</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"And I think it’s very important though that we remember that as when we’re immersed in the technology and the research, I think a lot of researchers that I see in our field are a little bit too narrow and only understand the technology. And I think also that’s why it’s important for this to be debated by society at large. I’m very supportive of things like the AI summits that will happen and governments understanding it. And I think that’s one good thing about the chatbot era and the product era of AI is that everyday person can actually feel and interact with cutting edge AI and feel it for themselves."</div>
+  <div class="quote-zh">我认为非常重要的是，我们要记住，当我们沉浸在技术和研究中时，我认为我在我们的领域看到的很多研究人员都有点太狭隘了，只了解技术。我认为这也是为什么整个社会对此进行辩论很重要的原因。我非常支持即将举行的人工智能峰会以及政府的理解等事情。我认为聊天机器人时代和人工智能产品时代的一件好事是，每个人都可以真正感受到尖端人工智能并与之互动，并亲自感受它。</div>
+  <div class="quote-meta">— Demis Hassabis （01:54:53）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Exactly. Because for the first time in human history we wouldn’t be resource constrained. And I think that could be amazing new era for humanity where it’s not zero-sum, right? I have this land, you don’t have it. Or if the tigers have their forest, then the local villages can’t, what are they going to use? I think that this will help a lot. No, it won’t solve all problems because there’s still other human foibles that will still exist, but it will at least remove one, I think one of the big vectors, which is scarcity of resources, including land and more materials and energy."</div>
+  <div class="quote-zh">确切地。因为在人类历史上，我们第一次不再受到资源限制。我认为这对人类来说可能是一个令人惊奇的新时代，它不是零和的，对吗？这片土地我有，你没有。或者说，如果老虎有森林，当地村庄却没有，那他们拿什么去利用呢？我认为这会有很大帮助。不，它不会解决所有问题，因为人类的其他弱点仍然存在，但它至少会消除一个，我认为是最大的矢量之一，那就是资源的稀缺，包括土地和更多的材料和能源。</div>
+  <div class="quote-meta">— Demis Hassabis （01:12:07）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I’ve always seen it like that. And maybe in the Renaissance times, the great discoverers then, people like Da Vinci, I don’t think he saw any difference between science and art and perhaps religion. Everything was, it’s just part of being human and being inspired about the world around us. And that’s the philosophy I tried to take. And one of my favorite philosophers is Spinoza. And I think he combined that all very well, this idea of trying to understand the universe and understanding our place in it. And that was his way of understanding religion. And I think that’s quite beautiful. And for me, all of these things are related, interrelated, the technology and what it means to be human."</div>
+  <div class="quote-zh">我一直都是这样看的。也许在文艺复兴时期，伟大的发现者，像达芬奇这样的人，我认为他没有看到科学和艺术，也许还有宗教之间有任何区别。一切都是，这只是人类的一部分，也是我们受到周围世界启发的一部分。这就是我试图遵循的哲学。我最喜欢的哲学家之一是斯宾诺莎。我认为他很好地将这一切结合起来，试图理解宇宙并理解我们在其中的地位。这就是他理解宗教的方式。我认为这非常漂亮。对我来说，所有这些事情都是相关的、相互关联的、技术以及人类的意义。</div>
+  <div class="quote-meta">— Demis Hassabis （01:54:10）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Well, it may be pretty complicated. So it could be, the analogy I give there is I don’t think it will be totally mysterious to the best human scientists, but it may be a bit like, for example in chess, if I was to talk to Garry Kasparov for Magnus Carlsen and play a game with them and they make a brilliant move, I might not be able to come up with that move. But they could explain why afterwards that move made sense. And we would be to understand it to some degree, not to the level they do, but if they were good at explaining, which is actually part of intelligence too, is being able to explain in a simple way that what you’re thinking about, I think that that will be very possible for the best human scientists."</div>
+  <div class="quote-zh">嗯，这可能相当复杂。所以，我给出的类比可能是，我不认为这对于最优秀的人类科学家来说是完全神秘的，但这可能有点像，例如在国际象棋中，如果我要与马格努斯·卡尔森的加里·卡斯帕罗夫交谈并与他们下棋，他们下了一个精彩的棋步，我可能无法想出那个棋步。但他们可以解释为什么后来这一举动是有意义的。我们会在某种程度上理解它，而不是达到他们的水平，但如果他们善于解释，这实际上也是智力的一部分，能够以简单的方式解释你正在思考的事情，我认为这对于最好的人类科学家来说是很有可能的。</div>
+  <div class="quote-meta">— Demis Hassabis （00:57:12）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I agree and I would love to see a lot of people, all of the other labs talk about science, but I think we’re really the only ones using it for science and doing that. And that’s why projects like AlphaFold are so important to me. And I think to our mission is to show how AI can be clearly used in a very concrete way for the benefit of humanity. And also, we spun out companies like Isomorphic off the back of Alpha Fold to do drug discovery and it’s going really well and you can think of build additional AlphaFold type systems to go into chemistry space to help accelerate drug design. And the examples I think we need to show and society needs to understand are where AI can bring these huge benefits."</div>
+  <div class="quote-zh">我同意，我很乐意看到很多人，所有其他实验室都在谈论科学，但我认为我们确实是唯一将其用于科学并这样做的人。这就是为什么像 AlphaFold 这样的项目对我来说如此重要。我认为我们的使命是展示如何以非常具体的方式明确使用人工智能来造福人类。而且，我们在 Alpha Fold 的基础上剥离了像 Isomorphic 这样的公司来进行药物发现，进展非常顺利，你可以考虑构建额外的 AlphaFold 类型系统进入化学领域，以帮助加速药物设计。我认为我们需要展示、社会需要理解的例子是人工智能可以带来这些巨大好处的地方。</div>
+  <div class="quote-meta">— Demis Hassabis （01:39:01）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">It’s hard for us humans to make any kind of clean predictions about highly nonlinear dynamical systems. But again, to your point, we might be very surprised what classical learning systems might be able to do about even fluid.</div>
+  <div class="dialogue-zh">我们人类很难对高度非线性动力系统做出任何清晰的预测。但同样，就你的观点而言，我们可能会非常惊讶经典学习系统甚至能够对流体进行处理。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Demis Hassabis <span class="dialogue-time">(00:00:12)</span>
+  </div>
+  <div class="dialogue-en">Yes, exactly. I mean, fluid dynamics, Navier-Stokes equations, these are traditionally thought of as very, very difficult intractable problems to do on classical systems. They take enormous amounts of compute, weather prediction systems. These kinds of things all involve fluid dynamics calculations.</div>
+  <div class="dialogue-zh">是的，完全正确。我的意思是，流体动力学、纳维-斯托克斯方程，这些传统上被认为是在经典系统上解决非常非常困难的棘手问题。它们需要大量的计算和天气预报系统。这类事情都涉及流体动力学计算。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Demis Hassabis <span class="dialogue-time">(00:00:27)</span>
+  </div>
+  <div class="dialogue-en">But again, if you look at something like Veo, our video generation model, it can model liquids quite well, surprisingly well. And materials, specular lighting, I love the ones where there’s people who generate videos where there’s clear liquids going through hydraulic presses and then it’s being squeezed out. I used to write physics engines and graphics engines in my early days in gaming, and I kn...</div>
+  <div class="dialogue-zh">但同样，如果你看看像我们的视频生成模型 Veo 这样的东西，它可以很好地模拟液体，效果出奇地好。还有材质、镜面照明，我喜欢那些制作视频的人，其中有透明液体通过液压机，然后被挤出。我在游戏早期曾经编写过物理引擎和图形引擎，我知道</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:22)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Demis Hassabis, his second time on the podcast. He is the leader of Google DeepMind and is now a Nobel Prize winner. Demis is one of the most brilliant and fascinating minds in the world today working on understanding and building intelligence and exploring the big mysteries of our universe. This was truly an honor and a pleasure for me.</div>
+  <div class="dialogue-zh">以下是与 Demis Hassabis 的对话，这是他第二次参加播客。他是谷歌DeepMind的领导者，现在是诺贝尔奖获得者。戴米斯是当今世界上最聪明、最迷人的人之一，致力于理解和构建智能以及探索宇宙的巨大奥秘。这对我来说确实是一种荣幸和快乐。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:51)</span>
+  </div>
+  <div class="dialogue-en">This is the Lex Fridman Podcast. To support it, please check out our sponsors in the description and consider subscribing to this channel. And now, dear friends, here’s Demis Hassabis. Learnable patterns in nature</div>
+  <div class="dialogue-zh">这是莱克斯·弗里德曼播客。为了支持它，请查看说明中的赞助商并考虑订阅此频道。现在，亲爱的朋友们，这是黛米斯·哈萨比斯。自然界中可学习的模式</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:06)</span>
+  </div>
+  <div class="dialogue-en">In your Nobel Prize lecture, you propose what I think is a super interesting conjecture that “any pattern that can be generated or found in nature can be efficiently discovered and modeled by a classical learning algorithm.” What kind of patterns or systems might be included in that? Biology, chemistry, physics, maybe cosmology, neuroscience? What are we talking about?</div>
+  <div class="dialogue-zh">在您的诺贝尔奖演讲中，您提出了一个我认为非常有趣的猜想：“自然界中可以生成或发现的任何模式都可以通过经典学习算法有效地发现和建模。”其中可能包含什么样的模式或系统？生物学、化学、物理学，也许还有宇宙学、神经科学？我们在说什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Demis Hassabis <span class="dialogue-time">(00:02:32)</span>
+  </div>
+  <div class="dialogue-en">Sure. Well, look, I felt that it’s sort of a tradition, I think, of Nobel Prize lectures that you’re supposed to be a little bit provocative and I wanted to follow that tradition. What I was talking about there is if you take a step back and you look at all the work that we’ve done, especially with the Alpha X projects, so I’m thinking AlphaGo, of course, AlphaFold, what they really are is we are ...</div>
+  <div class="dialogue-zh">当然。嗯，听着，我觉得这是诺贝尔奖演讲的一种传统，你应该有点挑衅性，我想遵循这个传统。我所说的是，如果你退后一步，看看我们所做的所有工作，特别是 Alpha X 项目，所以我在想 AlphaGo，当然，AlphaFold，他们真正的样子就是我们</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Demis Hassabis <span class="dialogue-time">(00:03:08)</span>
+  </div>
+  <div class="dialogue-en">So you have to do something much smarter. And what we did in both cases was build models of those environments and that guided the search in a smart way and that makes it tractable. So if you think about protein folding, which is obviously a natural system, why should that be possible? How does physics do that? Proteins fold in milliseconds in our bodies, so somehow physics solves this problem tha...</div>
+  <div class="dialogue-zh">所以你必须做一些更聪明的事情。在这两种情况下，我们所做的都是构建这些环境的模型，并以智能的方式指导搜索，使其易于处理。因此，如果你考虑一下蛋白质折叠，这显然是一个自然系统，为什么这可能呢？物理学是如何做到这一点的？蛋白质在我们体内的折叠时间为几毫秒，因此物理学以某种方式解决了这个问题</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:49)</span>
+  </div>
+  <div class="dialogue-en">This perspective I think is a really interesting one. You’ve hinted it at it, which is almost like crudely stated, anything that can be evolved can be efficiently modeled. Think there’s some truth to that?</div>
+  <div class="dialogue-zh">我认为这个观点非常有趣。你已经暗示过，这几乎就像粗略地说，任何可以进化的东西都可以有效地建模。你认为这有一定道理吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Demis Hassabis <span class="dialogue-time">(00:04:03)</span>
+  </div>
+  <div class="dialogue-en">Yeah. I sometimes call it survival of the stablest or something like that because of course there’s evolution for life, living things, but there’s also, if you think about geological times, so the shape of mountains, that’s been shaped by weathering processes over thousands of years, but then you can even take it cosmological, the orbits of planets, the shapes of asteroids. These have all been sur...</div>
+  <div class="dialogue-zh">是的。我有时称之为“最稳定的生存”或类似的东西，因为当然有生命、生物的进化，但如果你考虑地质时代，那么还有山脉的形状，它是由数千年的风化过程塑造的，但你甚至可以把它理解为宇宙学，行星的轨道，小行星的形状。这些都已被证实</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Demis Hassabis <span class="dialogue-time">(00:04:31)</span>
+  </div>
+  <div class="dialogue-en">If that’s true, then there should be some sort of pattern that you can kind of reverse learn and a kind of manifold really that helps you search to the right solution, to the right shape and actually allow you to predict things about it in an efficient way because it’s not a random pattern. So it may not be possible for man-made things or abstract things like factorizing large numbers because unle...</div>
+  <div class="dialogue-zh">如果这是真的，那么应该有某种你可以反向学习的模式，以及一种真正可以帮助你搜索正确的解决方案、正确的形状的流形，并且实际上允许你以有效的方式预测有关它的事情，因为它不是随机模式。因此，人造事物或抽象事物（例如因式分解大数）可能是不可能的，因为除非</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:21)</span>
+  </div>
+  <div class="dialogue-en">It’s like nature is doing a search process and it’s so fascinating that in that search process, it’s creating systems that could be efficiently modeled.</div>
+  <div class="dialogue-zh">就像大自然正在进行搜索过程一样，它是如此令人着迷，在这个搜索过程中，它正在创建可以有效建模的系统。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Demis Hassabis <span class="dialogue-time">(00:05:31)</span>
+  </div>
+  <div class="dialogue-en">That’s right. Yeah.</div>
+  <div class="dialogue-zh">这是正确的。是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:32)</span>
+  </div>
+  <div class="dialogue-en">So interesting.</div>
+  <div class="dialogue-zh">太有趣了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Demis Hassabis <span class="dialogue-time">(00:05:33)</span>
+  </div>
+  <div class="dialogue-en">So they can be efficiently rediscovered or recovered because nature’s not random. Everything that we see around us, including the elements that are more stable, all of those things, they’re subject to some kind of selection process pressure. Computation and P vs NP</div>
+  <div class="dialogue-zh">因此，它们可以被有效地重新发现或恢复，因为自然不是随机的。我们在周围看到的一切，包括更稳定的元素，所有这些东西，它们都受到某种选择过程的压力。计算和 P 与 NP</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:47)</span>
+  </div>
+  <div class="dialogue-en">Do you think because you’re also a fan of theoretical computer science and complexity, do you think we can come up with a complexity class, like a complexity zoo type of class where maybe it’s the set of learnable systems, the set of learnable natural systems, LNS. This is a Demis Hassabis new class of systems that could be actually learnable by classical systems in this kind of way, natural syste...</div>
+  <div class="dialogue-zh">你是否认为因为你也是理论计算机科学和复杂性的粉丝，你认为我们可以提出一个复杂性类，就像复杂性动物园类型的类，其中可能是一组可学习的系统，一组可学习的自然系统，LNS。这是 Demis Hassabis 的一类新系统，实际上可以通过经典系统以这种方式学习，自然系统</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Demis Hassabis <span class="dialogue-time">(00:06:17)</span>
+  </div>
+  <div class="dialogue-en">Yeah, I mean I’ve always been fascinated by the P equals NP question and what is model-able by classical systems, i.e. non-quantum systems, Turing machines in effect. And that’s exactly what I’m working on actually in my few moments of spare time with a few colleagues about should there be maybe a new class or problem that is solvable by this type of neural network process and kind of mapped onto ...</div>
+  <div class="dialogue-zh">是的，我的意思是我一直对 P 等于 NP 问题以及经典系统（即非量子系统、图灵机）可建模的内容着迷。这正是我在业余时间与几位同事一起研究的问题，是否应该有一个新的类或问题可以通过这种类型的神经网络过程来解决，并映射到</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:07)</span>
+  </div>
+  <div class="dialogue-en">So when you think of the universe as an informational system, then the P equals NP question is a physics question.</div>
+  <div class="dialogue-zh">因此，当你将宇宙视为一个信息系统时，那么 P 等于 NP 问题就是一个物理问题。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Demis Hassabis <span class="dialogue-time">(00:07:14)</span>
+  </div>
+  <div class="dialogue-en">That’s right.</div>
+  <div class="dialogue-zh">这是正确的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:15)</span>
+  </div>
+  <div class="dialogue-en">And is a question that can help us actually solve the entirety of this whole thing going on.</div>
+  <div class="dialogue-zh">这是一个可以帮助我们真正解决整个事件的问题。</div>
+</div>
+    <a href="https://lexfridman.com/demis-hassabis-2-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-huberman-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman: Sleep, Dreams, Creativity &amp; the Limits of the Human Mind</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="andrew-ng.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Ng: Deep Learning, Education, and Real-World AI</div>
+  <div class="card-meta">Andrew Ng</div>
+</a>
+<a href="ben-goertzel.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ben Goertzel: Artificial General Intelligence</div>
+  <div class="card-meta">Ben Goertzel</div>
+</a>
+<a href="bryan-johnson.html" class="card" style="text-decoration:none">
+  <div class="card-title">Bryan Johnson: Kernel Brain-Computer Interfaces</div>
+  <div class="card-meta">Bryan Johnson</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

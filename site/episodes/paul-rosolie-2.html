@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Paul Rosolie #2 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Paul Rosolie #2</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Paul Rosolie #2</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/paul-rosolie.html" style="font-size:16px;color:#818cf8;font-weight:600">Paul Rosolie</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">44,021 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/paul-rosolie-2-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span><span class="tag" style="background:#f59e0b22;color:#f59e0b;border:1px solid #f59e0b44;font-size:13px;padding:4px 12px">哲学与宗教</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:07</span>
+  <span class="chapter-title">Amazon jungle<span class="zh-trans"> · 亚马逊丛林</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">4:25</span>
+  <span class="chapter-title">Bushmaster snakes<span class="zh-trans"> · 大毒蛇</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">15:51</span>
+  <span class="chapter-title">Black caiman<span class="zh-trans"> · 黑凯门鳄</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">34:11</span>
+  <span class="chapter-title">Rhinos<span class="zh-trans"> · 犀牛</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">37:25</span>
+  <span class="chapter-title">Anacondas<span class="zh-trans"> · 蟒蛇</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:07:42</span>
+  <span class="chapter-title">Mammals<span class="zh-trans"> · 哺乳动物</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:19:48</span>
+  <span class="chapter-title">Piranhas<span class="zh-trans"> · 食人鱼</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:30:38</span>
+  <span class="chapter-title">Aliens<span class="zh-trans"> · 外星人</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:48:23</span>
+  <span class="chapter-title">Elephants<span class="zh-trans"> · 大象</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:59:40</span>
+  <span class="chapter-title">Origin of life<span class="zh-trans"> · 生命的起源</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:12:59</span>
+  <span class="chapter-title">Explorers<span class="zh-trans"> · 探险家</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:26:16</span>
+  <span class="chapter-title">Ayahuasca<span class="zh-trans"> · 死藤水</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:34:41</span>
+  <span class="chapter-title">Deep jungle expedition<span class="zh-trans"> · 丛林深处探险</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:48:48</span>
+  <span class="chapter-title">Jane Goodall<span class="zh-trans"> · 珍·古道尔</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:51:19</span>
+  <span class="chapter-title">Theodore Roosevelt<span class="zh-trans"> · 西奥多·罗斯福</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:02:15</span>
+  <span class="chapter-title">Alone show<span class="zh-trans"> · 独秀</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:12:01</span>
+  <span class="chapter-title">Protecting the rainforest<span class="zh-trans"> · 保护雨林</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:28:14</span>
+  <span class="chapter-title">Snake makes appearance<span class="zh-trans"> · 蛇现身</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">3:36:25</span>
+  <span class="chapter-title">Uncontacted tribes<span class="zh-trans"> · 未接触的部落</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">paul</span><span class="keyword-tag">rosolie</span><span class="keyword-tag">going</span><span class="keyword-tag">don</span><span class="keyword-tag">jungle</span><span class="keyword-tag">caiman</span><span class="keyword-tag">snake</span><span class="keyword-tag">river</span><span class="keyword-tag">earth</span><span class="keyword-tag">got</span><span class="keyword-tag">trying</span><span class="keyword-tag">species</span><span class="keyword-tag">amazon</span><span class="keyword-tag">tree</span><span class="keyword-tag">humans</span><span class="keyword-tag">animals</span><span class="keyword-tag">water</span><span class="keyword-tag">doing</span><span class="keyword-tag">trees</span><span class="keyword-tag">incredible</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"And they’re so different than us, but yet I actually think that we grew up together. They raised us, sibling species, that we’ve inhabited the same epoch in history, and we’ve relied on the ecosystems that they’ve created. And I think that they have a deep understanding of humans, elephants, and I think I see them more like aliens, more like non-human beings that we share the Earth with. I don’t see it as we’re humans and they’re animals. I actually see elephants as a separate society along with humans as one of the dominant species on the planet."</div>
+  <div class="quote-zh">他们与我们如此不同，但我实际上认为我们是一起长大的。他们养育了我们，我们是兄弟物种，我们生活在历史上的同一时代，我们依赖他们创造的生态系统。我认为他们对人类、大象有深入的了解，我认为我认为他们更像是外星人，更像是与我们共享地球的非人类。我不这么认为，因为我们是人类，而他们是动物。实际上，我将大象视为一个独立的社会，而人类则视为地球上的优势物种之一。</div>
+  <div class="quote-meta">— Paul Rosolie （01:50:17）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Okay, I think I’m just going to take a stand here. I’m just sick of fucking playing it halfway. I think that because people live indoors in climate controlled boxes in cities far away from nature, they’ve completely lost track of everything that’s real. And they’ve started to think that we’re living inside of a simulation. Notice that nobody carrying an alpaca up a mountain thinks that we’re living inside of a video game. They all know that it’s real because they’ve had babies on the floor of a cold hut."</div>
+  <div class="quote-zh">好吧，我想我就在这里表明立场。我只是厌倦了玩到一半。我认为，由于人们生活在远离自然的城市中的气候控制箱中，他们完全忘记了一切真实的事物。他们开始认为我们生活在模拟之中。请注意，没有人背着羊驼上山，认为我们生活在电子游戏中。他们都知道这是真的，因为他们在寒冷小屋的地板上生过孩子。</div>
+  <div class="quote-meta">— Paul Rosolie （02:35:09）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, just loggers, people who aren’t from this part of the Amazon, because a local person would either eat the animal or not mess with it. Like Pico would never kill a caiman for no reason, because it doesn’t make any sense. So these are clearly people who aren’t from the region, which usually means loggers, because they’ve come from somewhere else. They’re doing a job here and they’re just cleaning their pots in the river at night and they see eyes come near them, because the caiman probably smells fish. And then they just whack, because they want to see it and they’re just curious monkeys on a beach. And again, me friend of caiman, I protect from my type."</div>
+  <div class="quote-zh">是的，只是伐木者，不是来自亚马逊地区的人，因为当地人要么吃掉这种动物，要么不乱搞它。就像皮科永远不会无缘无故地杀死凯门鳄一样，因为这没有任何意义。所以这些人显然不是来自该地区的人，这通常意味着伐木工，因为他们来自其他地方。他们在这里工作，晚上在河里清理罐子，他们看到有眼睛靠近他们，因为凯门鳄可能闻到了鱼的味道。然后他们就敲打，因为他们想看到它，他们只是海滩上好奇的猴子。再说一次，我的凯门鳄朋友，我保护自己免受我的类型的伤害。</div>
+  <div class="quote-meta">— Paul Rosolie （00:29:17）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think it’s more complex than we realize. You go back to that Frans de Waal book, Are We Smart Enough to Know How Smart Animals Are? There’s so many incredible examples of controlled studies where the researchers weren’t understanding how to shed being so insurmountably human and understand that there are other types of intelligence. And whether that’s elephants or cats. So big cats, for instance, we just saw a camera trap video from last night where you see one of our workers walk down the trail, and then five minutes later a cat behind him."</div>
+  <div class="quote-zh">我认为这比我们意识到的更复杂。你回到弗兰斯·德瓦尔的书《我们是否聪明到知道动物有多聪明？》有很多令人难以置信的对照研究例子，研究人员不明白如何摆脱如此难以克服的人类并理解还有其他类型的智力。无论是大象还是猫。例如，大型猫科动物，我们刚刚看到昨晚的一个摄像机陷阱视频，您可以看到我们的一名工人沿着小路走，五分钟后，他身后有一只猫。</div>
+  <div class="quote-meta">— Paul Rosolie （01:02:07）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I was reading about ayahuasca and they were saying statistically, if you put 1,000 humans in the Amazon and gave them villages to live in, because humans are a communal species, it would take tens and tens of thousands of years or perhaps even centuries before even the possibility. It’s like that thing, a bunch of chips on a keyboard how they write Hamlet. It’s astronomical odds to get to, oh wait, this and this dose together. What the local people believe is that the gods revealed this secret through the jungle to us as a link to the spirit world, and that that’s how we know this. Because if they didn’t remember it from their ancestors, we would have no idea how to get this information from the wild."</div>
+  <div class="quote-zh">我读到有关死藤水的文章，他们在统计上说，如果你把 1000 个人放在亚马逊地区并给他们居住的村庄，因为人类是一个公共物种，那么需要数万年甚至数个世纪才能实现这种可能性。就像那样的东西，键盘上的一堆芯片，他们如何写哈姆雷特。哦等等，同时服用这个和这个剂量的可能性是天文数字。当地人相信，众神通过丛林向我们揭示了这个秘密，作为与精神世界的联系，这就是我们知道这一点的方式。因为如果他们不记得祖先的信息，我们就不知道如何从野外获取这些信息。</div>
+  <div class="quote-meta">— Paul Rosolie （02:30:05）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">Where are we right now, Paul?</div>
+  <div class="dialogue-zh">保罗，我们现在在哪里？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Paul Rosolie <span class="dialogue-time">(00:00:02)</span>
+  </div>
+  <div class="dialogue-en">Lex, we are in the middle of nowhere.</div>
+  <div class="dialogue-zh">莱克斯，我们正处在一个偏僻的地方。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:06)</span>
+  </div>
+  <div class="dialogue-en">It’s the Amazon jungle. There’s vegetation, there’s insects, there’s all kinds of creatures. A million heartbeats, a million eyes. So really, where are we right now?</div>
+  <div class="dialogue-zh">这是亚马逊丛林。有植被，有昆虫，有各种各样的生物。一百万次心跳，一百万双眼睛。那么说真的，我们现在在哪里？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Paul Rosolie <span class="dialogue-time">(00:00:15)</span>
+  </div>
+  <div class="dialogue-en">We are in Peru, in a very remote part of the Western Amazon basin. And because of the proximity of the Andean Cloud Forest to the lowland tropical rainforest, we are in the most bio-diverse part of planet Earth. There is more life per square acre, per square mile out here than there is anywhere else on Earth, not just now, but in the entire fossil record.</div>
+  <div class="dialogue-zh">我们在秘鲁，位于西亚马逊盆地的一个非常偏远的地方。由于安第斯云雾森林靠近低地热带雨林，我们处于地球上生物多样性最丰富的地区。这里每平方英亩、每平方英里的生命数量比地球上其他任何地方都多，不仅是现在，而且在整个化石记录中也是如此。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:40)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Paul Rosolie, his second time on the podcast, but this time we did the conversation deep in the Amazon jungle. I traveled there to hang out with Paul and it turned out to be an adventure of a lifetime. I’ll post a video capturing some aspects of that adventure, in a week or so. It included everything, from getting lost in dense, unexplored wilderness with no co...</div>
+  <div class="dialogue-zh">以下是与保罗·罗索利的对话，这是他第二次在播客上进行的对话，但这一次我们是在亚马逊丛林深处进行的对话。我去那里和保罗一起出去玩，结果这是一次一生难忘的冒险。我将在一周左右的时间内发布一段视频，记录这次冒险的一些方面。它包括一切，从迷失在茂密的、未经探索的荒野中，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:37)</span>
+  </div>
+  <div class="dialogue-en">This trip, for me, was life-changing. It expanded my understanding of myself and of the beautiful world I’m fortunate to exist in with all of you. So I’m glad I went and I’m glad I made it out alive. This is a Lex Fridman podcast, to support it, please check out our sponsors in the description. And now, dear friends, here’s Paul Rosolie. Amazon jungle</div>
+  <div class="dialogue-zh">这次旅行对我来说改变了我的生活。它扩展了我对自己和我有幸与你们所有人共存的美丽世界的理解。所以我很高兴我去了，也很高兴我能活着出来。这是 Lex Fridman 播客，为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是保罗·罗索利。亚马逊丛林</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:07)</span>
+  </div>
+  <div class="dialogue-en">I can’t believe we’re actually here.</div>
+  <div class="dialogue-zh">我不敢相信我们真的在这里。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Paul Rosolie <span class="dialogue-time">(00:02:09)</span>
+  </div>
+  <div class="dialogue-en">I can’t believe you actually came.</div>
+  <div class="dialogue-zh">我不敢相信你真的来了。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:10)</span>
+  </div>
+  <div class="dialogue-en">And I can’t believe you forced me to wear a suit.</div>
+  <div class="dialogue-zh">我不敢相信你强迫我穿西装。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Paul Rosolie <span class="dialogue-time">(00:02:13)</span>
+  </div>
+  <div class="dialogue-en">That was the people’s choice, trust me.</div>
+  <div class="dialogue-zh">这是人民的选择，相信我。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:15)</span>
+  </div>
+  <div class="dialogue-en">All right. We’ve been through quite a lot over the last few days.</div>
+  <div class="dialogue-zh">好的。过去几天我们经历了很多事情。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Paul Rosolie <span class="dialogue-time">(00:02:19)</span>
+  </div>
+  <div class="dialogue-en">We’ve been through a bit.</div>
+  <div class="dialogue-zh">我们已经经历了一些。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:02:21)</span>
+  </div>
+  <div class="dialogue-en">Let me ask you a ridiculous question. What are all the creatures right now, if they wanted to, could cause us harm?</div>
+  <div class="dialogue-zh">让我问你一个可笑的问题。现在有哪些生物，如果它们愿意的话，可能会对我们造成伤害？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Paul Rosolie <span class="dialogue-time">(00:02:30)</span>
+  </div>
+  <div class="dialogue-en">The thing is, the Amazon rainforest has been described as the greatest natural battlefield on Earth, because there’s more life here than anywhere else, which means that everything here is fighting for survival. The trees are fighting for sunlight, the animals are fighting for prey, everybody’s fighting for survival. And so everything that you see here, everything around us, will be killed, eaten, ...</div>
+  <div class="dialogue-zh">事实是，亚马逊雨林被称为地球上最大的自然战场，因为这里的生命比其他任何地方都多，这意味着这里的一切都在为生存而战。树木在争夺阳光，动物在争夺猎物，每个人都在为生存而战。所以你在这里看到的一切，我们周围的一切，都会被杀死、吃掉，</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Paul Rosolie <span class="dialogue-time">(00:03:09)</span>
+  </div>
+  <div class="dialogue-en">And so the things in this forest, while they don’t want to hurt us, there are things that are heavily defended, because, for instance, a giant anteater needs claws to fight off a jaguar. A stingray needs a stinger on its tail, which is basically a serrated knife with venom on it, to deter anything that would hunt that stingray. Even the catfish have pectoral fins that have razor-long, steak-knife ...</div>
+  <div class="dialogue-zh">因此，这片森林中的生物虽然不想伤害我们，但也有一些受到严密防御的生物，因为，例如，巨型食蚁兽需要爪子来击退美洲虎。黄貂鱼的尾巴上需要有一个毒刺，基本上是一把带有毒液的锯齿刀，以阻止任何会捕食黄貂鱼的东西。就连鲶鱼也有胸鳍，上面有剃刀般长的牛排刀</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:57)</span>
+  </div>
+  <div class="dialogue-en">But each of those animals, like you described, have a kind of radius of defense.</div>
+  <div class="dialogue-zh">但正如您所描述的那样，每种动物都有一定的防御半径。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Paul Rosolie <span class="dialogue-time">(00:04:03)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:03)</span>
+  </div>
+  <div class="dialogue-en">So if you accidentally step into its home-</div>
+  <div class="dialogue-zh">所以如果你不小心踏入它的家——</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Paul Rosolie <span class="dialogue-time">(00:04:08)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:08)</span>
+  </div>
+  <div class="dialogue-en">Into that radius, it can cause harm.</div>
+  <div class="dialogue-zh">进入该半径范围内，它可能会造成伤害。</div>
+</div>
+    <a href="https://lexfridman.com/paul-rosolie-2-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="irving-finkel.html" class="card" style="text-decoration:none">
+  <div class="card-title">Irving Finkel</div>
+  <div class="card-meta">Irving Finkel</div>
+</a>
+<a href="nick-lane-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Nick Lane: Origin of Life, Evolution, Aliens, Biology, and Consciousness</div>
+  <div class="card-meta">Nick Lane</div>
+</a>
+<a href="nick-lane.html" class="card" style="text-decoration:none">
+  <div class="card-title">Nick Lane</div>
+  <div class="card-meta">Nick Lane</div>
+</a>
+<a href="richard-dawkins.html" class="card" style="text-decoration:none">
+  <div class="card-title">Richard Dawkins: Evolution, Intelligence, Simulation, and Memes</div>
+  <div class="card-meta">Richard Dawkins</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

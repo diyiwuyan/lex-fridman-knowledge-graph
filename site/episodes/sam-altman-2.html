@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sam Altman #2 - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Sam Altman #2</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Sam Altman #2</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/sam-altman.html" style="font-size:16px;color:#818cf8;font-weight:600">Sam Altman</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">20,459 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/sam-altman-2-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#6366f122;color:#6366f1;border:1px solid #6366f144;font-size:13px;padding:4px 12px">AI 与机器学习</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#10b98122;color:#10b981;border:1px solid #10b98144;font-size:13px;padding:4px 12px">商业与创业</span><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:05</span>
+  <span class="chapter-title">OpenAI board saga<span class="zh-trans"> · OpenAI 董事会传奇</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">18:31</span>
+  <span class="chapter-title">Ilya Sutskever<span class="zh-trans"> · 伊利亚·苏茨克维尔</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">24:40</span>
+  <span class="chapter-title">Elon Musk lawsuit<span class="zh-trans"> · 埃隆·马斯克诉讼</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">34:32</span>
+  <span class="chapter-title">Sora<span class="zh-trans"> · 索拉</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">44:23</span>
+  <span class="chapter-title">GPT-4<span class="zh-trans"> · GPT-4</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">55:32</span>
+  <span class="chapter-title">Memory &amp; privacy<span class="zh-trans"> · 记忆与隐私</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:02:36</span>
+  <span class="chapter-title">Q*<span class="zh-trans"> · Q*</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:06:12</span>
+  <span class="chapter-title">GPT-5<span class="zh-trans"> · GPT-5</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:09:27</span>
+  <span class="chapter-title">$7 trillion of compute<span class="zh-trans"> · 7 万亿美元的计算</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:17:35</span>
+  <span class="chapter-title">Google and Gemini<span class="zh-trans"> · 谷歌和双子座</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:28:40</span>
+  <span class="chapter-title">Leap to GPT-5<span class="zh-trans"> · 跃升至 GPT-5</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:32:24</span>
+  <span class="chapter-title">AGI<span class="zh-trans"> · 通用人工智能</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:50:57</span>
+  <span class="chapter-title">Aliens<span class="zh-trans"> · 外星人</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">sam</span><span class="keyword-tag">altman</span><span class="keyword-tag">going</span><span class="keyword-tag">don</span><span class="keyword-tag">board</span><span class="keyword-tag">gpt</span><span class="keyword-tag">agi</span><span class="keyword-tag">openai</span><span class="keyword-tag">better</span><span class="keyword-tag">model</span><span class="keyword-tag">stuff</span><span class="keyword-tag">sure</span><span class="keyword-tag">thinking</span><span class="keyword-tag">human</span><span class="keyword-tag">whole</span><span class="keyword-tag">hard</span><span class="keyword-tag">company</span><span class="keyword-tag">important</span><span class="keyword-tag">future</span><span class="keyword-tag">humans</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"And I realize that that means people like Marc Andreessen or whatever will claim I’m going for regulatory capture, and I’m just willing to be misunderstood there. It’s not true. And I think in the fullness of time, it’ll get proven out why this is important. But I think I have made plenty of bad decisions for OpenAI along the way, and a lot of good ones, and I’m proud of the track record overall. But I don’t think any one person should, and I don’t think any one person will. I think it’s just too big of a thing now, and it’s happening throughout society in a good and healthy way. But I don’t think any one person should be in control of an AGI, or this whole movement towards AGI. And I don’t think that’s what’s happening."</div>
+  <div class="quote-zh">我意识到这意味着像马克·安德森（Marc Andreessen）或其他人这样的人会声称我要寻求监管捕获，而我只是愿意在那里被误解。这不是真的。我认为，随着时间的推移，这一点的重要性将会被证明。但我认为，一路走来，我为 OpenAI 做出了很多错误的决定，也做出了很多好的决定，我对整体的业绩记录感到自豪。但我不认为任何人应该这样做，也不认为任何人会这样做。我认为现在这件事太大了，而且它正在以一种良好、健康的方式在整个社会发生。但我认为任何人都不应该控制通用人工智能，或者整个通用人工智能运动。我认为事实并非如此。</div>
+  <div class="quote-meta">— Sam Altman （01:40:12）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"We talked about theatrical risks earlier. That’s a theatrical risk. That is a thing that can really take over how people think about this problem. And there’s a big group of very smart, I think very well-meaning AI safety researchers that got super-hung up on this one problem, I’d argue without much progress, but super-hung up on this one problem. I’m actually happy that they do that, because I think we do need to think about this more. But I think it pushed out of the space of discourse a lot of the other very significant AI- related risks."</div>
+  <div class="quote-zh">我们之前讨论过戏剧风险。这是戏剧性的风险。这确实可以改变人们对这个问题的看法。有一大群非常聪明、我认为非常善意的人工智能安全研究人员对这个问题非常着迷，我认为没有太大进展，但对这个问题非常着迷。我实际上很高兴他们这样做，因为我认为我们确实需要更多地考虑这一点。但我认为它排除了许多其他非常重要的人工智能相关风险。</div>
+  <div class="quote-meta">— Sam Altman （01:42:21）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Look, I think compute is going to be the currency of the future. I think it will be maybe the most precious commodity in the world, and I think we should be investing heavily to make a lot more compute. Compute, I think it’s going to be an unusual market. People think about the market for chips for mobile phones or something like that. And you can say that, okay, there’s 8 billion people in the world, maybe 7 billion of them have phones, maybe 6 billion, let’s say. They upgrade every two years, so the market per year is 3 billion system-on-chip for smartphones. And if you make 30 billion, you will not sell 10 times as many phones, because most people have one phone."</div>
+  <div class="quote-zh">看，我认为计算将成为未来的货币。我认为这可能是世界上最珍贵的商品，我认为我们应该大力投资以进行更多的计算。计算一下，我认为这将是一个不寻常的市场。人们会想到手机芯片或类似产品的市场。你可以说，好吧，世界上有 80 亿人，其中可能有 70 亿拥有手机，也许有 60 亿，比方说。它们每两年升级一次，因此每年智能手机片上系统的市场规模为 30 亿个。而如果你赚了300亿，你的手机销量也不会增加10倍，因为大多数人都拥有一部手机。</div>
+  <div class="quote-meta">— Sam Altman （01:10:01）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"Yeah, but I don’t think 3.5 changed the world. It maybe changed the world’s expectations for the future, and that’s actually really important. And it did get more people to take this seriously and put us on this new trajectory. And that’s really important, too. So again, I don’t want to undersell it. I think I could retire after that accomplishment and be pretty happy with my career. But as an artifact, I don’t think we’re going to look back at that and say, “That was a threshold that really changed the world itself.”"</div>
+  <div class="quote-zh">是的，但我不认为 3.5 改变了世界。它可能改变了世界对未来的期望，这实际上非常重要。它确实让更多的人认真对待这一问题，并使我们走上新的轨道。这也非常重要。再说一次，我不想低价出售它。我想我可以在取得这一成就后退休并对我的职业生涯感到非常满意。但作为一件人工制品，我认为我们不会在回顾这一点时说：“这是一个真正改变世界本身的门槛。”</div>
+  <div class="quote-meta">— Sam Altman （01:33:49）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I definitely learned a lot about structure and incentives and what we need out of a board. And I think that it is valuable that this happened now in some sense. I think this is probably not the last high-stress moment of OpenAI, but it was quite a high-stress moment. My company very nearly got destroyed. And we think a lot about many of the other things we’ve got to get right for AGI, but thinking about how to build a resilient org and how to build a structure that will stand up to a lot of pressure in the world, which I expect more and more as we get closer, I think that’s super important."</div>
+  <div class="quote-zh">我确实学到了很多关于结构和激励措施以及我们对董事会的需求的知识。我认为现在发生的这件事在某种意义上是有价值的。我认为这可能不是 OpenAI 最后一个高压力时刻，但这是一个相当高压力的时刻。我的公司差一点就被毁掉了。我们思考了很多我们必须为 AGI 做好的其他事情，但思考如何建立一个有弹性的组织以及如何建立一个能够承受世界上巨大压力的结构，随着我们越来越接近，我越来越期望，我认为这是非常重要的。</div>
+  <div class="quote-meta">— Sam Altman （00:05:18）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sam Altman <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">I think compute is going to be the currency of the future. I think it’ll be maybe the most precious commodity in the world. I expect that by the end of this decade, and possibly somewhat sooner than that, we will have quite capable systems that we look at and say, “Wow, that’s really remarkable.” The road to AGI should be a giant power struggle. I expect that to be the case.</div>
+  <div class="dialogue-zh">我认为计算将成为未来的货币。我认为这可能是世界上最珍贵的商品。我预计到本十年末，甚至可能更早，我们将拥有功能相当强大的系统，我们会说：“哇，这真是太了不起了。”通往通用人工智能的道路应该是一场巨大的权力斗争。我希望情况会如此。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:26)</span>
+  </div>
+  <div class="dialogue-en">Whoever builds AGI first gets a lot of power. Do you trust yourself with that much power?</div>
+  <div class="dialogue-zh">谁先建立AGI，谁就获得很大的权力。你相信自己有那么大的力量吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:36)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Sam Altman, his second time on the podcast. He is the CEO of OpenAI, the company behind GPT-4, ChaTGPT, Sora, and perhaps one day the very company that will build AGI. This is The Lex Fridman Podcast. To support it, please check out our sponsors in the description. And now, dear friends, here’s Sam Altman. OpenAI board saga</div>
+  <div class="dialogue-zh">以下是与山姆·奥尔特曼的对话，这是他第二次参加播客。他是 OpenAI 的首席执行官，该公司是 GPT-4、ChaTGPT、Sora 背后的公司，也许有一天这家公司将打造 AGI。这是莱克斯·弗里德曼播客。为了支持它，请在说明中查看我们的赞助商。现在，亲爱的朋友们，这是山姆·奥尔特曼。 OpenAI 董事会传奇</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:05)</span>
+  </div>
+  <div class="dialogue-en">Take me through the OpenAI board saga that started on Thursday, November 16th, maybe Friday, November 17th for you.</div>
+  <div class="dialogue-zh">带我回顾一下从 11 月 16 日星期四开始的 OpenAI 董事会传奇，也许对您来说是 11 月 17 日星期五。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sam Altman <span class="dialogue-time">(00:01:13)</span>
+  </div>
+  <div class="dialogue-en">That was definitely the most painful professional experience of my life, and chaotic and shameful and upsetting and a bunch of other negative things. There were great things about it too, and I wish it had not been in such an adrenaline rush that I wasn’t able to stop and appreciate them at the time. But I came across this old tweet of mine or this tweet of mine from that time period. It was like ...</div>
+  <div class="dialogue-zh">这绝对是我一生中最痛苦的职业经历，混乱、可耻、令人不安，还有很多其他负面的事情。它也有很棒的东西，我希望它没有如此肾上腺素激增，以至于我当时无法停下来欣赏它们。但我发现了我的这条旧推文或我那个时期的这条推文。就像</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:02)</span>
+  </div>
+  <div class="dialogue-en">But the thing you had a sense that you would experience is some kind of power struggle?</div>
+  <div class="dialogue-zh">但你有一种感觉，你会经历某种权力斗争？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sam Altman <span class="dialogue-time">(00:03:08)</span>
+  </div>
+  <div class="dialogue-en">The road to AGI should be a giant power struggle. The world should… Well, not should. I expect that to be the case.</div>
+  <div class="dialogue-zh">通往通用人工智能的道路应该是一场巨大的权力斗争。世界应该……嗯，不应该。我希望情况会如此。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:17)</span>
+  </div>
+  <div class="dialogue-en">And so you have to go through that, like you said, iterate as often as possible in figuring out how to have a board structure, how to have organization, how to have the kind of people that you’re working with, how to communicate all that in order to deescalate the power struggle as much as possible.</div>
+  <div class="dialogue-zh">所以你必须经历这一点，就像你说的，尽可能频繁地迭代，弄清楚如何建立董事会结构，如何建立组织，如何拥有与你一起工作的人，如何沟通所有这些，以便尽可能地缓和权力斗争。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sam Altman <span class="dialogue-time">(00:03:37)</span>
+  </div>
+  <div class="dialogue-en">Yeah.</div>
+  <div class="dialogue-zh">是的。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:37)</span>
+  </div>
+  <div class="dialogue-en">Pacify it.</div>
+  <div class="dialogue-zh">安抚之。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sam Altman <span class="dialogue-time">(00:03:38)</span>
+  </div>
+  <div class="dialogue-en">But at this point, it feels like something that was in the past that was really unpleasant and really difficult and painful, but we’re back to work and things are so busy and so intense that I don’t spend a lot of time thinking about it. There was a time after, there was this fugue state for the month after, maybe 45 days after, that I was just drifting through the days. I was so out of it. I was ...</div>
+  <div class="dialogue-zh">但此时此刻，感觉就像是过去的事情，真的很不愉快，真的很困难和痛苦，但我们又回到了工作岗位，事情是如此忙碌和紧张，以至于我没有花很多时间去思考它。之后有一段时间，一个月后，也许是45天后，我就处于这种神游状态，我只是在这些日子里漂泊。我实在是太没出息了。我是</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:17)</span>
+  </div>
+  <div class="dialogue-en">Just on a personal, psychological level?</div>
+  <div class="dialogue-zh">只是在个人心理层面上吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sam Altman <span class="dialogue-time">(00:04:20)</span>
+  </div>
+  <div class="dialogue-en">Yeah. Really painful, and hard to have to keep running OpenAI in the middle of that. I just wanted to crawl into a cave and recover for a while. But now it’s like we’re just back to working on the mission.</div>
+  <div class="dialogue-zh">是的。真的很痛苦，而且很难在这中间继续运行 OpenAI。我只想爬进山洞里恢复一下。但现在我们好像刚刚回到任务中。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:04:38)</span>
+  </div>
+  <div class="dialogue-en">Well, it’s still useful to go back there and reflect on board structures, on power dynamics, on how companies are run, the tension between research and product development and money and all this kind of stuff so that you, who have a very high potential of building AGI, would do so in a slightly more organized, less dramatic way in the future. So there’s value there to go, both the personal psychol...</div>
+  <div class="dialogue-zh">嗯，回到那里反思一下董事会结构、权力动态、公司的运营方式、研究和产品开发与资金之间的紧张关系以及所有这些东西仍然很有用，这样，你这个在构建 AGI 方面具有巨大潜力的人，将来就能以一种稍微更有组织性、不那么戏剧化的方式来实现这一目标。因此，无论是个人心理还是个人心理方面，这里都有价值</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sam Altman <span class="dialogue-time">(00:05:18)</span>
+  </div>
+  <div class="dialogue-en">I definitely learned a lot about structure and incentives and what we need out of a board. And I think that it is valuable that this happened now in some sense. I think this is probably not the last high-stress moment of OpenAI, but it was quite a high-stress moment. My company very nearly got destroyed. And we think a lot about many of the other things we’ve got to get right for AGI, but thinking...</div>
+  <div class="dialogue-zh">我确实学到了很多关于结构和激励措施以及我们对董事会的需求的知识。我认为现在发生的这件事在某种意义上是有价值的。我认为这可能不是 OpenAI 最后一个高压力时刻，但这是一个相当高压力的时刻。我的公司差一点就被毁掉了。我们思考了很多我们必须为 AGI 做好的其他事情，但是思考</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:01)</span>
+  </div>
+  <div class="dialogue-en">Do you have a sense of how deep and rigorous the deliberation process by the board was? Can you shine some light on just human dynamics involved in situations like this? Was it just a few conversations and all of a sudden it escalates and why don’t we fire Sam kind of thing?</div>
+  <div class="dialogue-zh">您是否感受到董事会的审议过程有多深入、有多严谨？您能简单介绍一下在这种情况下人类的动态吗？是不是只是聊了几句，事情突然升级了，我们为什么不解雇萨姆之类的事情呢？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sam Altman <span class="dialogue-time">(00:06:22)</span>
+  </div>
+  <div class="dialogue-en">I think the board members are well-meaning people on the whole, and I believe that in stressful situations where people feel time pressure or whatever, people understand and make suboptimal decisions. And I think one of the challenges for OpenAI will be we’re going to have to have a board and a team that are good at operating under pressure.</div>
+  <div class="dialogue-zh">我认为董事会成员总体上都是善意的人，而且我相信，在人们感到时间压力或其他压力的情况下，人们会理解并做出次优的决定。我认为 OpenAI 面临的挑战之一是我们必须拥有一个善于在压力下运作的董事会和团队。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:00)</span>
+  </div>
+  <div class="dialogue-en">Do you think the board had too much power?</div>
+  <div class="dialogue-zh">你认为董事会的权力是否太大？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Sam Altman <span class="dialogue-time">(00:07:03)</span>
+  </div>
+  <div class="dialogue-en">I think boards are supposed to have a lot of power, but one of the things that we did see is in most corporate structures, boards are usually answerable to shareholders. Sometimes people have super voting shares or whatever. In this case, and I think one of the things with our structure that we maybe should have thought about more than we did is that the board of a nonprofit has, unless you put ot...</div>
+  <div class="dialogue-zh">我认为董事会应该拥有很大的权力，但我们确实看到的一件事是，在大多数公司结构中，董事会通常对股东负责。有时人们拥有超级投票权股份或其他什么。在这种情况下，我认为我们的结构中我们可能应该比我们考虑更多的事情之一是非营利组织的董事会，除非你把其他</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:44)</span>
+  </div>
+  <div class="dialogue-en">So there’s a new board announced.</div>
+  <div class="dialogue-zh">所以宣布了一个新的董事会。</div>
+</div>
+    <a href="https://lexfridman.com/sam-altman-2-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="aravind-srinivas.html" class="card" style="text-decoration:none">
+  <div class="card-title">Aravind Srinivas</div>
+  <div class="card-meta">Aravind Srinivas</div>
+</a>
+<a href="ayanna-howard.html" class="card" style="text-decoration:none">
+  <div class="card-title">Ayanna Howard: Human-Robot Interaction and Ethics of Safety-Critical Systems</div>
+  <div class="card-meta">Ayanna Howard</div>
+</a>
+<a href="boris-sofman.html" class="card" style="text-decoration:none">
+  <div class="card-title">Boris Sofman: Waymo, Cozmo, Self-Driving Cars, and the Future of Robotics</div>
+  <div class="card-meta">Boris Sofman</div>
+</a>
+<a href="colin-angle.html" class="card" style="text-decoration:none">
+  <div class="card-title">Colin Angle: iRobot</div>
+  <div class="card-meta">Colin Angle</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>

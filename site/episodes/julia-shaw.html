@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Julia Shaw - Lex Fridman 知识图谱</title>
+  <style>
+:root {
+  --bg: #0f0f13;
+  --bg2: #16161d;
+  --bg3: #1e1e2a;
+  --border: #2a2a3a;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --text3: #64748b;
+  --accent: #6366f1;
+  --accent2: #818cf8;
+  --gold: #f59e0b;
+  --green: #22c55e;
+  --red: #ef4444;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+a { color: var(--accent2); text-decoration: none; }
+a:hover { color: var(--accent); text-decoration: underline; }
+
+/* Layout */
+.layout { display: flex; min-height: 100vh; }
+
+.sidebar {
+  width: 260px;
+  min-width: 260px;
+  background: var(--bg2);
+  border-right: 1px solid var(--border);
+  padding: 24px 0;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.sidebar-logo h1 {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.3;
+}
+
+.sidebar-logo p {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+.sidebar-section {
+  padding: 8px 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text3);
+  margin-top: 12px;
+}
+
+.sidebar-link {
+  display: block;
+  padding: 8px 20px;
+  font-size: 14px;
+  color: var(--text2);
+  border-left: 3px solid transparent;
+  transition: all 0.15s;
+}
+
+.sidebar-link:hover, .sidebar-link.active {
+  color: var(--text);
+  background: var(--bg3);
+  border-left-color: var(--accent);
+  text-decoration: none;
+}
+
+.sidebar-link .count {
+  float: right;
+  font-size: 11px;
+  color: var(--text3);
+  background: var(--bg3);
+  padding: 1px 6px;
+  border-radius: 10px;
+}
+
+.main { flex: 1; overflow-x: hidden; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(135deg, #0f0f13 0%, #1a1a2e 50%, #16213e 100%);
+  padding: 60px 48px;
+  border-bottom: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(ellipse at center, rgba(99,102,241,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+
+.hero h1 {
+  font-size: 42px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #e2e8f0, #818cf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 12px;
+  line-height: 1.2;
+}
+
+.hero p {
+  font-size: 18px;
+  color: var(--text2);
+  max-width: 600px;
+  margin-bottom: 32px;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+  max-width: 700px;
+}
+
+.stat-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  text-align: center;
+}
+
+.stat-card .num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  display: block;
+}
+
+.stat-card .label {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 4px;
+}
+
+/* Content area */
+.content { padding: 40px 48px; max-width: 1200px; }
+
+.section-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.section-desc {
+  font-size: 14px;
+  color: var(--text2);
+  margin-bottom: 28px;
+}
+
+/* Cards */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.card {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.card-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 10px;
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+
+.tag {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Episode list */
+.ep-list { margin-bottom: 40px; }
+
+.ep-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+  transition: all 0.15s;
+}
+
+.ep-item:hover { background: rgba(255,255,255,0.02); }
+
+.ep-num {
+  font-size: 12px;
+  color: var(--text3);
+  min-width: 40px;
+  padding-top: 2px;
+  font-family: monospace;
+}
+
+.ep-info { flex: 1; }
+
+.ep-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.ep-guest {
+  font-size: 13px;
+  color: var(--accent2);
+  margin-bottom: 6px;
+}
+
+.ep-topics { display: flex; flex-wrap: wrap; gap: 4px; }
+
+.ep-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btn {
+  font-size: 12px;
+  padding: 5px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg3);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+  display: inline-block;
+}
+
+.btn:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: var(--accent2);
+  border-color: var(--accent2);
+  color: white;
+}
+
+/* Guest page */
+.guest-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 24px;
+  margin-bottom: 32px;
+  padding: 28px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.guest-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+
+.guest-name { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.guest-meta { font-size: 14px; color: var(--text2); }
+
+/* Quote */
+.quote-block {
+  background: var(--bg2);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+
+.quote-text {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.7;
+  font-style: italic;
+}
+
+.quote-meta {
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+}
+
+/* Bilingual translation styles */
+.quote-zh {
+  font-size: 13px;
+  color: #94a3b8;
+  line-height: 1.7;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #2a2a3a;
+  font-style: normal;
+}
+
+.zh-trans {
+  color: #64748b;
+  font-size: 0.9em;
+}
+
+.dialogue-box {
+  background: #16161d;
+  border: 1px solid #2a2a3a;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.dialogue-item {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #1e1e2e;
+}
+
+.dialogue-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.dialogue-speaker {
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.dialogue-time {
+  color: #475569;
+  font-weight: 400;
+}
+
+.dialogue-en {
+  font-size: 14px;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.dialogue-zh {
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.7;
+  margin-top: 6px;
+  padding-left: 10px;
+  border-left: 2px solid #2a2a3a;
+}
+
+/* Topic page */
+.topic-header {
+  padding: 28px;
+  border-radius: var(--radius);
+  margin-bottom: 28px;
+  color: white;
+}
+
+.topic-header h1 { font-size: 28px; font-weight: 700; margin-bottom: 8px; }
+.topic-header p { font-size: 14px; opacity: 0.8; }
+
+/* Search */
+.search-box {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-size: 15px;
+  margin-bottom: 24px;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.search-box:focus { border-color: var(--accent); }
+.search-box::placeholder { color: var(--text3); }
+
+/* Keyword cloud */
+.keyword-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.keyword-tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.keyword-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent2);
+}
+
+/* Chapters */
+.chapter-list { margin: 16px 0; }
+
+.chapter-item {
+  display: flex;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+.chapter-time {
+  color: var(--accent2);
+  font-family: monospace;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.chapter-title { color: var(--text2); }
+
+/* Breadcrumb */
+.breadcrumb {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.breadcrumb a { color: var(--text3); }
+.breadcrumb a:hover { color: var(--text2); }
+.breadcrumb span { color: var(--text3); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .hero { padding: 32px 20px; }
+  .hero h1 { font-size: 28px; }
+  .content { padding: 24px 20px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text3); }
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease; }
+
+/* Filter bar */
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.filter-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.filter-btn:hover, .filter-btn.active {
+  border-color: var(--accent);
+  color: var(--accent2);
+  background: rgba(99,102,241,0.1);
+}
+
+/* Progress bar */
+.word-bar {
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.word-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  border-radius: 2px;
+}
+</style>
+</head>
+<body>
+<div class="layout">
+  
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <h1>Lex Fridman<br>知识图谱</h1>
+    <p>112 期节目 · 全文字幕</p>
+  </div>
+  
+  <div class="sidebar-section">导航</div>
+  <a href="../index.html" class="sidebar-link ">🏠 首页</a>
+  <a href="../episodes/index.html" class="sidebar-link active">🎙️ 全部节目</a>
+  <a href="../guests/index.html" class="sidebar-link ">👤 嘉宾</a>
+  <a href="../topics/index.html" class="sidebar-link ">🏷️ 主题</a>
+  
+  <div class="sidebar-section">主题分类</div>
+  <a href="../topics/ai-machine-learning.html" class="sidebar-link">🤖 AI 与机器学习</a>
+  <a href="../topics/physics-cosmology.html" class="sidebar-link">⚛️ 物理与宇宙学</a>
+  <a href="../topics/politics-society.html" class="sidebar-link">🏛️ 政治与社会</a>
+  <a href="../topics/philosophy-religion.html" class="sidebar-link">🧠 哲学与宗教</a>
+  <a href="../topics/history-civilization.html" class="sidebar-link">📜 历史与文明</a>
+  <a href="../topics/technology-programming.html" class="sidebar-link">💻 技术与编程</a>
+  <a href="../topics/space-exploration.html" class="sidebar-link">🚀 太空与探索</a>
+  <a href="../topics/biology-evolution.html" class="sidebar-link">🧬 生物与进化</a>
+</nav>
+
+  <main class="main">
+    
+<div class="content fade-in">
+  <div class="breadcrumb">
+    <a href="../index.html">首页</a> <span>›</span>
+    <a href="index.html">全部节目</a> <span>›</span>
+    <span>Julia Shaw</span>
+  </div>
+
+  <h1 style="font-size:28px;font-weight:800;margin-bottom:12px;line-height:1.3">Julia Shaw</h1>
+
+  <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+    <a href="../guests/julia-shaw.html" style="font-size:16px;color:#818cf8;font-weight:600">Julia Shaw</a>
+    <span style="color:#475569">·</span>
+    <span style="font-size:14px;color:#64748b">31,357 词</span>
+    <span style="color:#475569">·</span>
+    <a href="https://lexfridman.com/julia-shaw-transcript" target="_blank" class="btn">查看原文 ↗</a>
+  </div>
+
+  <div class="card-tags" style="margin-bottom:28px"><span class="tag" style="background:#ec489922;color:#ec4899;border:1px solid #ec489944;font-size:13px;padding:4px 12px">心理与人性</span><span class="tag" style="background:#3b82f622;color:#3b82f6;border:1px solid #3b82f644;font-size:13px;padding:4px 12px">技术与编程</span><span class="tag" style="background:#e879f922;color:#e879f9;border:1px solid #e879f944;font-size:13px;padding:4px 12px">音乐与艺术</span><span class="tag" style="background:#22c55e22;color:#22c55e;border:1px solid #22c55e44;font-size:13px;padding:4px 12px">生物与进化</span><span class="tag" style="background:#d9770622;color:#d97706;border:1px solid #d9770644;font-size:13px;padding:4px 12px">历史与文明</span></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px">
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">📋 章节目录</div>
+      <div class="chapter-list">
+<div class="chapter-item">
+  <span class="chapter-time">0:00</span>
+  <span class="chapter-title">Episode highlight<span class="zh-trans"> · 剧集亮点</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">0:23</span>
+  <span class="chapter-title">Introduction<span class="zh-trans"> · 介绍</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:38</span>
+  <span class="chapter-title">Dark Tetrad<span class="zh-trans"> · 暗四分体</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">22:45</span>
+  <span class="chapter-title">Serial killers<span class="zh-trans"> · 连环杀手</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">37:21</span>
+  <span class="chapter-title">Murder<span class="zh-trans"> · 谋杀</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">45:13</span>
+  <span class="chapter-title">Lies and scams<span class="zh-trans"> · 谎言和诈骗</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">50:00</span>
+  <span class="chapter-title">Jealousy<span class="zh-trans"> · 妒忌</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">53:29</span>
+  <span class="chapter-title">Monogamy<span class="zh-trans"> · 一夫一妻制</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">58:42</span>
+  <span class="chapter-title">Sexuality<span class="zh-trans"> · 性欲</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:13:43</span>
+  <span class="chapter-title">Sexual fetishes<span class="zh-trans"> · 性恋物癖</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:29:18</span>
+  <span class="chapter-title">Criminal psychology<span class="zh-trans"> · 犯罪心理学</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">1:32:26</span>
+  <span class="chapter-title">False memories<span class="zh-trans"> · 错误的记忆</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:18:22</span>
+  <span class="chapter-title">Criminals destroying the planet<span class="zh-trans"> · 犯罪分子正在毁灭地球</span></span>
+</div>
+<div class="chapter-item">
+  <span class="chapter-time">2:33:46</span>
+  <span class="chapter-title">Hope<span class="zh-trans"> · 希望</span></span>
+</div></div>
+    </div>
+    <div>
+      <div class="section-title" style="font-size:18px;margin-bottom:12px">🔑 关键词</div>
+      <div class="keyword-cloud"><span class="keyword-tag">julia</span><span class="keyword-tag">shaw</span><span class="keyword-tag">going</span><span class="keyword-tag">don</span><span class="keyword-tag">memory</span><span class="keyword-tag">person</span><span class="keyword-tag">memories</span><span class="keyword-tag">evil</span><span class="keyword-tag">research</span><span class="keyword-tag">doing</span><span class="keyword-tag">false</span><span class="keyword-tag">crime</span><span class="keyword-tag">happened</span><span class="keyword-tag">important</span><span class="keyword-tag">sexuality</span><span class="keyword-tag">got</span><span class="keyword-tag">human</span><span class="keyword-tag">book</span><span class="keyword-tag">interesting</span><span class="keyword-tag">social</span></div>
+    </div>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">💬 精彩语录</div>
+  
+<div class="quote-block">
+  <div class="quote-text">"That’s right. So the first thing that’s important is for people to understand that they are capable of creating these false memories and that they’re not this really unusual, hard-to-generate thing. They’re actually a normal memory process. And that insight is why I wrote The Memory Illusion because I think people need to just understand that their minds work like this, and that they’re really glitchy when it comes to the accuracy of their autobiographical memories. But again, that’s probably ultimately a good thing as well in terms of our overall human experience. But then what happens if you do have an important piece of information that’s important and not being distorted, right?"</div>
+  <div class="quote-zh">这是正确的。因此，首先重要的是让人们明白，他们有能力创造这些错误记忆，而且它们并不是真正不寻常、难以生成的东西。它们实际上是一个正常的记忆过程。这种洞察力就是我写《记忆错觉》的原因，因为我认为人们需要明白他们的思维是这样运作的，而且当涉及到自传体记忆的准确性时，他们真的很容易出问题。但同样，就我们人类的整体体验而言，这最终可能也是一件好事。但是，如果您确实拥有一条重要且没有被扭曲的重要信息，会发生什么，对吧？</div>
+  <div class="quote-meta">— Julia Shaw （01:53:19）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"You referenced Nietzsche in the book, you know, “Gaze into the abyss, the abyss gazes into you.” If you study, quote unquote, “evil,” or study monsters, you may become that. Is there a danger of that? I don’t think so. I think that’s what people fear. So, a lot of the Nietzsche quotes I use are… some of them I like because they speak to the chapters I write about, and the issues I write about. But some of them I also like because they are how people think about evil and people who are labeled evil. And I do think with gazing into the abyss and the abyss gazing back, it’s more of a… You’re trying to find it. And that’s why in some ways that doesn’t work actually, because it isn’t a total blank. It isn’t the abyss."</div>
+  <div class="quote-zh">你在书中引用了尼采，你知道，“凝视深渊，深渊凝视着你。”如果你研究“邪恶”，或者研究怪物，你可能会成为那样。有这样的危险吗？我不这么认为。我认为这就是人们所害怕的。所以，我使用的很多尼采名言是……其中一些是我喜欢的，因为它们涉及我所写的章节和我所写的问题。但其中一些我也喜欢，因为他们是人们对邪恶和被贴上邪恶标签的人的看法。我确实认为，凝视深渊，深渊回望，这更像是……你试图找到它。这就是为什么在某些方面这实际上不起作用，因为它并不是完全空白。这不是深渊。</div>
+  <div class="quote-meta">— Julia Shaw （00:18:21）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And so I think much like writing Evil at a time when you’re not at war and you’re able to think deeply about these important issues, I think we also need to be thinking about things like sexuality and other issues that are important to us. And if we want to preserve our rights, we need to normalize these issues and make sure that they’re visible so that people find it harder to dehumanize those communities. And so I’m always terrified that bisexual people are going to be hypersexualized, dehumanized again, and that there’s going to be laws against basically just who I am."</div>
+  <div class="quote-zh">所以我认为就像在非战争时期写《邪恶》一样，你能够深入思考这些重要问题，我认为我们也需要思考性和其他对我们来说很重要的问题。如果我们想保护我们的权利，我们需要使这些问题正常化并确保它们是可见的，以便人们更难对这些社区进行非人性对待。所以我总是害怕双性恋者会再次被过度性化、非人化，而且会有法律基本上反对我是谁。</div>
+  <div class="quote-meta">— Julia Shaw （01:23:20）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"I think it’s important to speak with people whom we, or who a lot of people, dehumanize, including myself. I mean, I also speak with people who I think are, or have, committed terrible crimes, and I’ve spoken to these people because, as a criminal psychologist, that’s often part of my job. So, what’s interesting, I think, when you’re speaking to people who have committed really terrible crimes, or certainly who’ve been convicted of terrible crimes, is that not only is it potentially insightful because they might give you a real answer and not just a controlled narrative about why they committed these crimes."</div>
+  <div class="quote-zh">我认为与我们或很多人非人化的人交谈很重要，包括我自己。我的意思是，我也与那些我认为正在或曾经犯下可怕罪行的人交谈，我与这些人交谈是因为，作为一名犯罪心理学家，这通常是我工作的一部分。所以，我认为，有趣的是，当你与犯下真正可怕罪行的人，或者肯定被判犯有可怕罪行的人交谈时，这不仅具有潜在的洞察力，因为他们可能会给你一个真正的答案，而不仅仅是关于他们为什么犯下这些罪行的受控叙述。</div>
+  <div class="quote-meta">— Julia Shaw （00:10:13）</div>
+</div>
+<div class="quote-block">
+  <div class="quote-text">"And I think sometimes scientists read as callous because we enjoy this discovery of knowledge and the discovery of insights. And it just feels like this little light bulb has gone off and you go, “Oh, I understand a tiny bit more about the human experience or about the world around us.” And I think it must be similar. I don’t know that I feel or worry that I sort of become more, quote unquote, “evil.” I think it’s more that you add this nuance, which I guess sometimes can be estranging to other people. So, there’s that. So, when you speak with others, sometimes… Like, even when I say, “We shouldn’t use the word evil,” people go, “No, but you have to. Does that mean you’re trivializing things?” And the answer is, no, I’m not trivializing. I’m just trying to understand."</div>
+  <div class="quote-zh">我认为有时候科学家们读起来很冷酷，因为我们喜欢这种知识的发现和见解的发现。感觉就像这个小灯泡熄灭了，你会说：“哦，我对人类的经历或我们周围的世界有了更多的了解。”我认为它一定是相似的。我不知道我是否感觉或担心我变得更加“邪恶”。我认为你应该添加这种细微差别，我想有时这可能会使其他人感到疏远。所以，就是这样。所以，当你与他人交谈时，有时……就像，即使当我说“我们不应该使用邪恶这个词”时，人们也会说，“不，但你必须这样做。这是否意味着你在轻视事情？”答案是，不，我并没有小题大做。我只是想了解一下。</div>
+  <div class="quote-meta">— Julia Shaw （00:21:19）</div>
+</div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px;margin-top:32px">🎙️ 对话预览</div>
+  <div class="dialogue-box">
+    
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Julia Shaw <span class="dialogue-time">(00:00:00)</span>
+  </div>
+  <div class="dialogue-en">We all have the capacity to kill and murder people and do other terrible things. The question is, why we don’t do those things, rather than why we do do those things, quite often. Most men have fantasized about killing someone, about 70% in two studies, and most women as well. More than 50% of women have fantasized about killing somebody. So, murder fantasies are incredibly common.</div>
+  <div class="dialogue-zh">我们都有能力杀人和谋杀他人以及做其他可怕的事情。问题是，为什么我们不做这些事情，而不是为什么我们经常做这些事情。大多数男性都曾幻想过杀人，两项研究显示这一比例约为 70%，大多数女性也是如此。超过 50% 的女性曾幻想过杀人。因此，谋杀幻想非常普遍。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:00:23)</span>
+  </div>
+  <div class="dialogue-en">The following is a conversation with Julia Shaw, a criminal psychologist who has written extensively on a wide variety of topics that explore human nature, including psychopathy, violent crime, psychology of evil, police interrogation, false memory manipulation, deception detection, and human sexuality. Her books include “Evil,” about the psychology of murder and sadism; “The Memory Illusion,” abo...</div>
+  <div class="dialogue-zh">以下是与犯罪心理学家朱莉娅·肖 (Julia Shaw) 的对话，她在探讨人性的各种主题上撰写了大量文章，包括精神病、暴力犯罪、邪恶心理、警察审讯、错误记忆操纵、欺骗检测和人类性行为。她的著作包括关于谋杀和虐待狂心理学的《邪恶》； 《记忆错觉》，abo</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:20)</span>
+  </div>
+  <div class="dialogue-en">This was an honor and a pleasure. This is the Lex Fridman Podcast. To support it, please check out our sponsors in the description, where you can also find links to contact me, ask questions, give feedback, and so on. And now, dear friends, here’s Julia Shaw.</div>
+  <div class="dialogue-zh">这是一种荣幸和荣幸。这是莱克斯·弗里德曼播客。为了支持它，请在描述中查看我们的赞助商，您还可以在其中找到联系我、提出问题、提供反馈等的链接。现在，亲爱的朋友们，这是朱莉娅·肖。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:01:38)</span>
+  </div>
+  <div class="dialogue-en">You wrote the book “Evil: The Science Behind Humanity’s Dark Side.” So, lots of interesting topics to cover here. Let’s start with the continuum. You described that evil is a continuum. In other words, the dark tetrad — psychopathy, sadism, narcissism, Machiavellianism — are a continuum of traits, not a binary zero-one label of monster or non-monster. So, can you explain this continuum?</div>
+  <div class="dialogue-zh">你写了《邪恶：人类黑暗面背后的科学》一书。所以，这里有很多有趣的话题要讨论。让我们从连续体开始。你描述了邪恶是一个连续体。换句话说，黑暗四联体——精神病、虐待狂、自恋、马基雅维利主义——是一个连续的特征，而不是怪物或非怪物的二元零一标签。那么，你能解释一下这个连续体吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Julia Shaw <span class="dialogue-time">(00:02:05)</span>
+  </div>
+  <div class="dialogue-en">So, each trait on the dark tetrad, as it’s called, are the four traits that are associated with dark personality traits, things that we often associate with the word evil, like sadism, which is a pleasure in hurting other people; Machiavellianism, which is doing whatever it takes to get ahead; narcissism, which is taking too much pleasure in yourself and seeing yourself as superior to others. And ...</div>
+  <div class="dialogue-zh">因此，所谓的黑暗四分形上的每个特征都是与黑暗人格特征相关的四个特征，我们经常将这些特征与“邪恶”这个词联系在一起，比如施虐狂，以伤害他人为乐；马基雅维利主义，即不择手段地取得成功；自恋，是指对自己过于满意，认为自己比别人优越。和</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Julia Shaw <span class="dialogue-time">(00:02:52)</span>
+  </div>
+  <div class="dialogue-en">Now, all of those traits — psychopathy, sadism, Machiavellianism, and narcissism — all of them have a scale. So, you can be low on each of those traits, or you can be high on each of those traits. And what the dark tetrad is, it’s actually a way of classifying people into those who might be more likely to engage in risky behaviors or harmful behaviors and those who are not. And if you score high o...</div>
+  <div class="dialogue-zh">现在，所有这些特征——精神病、虐待狂、马基雅维利主义和自恋——都有一个量表。因此，你可以在这些特征中的每一个上都较低，也可以在其中的每一个特征上都很高。黑暗四分体是什么，它实际上是一种将人们分为更有可能从事危险行为或有害行为的人和不从事危险行为或有害行为的人的一种方法。如果你得分高</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Julia Shaw <span class="dialogue-time">(00:03:37)</span>
+  </div>
+  <div class="dialogue-en">Or they’re subclinical, which means you don’t quite meet the threshold, but you have traits that are related and that are so important for us to understand in the same context.</div>
+  <div class="dialogue-zh">或者它们是亚临床的，这意味着您没有完全达到阈值，但您具有相关的特征，并且对于我们在同一背景下理解这些特征非常重要。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:03:46)</span>
+  </div>
+  <div class="dialogue-en">So early in the book, you raised the question that I think you highlight is a very important question. If you could go back in time, would you kill baby Hitler? This is somehow a defining question. Can you explain?</div>
+  <div class="dialogue-zh">在本书的早期，您提出了我认为您强调的一个非常重要的问题。如果你能回到过去，你会杀死婴儿希特勒吗？这在某种程度上是一个定义性的问题。你能解释一下吗？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Julia Shaw <span class="dialogue-time">(00:03:58)</span>
+  </div>
+  <div class="dialogue-en">Well, it’s about whether you think that people are born evil. And so the question of “Would you kill baby Hitler?” is meant to be something that gets people chatting about whether or not they think that people are born with the traits that make them capable of extreme harm towards others. Or whether they think it’s socialized, whether it’s something that maybe in how people are raised sort of mani...</div>
+  <div class="dialogue-zh">嗯，这是关于你是否认为人性本恶。所以问题是“你会杀死婴儿希特勒吗？”旨在让人们讨论他们是否认为人们生来就有能力对他人造成极端伤害的特征。或者他们是否认为这是社会化的，是否是人们成长方式中的一部分</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Julia Shaw <span class="dialogue-time">(00:04:32)</span>
+  </div>
+  <div class="dialogue-en">And with the answer to, “Was he mad?” Well, he certainly had some characteristics that people would associate with, for example, maybe sadism. This idea that he was less high on empathy is probably also showcased in his work. But in terms of whether he was born that way, I think the answer usually would be no. And actually, in his early life, he didn’t showcase quite a lot of the traits that later...</div>
+  <div class="dialogue-zh">并回答“他疯了吗？”嗯，他确实有一些人们会联想到的特征，例如，也许是虐待狂。他的同理心不太高的想法可能也体现在他的作品中。但至于他是否生来如此，我想答案通常是否定的。事实上，在他的早年生活中，他并没有表现出很多后来的特质。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:05:08)</span>
+  </div>
+  <div class="dialogue-en">So you think a large part of it is nurture versus nature, the environment shaping the person to become, to manifest the evil that they bring out to the world?</div>
+  <div class="dialogue-zh">所以你认为其中很大一部分是后天与先天的对抗，是环境塑造了一个人，让他们向世界展示了邪恶？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Julia Shaw <span class="dialogue-time">(00:05:19)</span>
+  </div>
+  <div class="dialogue-en">Well, and I’d be careful with using the word “evil,” because I think we shouldn’t use it to describe human beings, as it most commonly “others” people. In fact, I think it makes us capable of perpetrating horrendous crimes against those we label evil. So for me, that word is the end of a conversation. When we call somebody evil, we say, “This person is so different from me that I don’t even need t...</div>
+  <div class="dialogue-zh">好吧，我会谨慎使用“邪恶”这个词，因为我认为我们不应该用它来描述人类，因为它最常见的是“其他”人。事实上，我认为它使我们能够对那些我们标记为邪恶的人犯下可怕的罪行。所以对我来说，这个词就是对话的结束。当我们称某人为邪恶时，我们会说：“这个人与我如此不同，我什至不需要</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Julia Shaw <span class="dialogue-time">(00:05:56)</span>
+  </div>
+  <div class="dialogue-en">And that’s why introducing continuums for different kinds of negative traits is really important, and introducing this idea that there’s nothing fundamental to people that makes them capable of great harm. We all have the capacity to kill and murder people and do other terrible things. The question is, why we don’t do those things, rather than why we do do those things quite often. So, I think hum...</div>
+  <div class="dialogue-zh">这就是为什么引入不同类型的负面特征的连续体非常重要，并引入这样的想法：对于人们来说，没有什么基本的东西可以使他们产生巨大的伤害。我们都有能力杀人和谋杀他人以及做其他可怕的事情。问题是，为什么我们不做这些事情，而不是为什么我们经常做这些事情。所以我觉得嗯</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:06:24)</span>
+  </div>
+  <div class="dialogue-en">Yeah, I think a prerequisite of doing evil, I see this in war a lot, is to dehumanize the other. In order to be able to murder them on scale, you have to reformulate the war as a fight between good and evil. And the interesting thing you see with war is both sides think that it’s a battle of good versus evil. It almost always is like that, especially at large-scale wars.</div>
+  <div class="dialogue-zh">是的，我认为作恶的先决条件是使他​​人非人化，我在战争中经常看到这一点。为了能够大规模谋杀他们，你必须将战争重新表述为正义与邪恶之间的战斗。你在战争中看到的有趣的事情是双方都认为这是一场善与恶的战争。几乎总是如此，尤其是在大规模战争中。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Julia Shaw <span class="dialogue-time">(00:06:49)</span>
+  </div>
+  <div class="dialogue-en">That’s right, and on top of dehumanization, there is also this other thing called de-individuation, which is where you see yourself as part of the group, and you no longer see yourself as an individual. So, it’s this fight of us versus them. And so you need both of those things. You need that collapse of empathy for other people, the people who are on the other side. And you need this idea that yo...</div>
+  <div class="dialogue-zh">是的，除了非人化之外，还有一种叫做去个性化的东西，就是你将自己视为群体的一部分，而不再将自己视为个人。所以，这是我们与他们的战斗。所以你需要这两件事。你需要对其他人、对方的人失去同理心。你需要这个想法</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Julia Shaw <span class="dialogue-time">(00:07:29)</span>
+  </div>
+  <div class="dialogue-en">But certainly calling other people evil and calling the other side evil and dehumanizing them is crucial to most of these kinds of fights.</div>
+  <div class="dialogue-zh">但毫无疑问，称他人为邪恶、称另一方为邪恶、非人性化对于大多数此类争斗至关重要。</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:07:37)</span>
+  </div>
+  <div class="dialogue-en">Yeah, you promote empathy as an important thing to do when we’re trying to understand each other, and then a lot of people are, are uncomfortable with empathy when it comes to folks that we traditionally label as evil. Hitler’s an example. To have empathy means that you’re somehow dirtying yourself by the evil. What’s your case for empathy, even when we’re talking about some of the darker humans i...</div>
+  <div class="dialogue-zh">是的，当我们试图相互理解时，你提倡同理心作为一件重要的事情，然后很多人，当涉及到我们传统上标记为邪恶的人时，对同理心感到不舒服。希特勒就是一个例子。拥有同理心意味着你在某种程度上被邪恶玷污了自己。即使我们谈论的是一些较黑暗的人类，你的同理心是什么？</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Julia Shaw <span class="dialogue-time">(00:08:04)</span>
+  </div>
+  <div class="dialogue-en">My case for empathy, or “evil empathy” as I sometimes call it — so empathy for people who we often call evil… Also, the title of my book is “Evil,” or in the UK market, it’s “Making Evil,” which is a reference to a Nietzsche quote, which is, “Thinking evil is making evil.” The idea being that evil is a label we place onto others. There’s nothing inherent to anything that makes it evil. And so I al...</div>
+  <div class="dialogue-zh">我对同理心的看法，或者我有时称之为“邪恶的同理心”——对那些我们经常称之为邪恶的人抱有同理心……此外，我的书名是“邪恶”，或者在英国市场，它是“制造邪恶”，这是对尼采名言的引用，即“思考邪恶就是制造邪恶”。这个想法是邪恶是我们给他人贴上的标签。任何事物都没有固有的东西使它变得邪恶。所以我也</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#818cf8">
+    Julia Shaw <span class="dialogue-time">(00:08:45)</span>
+  </div>
+  <div class="dialogue-en">I work as a criminal psychologist, so I work a lot on sexual abuse cases, on rape cases, on murder trials, and so in those contexts, that word “evil” is used all the time. So, “This person is evil.” And if we’re doing that, then we need to go, “Okay, but what we actually want is…” We don’t really just want to label people. We want to stop that behavior from happening, and the only way we’re going ...</div>
+  <div class="dialogue-zh">我是一名犯罪心理学家，所以我在性虐待案件、强奸案件、谋杀审判方面做了很多工作，所以在这些情况下，“邪恶”这个词一直被使用。所以，“这个人是邪恶的。”如果我们这样做，那么我们需要说，“好吧，但我们真正想要的是……”我们真的不仅仅是想给人们贴上标签。我们想要阻止这种行为的发生，这是我们唯一的方法</div>
+</div>
+<div class="dialogue-item">
+  <div class="dialogue-speaker" style="color:#94a3b8">
+    Lex Fridman <span class="dialogue-time">(00:09:26)</span>
+  </div>
+  <div class="dialogue-en">On a small tangent, I get to interview a bunch of folks that a large number of people consider evil. So, how would you give advice about how to conduct such interviews when you’re sitting in front of a world leader that some millions of people consider evil? Or if you’re sitting in front of people that are actual, like convicted criminals, what’s the way to conduct that interview? Because to me, I...</div>
+  <div class="dialogue-zh">顺便说一句，我采访了一群被很多人认为是邪恶的人。那么，当你坐在一位被数百万人视为邪恶的世界领导人面前时，你会如何就如何进行此类采访提出建议呢？或者，如果你坐在真实的人面前，比如被定罪的罪犯，那么进行采访的方式是什么？因为对我来说，我</div>
+</div>
+    <a href="https://lexfridman.com/julia-shaw-transcript" target="_blank" class="btn btn-primary" style="margin-top:16px">阅读完整文字稿 ↗</a>
+  </div>
+
+  <div class="section-title" style="font-size:18px;margin-bottom:12px">🔗 相关节目</div>
+  <div class="card-grid">
+<a href="andrew-huberman-4.html" class="card" style="text-decoration:none">
+  <div class="card-title">Andrew Huberman #4</div>
+  <div class="card-meta">Andrew Huberman</div>
+</a>
+<a href="graham-hancock.html" class="card" style="text-decoration:none">
+  <div class="card-title">Graham Hancock</div>
+  <div class="card-meta">Graham Hancock</div>
+</a>
+<a href="grimes.html" class="card" style="text-decoration:none">
+  <div class="card-title">Grimes: Music, AI, and the Future of Humanity</div>
+  <div class="card-meta">Grimes</div>
+</a>
+<a href="lisa-feldman-barrett-2.html" class="card" style="text-decoration:none">
+  <div class="card-title">Lisa Feldman Barrett: Love, Evolution, and the Human Brain</div>
+  <div class="card-meta">Lisa Feldman Barrett</div>
+</a></div>
+</div>
+
+  </main>
+</div>
+<script>
+// Search functionality
+function initSearch(inputId, listId, itemClass) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  
+  input.addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    const items = document.querySelectorAll('.' + itemClass);
+    
+    items.forEach(item => {
+      const text = item.textContent.toLowerCase();
+      item.style.display = (!query || text.includes(query)) ? '' : 'none';
+    });
+  });
+}
+
+// Filter by topic
+function filterByTopic(topic) {
+  const btns = document.querySelectorAll('.filter-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  
+  const items = document.querySelectorAll('.ep-item, .card');
+  items.forEach(item => {
+    if (!topic || item.dataset.topics?.includes(topic)) {
+      item.style.display = '';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+}
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+  initSearch('search-input', 'ep-list', 'ep-item');
+  initSearch('guest-search', 'guest-grid', 'card');
+  
+  // Highlight current page in sidebar
+  const currentPath = window.location.pathname;
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    if (link.getAttribute('href') === currentPath || 
+        link.getAttribute('href') === currentPath.replace('/index.html', '/')) {
+      link.classList.add('active');
+    }
+  });
+});
+</script>
+</body>
+</html>
