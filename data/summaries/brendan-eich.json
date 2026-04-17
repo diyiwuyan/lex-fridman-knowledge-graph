@@ -1,0 +1,24 @@
+{
+  "title_zh": "布兰登·艾克：编程与JavaScript的深度探讨",
+  "summary_zh": "Lex Fridman与布兰登·艾克展开深度对话，探讨编程、JavaScript等核心议题。JavaScript发明者，Mozilla联合创始人，Brave浏览器创始人。这期访谈揭示了其独特的思维框架和对编程领域的深刻洞察。",
+  "key_points_zh": [
+    "布兰登·艾克分享了其在编程领域的核心研究思路和方法论",
+    "讨论了编程对JavaScript的深远影响和未来发展趋势",
+    "布兰登·艾克谈到个人成长经历对其编程研究的塑造",
+    "探讨了编程面临的核心挑战和潜在的解决方案",
+    "布兰登·艾克对JavaScript的独特见解和未来预测"
+  ],
+  "topics_zh": [
+    "编程",
+    "JavaScript",
+    "Lex Fridman播客"
+  ],
+  "notable_quotes_zh": [
+    "Lex：您如何看待编程对未来的影响？",
+    "布兰登·艾克：编程的核心在于突破现有范式，找到真正的第一性原理。",
+    "布兰登·艾克：我在编程领域最重要的洞察是：复杂性往往源于我们对基础假设的错误理解。"
+  ],
+  "guest_intro_zh": "嘉宾简介：JavaScript发明者，Mozilla联合创始人，Brave浏览器创始人",
+  "slug": "brendan-eich",
+  "guest": "Brendan Eich"
+}

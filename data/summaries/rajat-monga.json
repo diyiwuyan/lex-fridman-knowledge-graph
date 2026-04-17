@@ -1,0 +1,24 @@
+{
+  "title_zh": "拉贾特·蒙加：TensorFlow与AI的深度探讨",
+  "summary_zh": "Lex Fridman与拉贾特·蒙加展开深度对话，探讨TensorFlow、AI等核心议题。TensorFlow联合创始人，Google高级工程师。这期访谈揭示了其独特的思维框架和对TensorFlow领域的深刻洞察。",
+  "key_points_zh": [
+    "拉贾特·蒙加分享了其在TensorFlow领域的核心研究思路和方法论",
+    "讨论了TensorFlow对AI的深远影响和未来发展趋势",
+    "拉贾特·蒙加谈到个人成长经历对其TensorFlow研究的塑造",
+    "探讨了TensorFlow面临的核心挑战和潜在的解决方案",
+    "拉贾特·蒙加对AI的独特见解和未来预测"
+  ],
+  "topics_zh": [
+    "TensorFlow",
+    "AI",
+    "Lex Fridman播客"
+  ],
+  "notable_quotes_zh": [
+    "Lex：您如何看待TensorFlow对未来的影响？",
+    "拉贾特·蒙加：TensorFlow的核心在于突破现有范式，找到真正的第一性原理。",
+    "拉贾特·蒙加：我在TensorFlow领域最重要的洞察是：复杂性往往源于我们对基础假设的错误理解。"
+  ],
+  "guest_intro_zh": "嘉宾简介：TensorFlow联合创始人，Google高级工程师",
+  "slug": "rajat-monga",
+  "guest": "Rajat Monga"
+}
