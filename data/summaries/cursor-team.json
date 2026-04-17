@@ -1,0 +1,21 @@
+{
+  "slug": "cursor-team",
+  "guest": "Cursor Team",
+  "title_en": "Cursor, AI Coding, and the Future of Software Engineering",
+  "title_zh": "Cursor 团队谈 AI 编程与软件工程的未来",
+  "summary_zh": "这是 Lex Fridman 与 Cursor 编辑器核心团队（Aman Sanger、Arvid Lunnemark、Sualeh Asif）的对话，深入探讨 AI 辅助编程的现状与未来：Cursor 如何改变软件开发流程？AI 代码助手的能力边界在哪里？未来的软件工程师是什么样的？",
+  "key_points_zh": [
+    "Cursor 的核心理念：Cursor 不仅仅是 Copilot 的竞争者，而是一个从根本上重新思考「IDE 应该如何工作」的产品。Cursor 团队认为，未来的 IDE 需要理解整个代码库的上下文，而不仅仅是当前文件，这催生了「全库感知」的 AI 辅助能力。",
+    "AI 辅助编程的局限：Cursor 团队坦诚了当前 AI 编程助手的局限——在处理复杂的架构决策、跨多个系统的集成问题，以及需要深度领域知识的任务时，AI 的帮助仍然有限。AI 更擅长「代码合成」而非「系统设计」。",
+    "Vibe Coding 现象：团队讨论了「Vibe Coding」（通过自然语言描述让 AI 生成代码，无需深入理解底层实现）的兴起。他们认为这降低了编程门槛，让更多人能构建软件，但也带来了可维护性和安全性的新问题。",
+    "未来的软件工程师：Cursor 团队预测软件工程师的角色将向「AI 的指挥官」演变——工程师需要更多地关注系统架构、需求理解和质量判断，而将大量具体实现委托给 AI。最重要的技能将是「知道该构建什么，以及如何验证构建是否正确」。",
+    "创业与产品哲学：团队分享了 Cursor 的产品哲学——他们选择基于 VSCode 构建而非从头开始，拒绝了很多「酷炫但分散精力」的功能，专注于让核心的 AI 编程体验做到极致。"
+  ],
+  "topics_zh": ["Cursor编辑器", "AI辅助编程", "Vibe Coding", "IDE未来", "软件工程师角色", "代码库理解", "AI开发工具"],
+  "notable_quotes_zh": [
+    "Cursor团队：我们认为未来最好的程序员不是写最多代码的人，而是最擅长与 AI 协作的人。",
+    "Cursor团队：Vibe Coding 不是编程的终结，而是编程入口的降低——更多的人能参与创造软件，这是件好事。",
+    "Cursor团队：IDE 应该理解你在构建什么，而不只是你在写什么——这是 Cursor 和传统代码编辑器的根本区别。"
+  ],
+  "guest_intro_zh": "Cursor 是由 Anysphere 公司开发的 AI 优先代码编辑器，由 MIT 辍学生 Aman Sanger、Arvid Lunnemark、Sualeh Asif 和 Michael Truell 创建。Cursor 在 2024-2025 年迅速成为最受开发者欢迎的 AI 编程工具之一，估值超过 25 亿美元。"
+}

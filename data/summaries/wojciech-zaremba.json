@@ -1,0 +1,21 @@
+{
+  "slug": "wojciech-zaremba",
+  "guest": "Wojciech Zaremba",
+  "title_en": "OpenAI Codex, GPT-3, Robotics, and the Future of AI",
+  "title_zh": "沃伊切赫·扎伦巴谈OpenAI Codex、GPT-3与AI未来",
+  "summary_zh": "这是 Lex Fridman 与 OpenAI 联合创始人 Wojciech Zaremba 的深度对话。扎伦巴主导了 OpenAI Codex（GitHub Copilot 的基础）和 GPT-3 的语言与代码生成研究，他分享了对 AI 编程、机器人学习和通用智能路径的深刻洞见。",
+  "key_points_zh": [
+    "Codex 与 AI 编程：扎伦巴是 OpenAI Codex 的核心开发者，Codex 是 GitHub Copilot 的基础模型。他认为 AI 编程助手将从根本上改变软件开发，降低编程门槛，让更多人能够将想法转化为软件。",
+    "GPT-3 的涌现能力：扎伦巴分享了 GPT-3 开发过程中最令人惊讶的发现——随着模型规模的增大，出现了训练时完全没有预期的新能力（涌现现象）。这让团队意识到 scaling 的力量远超预期。",
+    "机器人学习：扎伦巴曾领导 OpenAI 的机器人研究，他们训练机器人用单手解魔方，使用了大量强化学习和仿真到现实的迁移。他认为机器人学习的核心挑战是如何高效地从少量真实数据中学习。",
+    "AI 安全与能力的平衡：扎伦巴认为 AI 安全和 AI 能力不是对立的，而是相互促进的。只有理解了 AI 系统的能力，才能真正理解其风险，进而设计出更安全的系统。",
+    "对 AGI 的思考：扎伦巴认为我们正在接近某种形式的 AGI，但真正的通用智能需要解决常识推理、长期规划和世界模型等核心问题，这些问题目前仍未解决。"
+  ],
+  "topics_zh": ["OpenAI", "Codex", "GPT-3", "AI编程", "机器人学习", "涌现能力", "AGI"],
+  "notable_quotes_zh": [
+    "扎伦巴：GPT-3 的涌现能力让我们意识到 scaling 的力量远超预期——随着规模增大，出现了完全没有预期的新能力。",
+    "扎伦巴：AI 编程助手将从根本上改变软件开发，降低编程门槛，让更多人能够将想法转化为软件。",
+    "扎伦巴：AI 安全和 AI 能力不是对立的——只有理解了能力，才能真正理解风险。"
+  ],
+  "guest_intro_zh": "Wojciech Zaremba 是 OpenAI 联合创始人，主导了 OpenAI Codex、GPT-3 语言生成和机器人研究，曾在 Google Brain、Facebook AI 研究院工作，是深度学习领域最重要的研究者之一。"
+}

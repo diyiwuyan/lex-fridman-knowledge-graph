@@ -1,0 +1,21 @@
+{
+  "slug": "dhh-david-heinemeier-hansson",
+  "guest": "David Heinemeier Hansson",
+  "title_en": "Ruby on Rails, Remote Work, and the Future of Software",
+  "title_zh": "大卫·汉森谈 Ruby on Rails、远程工作与软件的未来",
+  "summary_zh": "这是 Lex Fridman 与 Ruby on Rails 创始人、Basecamp 和 Hey 联合创始人大卫·汉森（DHH）的对话。DHH 以反主流科技文化立场著称——反对风险投资模式、推崇远程工作、批判「工作崇拜」文化，以及近年来对「觉醒文化」的强烈批评。",
+  "key_points_zh": [
+    "Ruby on Rails 的设计哲学：DHH 分享了他创建 Rails 的核心理念——「开发者快乐」（developer happiness）和「约定优于配置」（convention over configuration）。他认为好的工具应该让程序员享受编程的乐趣，而非与工具本身战斗。Rails 的成功证明了「固执己见的框架」可以极大地提升生产力。",
+    "反风险投资模式：DHH 和合伙人 Jason Fried 是「平静公司」（Calm Company）运动的倡导者，他们拒绝风险投资，Basecamp 完全自举盈利已超过 20 年。他认为 VC 模式扭曲了公司的价值取向，将短期增长置于可持续发展之上。",
+    "远程工作倡导：DHH 是远程工作最早的倡导者之一，他的著作《远程工作》（Remote）在新冠疫情前就已出版。他认为远程工作不只是灵活性问题，而是一种根本上更公平、更有效的工作方式。",
+    "反觉醒文化立场：DHH 近年来因公开批评「觉醒文化」在科技公司中的影响而引发争议——他在 Basecamp 内部禁止政治讨论，导致多名员工离职。他认为工作场所不应成为政治行动主义的空间。",
+    "赛车与激情：DHH 是职业赛车手，他详细讲述了对赛车的热爱——他认为赛车和编程有相似之处，都需要在压力下保持专注，在约束条件下寻找最优路径。"
+  ],
+  "topics_zh": ["Ruby on Rails", "平静公司", "反VC模式", "远程工作", "开发者体验", "反觉醒立场", "赛车"],
+  "notable_quotes_zh": [
+    "DHH：Rails 的核心理念是让程序员快乐——当你享受你的工具，你会做出更好的工作。",
+    "DHH：风险投资不是免费的钱——它是一种交换，你用公司的灵魂换取增长的压力。",
+    "DHH：远程工作最大的好处不是节省通勤时间，而是它强迫你建立真正依赖异步沟通和清晰写作的工作文化。"
+  ],
+  "guest_intro_zh": "大卫·汉森（David Heinemeier Hansson，简称 DHH）是丹麦程序员和企业家，Ruby on Rails 框架创始人，Basecamp 和 Hey 电子邮件服务联合创始人。他以「平静公司」哲学、远程工作倡导和对科技行业文化的直率批评著称，同时是一位职业赛车手。"
+}

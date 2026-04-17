@@ -1,0 +1,21 @@
+{
+  "slug": "ai-sota-2026",
+  "guest": "AI State of the Art 2026",
+  "title_en": "AI State of the Art: Models, Benchmarks, and What's Next",
+  "title_zh": "2026 年 AI 前沿：模型、基准与下一步",
+  "summary_zh": "这是 Lex Fridman 对 2026 年 AI 前沿状态的深度综述，涵盖最新的语言模型、推理能力突破、多模态进展，以及 AI 研究社区对未来方向的讨论。这一集以深度技术分析和对 AI 进展节奏的反思为核心。",
+  "key_points_zh": [
+    "推理模型的崛起：2025-2026 年，以 OpenAI o3、DeepSeek-R1 为代表的「推理模型」（Reasoning Models）成为 AI 前沿的核心进展，这类模型通过「思维链」（Chain-of-Thought）强化学习显著提升了数学、编程和逻辑推理能力，标志着 AI 从「知识检索」向「真正推理」的转变。",
+    "多模态能力扩展：AI 系统的能力边界从文字扩展到图像、音频、视频的理解与生成，模型开始能处理实时视频流、生成高质量音乐和视频内容，多模态融合成为下一代基础模型的标配。",
+    "AI Agent 的实用化：AI Agent（能执行多步骤任务、使用工具、浏览网页、写代码并运行）在 2025-2026 年从实验室走向实用，主要 AI 公司纷纷推出 Agent 框架，「AI Operator」成为新的用户界面范式。",
+    "算力与效率的博弈：在 Scaling Law 的边际收益减弱的背景下，AI 社区的关注点从「更多算力」转向「更高效算法」——DeepSeek 的低成本训练突破、混合专家架构（MoE）的普及，以及测试时计算（Test-Time Compute）的崛起成为主要趋势。",
+    "AI 对齐的进展与挑战：随着 AI 能力的快速提升，对齐研究也在加速——可解释性研究（Anthropic 的 Mechanistic Interpretability）、宪法 AI 和强化学习从人类反馈（RLHF）的改进版本成为研究热点，但基本的对齐难题仍未解决。"
+  ],
+  "topics_zh": ["推理模型", "多模态AI", "AI Agent", "Scaling Law", "测试时计算", "AI对齐", "2026年AI前沿"],
+  "notable_quotes_zh": [
+    "Lex：我们正在见证AI从'知道什么'到'能做什么'的根本性转变——推理模型的出现标志着这一转变的开始。",
+    "Lex：DeepSeek 证明了一件重要的事：算法创新可以部分替代算力优势——这改变了AI竞赛的性质。",
+    "Lex：2026年的AI和2022年的AI之间的差距，比2022年和2010年之间的差距更大——我们正在经历指数增长的现实。"
+  ],
+  "guest_intro_zh": "本期为 Lex Fridman 独立制作的 AI 前沿综述特辑，系统回顾和分析截至 2026 年初的 AI 技术进展、代表性模型和研究趋势，是了解当前 AI 发展状态的重要参考资料。"
+}

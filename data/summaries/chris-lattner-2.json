@@ -1,0 +1,21 @@
+{
+  "slug": "chris-lattner-2",
+  "guest": "Chris Lattner",
+  "title_en": "The Future of Computing and Programming Languages",
+  "title_zh": "克里斯·拉特纳谈计算与编程语言的未来",
+  "summary_zh": "这是 Lex Fridman 与编译器传奇人物 Chris Lattner 的第二次对话。Lattner 创造了 LLVM、Clang、Swift 等改变行业的技术，他分享了对编程语言设计、AI 辅助编程、Mojo 语言，以及计算未来的深刻洞见。",
+  "key_points_zh": [
+    "LLVM 的革命：Lattner 在大学时创造了 LLVM（低级虚拟机），这个项目后来成为了现代编译器基础设施的基石，被 Apple、Google、Intel 等几乎所有主要科技公司使用，彻底改变了编译器技术的格局。",
+    "Swift 的设计哲学：Lattner 在 Apple 设计了 Swift 语言，他的目标是创造一门既安全又高效的语言，让初学者容易上手同时让专家也能发挥全部能力。Swift 的设计融合了函数式编程、面向对象和协议导向等多种范式。",
+    "Mojo 与 AI 编程：在 Modular 公司，Lattner 正在开发 Mojo 语言——一种专为 AI 编程设计的语言，目标是将 Python 的易用性与 C++ 的性能结合，解决 AI 基础设施的性能瓶颈。",
+    "AI 辅助编程的未来：Lattner 认为 AI 编程助手（如 Copilot）将从根本上改变软件工程师的工作方式，但人类程序员的角色不会消失，而是会转向更高层次的设计和架构决策。",
+    "编程语言设计的艺术：Lattner 认为设计编程语言是一门艺术，需要平衡表达力、安全性、性能和易用性等多个维度。好的语言设计能够引导程序员写出更好的代码。"
+  ],
+  "topics_zh": ["LLVM", "Swift", "Mojo", "编程语言", "编译器", "AI编程", "计算未来"],
+  "notable_quotes_zh": [
+    "Lattner：好的编程语言设计能够引导程序员写出更好的代码——语言不仅是工具，更是思维方式的塑造者。",
+    "Lattner：Mojo 的目标是将 Python 的易用性与 C++ 的性能结合——解决 AI 基础设施的性能瓶颈。",
+    "Lattner：AI 编程助手将改变软件工程师的工作方式，但人类程序员的角色会转向更高层次的设计和架构。"
+  ],
+  "guest_intro_zh": "Chris Lattner 是美国计算机科学家，LLVM 和 Clang 编译器的创造者，苹果 Swift 语言的设计者，曾任 Apple、Google、Tesla 和 SiFive 的工程领导，现为 Modular 公司 CEO，开发面向 AI 的 Mojo 语言。"
+}
